@@ -507,7 +507,7 @@ export function Home() {
                         Grab your phone, round up your family and friends, and head outside for a fun-filled day of creative problem-solving, exploration, and excitement!
                         <View className="italics" paddingTop={"2px"}>Games are played at locations in Game List below.</View>
                     </View>
-                    <View className="hero-accordion">
+                    <View className="hero-accordion hide">
                         <Accordion className="light-dark-accordion" allowMultiple
                                    items={[
                                        {
@@ -613,7 +613,7 @@ export function Home() {
                 </Flex>
                 <View id="game-list"  className={isWaiverVisible ? "hide" : "show"}>
                     <Heading level={"5"} className={"heading light-dark"} marginTop={"15px"}>
-                        Game List: Tybee Island, GA
+                        Games coming soon to Tybee Island, GA
                     </Heading>
                     <Flex className="flex-games">
                         {loading ? (<View>loading</View>):null}
@@ -814,7 +814,7 @@ export function Home() {
             </View>
 
             <View className={isWaiverVisible ? "hide" : "main-content light-dark show"} marginTop="1em">
-                <View textAlign="center" className={"light-dark"}> © 2023 EscapeOut.Games<br />
+                <View textAlign="center" className={"light-dark"}> © 2022-2024 EscapeOut.Games<br />
                     <Link
                         href="https://escapeout.games/privacy-policy/"
                         className={"light-dark"}
