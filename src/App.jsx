@@ -1,75 +1,44 @@
 /* src/App.jsx */
-import { useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import {BrowserRouter, Routes, Route, useLocation, Navigate} from 'react-router-dom';
 import { RequireAuth } from './RequireAuthLogin';
+import {Authenticator, useAuthenticator} from "@aws-amplify/ui-react";
+
+/* routes */
 import { Login } from './components/Login';
 import { Home } from './components/Home';
 import { Admin } from './components/Admin';
+import { Waiver } from './components/Waiver';
+
+/* games */
+import { Hurricane1Easy } from './games/hurricane1Easy/Hurricane1Easy';
+
+
+/* header and footer */
 import { Layout } from './components/Layout';
 
-import PropTypes from 'prop-types'
 import { Amplify } from 'aws-amplify';
-import { generateClient } from 'aws-amplify/api';
 
-import { createTodo } from './graphql/mutations';
-import { listTodos } from './graphql/queries';
-
-import { Authenticator, Button, Heading } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 
 import amplifyconfig from './amplifyconfiguration.json';
 Amplify.configure(amplifyconfig);
 
-const initialState = { name: '', description: '' };
-const client = generateClient();
-
-const App = ({ signOut, user }) => {
-    const [formState, setFormState] = useState(initialState);
-    const [todos, setTodos] = useState([]);
-
-    useEffect(() => {
-        fetchTodos();
-    }, []);
-
-    function setInput(key, value) {
-        setFormState({ ...formState, [key]: value });
-    }
-
-    async function fetchTodos() {
-        try {
-            const todoData = await client.graphql({
-                query: listTodos
-            });
-            const todos = todoData.data.listTodos.items;
-            setTodos(todos);
-        } catch (err) {
-            console.log('error fetching todos');
-        }
-    }
-
-    async function addTodo() {
-        try {
-            if (!formState.name || !formState.description) return;
-            const todo = { ...formState };
-            setTodos([...todos, todo]);
-            setFormState(initialState);
-            await client.graphql({
-                query: createTodo,
-                variables: {
-                    input: todo
-                }
-            });
-        } catch (err) {
-            console.log('error creating todo:', err);
-        }
-    }
-
+/* why signout, user? see https://docs.amplify.aws/react/build-a-backend/auth/set-up-auth/ */
+const App = () => {
     function MyRoutes() {
         return (
             <BrowserRouter>
                 <Routes>
-                    <Route path="/" element={<Layout/>}>
+                    <Route path="/" element={<Layout />}>
                         <Route index element={<Home />}/>
+                        <Route
+                            path="/game"
+                            element={
+                                <RequireAuth>
+                                    <Hurricane1Easy />
+                                </RequireAuth>
+                            }
+                        />
                         <Route
                             path="/admin"
                             element={
@@ -78,7 +47,14 @@ const App = ({ signOut, user }) => {
                                 </RequireAuth>
                             }
                         />
-
+                        <Route
+                            path="/waiver"
+                            element={
+                                <RequireAuth>
+                                    <Waiver />
+                                </RequireAuth>
+                            }
+                        />
                         <Route
                             path="/login"
                             element={
@@ -98,12 +74,6 @@ const App = ({ signOut, user }) => {
     );
 
 };
-
-App.propTypes = {
-    signOut: PropTypes.func,
-    user: PropTypes.object
-}
-
 
 const styles = {
     container: {

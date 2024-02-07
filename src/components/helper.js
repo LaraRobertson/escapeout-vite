@@ -1,8 +1,10 @@
-import React, {useState} from "react";
-import {useNavigate} from "react-router-dom";
-import {API} from "aws-amplify";
-import {gameScoreByGameStatsID, gameStopByGameID} from "../graphql/queries";
-import {createGameHintTime, createGameStopTime, updateGameScore} from "../graphql/mutations";
+import React, {useEffect, useState} from "react";
+import {gameScoreByGameStatsID} from "../graphql/queries";
+import {updateGameScore, deleteGameScore, deleteGameStats} from "../graphql/mutations";
+import {generateClient} from "aws-amplify/api";
+
+const client = generateClient();
+
 export function intervalFunction(gameTime,stopClock,setGameTime,hintTime1,hintTime2,hintTime3,hintTime4,setGameTimeHint,isIntroVisible) {
     console.log('Logs every 3 seconds');
     console.log('gameTime: ' + gameTime);
@@ -17,109 +19,6 @@ export function intervalFunction(gameTime,stopClock,setGameTime,hintTime1,hintTi
         setGameTimeHint(hintTimeTotalNum);
     }
     console.log("stopClock: " + stopClock);
-}
-export async function setGameStopFunction(setGameStop,setNumberOfTimes,setGameID,setGameStatsID,setGameStopNameArray,
-                                          setGameStopName,setGameScoreID,setIsGameIntroVisible,setIsIntroVisible,gameTime,setGameTime,setGameTimeHint,
-                                          setIsAlertVisible,setAlertText,setTeamName, setStopClock, setHintTime1, setHintTime2, setHintTime3, setHintTime4,setRealTimeStart,
-                                          setGameNotes,setClues) {
-    console.log("setGameStopFunction - only on mount");
-    //* check if already playing */
-    console.log ("localStorage.getItem('gameTime'): " + localStorage.getItem('gameTime'));
-    console.log ("gameTime: " + gameTime);
-    if (localStorage.getItem("realTimeStart")) {
-        setStopClock(false);
-        setIsGameIntroVisible(false);
-        setIsIntroVisible(false);
-        setIsAlertVisible(true);
-        setAlertText('resuming game');
-        setTimeout(() => {
-            setIsAlertVisible(false);
-        }, 3000);
-        setGameNotes(localStorage.getItem("gameNotes"));
-        setClues(localStorage.getItem("clues"));
-        setRealTimeStart(localStorage.getItem("realTimeStart"));
-        setTeamName(localStorage.getItem("teamName"));
-        setGameScoreID(localStorage.getItem("gameScoreID"));
-        setGameStop(localStorage.getItem("gameStop"))
-        setGameTime(Number(localStorage.getItem('gameTime')));
-        setGameTimeHint(Number(localStorage.getItem('gameTimeHint')));
-        setHintTime1(Number(localStorage.getItem('HintTime1')));
-        setHintTime2(Number(localStorage.getItem('HintTime2')));
-        setHintTime3(Number(localStorage.getItem('HintTime3')));
-        setHintTime4(Number(localStorage.getItem('HintTime4')));
-        let GameStopIndex = Number(localStorage.getItem("gameStop"))-1;
-        setGameStopNameArray(localStorage.getItem("gameStopNameArray"));
-        setGameStopName(localStorage.getItem("gameStopNameArray")[GameStopIndex].gameStopName);
-        /* end check */
-    } else {
-        console.log ("get Game Stop: " + localStorage.getItem("gameStop"));
-        console.log ("get GameID: " + localStorage.getItem("gameID"));
-        console.log ("get GameStatsID: " + localStorage.getItem("gameStatsID"));
-        setGameStop(localStorage.getItem("gameStop"))
-        setNumberOfTimes(localStorage.getItem("numberOfTimes"));
-        setGameID(localStorage.getItem("gameID"));
-        setGameStatsID(localStorage.getItem("gameStatsID"));
-        /* get gameStop name */
-        const gameStopFromAPI = await getGameStopName();
-        let gameStopNameArrayConst = gameStopFromAPI.data.gameStopByGameID.items;
-        /* get gameScore Id */
-        const gameScoreFromAPI = await getGameScoreID();
-        let gameScoreID = "";
-        if (gameScoreFromAPI) {
-            gameScoreID = gameScoreFromAPI.data.gameScoreByGameStatsID.items[0].id;
-            setGameScoreID(gameScoreID);
-            localStorage.setItem("gameScoreID", gameScoreID);
-        }
-        /*let testObject = gameStopNameArrayConst[0];
-        for (const key in testObject) {
-            console.log(`${key}: ${ testObject[key]}`);
-            for (const key1 in testObject[key]) {
-                //console.log(`${key1}: ${testObject[key][key1]}`);
-            }
-        }*/
-        let GameStopIndex = Number(localStorage.getItem("gameStop"))-1;
-        setGameStopNameArray(gameStopNameArrayConst);
-        setGameStopName(gameStopNameArrayConst[GameStopIndex].gameStopName);
-        console.log("gameStopNameArrayConst[0].gameStopName (setGameStopFunction): " + gameStopNameArrayConst[GameStopIndex].gameStopName);
-        localStorage.setItem("gameStopNameArray", gameStopFromAPI.data.gameStopByGameID.items);
-    }
-}
-
-async function getGameScoreID() {
-    let filter = {
-        completed: {
-            eq: false
-        }
-    };
-    const apiGameScore = await API.graphql({
-        query: gameScoreByGameStatsID,
-        variables: { filter: filter, gameStatsID: localStorage.getItem("gameStatsID")}
-    }).then(response => {
-        console.log(response);
-        return(response);
-    }).catch(e => {
-        console.log("catch");
-        console.log(e);
-        return null;
-    });
-
-    return(apiGameScore);
-}
-
-async function getGameStopName() {
-    const apiGameStop = await API.graphql({
-        query: gameStopByGameID,
-        variables: { gameID: localStorage.getItem("gameID")}
-    }).then(response => {
-        console.log(response);
-        return(response);
-    }).catch(e => {
-        console.log("catch");
-        console.log(e);
-        return null;
-    });
-
-    return(apiGameStop);
 }
 
 export function setGameNotesFunction(gameNotes,setGameNotes) {
@@ -238,8 +137,34 @@ export function setCommentsFunction(notes,setGameComments) {
     /* set localhost variable */
     setGameComments(notes);
 }
-export function goHomeQuit(navigate) {
+
+export async function goHomeQuit(navigate) {
     removeLocalStorage();
+    /* remove gameStat and gameScore */
+    if (localStorage.getItem("numberOfTimes") == 0) {
+        const gameStatDetails = {
+            id: localStorage.getItem("gameStatsID"),
+        };
+        try {
+            await client.graphql({
+                query: deleteGameStats,
+                variables: {input: gameStatDetails}
+            });
+        } catch (err) {
+            console.log('error deleteGameStats..', err)
+        }
+        const gameScoreDetails = {
+            id: localStorage.getItem("gameScoreID"),
+        };
+        try {
+            await client.graphql({
+                query: deleteGameScore,
+                variables: {input: gameScoreDetails}
+            });
+        } catch (err) {
+            console.log('error deleteGameScore..', err)
+        }
+    }
     navigate('/');
 }
 
@@ -256,12 +181,61 @@ export async function goHome(navigate,gameComments) {
         gameComments: gameComments,
         completed: true
     };
-    const apiGameScoreUpdate = await API.graphql({ query: updateGameScore, variables: {input: newGameStats}});
-    removeLocalStorage();
-    navigate('/');
+    try {
+        await client.graphql({ query: updateGameScore, variables: {input: newGameStats}});
+        removeLocalStorage();
+        navigate('/');
+    } catch (err) {
+        console.log('error updateGameScore..', err)
+    }
+
 }
 
-export async function winGameFunction(props,gameScoreID,gameTime,gameStop,gameTimeTotal,setGameTimeTotal,gameTimeHint,numberOfPlayers,teamName, realTimeStart,
+export async function setGamePlayFunction(setNumberOfTimes,setGameID,setGameStatsID,setGameScoreID,setIsGameIntroVisible,setIsIntroVisible,gameTime,setGameTime,setGameTimeHint,
+                                          setIsAlertVisible,setAlertText,setTeamName, setStopClock, setHintTime1, setHintTime2, setHintTime3, setHintTime4,setRealTimeStart,
+                                          setGameNotes,setClues) {
+    console.log("setGamePlayFunction - only on mount");
+    //* check if already playing */
+    console.log ("localStorage.getItem('gameTime'): " + localStorage.getItem('gameTime'));
+    console.log ("gameTime: " + gameTime);
+    if (localStorage.getItem("realTimeStart")) {
+        setStopClock(false);
+        setIsGameIntroVisible(false);
+        setIsIntroVisible(false);
+        setIsAlertVisible(true);
+        setAlertText('resuming game');
+        setTimeout(() => {
+            setIsAlertVisible(false);
+        }, 3000);
+        setGameNotes(localStorage.getItem("gameNotes"));
+        setClues(localStorage.getItem("clues"));
+        setRealTimeStart(localStorage.getItem("realTimeStart"));
+        setTeamName(localStorage.getItem("teamName"));
+        setGameScoreID(localStorage.getItem("gameScoreID"));
+        setGameTime(Number(localStorage.getItem('gameTime')));
+        setGameTimeHint(Number(localStorage.getItem('gameTimeHint')));
+        setHintTime1(Number(localStorage.getItem('HintTime1')));
+        setHintTime2(Number(localStorage.getItem('HintTime2')));
+        setHintTime3(Number(localStorage.getItem('HintTime3')));
+        setHintTime4(Number(localStorage.getItem('HintTime4')));
+        /* end check */
+    } else {
+        console.log("get GameID: " + localStorage.getItem("gameID"));
+        console.log("get GameStatsID: " + localStorage.getItem("gameStatsID"));
+        /* why need numberoftimes here?*/
+        //setNumberOfTimes(localStorage.getItem("numberOfTimes"));
+        setGameID(localStorage.getItem("gameID"));
+        setGameStatsID(localStorage.getItem("gameStatsID"));
+        setGameScoreID(localStorage.getItem("gameScoreID"));
+        setStopClock(false);
+        let startDate = new Date();
+        setRealTimeStart(startDate);
+        localStorage.setItem("realTimeStart",startDate);
+        setGameTimeFunction(gameTime, setGameTime, .00);
+    }
+}
+
+export async function winGameFunction(props,gameScoreID,gameTime,gameTimeTotal,setGameTimeTotal,gameTimeHint,numberOfPlayers,teamName, realTimeStart,
                                       hintTime1,hintTime2,hintTime3,hintTime4) {
     console.log("props: " + props);
     console.log("gameTimeTotal: " + gameTimeTotal);
@@ -278,39 +252,28 @@ export async function winGameFunction(props,gameScoreID,gameTime,gameStop,gameTi
     console.log("gameTime: " + gameTime);
     console.log("stop has been won");
     /* update gameScore based on stop - */
-    updateGameScoreFunction(props,gameScoreID,gameTime,seconds,gameStop,gameTimeTotal,setGameTimeTotal,gameTimeHint,hintTimeTotalNum,numberOfPlayers,teamName);
-    createGameStopFunction(gameScoreID,gameTime,seconds,gameStop);
-    createGameHintFunction(gameScoreID,gameTimeHint,hintTimeTotalNum,gameStop);
+   //updateGameScoreFunction(props,gameScoreID,gameTime,seconds,gameTimeTotal,setGameTimeTotal,gameTimeHint,hintTimeTotalNum,numberOfPlayers,teamName);
+   // createGameHintFunction(gameScoreID,gameTimeHint,hintTimeTotalNum);
 }
 
-export async function createGameStopFunction(gameScoreID,gameTime,seconds,gameStop) {
-    console.log("createGameStopFunction: gameStop: " + gameStop);
-    console.log("createGameStopFunction: gameTime: " + gameTime);
-    console.log("createGameStopFunction: gameScoreID: " + gameScoreID);
+
+async function createGameHintFunction(gameScoreID,gameTimeHint,hintTimeTotalNum) {
     const data = {
         gameScoreID: gameScoreID,
-        gameStopTime: Number(seconds).toFixed(2),
-        gameStop: gameStop
+        gameHintTime: hintTimeTotalNum
     };
-    await API.graphql({
-        query: createGameStopTime,
-        variables: { input: data },
-    });
+    try {
+        await client.graphql({
+            query: createGameHintTime,
+            variables: { input: data },
+        });
+    } catch (err) {
+        console.log('error createGameHintTime..', err)
+    }
 }
 
-async function createGameHintFunction(gameScoreID,gameTimeHint,hintTimeTotalNum,gameStop) {
-    const data = {
-        gameScoreID: gameScoreID,
-        gameHintTime: hintTimeTotalNum,
-        gameStop: gameStop
-    };
-    await API.graphql({
-        query: createGameHintTime,
-        variables: { input: data },
-    });
-}
-
-async function updateGameScoreFunction(props,gameScoreID,gameTime,seconds,gameStop,gameTimeTotal,setGameTimeTotal,gameTimeHint,hintTimeTotalNum,numberOfPlayers,teamName) {
+async function updateGameScoreFunction(props,gameScoreID,gameTime,seconds,gameTimeTotal,setGameTimeTotal,gameTimeHint,
+                                       hintTimeTotalNum,numberOfPlayers,teamName) {
     console.log("gameScoreID (update):" + gameScoreID);
     let GameTimeTotalVar = Number(gameTimeTotal + seconds + hintTimeTotalNum).toFixed(2);
     console.log("gameTimeTotalVar: " +  GameTimeTotalVar);
@@ -329,35 +292,15 @@ async function updateGameScoreFunction(props,gameScoreID,gameTime,seconds,gameSt
             //console.log(`${key1}: ${testObject[key][key1]}`);
         }
     }*/
-    const apiUpdateGameScore = await API.graphql({
-        query: updateGameScore,
-        variables: { input: data },
-    }).then(response => {
-        console.log(response);
-        return(response);
-    }).catch(e => {
-        console.log("catch apiUpdateGameScore");
-        console.log(e);
-        return null;
-    });
-
+    try {
+        const apiUpdateGameScore = await client.graphql({
+            query: updateGameScore,
+            variables: { input: data }
+        });
+    } catch (err) {
+        console.log('error udpateGameScore', err);
+    }
     return(apiUpdateGameScore);
-}
-
-export function goToStop(setGameStop,gameStop,gameTime,setGameTime,gameTimeTotal,setGameTimeTotal,setGameTimeHint,gameTimeHint,setHintTime1,setHintTime2,setHintTime3,setHintTime4,setIsIntroVisible,isCoverScreenVisible,setIsCoverScreenVisible) {
-    setGameStop(Number(gameStop) + 1);
-    localStorage.setItem("gameStop",Number(gameStop) + 1);
-    console.log("go to stop:" + (Number(gameStop) + 1));
-    setGameTimeTotal(gameTimeTotal + gameTime + gameTimeHint);
-    /* reset time */
-    setHintTime1(0);
-    setHintTime2(0);
-    setHintTime3(0);
-    setHintTime4(0);
-    setGameTime(0);
-    setGameTimeHint(0);
-    isCoverScreenVisible ? setIsCoverScreenVisible(false) : setIsCoverScreenVisible(true);
-    setIsIntroVisible(true);
 }
 
 export function setTeamNameFunction(teamNameValue,setTeamName) {
@@ -445,7 +388,7 @@ export function showItemContents(value,gameBackpack,isShovelOn,setIsShovelOn,isP
 
 export function removeLocalStorage() {
     localStorage.removeItem("agreeToWaiver");
-    localStorage.removeItem("email");
+    localStorage.removeItem("userAttributes");
     localStorage.removeItem("gameStatsID");
     localStorage.removeItem("gameScoreID");
     localStorage.removeItem("gameID");
@@ -456,8 +399,6 @@ export function removeLocalStorage() {
     localStorage.removeItem("gameTime")
     localStorage.removeItem("gameTimeHint");
     localStorage.removeItem("gameTimeTotal");
-    localStorage.removeItem("gameStop");
-    localStorage.removeItem("gameStopNameArray");
     localStorage.removeItem("numberOfTimes");
     localStorage.removeItem("numberOfPlayers");
     localStorage.removeItem("key");
@@ -476,6 +417,4 @@ export function removeLocalStorage() {
     localStorage.removeItem("gameDescriptionP");
     localStorage.removeItem("gameDescriptionH2");
     localStorage.removeItem("gameDescriptionH3");
-
-
 }

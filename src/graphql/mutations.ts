@@ -8,54 +8,717 @@ type GeneratedMutation<InputType, OutputType> = string & {
   __generatedMutationOutput: OutputType;
 };
 
-export const createTodo = /* GraphQL */ `mutation CreateTodo(
-  $input: CreateTodoInput!
-  $condition: ModelTodoConditionInput
+export const createUser = /* GraphQL */ `mutation CreateUser(
+  $input: CreateUserInput!
+  $condition: ModelUserConditionInput
 ) {
-  createTodo(input: $input, condition: $condition) {
+  createUser(input: $input, condition: $condition) {
     id
-    name
+    userName
     description
+    location
+    email
+    game {
+      nextToken
+      __typename
+    }
     createdAt
+    disabled
     updatedAt
     __typename
   }
 }
 ` as GeneratedMutation<
-  APITypes.CreateTodoMutationVariables,
-  APITypes.CreateTodoMutation
+  APITypes.CreateUserMutationVariables,
+  APITypes.CreateUserMutation
 >;
-export const updateTodo = /* GraphQL */ `mutation UpdateTodo(
-  $input: UpdateTodoInput!
-  $condition: ModelTodoConditionInput
+export const updateUser = /* GraphQL */ `mutation UpdateUser(
+  $input: UpdateUserInput!
+  $condition: ModelUserConditionInput
 ) {
-  updateTodo(input: $input, condition: $condition) {
+  updateUser(input: $input, condition: $condition) {
     id
-    name
+    userName
     description
+    location
+    email
+    game {
+      nextToken
+      __typename
+    }
     createdAt
+    disabled
     updatedAt
     __typename
   }
 }
 ` as GeneratedMutation<
-  APITypes.UpdateTodoMutationVariables,
-  APITypes.UpdateTodoMutation
+  APITypes.UpdateUserMutationVariables,
+  APITypes.UpdateUserMutation
 >;
-export const deleteTodo = /* GraphQL */ `mutation DeleteTodo(
-  $input: DeleteTodoInput!
-  $condition: ModelTodoConditionInput
+export const deleteUser = /* GraphQL */ `mutation DeleteUser(
+  $input: DeleteUserInput!
+  $condition: ModelUserConditionInput
 ) {
-  deleteTodo(input: $input, condition: $condition) {
+  deleteUser(input: $input, condition: $condition) {
     id
-    name
+    userName
     description
+    location
+    email
+    game {
+      nextToken
+      __typename
+    }
+    createdAt
+    disabled
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteUserMutationVariables,
+  APITypes.DeleteUserMutation
+>;
+export const createGame = /* GraphQL */ `mutation CreateGame(
+  $input: CreateGameInput!
+  $condition: ModelGameConditionInput
+) {
+  createGame(input: $input, condition: $condition) {
+    id
+    gameName
+    gameDescriptionH2
+    gameDescriptionH3
+    gameDescriptionP
+    gameLocationPlace
+    gameLocationCity
+    gameImage
+    gameType
+    gameLink
+    gameGoals
+    gameIntro
+    gameMap
+    gamePlayZone {
+      nextToken
+      __typename
+    }
+    gameHint {
+      nextToken
+      __typename
+    }
+    type
+    gameClue {
+      nextToken
+      __typename
+    }
+    gamePuzzle
+    gameObject
+    createdAt
+    disabled
+    user {
+      nextToken
+      __typename
+    }
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateGameMutationVariables,
+  APITypes.CreateGameMutation
+>;
+export const updateGame = /* GraphQL */ `mutation UpdateGame(
+  $input: UpdateGameInput!
+  $condition: ModelGameConditionInput
+) {
+  updateGame(input: $input, condition: $condition) {
+    id
+    gameName
+    gameDescriptionH2
+    gameDescriptionH3
+    gameDescriptionP
+    gameLocationPlace
+    gameLocationCity
+    gameImage
+    gameType
+    gameLink
+    gameGoals
+    gameIntro
+    gameMap
+    gamePlayZone {
+      nextToken
+      __typename
+    }
+    gameHint {
+      nextToken
+      __typename
+    }
+    type
+    gameClue {
+      nextToken
+      __typename
+    }
+    gamePuzzle
+    gameObject
+    createdAt
+    disabled
+    user {
+      nextToken
+      __typename
+    }
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateGameMutationVariables,
+  APITypes.UpdateGameMutation
+>;
+export const deleteGame = /* GraphQL */ `mutation DeleteGame(
+  $input: DeleteGameInput!
+  $condition: ModelGameConditionInput
+) {
+  deleteGame(input: $input, condition: $condition) {
+    id
+    gameName
+    gameDescriptionH2
+    gameDescriptionH3
+    gameDescriptionP
+    gameLocationPlace
+    gameLocationCity
+    gameImage
+    gameType
+    gameLink
+    gameGoals
+    gameIntro
+    gameMap
+    gamePlayZone {
+      nextToken
+      __typename
+    }
+    gameHint {
+      nextToken
+      __typename
+    }
+    type
+    gameClue {
+      nextToken
+      __typename
+    }
+    gamePuzzle
+    gameObject
+    createdAt
+    disabled
+    user {
+      nextToken
+      __typename
+    }
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteGameMutationVariables,
+  APITypes.DeleteGameMutation
+>;
+export const createGameStats = /* GraphQL */ `mutation CreateGameStats(
+  $input: CreateGameStatsInput!
+  $condition: ModelGameStatsConditionInput
+) {
+  createGameStats(input: $input, condition: $condition) {
+    id
+    gameID
+    userEmail
+    gameLocationCity
+    gameName
+    gameStates
+    gameScore {
+      nextToken
+      __typename
+    }
+    type
+    createdAt
+    disabled
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateGameStatsMutationVariables,
+  APITypes.CreateGameStatsMutation
+>;
+export const updateGameStats = /* GraphQL */ `mutation UpdateGameStats(
+  $input: UpdateGameStatsInput!
+  $condition: ModelGameStatsConditionInput
+) {
+  updateGameStats(input: $input, condition: $condition) {
+    id
+    gameID
+    userEmail
+    gameLocationCity
+    gameName
+    gameStates
+    gameScore {
+      nextToken
+      __typename
+    }
+    type
+    createdAt
+    disabled
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateGameStatsMutationVariables,
+  APITypes.UpdateGameStatsMutation
+>;
+export const deleteGameStats = /* GraphQL */ `mutation DeleteGameStats(
+  $input: DeleteGameStatsInput!
+  $condition: ModelGameStatsConditionInput
+) {
+  deleteGameStats(input: $input, condition: $condition) {
+    id
+    gameID
+    userEmail
+    gameLocationCity
+    gameName
+    gameStates
+    gameScore {
+      nextToken
+      __typename
+    }
+    type
+    createdAt
+    disabled
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteGameStatsMutationVariables,
+  APITypes.DeleteGameStatsMutation
+>;
+export const createGameScore = /* GraphQL */ `mutation CreateGameScore(
+  $input: CreateGameScoreInput!
+  $condition: ModelGameScoreConditionInput
+) {
+  createGameScore(input: $input, condition: $condition) {
+    id
+    gameStatsID
+    gameID
+    numberOfPlayers
+    teamName
+    teamLocation
+    gameComments
+    gameTotalTime
+    completed
+    firstTime
+    gameHintTime
+    createdAt
+    disabled
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateGameScoreMutationVariables,
+  APITypes.CreateGameScoreMutation
+>;
+export const updateGameScore = /* GraphQL */ `mutation UpdateGameScore(
+  $input: UpdateGameScoreInput!
+  $condition: ModelGameScoreConditionInput
+) {
+  updateGameScore(input: $input, condition: $condition) {
+    id
+    gameStatsID
+    gameID
+    numberOfPlayers
+    teamName
+    teamLocation
+    gameComments
+    gameTotalTime
+    completed
+    firstTime
+    gameHintTime
+    createdAt
+    disabled
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateGameScoreMutationVariables,
+  APITypes.UpdateGameScoreMutation
+>;
+export const deleteGameScore = /* GraphQL */ `mutation DeleteGameScore(
+  $input: DeleteGameScoreInput!
+  $condition: ModelGameScoreConditionInput
+) {
+  deleteGameScore(input: $input, condition: $condition) {
+    id
+    gameStatsID
+    gameID
+    numberOfPlayers
+    teamName
+    teamLocation
+    gameComments
+    gameTotalTime
+    completed
+    firstTime
+    gameHintTime
+    createdAt
+    disabled
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteGameScoreMutationVariables,
+  APITypes.DeleteGameScoreMutation
+>;
+export const createGameHint = /* GraphQL */ `mutation CreateGameHint(
+  $input: CreateGameHintInput!
+  $condition: ModelGameHintConditionInput
+) {
+  createGameHint(input: $input, condition: $condition) {
+    id
+    gameID
+    gameHintName
+    gameHintDescription
+    order
+    createdAt
+    disabled
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateGameHintMutationVariables,
+  APITypes.CreateGameHintMutation
+>;
+export const updateGameHint = /* GraphQL */ `mutation UpdateGameHint(
+  $input: UpdateGameHintInput!
+  $condition: ModelGameHintConditionInput
+) {
+  updateGameHint(input: $input, condition: $condition) {
+    id
+    gameID
+    gameHintName
+    gameHintDescription
+    order
+    createdAt
+    disabled
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateGameHintMutationVariables,
+  APITypes.UpdateGameHintMutation
+>;
+export const deleteGameHint = /* GraphQL */ `mutation DeleteGameHint(
+  $input: DeleteGameHintInput!
+  $condition: ModelGameHintConditionInput
+) {
+  deleteGameHint(input: $input, condition: $condition) {
+    id
+    gameID
+    gameHintName
+    gameHintDescription
+    order
+    createdAt
+    disabled
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteGameHintMutationVariables,
+  APITypes.DeleteGameHintMutation
+>;
+export const createGameClue = /* GraphQL */ `mutation CreateGameClue(
+  $input: CreateGameClueInput!
+  $condition: ModelGameClueConditionInput
+) {
+  createGameClue(input: $input, condition: $condition) {
+    id
+    gameID
+    gamePlayZoneID
+    gameClueName
+    gameClueImage
+    gameClueText
+    gameCluePosition
+    order
+    createdAt
+    disabled
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateGameClueMutationVariables,
+  APITypes.CreateGameClueMutation
+>;
+export const updateGameClue = /* GraphQL */ `mutation UpdateGameClue(
+  $input: UpdateGameClueInput!
+  $condition: ModelGameClueConditionInput
+) {
+  updateGameClue(input: $input, condition: $condition) {
+    id
+    gameID
+    gamePlayZoneID
+    gameClueName
+    gameClueImage
+    gameClueText
+    gameCluePosition
+    order
+    createdAt
+    disabled
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateGameClueMutationVariables,
+  APITypes.UpdateGameClueMutation
+>;
+export const deleteGameClue = /* GraphQL */ `mutation DeleteGameClue(
+  $input: DeleteGameClueInput!
+  $condition: ModelGameClueConditionInput
+) {
+  deleteGameClue(input: $input, condition: $condition) {
+    id
+    gameID
+    gamePlayZoneID
+    gameClueName
+    gameClueImage
+    gameClueText
+    gameCluePosition
+    order
+    createdAt
+    disabled
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteGameClueMutationVariables,
+  APITypes.DeleteGameClueMutation
+>;
+export const createGamePlayZone = /* GraphQL */ `mutation CreateGamePlayZone(
+  $input: CreateGamePlayZoneInput!
+  $condition: ModelGamePlayZoneConditionInput
+) {
+  createGamePlayZone(input: $input, condition: $condition) {
+    id
+    gameID
+    gameZoneName
+    gameZoneImage
+    gameZoneDescription
+    gameZoneIcon
+    order
+    createdAt
+    disabled
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateGamePlayZoneMutationVariables,
+  APITypes.CreateGamePlayZoneMutation
+>;
+export const updateGamePlayZone = /* GraphQL */ `mutation UpdateGamePlayZone(
+  $input: UpdateGamePlayZoneInput!
+  $condition: ModelGamePlayZoneConditionInput
+) {
+  updateGamePlayZone(input: $input, condition: $condition) {
+    id
+    gameID
+    gameZoneName
+    gameZoneImage
+    gameZoneDescription
+    gameZoneIcon
+    order
+    createdAt
+    disabled
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateGamePlayZoneMutationVariables,
+  APITypes.UpdateGamePlayZoneMutation
+>;
+export const deleteGamePlayZone = /* GraphQL */ `mutation DeleteGamePlayZone(
+  $input: DeleteGamePlayZoneInput!
+  $condition: ModelGamePlayZoneConditionInput
+) {
+  deleteGamePlayZone(input: $input, condition: $condition) {
+    id
+    gameID
+    gameZoneName
+    gameZoneImage
+    gameZoneDescription
+    gameZoneIcon
+    order
+    createdAt
+    disabled
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteGamePlayZoneMutationVariables,
+  APITypes.DeleteGamePlayZoneMutation
+>;
+export const createUserGamePlay = /* GraphQL */ `mutation CreateUserGamePlay(
+  $input: CreateUserGamePlayInput!
+  $condition: ModelUserGamePlayConditionInput
+) {
+  createUserGamePlay(input: $input, condition: $condition) {
+    id
+    userId
+    gameId
+    user {
+      id
+      userName
+      description
+      location
+      email
+      createdAt
+      disabled
+      updatedAt
+      __typename
+    }
+    game {
+      id
+      gameName
+      gameDescriptionH2
+      gameDescriptionH3
+      gameDescriptionP
+      gameLocationPlace
+      gameLocationCity
+      gameImage
+      gameType
+      gameLink
+      gameGoals
+      gameIntro
+      gameMap
+      type
+      gamePuzzle
+      gameObject
+      createdAt
+      disabled
+      updatedAt
+      __typename
+    }
     createdAt
     updatedAt
     __typename
   }
 }
 ` as GeneratedMutation<
-  APITypes.DeleteTodoMutationVariables,
-  APITypes.DeleteTodoMutation
+  APITypes.CreateUserGamePlayMutationVariables,
+  APITypes.CreateUserGamePlayMutation
+>;
+export const updateUserGamePlay = /* GraphQL */ `mutation UpdateUserGamePlay(
+  $input: UpdateUserGamePlayInput!
+  $condition: ModelUserGamePlayConditionInput
+) {
+  updateUserGamePlay(input: $input, condition: $condition) {
+    id
+    userId
+    gameId
+    user {
+      id
+      userName
+      description
+      location
+      email
+      createdAt
+      disabled
+      updatedAt
+      __typename
+    }
+    game {
+      id
+      gameName
+      gameDescriptionH2
+      gameDescriptionH3
+      gameDescriptionP
+      gameLocationPlace
+      gameLocationCity
+      gameImage
+      gameType
+      gameLink
+      gameGoals
+      gameIntro
+      gameMap
+      type
+      gamePuzzle
+      gameObject
+      createdAt
+      disabled
+      updatedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateUserGamePlayMutationVariables,
+  APITypes.UpdateUserGamePlayMutation
+>;
+export const deleteUserGamePlay = /* GraphQL */ `mutation DeleteUserGamePlay(
+  $input: DeleteUserGamePlayInput!
+  $condition: ModelUserGamePlayConditionInput
+) {
+  deleteUserGamePlay(input: $input, condition: $condition) {
+    id
+    userId
+    gameId
+    user {
+      id
+      userName
+      description
+      location
+      email
+      createdAt
+      disabled
+      updatedAt
+      __typename
+    }
+    game {
+      id
+      gameName
+      gameDescriptionH2
+      gameDescriptionH3
+      gameDescriptionP
+      gameLocationPlace
+      gameLocationCity
+      gameImage
+      gameType
+      gameLink
+      gameGoals
+      gameIntro
+      gameMap
+      type
+      gamePuzzle
+      gameObject
+      createdAt
+      disabled
+      updatedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteUserGamePlayMutationVariables,
+  APITypes.DeleteUserGamePlayMutation
 >;

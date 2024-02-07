@@ -2,8 +2,102 @@
 # all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
 input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
 
-type Todo @model {
+type User @model @auth(rules: [ { allow: public } ] ) {
   id: ID!
-  name: String!
+  userName: String
   description: String
+  location: String
+  email: String! @index
+  game: [Game] @manyToMany(relationName: "UserGamePlay")
+  createdAt: String!
+  disabled: Boolean
 }
+
+type Game @model @auth(rules: [ { allow: public } ] ) {
+  id: ID!
+  gameName: String! @index(name:"SortByType", sortKeyFields:["type"])
+  gameDescriptionH2: String
+  gameDescriptionH3: String
+  gameDescriptionP: String
+  gameLocationPlace: String
+  gameLocationCity: String!
+  gameImage: String
+  gameType: String
+  gameLink: String
+  gameGoals: String
+  gameIntro: String
+  gameMap: String
+  gamePlayZone: [GamePlayZone] @hasMany(indexName: "byGameID", fields: ["id"])
+  gameHint: [GameHint] @hasMany(indexName: "byGameID", fields: ["id"])
+  type: String! @index(name: "gamesByCity", queryField: "gamesByCity", sortKeyFields: ["gameLocationCity"])
+  gameClue: [GameClue] @hasMany(indexName: "byGameID", fields: ["id"])
+  gamePuzzle: String
+  gameObject: String
+  createdAt: String!
+  disabled: Boolean
+  user:[User] @manyToMany(relationName: "UserGamePlay")
+ }
+
+ type GameStats @model @auth(rules: [ { allow: public } ] ) {
+   id: ID!
+   gameID: String! @index
+   userEmail: String! @index
+   gameLocationCity: String
+   gameName: String! @index(name: "byGameName", queryField: "gameStatsByGameName", sortKeyFields: ["createdAt"])
+   gameStates: String
+   gameScore: [GameScore] @hasMany(indexName: "byGameStats", fields: ["id"])
+   type: String! @index(name: "sortedByGameName", queryField: "gameStatsSortedByGameName", sortKeyFields: ["gameName"])
+   createdAt: String!
+   disabled: Boolean
+ }
+
+type GameScore @model @auth(rules: [ { allow: public } ] ) {
+  id: ID!
+  gameStatsID: ID! @index(name: "byGameStats", queryField: "gameScoreByGameStatsID", sortKeyFields: ["createdAt"])
+  gameID: ID! @index(name: "byGameID", queryField: "gameScoreByGameID", sortKeyFields: ["gameTotalTime"])
+  numberOfPlayers: String
+  teamName: String
+  teamLocation: String
+  gameComments: String
+  gameTotalTime: Float!
+  completed: Boolean
+  firstTime: Boolean
+  gameHintTime: Float!
+  createdAt: String!
+  disabled: Boolean
+ }
+
+type GameHint @model @auth(rules: [ { allow: public } ] ) {
+  id: ID!
+  gameID: ID! @index(name: "byGameID", queryField: "gameHintByGameID", sortKeyFields: ["order"])
+  gameHintName: String
+  gameHintDescription: String
+  order: Int!
+  createdAt: String!
+  disabled: Boolean
+ }
+
+type GameClue @model @auth(rules: [ { allow: public } ] ) {
+  id: ID!
+  gameID: ID! @index(name: "byGameID", queryField: "gameClueByGameID", sortKeyFields: ["order"])
+  gamePlayZoneID: String
+  gameClueName: String
+  gameClueImage: String
+  gameClueText: String
+  gameCluePosition: String
+  order: Int!
+  createdAt: String!
+  disabled: Boolean
+ }
+
+type GamePlayZone @model @auth(rules: [ { allow: public } ] ) {
+  id: ID!
+  gameID: ID! @index(name: "byGameID", queryField: "gamePlayZoneByGameID", sortKeyFields: ["order"])
+  gameZoneName: String
+  gameZoneImage: String
+  gameZoneDescription: String
+  gameZoneIcon: String
+  order: Int!
+  createdAt: String!
+  disabled: Boolean
+ }

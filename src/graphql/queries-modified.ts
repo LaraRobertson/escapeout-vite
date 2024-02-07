@@ -64,20 +64,30 @@ export const getGame = /* GraphQL */ `query GetGame($id: ID!) {
     gameIntro
     gameMap
     gamePlayZone {
+      items {
+        id
+        disabled
+        gameID
+        gameZoneName
+        gameZoneImage
+        order
+        disabled
+      }
       nextToken
-      __typename
     }
     gameHint {
+      items {
+         gameHintName
+         gameHintDescription
+         order
+         disabled
+      }
       nextToken
-      __typename
     }
     type
-    gameClue {
-      nextToken
-      __typename
-    }
-    gamePuzzle
-    gameObject
+    gameClues
+    gamePuzzles
+    gameObjects
     createdAt
     disabled
     user {
@@ -109,9 +119,34 @@ export const listGames = /* GraphQL */ `query ListGames(
       gameGoals
       gameIntro
       gameMap
+     gamePlayZone {
+          items {
+            id
+            disabled
+            gameID
+            gameZoneName
+            order
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+      gameHint {
+          items {
+            id
+            disabled
+            gameID
+            gameHintName
+            order
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
       type
-      gamePuzzle
-      gameObject
+      gameClues
+      gamePuzzles
+      gameObjects
       createdAt
       disabled
       updatedAt
@@ -268,54 +303,6 @@ export const listGameHints = /* GraphQL */ `query ListGameHints(
   APITypes.ListGameHintsQueryVariables,
   APITypes.ListGameHintsQuery
 >;
-export const getGameClue = /* GraphQL */ `query GetGameClue($id: ID!) {
-  getGameClue(id: $id) {
-    id
-    gameID
-    gamePlayZoneID
-    gameClueName
-    gameClueImage
-    gameClueText
-    gameCluePosition
-    order
-    createdAt
-    disabled
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedQuery<
-  APITypes.GetGameClueQueryVariables,
-  APITypes.GetGameClueQuery
->;
-export const listGameClues = /* GraphQL */ `query ListGameClues(
-  $filter: ModelGameClueFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  listGameClues(filter: $filter, limit: $limit, nextToken: $nextToken) {
-    items {
-      id
-      gameID
-      gamePlayZoneID
-      gameClueName
-      gameClueImage
-      gameClueText
-      gameCluePosition
-      order
-      createdAt
-      disabled
-      updatedAt
-      __typename
-    }
-    nextToken
-    __typename
-  }
-}
-` as GeneratedQuery<
-  APITypes.ListGameCluesQueryVariables,
-  APITypes.ListGameCluesQuery
->;
 export const getGamePlayZone = /* GraphQL */ `query GetGamePlayZone($id: ID!) {
   getGamePlayZone(id: $id) {
     id
@@ -323,7 +310,6 @@ export const getGamePlayZone = /* GraphQL */ `query GetGamePlayZone($id: ID!) {
     gameZoneName
     gameZoneImage
     gameZoneDescription
-    gameZoneIcon
     order
     createdAt
     disabled
@@ -347,7 +333,6 @@ export const listGamePlayZones = /* GraphQL */ `query ListGamePlayZones(
       gameZoneName
       gameZoneImage
       gameZoneDescription
-      gameZoneIcon
       order
       createdAt
       disabled
@@ -393,8 +378,9 @@ export const getUserGamePlay = /* GraphQL */ `query GetUserGamePlay($id: ID!) {
       gameIntro
       gameMap
       type
-      gamePuzzle
-      gameObject
+      gameClues
+      gamePuzzles
+      gameObjects
       createdAt
       disabled
       updatedAt
@@ -495,8 +481,9 @@ export const gamesByGameNameAndType = /* GraphQL */ `query GamesByGameNameAndTyp
       gameIntro
       gameMap
       type
-      gamePuzzle
-      gameObject
+      gameClues
+      gamePuzzles
+      gameObjects
       createdAt
       disabled
       updatedAt
@@ -541,8 +528,9 @@ export const gamesByCity = /* GraphQL */ `query GamesByCity(
       gameIntro
       gameMap
       type
-      gamePuzzle
-      gameObject
+      gameClues
+      gamePuzzles
+      gameObjects
       createdAt
       disabled
       updatedAt
@@ -817,44 +805,6 @@ export const gameHintByGameID = /* GraphQL */ `query GameHintByGameID(
   APITypes.GameHintByGameIDQueryVariables,
   APITypes.GameHintByGameIDQuery
 >;
-export const gameClueByGameID = /* GraphQL */ `query GameClueByGameID(
-  $gameID: ID!
-  $order: ModelIntKeyConditionInput
-  $sortDirection: ModelSortDirection
-  $filter: ModelGameClueFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  gameClueByGameID(
-    gameID: $gameID
-    order: $order
-    sortDirection: $sortDirection
-    filter: $filter
-    limit: $limit
-    nextToken: $nextToken
-  ) {
-    items {
-      id
-      gameID
-      gamePlayZoneID
-      gameClueName
-      gameClueImage
-      gameClueText
-      gameCluePosition
-      order
-      createdAt
-      disabled
-      updatedAt
-      __typename
-    }
-    nextToken
-    __typename
-  }
-}
-` as GeneratedQuery<
-  APITypes.GameClueByGameIDQueryVariables,
-  APITypes.GameClueByGameIDQuery
->;
 export const gamePlayZoneByGameID = /* GraphQL */ `query GamePlayZoneByGameID(
   $gameID: ID!
   $order: ModelIntKeyConditionInput
@@ -877,7 +827,6 @@ export const gamePlayZoneByGameID = /* GraphQL */ `query GamePlayZoneByGameID(
       gameZoneName
       gameZoneImage
       gameZoneDescription
-      gameZoneIcon
       order
       createdAt
       disabled
