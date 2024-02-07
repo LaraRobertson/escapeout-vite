@@ -67,6 +67,6 @@
       "Ref": "AWS::StackId"
     },
     "permissions": [],
-    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"http://localhost:5173/\",\"https://dev.di3048wmen2tr.amplifyapp.com/\"],\"LogoutURLs\":[\"http://localhost:5173/\",\"https://dev.di3048wmen2tr.amplifyapp.com/\"]}"
+    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"http://localhost:5173/\",\"https://dev.di3048wmen2tr.amplifyapp.com/\",\"https://play.escapeout.games/\",\"http://localhost:5173/\"],\"LogoutURLs\":[\"http://localhost:5173/\",\"https://dev.di3048wmen2tr.amplifyapp.com/\",\"https://play.escapeout.games/\"]}"
   }
 }
