@@ -15,7 +15,7 @@ import {
     gamesByCity,
     usersByEmail,
     listUsers, getGame, listGames,
-    getGamePlayZone,getGameHint
+    getGamePlayZone,getGameHint,getGameClue
 } from "../graphql/queries";
 import { format } from 'date-fns'
 import * as mutations from '../graphql/mutations';
@@ -24,6 +24,7 @@ import { useNavigate } from 'react-router-dom';
 
 import {generateClient} from "aws-amplify/api";
 import { fetchUserAttributes } from 'aws-amplify/auth';
+import {deleteGameHint} from "../graphql/mutations";
 
 export function Admin() {
     const [email, setEmail] = useState();
@@ -39,6 +40,11 @@ export function Admin() {
     const [gameName, setGameName] = useState();
     const [gameType, setGameType] = useState();
     const [disabledGame, setDisabledGame] = useState();
+    const [gameVisible, setGameVisible] = useState("");
+    const [gameFormVisible, setGameFormVisible] = useState(false);
+    const [gameZoneFormVisible, setGameZoneFormVisible] = useState(false);
+    const [gameHintFormVisible, setGameHintFormVisible] = useState(false);
+    const [gameClueFormVisible, setGameClueFormVisible] = useState(false);
 
 
     const client = generateClient();
@@ -214,6 +220,37 @@ export function Admin() {
         fetchGames();
     }
 
+    async function deleteHint(props) {
+        console.log("props.hintID: " + props.hintID);
+        try {
+            const hintDetails = {
+                id: props.hintID
+            };
+            await client.graphql({
+                query: mutations.deleteGameHint,
+                variables: { input: hintDetails }
+            });
+        } catch (err) {
+            console.log('error deleting hint:', err);
+        }
+        fetchGames();
+    }
+
+    async function deleteClue(props) {
+        console.log("props.clueID: " + props.clueID);
+        try {
+            const clueDetails = {
+                id: props.clueID
+            };
+            await client.graphql({
+                query: mutations.deleteGameClue,
+                variables: { input: clueDetails }
+            });
+        } catch (err) {
+            console.log('error deleting clue:', err);
+        }
+        fetchGames();
+    }
     async function deleteUser(props) {
         console.log("props.userID: " + props.userID);
         try {
@@ -246,6 +283,7 @@ export function Admin() {
     }
     /* GAME */
     const initialStateCreateGame = {
+        gameID: '',
         gameName: '',
         gameType: '',
         gameLocationPlace: '',
@@ -284,7 +322,8 @@ export function Admin() {
             const gamesFromAPI = apiData.data.getGame;
             setFormCreateGameState(gamesFromAPI);
             console.log("gamesFromAPI - update game")
-            for (const key in gamesFromAPI) {
+            setGameFormVisible(true);
+            /*for (const key in gamesFromAPI) {
                 console.log(`${key}: ${gamesFromAPI[key]}`);
             }
             let element =  document.getElementById("updateGame");
@@ -292,7 +331,7 @@ export function Admin() {
             element.classList.add('show');
             let element2 =  document.getElementById("createGame");
             element2.classList.remove('show');
-            element2.classList.add('hide');
+            element2.classList.add('hide');*/
         } catch (err) {
             console.log('error fetching getGame', err);
         }
@@ -317,8 +356,9 @@ export function Admin() {
         }
     }
     async function updateGame() {
+        console.log("updateGame: " + formCreateGameState.gameName)
         try {
-            if (!formCreateGameState.gameName || !formCreateGameState.gameLink) return;
+            if (!formCreateGameState.gameName) return;
             const game = { ...formCreateGameState };
             console.log("formCreateGameState - update game")
             for (const key in game) {
@@ -330,6 +370,7 @@ export function Admin() {
             delete game.__typename;
             delete game.gameHint;
             delete game.gamePlayZone;
+            delete game.gameClue;
             delete game.gamePuzzles;
             await client.graphql({
                 query: mutations.updateGame,
@@ -343,11 +384,13 @@ export function Admin() {
             let element2 =  document.getElementById("createGame");
             element2.classList.remove('hide');
             element2.classList.add('show');
+
             fetchGames();
 
         } catch (err) {
             console.log('error updating games:', err);
         }
+        setGameFormVisible(false);
     }
 
     /* GamePLayZone */
@@ -362,6 +405,7 @@ export function Admin() {
     const [formCreateZoneState, setFormCreateZoneState] = useState(initialStateCreateZone);
     function setInputCreateZone(key, value) {
         setFormCreateZoneState({ ...formCreateZoneState, [key]: value });
+        setGameZoneFormVisible(true);
     }
     useEffect(() => {
         console.log("***useEffect***:  formCreateZoneState");
@@ -409,6 +453,7 @@ export function Admin() {
             let element2 =  document.getElementById("createZone");
             element2.classList.remove('show');
             element2.classList.add('hide');
+            setGameZoneFormVisible(true);
         } catch (err) {
             console.log('error fetching getPlayZone', err);
         }
@@ -438,6 +483,7 @@ export function Admin() {
             let element2 =  document.getElementById("createZone");
             element2.classList.remove('hide');
             element2.classList.add('show');
+            setGameZoneFormVisible(false);
             fetchGames();
 
         } catch (err) {
@@ -446,14 +492,20 @@ export function Admin() {
     }
     /* end GamePlayZone */
     /* GameHint */
+
     const initialStateCreateHint = {
         gameID: 'xxxx',
+        gamePlayZoneID: '',
         gameHintName: '',
         gameHintDescription: '',
         order: 1,
         disabled: false
     };
     const [formCreateHintState, setFormCreateHintState] = useState(initialStateCreateHint);
+    function setInputCreateHintInitial(key1, value1, key2, value2) {
+        setFormCreateHintState({ ...formCreateHintState, [key1]: value1, [key2]: value2});
+        setGameHintFormVisible(true);
+    }
     function setInputCreateHint(key, value) {
         setFormCreateHintState({ ...formCreateHintState, [key]: value });
     }
@@ -502,6 +554,7 @@ export function Admin() {
             let element2 =  document.getElementById("createHint");
             element2.classList.remove('show');
             element2.classList.add('hide');
+            setGameHintFormVisible(true);
         } catch (err) {
             console.log('error fetching getGameHint', err);
         }
@@ -535,6 +588,115 @@ export function Admin() {
 
         } catch (err) {
             console.log('error updating GameHint:', err);
+        }
+    }
+
+    /* GameClue */
+    const initialStateCreateClue = {
+        gameID: 'xxx',
+        gamePlayZoneID: '',
+        gameClueName: '',
+        gameClueIcon: '',
+        gameClueImage: '',
+        gameClueText: '',
+        gameCluePosition: '',
+        order: 1,
+        disabled: false
+    };
+    const [formCreateClueState, setFormCreateClueState] = useState(initialStateCreateClue);
+    function setInputCreateClueInitial(key1, value1, key2, value2) {
+        console.log("formCreateClueInitial: " + key1 + "|" + value1 + "|" + key2 + "|" + value2 );
+        setFormCreateClueState({ ...formCreateClueState, [key1]: value1, [key2]: value2});
+        setGameClueFormVisible(true);
+    }
+    function setInputCreateClue(key, value) {
+        console.log("setInputCreateClue: " + key +"|" + value);
+        setFormCreateClueState({ ...formCreateClueState, [key]: value });
+    }
+    useEffect(() => {
+        console.log("***useEffect***:  formCreateClueState");
+        for (const key in formCreateClueState) {
+            console.log(`${key}: ${formCreateClueState[key]}`);
+        }
+    }, [formCreateClueState]);
+    // createClue
+    async function addClue() {
+        console.log("addClue");
+        try {
+            if (!formCreateClueState.gameID || !formCreateClueState.gameClueName) return;
+            const gameClue = { ...formCreateClueState };
+            console.log("addClue - gameClue: " + gameClue);
+            setFormCreateClueState(initialStateCreateClue);
+            await client.graphql({
+                query: mutations.createGameClue,
+                variables: {
+                    input: gameClue
+                }
+            });
+            setGameClueFormVisible(false);
+            setFormCreateClueState(initialStateCreateClue);
+            fetchGames();
+        } catch (err) {
+            console.log('error creating gameClue:', err);
+        }
+    }
+    async function showUpdateClue(props) {
+        console.log("props.clueID: " + props.clueID);
+        /* first load up FormCreateGameState */
+        try {
+            const apiData = await client.graphql({
+                query: getGameClue,
+                variables: {id: props.clueID}
+            });
+            const cluesFromAPI = apiData.data.getGameClue;
+            setFormCreateClueState(cluesFromAPI);
+            console.log("cluesFromAPI - update clue")
+            for (const key in cluesFromAPI) {
+                console.log(`${key}: ${cluesFromAPI[key]}`);
+            }
+            let element =  document.getElementById("updateClue");
+            element.classList.remove('hide');
+            element.classList.add('show');
+            let element2 =  document.getElementById("createClue");
+            element2.classList.remove('show');
+            element2.classList.add('hide');
+            setGameClueFormVisible(true);
+        } catch (err) {
+            console.log('error fetching getGameClue', err);
+        }
+    }
+
+    async function updateClue() {
+        try {
+            if (!formCreateClueState.gameID|| !formCreateClueState.gamePlayZoneID) return;
+            const gameClue = { ...formCreateClueState };
+            console.log("formCreateClueState - update gameClue")
+            for (const key in gameClue) {
+                console.log(`${key}: ${gameClue[key]}`);
+            }
+            setFormCreateClueState(initialStateCreateClue);
+            delete gameClue.updatedAt;
+            delete gameClue.__typename;
+            await client.graphql({
+                query: mutations.updateGameClue,
+                variables: {
+                    input: gameClue
+                }
+            });
+            /* change the buttons back */
+            /* use state variable? */
+            let element =  document.getElementById("updateClue");
+            element.classList.remove('show');
+            element.classList.add('hide');
+            let element2 =  document.getElementById("createClue");
+            element2.classList.remove('hide');
+            element2.classList.add('show');
+            setGameClueFormVisible(false);
+            setFormCreateClueState(initialStateCreateClue);
+            fetchGames();
+
+        } catch (err) {
+            console.log('error updating GameClue:', err);
         }
     }
     /* END ADMIN
@@ -769,11 +931,80 @@ export function Admin() {
                         <UserStatsView title={statsTitle} />
                         <View id="gameSection" className="show section">
                             <Heading level={3} color="black">Games</Heading>
-                            <Button marginRight="5px" id="gameFormButton" backgroundColor="#B8CEF9" onClick={() => divShowHide("gameForm")}>{showHideLabel.gameForm} Form</Button>
+
+                            <Button marginRight="5px" backgroundColor="#B8CEF9" onClick={() => setFilterCreateGame()}>All Games</Button>
+                            <Button marginRight="5px" backgroundColor="#B8CEF9" onClick={() => setFilterCreateGame("disabled",{eq:false})}>live</Button>
+                            <Button marginRight="5px" backgroundColor="#B8CEF9" onClick={() => setFilterCreateGame("disabled",{eq:true})}>disabled</Button>
+                            <Button backgroundColor="#B8CEF9" onClick={() => setFilterCreateGame("gameType",{eq:"free"})}>Get Free Games</Button>
+                            <View>type: "game"</View>
+                            {(gameType) ? (<View>gameType: {gameType}</View>):null}
+                            {(disabledGame === true)? (<View>disabled: true</View>):null}
+                            {(disabledGame === false)? (<View>disabled: false</View>):null}
+                            <Button className={"show-button blue-duke"} onClick={() => {setFormCreateGameState(initialStateCreateGame);setGameFormVisible(true)}}>add game</Button>
+                            {games.map((game) => (
+                                <View key={game.id} >
+                                    <View className={(gameVisible==game.id)? "hide" : "show"}>
+                                        <Button className={"show-button blue-duke"} onClick={() => setGameVisible(game.id)}>show game detail:</Button>
+                                        <strong>name</strong>: {game.gameName} | <strong>type</strong>: {game.gameType} | <strong>place</strong>: {game.gameLocationPlace} | <strong>city</strong>: {game.gameLocationCity}|<strong>disabled</strong>: { game.disabled ? "true":"false"}
+                                    </View>
+                                    <View className={(gameVisible==game.id)? "show" : "hide"}>
+                                        <Button className={"show-button blue-duke"} onClick={() => setGameVisible("")}>close game:</Button>
+                                        <strong>name</strong>: {game.gameName} | <strong>type</strong>: {game.gameType} | <strong>place</strong>: {game.gameLocationPlace} | <strong>city</strong>: {game.gameLocationCity}|<strong>disabled</strong>: { game.disabled ? "true":"false"}
+                                        <br /><strong>game id</strong>: {game.id}| <strong>game link</strong>: {game.gameLink}
+                                        <br />
+                                    <strong>gameDescriptionH2</strong>: {game.gameDescriptionH2} <br />
+                                    <strong>gameDescriptionH3</strong>: {game.gameDescriptionH3} <br />
+                                    <strong>gameDescriptionP</strong> {game.gameDescriptionP} <br />
+                                    <strong>gameIntro: </strong>{game.gameIntro} <br />
+                                    <strong>gameGoals: </strong>{game.gameGoals} <br />
+                                    <strong>gameImage: </strong>{game.gameImage} <br />
+                                    <strong>gameMap: </strong>{game.gameMap} <br />
+                                    <strong>How many zones: {game.gamePlayZone.items.length}</strong><br />
+                                    {game.gamePlayZone.items.map((zone) => (
+                                        <View key={zone.id}>
+                                            <strong>zone id:</strong> {zone.id} | <strong>disabled</strong>: {zone.disabled ? "true" : "false"} | <strong>order: </strong>{zone.order}  | <strong>gameZoneName: </strong>{zone.gameZoneName}
+                                            <br />
+                                            <Button marginRight="5px" className="button-small" onClick={() => showUpdateZone({"zoneID": zone.id})}>Update Zone</Button>
+                                            <Button marginRight="5px" className="button-small" onClick={() => setInputCreateHintInitial('gameID',game.id,'gamePlayZoneID',zone.id)}>Add Game Hint</Button>
+                                            <Button marginRight="5px" className="button-small" onClick={() => setInputCreateClueInitial('gameID',game.id,'gamePlayZoneID',zone.id)}>Add Clue</Button>
+                                        </View>
+                                    ))}
+                                    <strong>Hints: {game.gameHint.items.length}</strong><br />
+                                    {game.gameHint.items.map((hint) => (
+                                        <View key={hint.id}>
+                                            <strong>pzID:</strong>  {hint.gamePlayZoneID} | <strong>disabled</strong>: {hint.disabled ? "true" : "false"} | <strong>ord:</strong>  {hint.order} | <strong>hintName:</strong>  {hint.gameHintName} <strong>hint Description: </strong>{hint.gameHintDescription}
+                                            <br /><Button marginRight="5px" className="button-small" onClick={() => showUpdateHint({"hintID": hint.id})}>Update Hint</Button>
+                                            <Button marginRight="5px" className="button-small" onClick={() => deleteHint({"hintID": hint.id})}>Delete Hint</Button>
+                                        </View>
+                                    ))}
+                                        <strong>Clues: {game.gameClue.items.length}</strong><br />
+                                        {game.gameClue.items.map((clue) => (
+                                            <View key={clue.id}>
+                                                <strong>pzID:</strong>  {clue.gamePlayZoneID} | <strong>disabled</strong>: {clue.disabled ? "true" : "false"} |
+                                                <strong>ord:</strong>  {clue.order} | <strong>clueName:</strong>  {clue.gameClueName} |
+                                                <strong>clue Position: </strong>{clue.gameCluePosition} |
+                                                <strong>clue Icon: </strong>{clue.gameClueIcon} |
+                                                <strong>clue Image: </strong>{clue.gameClueImage} |
+                                                <strong>clue Image: </strong>{clue.gameClueText}
+                                                <br /><Button marginRight="5px" className="button-small" onClick={() => showUpdateClue({"clueID": clue.id})}>Update Clue</Button>
+                                                <Button marginRight="5px" className="button-small" onClick={() => deleteClue({"clueID": clue.id})}>Delete Clue</Button>
+                                            </View>
+                                        ))}
+                                    <Button marginRight="5px" className="button" onClick={() => showGameStats({"gameID": game.id, "gameName": game.gameName})}>Game Stats</Button>
+                                    <Button marginRight="5px" className="button" onClick={() => deleteGame({"gameID": game.id})}>Delete Game</Button>
+                                    <Button marginRight="5px" className="button" onClick={() => showUpdateGame({"gameID": game.id})}>Update Game</Button>
+                                    <Button marginRight="5px" className="button" onClick={() => setInputCreateZone('gameID',game.id)}>Add Game Play Zone</Button>
+                                    <hr />
+                                </View>
+                                </View>
+
+                            ))}
                             <View>
+                                <View className={gameFormVisible? "overlay" : "hide"}>
+                                    <View className="popup">
                                 <View id="gameForm" className="show" as="form" margin="3rem 0" >
                                     <View><strong>Game Form</strong></View>
-                                    <Flex direction="row" justifyContent="center" gap="1rem">
+                                    <Flex direction="column" justifyContent="center" gap="1rem">
                                         <SwitchField
                                             label="disabled"
                                             isChecked={formCreateGameState.disabled}
@@ -787,7 +1018,6 @@ export function Admin() {
                                             name="gameName"
                                             placeholder="Game Name"
                                             label="Game Name"
-                                            labelHidden
                                             variation="quiet"
                                             value={formCreateGameState.gameName}
                                             required
@@ -797,7 +1027,6 @@ export function Admin() {
                                             name="GameType"
                                             placeholder="free/not free"
                                             label="Game Type"
-                                            labelHidden
                                             variation="quiet"
                                             value={formCreateGameState.gameType}
                                             required
@@ -807,19 +1036,15 @@ export function Admin() {
                                             name="GameLink"
                                             placeholder="GameLink in app.js"
                                             label="Game Link"
-                                            labelHidden
                                             variation="quiet"
                                             value={formCreateGameState.gameLink}
                                             required
                                         />
-                                    </Flex>
-                                    <Flex direction="column" justifyContent="center" gap="1rem">
                                         <TextField
                                             onChange={(event) => setInputCreateGame('gameLocationPlace', event.target.value)}
                                             name="GameLocationPlace"
                                             placeholder="Place"
                                             label="Game Location Place"
-                                            labelHidden
                                             variation="quiet"
                                             value={formCreateGameState.gameLocationPlace}
                                             required
@@ -830,7 +1055,6 @@ export function Admin() {
                                             onChange={(event) => setInputCreateGame('gameLocationCity', event.target.value)}
                                             placeholder="City"
                                             label="Game Location City"
-                                            labelHidden
                                             variation="quiet"
                                             value={formCreateGameState.gameLocationCity}
                                             required
@@ -841,7 +1065,6 @@ export function Admin() {
                                             name="GameImage"
                                             placeholder="game Image"
                                             label="Game Image"
-                                            labelHidden
                                             variation="quiet"
                                             value={formCreateGameState.gameImage}
                                         />
@@ -850,7 +1073,6 @@ export function Admin() {
                                             name="GameDescriptionH2"
                                             placeholder="Game Description H2"
                                             label="Game Description H2"
-                                            labelHidden
                                             variation="quiet"
                                             value={formCreateGameState.gameDescriptionH2}
                                             required
@@ -860,7 +1082,6 @@ export function Admin() {
                                             name="GameDescriptionH3"
                                             placeholder="Game Description H3"
                                             label="Game Description H3"
-                                            labelHidden
                                             variation="quiet"
                                             value={formCreateGameState.gameDescriptionH3}
                                             required
@@ -870,7 +1091,6 @@ export function Admin() {
                                             name="GameMap"
                                             placeholder="Game Map"
                                             label="Game Map"
-                                            labelHidden
                                             variation="quiet"
                                             value={formCreateGameState.gameMap}
                                             required
@@ -878,6 +1098,7 @@ export function Admin() {
 
                                         <TextAreaField
                                             autoComplete="off"
+                                            label="Game Description P"
                                             direction="column"
                                             hasError={false}
                                             isDisabled={false}
@@ -895,6 +1116,7 @@ export function Admin() {
                                         <TextAreaField
                                             autoComplete="off"
                                             direction="column"
+                                            label="Game Intro"
                                             hasError={false}
                                             isDisabled={false}
                                             isReadOnly={false}
@@ -913,24 +1135,32 @@ export function Admin() {
                                             name="GameGoals"
                                             placeholder="Game Goals"
                                             label="Game Goals"
-                                            labelHidden
                                             variation="quiet"
                                             value={formCreateGameState.gameGoals}
                                         />
                                     </Flex>
                                     <Flex direction="row" justifyContent="center" marginTop="20px">
-                                        <Button id="createGame" className="show" onClick={addGame} variation="primary">
+                                        <Button className="show" onClick={() => setGameFormVisible(false)} variation="primary">
+                                            Close
+                                        </Button>
+                                        <Button id="createGame" className={(formCreateGameState.gameID=='')? "show" : "hide"} onClick={addGame} variation="primary">
                                             Create Game
                                         </Button>
-                                        <Button id="updateGame" className="hide" onClick={updateGame} variation="primary">
+                                        <Button id="updateGame" className={(formCreateGameState.gameID!='')? "show" : "hide"} onClick={updateGame} variation="primary">
                                             Update Game
                                         </Button>
                                     </Flex>
                                 </View>
+                                    </View>
+                                </View>
+
+                        <View>
+                            <View className={gameZoneFormVisible? "overlay" : "hide"}>
+                                <View className="popup">
                                 <View id="gamePlayZoneForm" className="show" as="form" margin="3rem 0" >
                                     <View><strong>Game Play Zone Form</strong></View>
 
-                                    <Flex direction="row" justifyContent="center" gap="1rem">
+                                    <Flex direction="column" justifyContent="center" gap="1rem">
                                         <SwitchField
                                             label="disabled"
                                             isChecked={formCreateZoneState.disabled}
@@ -939,6 +1169,7 @@ export function Admin() {
                                                 setInputCreateZone('disabled',e.target.checked);
                                             }}
                                         />
+                                        <View>Order</View>
                                         <Input
                                             name="order"
                                             type="number"
@@ -952,7 +1183,6 @@ export function Admin() {
                                             name="gameID"
                                             placeholder="Game ID"
                                             label="Game ID"
-                                            labelHidden
                                             variation="quiet"
                                             value={formCreateZoneState.gameID}
                                             required
@@ -962,22 +1192,26 @@ export function Admin() {
                                             name="gameZoneName"
                                             placeholder="Game Zone Name"
                                             label="Game Zone Name"
-                                            labelHidden
                                             variation="quiet"
                                             value={formCreateZoneState.gameZoneName}
                                             required
                                         />
-                                    </Flex>
-                                    <Flex direction="column" justifyContent="center" gap="1rem">
-
                                         <TextField
-                                            name="GameLocationCity"
+                                            name="GameLocationImage"
                                             onChange={(event) => setInputCreateZone('gameZoneImage', event.target.value)}
                                             placeholder="Game Zone Image"
                                             label="Game Zone Image"
-                                            labelHidden
                                             variation="quiet"
                                             value={formCreateZoneState.gameZoneImage}
+                                            required
+                                        />
+                                        <TextField
+                                            name="GameLocationIcon"
+                                            onChange={(event) => setInputCreateZone('gameZoneIcon', event.target.value)}
+                                            placeholder="Game Zone Icon"
+                                            label="Game Zone Icon"
+                                            variation="quiet"
+                                            value={formCreateZoneState.gameZoneIcon}
                                             required
                                         />
                                         <TextField
@@ -985,13 +1219,15 @@ export function Admin() {
                                             name="GameZoneDescription"
                                             placeholder="Game Zone Description"
                                             label="Game Zone Description"
-                                            labelHidden
                                             variation="quiet"
                                             value={formCreateZoneState.gameZoneDescription}
                                             required
                                         />
                                     </Flex>
                                     <Flex direction="row" justifyContent="center" marginTop="20px">
+                                        <Button className="show" onClick={() => setGameZoneFormVisible(false)} variation="primary">
+                                            Close
+                                        </Button>
                                         <Button id="createZone" className="show" onClick={addZone} variation="primary">
                                             Create Zone
                                         </Button>
@@ -1000,116 +1236,196 @@ export function Admin() {
                                         </Button>
                                     </Flex>
                                 </View>
-                            <View id="gameHintForm" className="show" as="form" margin="3rem 0" >
-                                <View><strong>Game Hint Form</strong></View>
-
-                                <Flex direction="row" justifyContent="center" gap="1rem">
-                                    <SwitchField
-                                        label="disabled"
-                                        isChecked={formCreateHintState.disabled}
-                                        onChange={(e) => {
-                                            console.log("e.target.checked: " + e.target.checked)
-                                            setInputCreateHint('disabled',e.target.checked);
-                                        }}
-                                    />
-                                    <Input
-                                        name="order"
-                                        type="number"
-                                        size="small"
-                                        width="50px"
-                                        onChange={(event) => setInputCreateHint('order', event.target.value)}
-                                        value={formCreateHintState.order}
-                                    />
-                                    <TextField
-                                        onChange={(event) => setInputCreateHint('gameID', event.target.value)}
-                                        name="gameID"
-                                        placeholder="Game ID"
-                                        label="Game ID"
-                                        labelHidden
-                                        variation="quiet"
-                                        value={formCreateHintState.gameID}
-                                        required
-                                    />
-                                    <TextField
-                                        onChange={(event) => setInputCreateHint('gameHintName', event.target.value)}
-                                        name="gameHintName"
-                                        placeholder="Game Hint Name"
-                                        label="Game Hint Name"
-                                        labelHidden
-                                        variation="quiet"
-                                        value={formCreateHintState.gameHintName}
-                                        required
-                                    />
-                                </Flex>
-                                <Flex direction="column" justifyContent="center" gap="1rem">
-
-                                    <TextField
-                                        onChange={(event) => setInputCreateHint('gameHintDescription', event.target.value)}
-                                        name="GameHintDescription"
-                                        placeholder="Game Hint Description"
-                                        label="Game Hint Description"
-                                        labelHidden
-                                        variation="quiet"
-                                        value={formCreateHintState.gameHintDescription}
-                                        required
-                                    />
-                                </Flex>
-                                <Flex direction="row" justifyContent="center" marginTop="20px">
-                                    <Button id="createHint" className="show" onClick={addHint} variation="primary">
-                                        Create Hint
-                                    </Button>
-                                    <Button id="updateHint" className="hide" onClick={updateHint} variation="primary">
-                                        Update Hint
-                                    </Button>
-                                </Flex>
+                                </View>
                             </View>
                         </View>
 
-                            <Button marginRight="5px" backgroundColor="#B8CEF9" onClick={() => setFilterCreateGame()}>All Games</Button>
-                            <Button marginRight="5px" backgroundColor="#B8CEF9" onClick={() => setFilterCreateGame("disabled",{eq:false})}>live</Button>
-                            <Button marginRight="5px" backgroundColor="#B8CEF9" onClick={() => setFilterCreateGame("disabled",{eq:true})}>disabled</Button>
-                            <Button backgroundColor="#B8CEF9" onClick={() => setFilterCreateGame("gameType",{eq:"free"})}>Get Free Games</Button>
-                            <View>type: "game"</View>
-                            {(gameType) ? (<View>gameType: {gameType}</View>):null}
-                            {(disabledGame === true)? (<View>disabled: true</View>):null}
-                            {(disabledGame === false)? (<View>disabled: false</View>):null}
 
-                            {games.map((game) => (
-                                <div key={game.id}> <strong>disabled</strong>: { game.disabled ? "true":"false"} | <strong>type</strong>: {game.type} | <strong>game id</strong>: {game.id}
-                                    <br /> <strong>game name</strong>: {game.gameName} | <strong>game type</strong>: {game.gameType} |
-                                    <strong>game link</strong>: {game.gameLink}
-                                    <br /><strong>gameLocationPlace</strong>: {game.gameLocationPlace} | <strong>gameLocationCity</strong>: {game.gameLocationCity}<br />
-                                    <strong>gameDescriptionH2</strong>: {game.gameDescriptionH2} <br />
-                                    <strong>gameDescriptionH3</strong>: {game.gameDescriptionH3} <br />
-                                    <strong>gameDescriptionP</strong> {game.gameDescriptionP} <br />
-                                    <strong>gameIntro: </strong>{game.gameIntro} <br />
-                                    <strong>gameGoals: </strong>{game.gameGoals} <br />
-                                    <strong>gameImage: </strong>{game.gameImage} <br />
-                                   <strong>gameMap: </strong>{game.gameMap} <br />
-                                    <strong>How many zones: {game.gamePlayZone.items.length}</strong><br />
-                                    {game.gamePlayZone.items.map((zone) => (
-                                        <View key={zone.id}>
-                                            <strong>disabled</strong>: {zone.disabled ? "true" : "false"} | <strong>order: {zone.order} </strong> | <strong>gameZoneName: {zone.gameZoneName}</strong>
-                                        <br /><Button marginRight="5px" className="button-small" onClick={() => showUpdateZone({"zoneID": zone.id})}>Update Zone</Button>
-                                        </View>
-                                    ))}
-                                    <strong>Hints: {game.gameHint.items.length}</strong><br />
-                                    {game.gameHint.items.map((hint) => (
-                                        <View key={hint.id}>
-                                            <strong>disabled</strong>: {hint.disabled ? "true" : "false"} | <strong>order: {hint.order} </strong> | <strong>hintName: {hint.gameHintName}</strong> <strong>hint Description: {hint.gameHintDescription}</strong>
-                                            <br /><Button marginRight="5px" className="button-small" onClick={() => showUpdateHint({"hintID": hint.id})}>Update Hint</Button>
-                                        </View>
-                                    ))}
-                                        <Button marginRight="5px" className="button" onClick={() => showGameStats({"gameID": game.id, "gameName": game.gameName})}>Game Stats</Button>
-                                        <Button marginRight="5px" className="button" onClick={() => deleteGame({"gameID": game.id})}>Delete Game</Button>
-                                        <Button marginRight="5px" className="button" onClick={() => showUpdateGame({"gameID": game.id})}>Update Game</Button>
-                                        <Button marginRight="5px" className="button" onClick={() => setInputCreateZone('gameID',game.id)}>Add Game Play Zone</Button>
-                                        <Button marginRight="5px" className="button" onClick={() => setInputCreateHint('gameID',game.id)}>Add Game Hint</Button>
-                                    <hr />
-                                </div>
+                            <View className={gameHintFormVisible? "overlay" : "hide"}>
+                               <View className="popup">
+                                       <View id="gameHintForm" className="show" as="form" margin="1rem" >
+                                            <View><strong>Game Hint Form</strong></View>
+                                            <Flex direction="column" justifyContent="center" gap="1rem">
+                                                <SwitchField
+                                                    label="disabled"
+                                                    isChecked={formCreateHintState.disabled}
+                                                    onChange={(e) => {
+                                                        console.log("e.target.checked: " + e.target.checked)
+                                                        setInputCreateHint('disabled',e.target.checked);
+                                                    }}
+                                                />
+                                                <View>Order</View>
+                                                <Input
+                                                    name="order"
+                                                    type="number"
+                                                    size="small"
+                                                    width="50px"
+                                                    placeholder="order"
+                                                    onChange={(event) => setInputCreateHint('order', event.target.value)}
+                                                    value={formCreateHintState.order}
+                                                />
+                                                <TextField
+                                                    onChange={(event) => setInputCreateHint('gameID', event.target.value)}
+                                                    name="gameID"
+                                                    placeholder="Game ID"
+                                                    label="Game ID"
+                                                    variation="quiet"
+                                                    value={formCreateHintState.gameID}
+                                                    required
+                                                />
 
-                            ))}
+                                                <TextField
+                                                    onChange={(event) => setInputCreateHint('gamePlayZoneID', event.target.value)}
+                                                    name="gamePlayZoneID"
+                                                    placeholder="gamePlayZoneID"
+                                                    label="gamePlayZoneID"
+                                                    variation="quiet"
+                                                    value={formCreateHintState.gamePlayZoneID}
+                                                    required
+                                                />
+                                                <TextField
+                                                    onChange={(event) => setInputCreateHint('gameHintName', event.target.value)}
+                                                    name="gameHintName"
+                                                    placeholder="Game Hint Name"
+                                                    label="Game Hint Name"
+                                                    variation="quiet"
+                                                    value={formCreateHintState.gameHintName}
+                                                    required
+                                                />
+                                            </Flex>
+                                            <Flex direction="column" justifyContent="center" gap="1rem">
+
+                                                <TextField
+                                                    onChange={(event) => setInputCreateHint('gameHintDescription', event.target.value)}
+                                                    name="GameHintDescription"
+                                                    placeholder="Game Hint Description"
+                                                    label="Game Hint Description"
+                                                    variation="quiet"
+                                                    value={formCreateHintState.gameHintDescription}
+                                                    required
+                                                />
+                                            </Flex>
+                                            <Flex direction="row" justifyContent="center" marginTop="20px">
+                                                <Button className="show" onClick={() => setGameHintFormVisible(false)} variation="primary">
+                                                    Close
+                                                </Button>
+                                                <Button id="createHint" className="show" onClick={addHint} variation="primary">
+                                                    Create Hint
+                                                </Button>
+                                                <Button id="updateHint" className="hide" onClick={updateHint} variation="primary">
+                                                    Update Hint
+                                                </Button>
+                                            </Flex>
+                                        </View>
+                                    </View>
+                                </View>
+                                <View className={gameClueFormVisible? "overlay" : "hide"}>
+                                    <View className="popup">
+                                        <View id="gameClueForm" className="show" as="form" margin="3rem 0" >
+                                            <View><strong>Game Clue Form</strong></View>
+
+                                            <Flex direction="column" justifyContent="center" gap="1rem">
+                                                <SwitchField
+                                                    label="disabled"
+                                                    isChecked={formCreateClueState.disabled}
+                                                    onChange={(e) => {
+                                                        console.log("e.target.checked: " + e.target.checked)
+                                                        setInputCreateClue('disabled',e.target.checked);
+                                                    }}
+                                                />
+                                                <View>Order - for "top" clue is 60px times "order" from Top on left side, for "bottom", 60px times order from right</View>
+                                                <Input
+                                                    name="order"
+                                                    type="number"
+                                                    size="small"
+                                                    width="50px"
+                                                    onChange={(event) => setInputCreateClue('order', event.target.value)}
+                                                    value={formCreateClueState.order}
+                                                />
+                                                <TextField
+                                                    onChange={(event) => setInputCreateClue('gameID', event.target.value)}
+                                                    name="gameID"
+                                                    placeholder="Game ID"
+                                                    label="Game ID"
+                                                    variation="quiet"
+                                                    value={formCreateClueState.gameID}
+                                                    required
+                                                />
+                                                <TextField
+                                                    onChange={(event) => setInputCreateClue('gamePlayZoneID', event.target.value)}
+                                                    name="gamePlayZoneID"
+                                                    placeholder="gamePlayZoneID"
+                                                    label="gamePlayZoneID"
+                                                    variation="quiet"
+                                                    value={formCreateClueState.gamePlayZoneID}
+                                                    required
+                                                />
+                                                <TextField
+                                                    onChange={(event) => setInputCreateClue('gameClueName', event.target.value)}
+                                                    name="gameClueName"
+                                                    placeholder="Game Clue Name"
+                                                    label="Game Clue Name"
+                                                    variation="quiet"
+                                                    value={formCreateClueState.gameClueName}
+                                                    required
+                                                />
+                                                <TextField
+                                                    onChange={(event) => setInputCreateClue('gameClueIcon', event.target.value)}
+                                                    name="gameClueIcon"
+                                                    placeholder="Game Clue Icon"
+                                                    label="Game Clue Icon"
+                                                    variation="quiet"
+                                                    value={formCreateClueState.gameClueIcon}
+                                                    required
+                                                />
+                                                <TextField
+                                                    onChange={(event) => setInputCreateClue('gameClueText', event.target.value)}
+                                                    name="gameClueText"
+                                                    placeholder="Game Clue Text"
+                                                    label="Game Clue Text"
+                                                    variation="quiet"
+                                                    value={formCreateClueState.gameClueText}
+                                                    required
+                                                />
+                                                <TextField
+                                                    onChange={(event) => setInputCreateClue('gameCluePosition', event.target.value)}
+                                                    name="gameCluePosition"
+                                                    placeholder="Game Clue Position"
+                                                    label="Game Clue Position - top or bottom"
+                                                    variation="quiet"
+                                                    value={formCreateClueState.gameCluePosition}
+                                                    required
+                                                />
+                                                <TextField
+                                                    onChange={(event) => setInputCreateClue('gameClueImage', event.target.value)}
+                                                    name="gameClueImage"
+                                                    placeholder="Game Clue Image"
+                                                    label="Game Clue Image"
+                                                    variation="quiet"
+                                                    value={formCreateClueState.gameClueImage}
+                                                    required
+                                                />
+                                            </Flex>
+                                            <Flex direction="row" justifyContent="center" marginTop="20px">
+                                                <Button className="show" onClick={() => setGameClueFormVisible(false)} variation="primary">
+                                                    Close
+                                                </Button>
+                                                <Button id="createClue" className="show" onClick={addClue} variation="primary">
+                                                    Create Clue
+                                                </Button>
+                                                <Button id="updateClue" className="hide" onClick={updateClue} variation="primary">
+                                                    Update Clue
+                                                </Button>
+                                            </Flex>
+                                        </View>
+                                    </View>
+                                </View>
+                            </View>
                         </View>
+
+
+
+
                         <View id="userSection" className="show section">
                         <Heading level={3} color="black">Users</Heading>
 

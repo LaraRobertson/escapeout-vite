@@ -63,21 +63,50 @@ export const getGame = /* GraphQL */ `query GetGame($id: ID!) {
     gameGoals
     gameIntro
     gameMap
-    gamePlayZone {
-      nextToken
-      __typename
-    }
-    gameHint {
-      nextToken
-      __typename
-    }
-    type
-    gameClue {
-      nextToken
-      __typename
-    }
+      gamePlayZone {
+          items {
+            id
+            disabled
+            gameID
+            gameZoneName
+            gameZoneImage
+            gameZoneIcon
+            order
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+       gameHint {
+          items {
+            id
+            disabled
+            gameID
+            gamePlayZoneID
+            gameHintName
+            order
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+      type
+       gameClue {
+          items {
+            id
+            gameClueName
+            gamePlayZoneID
+            gameClueIcon
+            gameClueImage
+            gameClueText
+            gameCluePosition
+            order
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
     gamePuzzle
-    gameObject
     createdAt
     disabled
     user {
@@ -109,9 +138,48 @@ export const listGames = /* GraphQL */ `query ListGames(
       gameGoals
       gameIntro
       gameMap
+      gamePlayZone {
+          items {
+            id
+            disabled
+            gameID
+            gameZoneName
+            order
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+       gameHint {
+          items {
+            id
+            disabled
+            gameID
+            gamePlayZoneID
+            gameHintName
+            order
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
       type
+       gameClue {
+          items {
+            id
+            gameClueName
+            gamePlayZoneID
+            gameClueIcon
+            gameClueImage
+            gameClueText
+            gameCluePosition
+            order
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
       gamePuzzle
-      gameObject
       createdAt
       disabled
       updatedAt
@@ -230,6 +298,7 @@ export const getGameHint = /* GraphQL */ `query GetGameHint($id: ID!) {
   getGameHint(id: $id) {
     id
     gameID
+    gamePlayZoneID
     gameHintName
     gameHintDescription
     order
@@ -252,6 +321,7 @@ export const listGameHints = /* GraphQL */ `query ListGameHints(
     items {
       id
       gameID
+      gamePlayZoneID
       gameHintName
       gameHintDescription
       order
@@ -274,6 +344,7 @@ export const getGameClue = /* GraphQL */ `query GetGameClue($id: ID!) {
     gameID
     gamePlayZoneID
     gameClueName
+    gameClueIcon
     gameClueImage
     gameClueText
     gameCluePosition
@@ -299,6 +370,7 @@ export const listGameClues = /* GraphQL */ `query ListGameClues(
       gameID
       gamePlayZoneID
       gameClueName
+      gameClueIcon
       gameClueImage
       gameClueText
       gameCluePosition
@@ -394,7 +466,6 @@ export const getUserGamePlay = /* GraphQL */ `query GetUserGamePlay($id: ID!) {
       gameMap
       type
       gamePuzzle
-      gameObject
       createdAt
       disabled
       updatedAt
@@ -496,7 +567,6 @@ export const gamesByGameNameAndType = /* GraphQL */ `query GamesByGameNameAndTyp
       gameMap
       type
       gamePuzzle
-      gameObject
       createdAt
       disabled
       updatedAt
@@ -542,7 +612,6 @@ export const gamesByCity = /* GraphQL */ `query GamesByCity(
       gameMap
       type
       gamePuzzle
-      gameObject
       createdAt
       disabled
       updatedAt
@@ -801,6 +870,7 @@ export const gameHintByGameID = /* GraphQL */ `query GameHintByGameID(
     items {
       id
       gameID
+      gamePlayZoneID
       gameHintName
       gameHintDescription
       order
@@ -838,6 +908,7 @@ export const gameClueByGameID = /* GraphQL */ `query GameClueByGameID(
       gameID
       gamePlayZoneID
       gameClueName
+      gameClueIcon
       gameClueImage
       gameClueText
       gameCluePosition

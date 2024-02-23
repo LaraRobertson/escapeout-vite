@@ -112,7 +112,6 @@ export const createGame = /* GraphQL */ `mutation CreateGame(
       __typename
     }
     gamePuzzle
-    gameObject
     createdAt
     disabled
     user {
@@ -159,7 +158,6 @@ export const updateGame = /* GraphQL */ `mutation UpdateGame(
       __typename
     }
     gamePuzzle
-    gameObject
     createdAt
     disabled
     user {
@@ -206,7 +204,6 @@ export const deleteGame = /* GraphQL */ `mutation DeleteGame(
       __typename
     }
     gamePuzzle
-    gameObject
     createdAt
     disabled
     user {
@@ -384,6 +381,7 @@ export const createGameHint = /* GraphQL */ `mutation CreateGameHint(
   createGameHint(input: $input, condition: $condition) {
     id
     gameID
+    gamePlayZoneID
     gameHintName
     gameHintDescription
     order
@@ -404,6 +402,7 @@ export const updateGameHint = /* GraphQL */ `mutation UpdateGameHint(
   updateGameHint(input: $input, condition: $condition) {
     id
     gameID
+    gamePlayZoneID
     gameHintName
     gameHintDescription
     order
@@ -424,6 +423,7 @@ export const deleteGameHint = /* GraphQL */ `mutation DeleteGameHint(
   deleteGameHint(input: $input, condition: $condition) {
     id
     gameID
+    gamePlayZoneID
     gameHintName
     gameHintDescription
     order
@@ -446,6 +446,7 @@ export const createGameClue = /* GraphQL */ `mutation CreateGameClue(
     gameID
     gamePlayZoneID
     gameClueName
+    gameClueIcon
     gameClueImage
     gameClueText
     gameCluePosition
@@ -469,6 +470,7 @@ export const updateGameClue = /* GraphQL */ `mutation UpdateGameClue(
     gameID
     gamePlayZoneID
     gameClueName
+    gameClueIcon
     gameClueImage
     gameClueText
     gameCluePosition
@@ -492,6 +494,7 @@ export const deleteGameClue = /* GraphQL */ `mutation DeleteGameClue(
     gameID
     gamePlayZoneID
     gameClueName
+    gameClueIcon
     gameClueImage
     gameClueText
     gameCluePosition
@@ -607,7 +610,6 @@ export const createUserGamePlay = /* GraphQL */ `mutation CreateUserGamePlay(
       gameMap
       type
       gamePuzzle
-      gameObject
       createdAt
       disabled
       updatedAt
@@ -657,7 +659,6 @@ export const updateUserGamePlay = /* GraphQL */ `mutation UpdateUserGamePlay(
       gameMap
       type
       gamePuzzle
-      gameObject
       createdAt
       disabled
       updatedAt
@@ -707,7 +708,6 @@ export const deleteUserGamePlay = /* GraphQL */ `mutation DeleteUserGamePlay(
       gameMap
       type
       gamePuzzle
-      gameObject
       createdAt
       disabled
       updatedAt

@@ -417,4 +417,6 @@ export function removeLocalStorage() {
     localStorage.removeItem("gameDescriptionP");
     localStorage.removeItem("gameDescriptionH2");
     localStorage.removeItem("gameDescriptionH3");
+    localStorage.removeItem("gamePuzzleSolved");
+    localStorage.removeItem("backpackObject");
 }

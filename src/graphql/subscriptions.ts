@@ -100,7 +100,6 @@ export const onCreateGame = /* GraphQL */ `subscription OnCreateGame($filter: Mo
       __typename
     }
     gamePuzzle
-    gameObject
     createdAt
     disabled
     user {
@@ -144,7 +143,6 @@ export const onUpdateGame = /* GraphQL */ `subscription OnUpdateGame($filter: Mo
       __typename
     }
     gamePuzzle
-    gameObject
     createdAt
     disabled
     user {
@@ -188,7 +186,6 @@ export const onDeleteGame = /* GraphQL */ `subscription OnDeleteGame($filter: Mo
       __typename
     }
     gamePuzzle
-    gameObject
     createdAt
     disabled
     user {
@@ -345,6 +342,7 @@ export const onCreateGameHint = /* GraphQL */ `subscription OnCreateGameHint($fi
   onCreateGameHint(filter: $filter) {
     id
     gameID
+    gamePlayZoneID
     gameHintName
     gameHintDescription
     order
@@ -362,6 +360,7 @@ export const onUpdateGameHint = /* GraphQL */ `subscription OnUpdateGameHint($fi
   onUpdateGameHint(filter: $filter) {
     id
     gameID
+    gamePlayZoneID
     gameHintName
     gameHintDescription
     order
@@ -379,6 +378,7 @@ export const onDeleteGameHint = /* GraphQL */ `subscription OnDeleteGameHint($fi
   onDeleteGameHint(filter: $filter) {
     id
     gameID
+    gamePlayZoneID
     gameHintName
     gameHintDescription
     order
@@ -398,6 +398,7 @@ export const onCreateGameClue = /* GraphQL */ `subscription OnCreateGameClue($fi
     gameID
     gamePlayZoneID
     gameClueName
+    gameClueIcon
     gameClueImage
     gameClueText
     gameCluePosition
@@ -418,6 +419,7 @@ export const onUpdateGameClue = /* GraphQL */ `subscription OnUpdateGameClue($fi
     gameID
     gamePlayZoneID
     gameClueName
+    gameClueIcon
     gameClueImage
     gameClueText
     gameCluePosition
@@ -438,6 +440,7 @@ export const onDeleteGameClue = /* GraphQL */ `subscription OnDeleteGameClue($fi
     gameID
     gamePlayZoneID
     gameClueName
+    gameClueIcon
     gameClueImage
     gameClueText
     gameCluePosition
@@ -549,7 +552,6 @@ export const onCreateUserGamePlay = /* GraphQL */ `subscription OnCreateUserGame
       gameMap
       type
       gamePuzzle
-      gameObject
       createdAt
       disabled
       updatedAt
@@ -598,7 +600,6 @@ export const onUpdateUserGamePlay = /* GraphQL */ `subscription OnUpdateUserGame
       gameMap
       type
       gamePuzzle
-      gameObject
       createdAt
       disabled
       updatedAt
@@ -647,7 +648,6 @@ export const onDeleteUserGamePlay = /* GraphQL */ `subscription OnDeleteUserGame
       gameMap
       type
       gamePuzzle
-      gameObject
       createdAt
       disabled
       updatedAt

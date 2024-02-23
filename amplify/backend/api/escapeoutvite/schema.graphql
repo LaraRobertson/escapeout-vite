@@ -32,7 +32,6 @@ type Game @model @auth(rules: [ { allow: public } ] ) {
   type: String! @index(name: "gamesByCity", queryField: "gamesByCity", sortKeyFields: ["gameLocationCity"])
   gameClue: [GameClue] @hasMany(indexName: "byGameID", fields: ["id"])
   gamePuzzle: String
-  gameObject: String
   createdAt: String!
   disabled: Boolean
   user:[User] @manyToMany(relationName: "UserGamePlay")
@@ -70,6 +69,7 @@ type GameScore @model @auth(rules: [ { allow: public } ] ) {
 type GameHint @model @auth(rules: [ { allow: public } ] ) {
   id: ID!
   gameID: ID! @index(name: "byGameID", queryField: "gameHintByGameID", sortKeyFields: ["order"])
+  gamePlayZoneID: String
   gameHintName: String
   gameHintDescription: String
   order: Int!
@@ -82,9 +82,11 @@ type GameClue @model @auth(rules: [ { allow: public } ] ) {
   gameID: ID! @index(name: "byGameID", queryField: "gameClueByGameID", sortKeyFields: ["order"])
   gamePlayZoneID: String
   gameClueName: String
+  gameClueIcon: String
   gameClueImage: String
   gameClueText: String
   gameCluePosition: String
+  gameClueTool: String
   order: Int!
   createdAt: String!
   disabled: Boolean
