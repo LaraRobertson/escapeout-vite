@@ -15,7 +15,8 @@ import {
     gamesByCity,
     usersByEmail,
     listUsers, getGame, listGames,
-    getGamePlayZone,getGameHint,getGameClue
+    getGamePlayZone,getGameHint,getGameClue, getGamePuzzle,
+    getTextField
 } from "../graphql/queries";
 import { format } from 'date-fns'
 import * as mutations from '../graphql/mutations';
@@ -25,6 +26,7 @@ import { useNavigate } from 'react-router-dom';
 import {generateClient} from "aws-amplify/api";
 import { fetchUserAttributes } from 'aws-amplify/auth';
 import {deleteGameHint} from "../graphql/mutations";
+import {setGamePlayFunction} from "./helper";
 
 export function Admin() {
     const [email, setEmail] = useState();
@@ -41,11 +43,13 @@ export function Admin() {
     const [gameType, setGameType] = useState();
     const [disabledGame, setDisabledGame] = useState();
     const [gameVisible, setGameVisible] = useState("");
+    const [gamePlayZoneObject, setGamePlayZoneObject] = useState({});
     const [gameFormVisible, setGameFormVisible] = useState(false);
     const [gameZoneFormVisible, setGameZoneFormVisible] = useState(false);
     const [gameHintFormVisible, setGameHintFormVisible] = useState(false);
     const [gameClueFormVisible, setGameClueFormVisible] = useState(false);
-
+    const [gamePuzzleFormVisible, setGamePuzzleFormVisible] = useState(false);
+    const [gameTextFieldFormVisible, setGameTextFieldFormVisible] = useState(false);
 
     const client = generateClient();
     const {  authStatus, user, route } = useAuthenticator((context) => [
@@ -114,6 +118,7 @@ export function Admin() {
                 variables: {filter: gamesFilter}
             });
             const gamesFromAPI = apiData.data.listGames.items;
+
             setGames(gamesFromAPI);
         } catch (err) {
             console.log('error fetching games', err);
@@ -251,6 +256,36 @@ export function Admin() {
         }
         fetchGames();
     }
+    async function deletePuzzle(props) {
+        console.log("props.puzzleID: " + props.puzzleID);
+        try {
+            const puzzleDetails = {
+                id: props.puzzleID
+            };
+            await client.graphql({
+                query: mutations.deleteGamePuzzle,
+                variables: { input: puzzleDetails }
+            });
+        } catch (err) {
+            console.log('error deleting puzzle:', err);
+        }
+        fetchGames();
+    }
+    async function deleteTextField(props) {
+        console.log("props.textFieldID: " + props.textFieldID);
+        try {
+            const textFieldDetails = {
+                id: props.textFieldID
+            };
+            await client.graphql({
+                query: mutations.deleteTextField,
+                variables: { input: textFieldDetails  }
+            });
+        } catch (err) {
+            console.log('error deleting textField:', err);
+        }
+        fetchGames();
+    }
     async function deleteUser(props) {
         console.log("props.userID: " + props.userID);
         try {
@@ -371,7 +406,7 @@ export function Admin() {
             delete game.gameHint;
             delete game.gamePlayZone;
             delete game.gameClue;
-            delete game.gamePuzzles;
+            delete game.gamePuzzle;
             await client.graphql({
                 query: mutations.updateGame,
                 variables: {
@@ -619,7 +654,8 @@ export function Admin() {
             console.log(`${key}: ${formCreateClueState[key]}`);
         }
     }, [formCreateClueState]);
-    // createClue
+
+    // create clue
     async function addClue() {
         console.log("addClue");
         try {
@@ -675,8 +711,6 @@ export function Admin() {
                 console.log(`${key}: ${gameClue[key]}`);
             }
             setFormCreateClueState(initialStateCreateClue);
-            delete gameClue.updatedAt;
-            delete gameClue.__typename;
             await client.graphql({
                 query: mutations.updateGameClue,
                 variables: {
@@ -699,6 +733,246 @@ export function Admin() {
             console.log('error updating GameClue:', err);
         }
     }
+
+
+    /* Game Puzzle */
+    const initialStateCreatePuzzle = {
+        gameID: 'xxx',
+        gamePlayZoneID: '',
+        puzzleName: '',
+        puzzlePosition: '',
+        puzzleImage: '',
+        puzzleImageSolved: '',
+        puzzleObjectClue: '',
+        puzzleToolRevealed: '',
+        puzzleToolNeeded: '',
+        winGame: false,
+        order: 0,
+        disabled: false
+    };
+    const [formCreatePuzzleState, setFormCreatePuzzleState] = useState(initialStateCreatePuzzle);
+    function setInputCreatePuzzleInitial(key1, value1, key2, value2) {
+        console.log("formCreatePuzzleInitial: " + key1 + "|" + value1 + "|" + key2 + "|" + value2 );
+        let dynamicObject = {
+            [key1]: value1,
+            [key2]: value2,
+        };
+        setFormCreatePuzzleState(dynamicObject);
+        setGamePuzzleFormVisible(true);
+    }
+
+    function setInputCreatePuzzle(key, value) {
+        console.log("setInputCreatePuzzle: " + key +"|" + value);
+        setFormCreatePuzzleState({ ...formCreatePuzzleState, [key]: value });
+    }
+    useEffect(() => {
+        console.log("***useEffect***:  formCreatePuzzleState");
+        for (const key in formCreatePuzzleState) {
+            console.log(`${key}: ${formCreatePuzzleState[key]}`);
+        }
+    }, [formCreatePuzzleState]);
+    // create puzzle
+    async function addPuzzle() {
+        console.log("addPuzzle");
+        try {
+            if (!formCreatePuzzleState.gameID || !formCreatePuzzleState.puzzleName) return;
+            const gamePuzzle = { ...formCreatePuzzleState };
+            console.log("addPuzzle - gamePuzzle: " + JSON.stringify(gamePuzzle));
+            setFormCreatePuzzleState(initialStateCreatePuzzle);
+            await client.graphql({
+                query: mutations.createGamePuzzle,
+                variables: {
+                    input: gamePuzzle
+                }
+            });
+            setGamePuzzleFormVisible(false);
+            setFormCreatePuzzleState(initialStateCreatePuzzle);
+            fetchGames();
+        } catch (err) {
+            console.log('error creating gamePuzzle:', err);
+        }
+    }
+    async function showUpdatePuzzle(props) {
+        console.log("props.puzzleID: " + props.puzzleID);
+        /* first load up FormCreateGameState */
+        try {
+            const apiData = await client.graphql({
+                query: getGamePuzzle,
+                variables: {id: props.puzzleID}
+            });
+            const puzzlesFromAPI = apiData.data.getGamePuzzle;
+            setFormCreatePuzzleState(puzzlesFromAPI);
+            console.log("puzzleFromAPI - update puzzle")
+            for (const key in puzzlesFromAPI) {
+                console.log(`${key}: ${puzzlesFromAPI[key]}`);
+            }
+            let element =  document.getElementById("updatePuzzle");
+            element.classList.remove('hide');
+            element.classList.add('show');
+            let element2 =  document.getElementById("createPuzzle");
+            element2.classList.remove('show');
+            element2.classList.add('hide');
+            setGamePuzzleFormVisible(true);
+        } catch (err) {
+            console.log('error fetching getGamePuzzle', err);
+        }
+    }
+
+    async function updatePuzzle() {
+        try {
+            if (!formCreatePuzzleState.gameID|| !formCreatePuzzleState.gamePlayZoneID) return;
+            const gamePuzzle = { ...formCreatePuzzleState };
+            console.log("formCreatePuzzleState - update gamePuzzle")
+            for (const key in gamePuzzle) {
+                console.log(`${key}: ${gamePuzzle[key]}`);
+            }
+            setFormCreatePuzzleState(initialStateCreatePuzzle);
+            delete gamePuzzle.updatedAt;
+            delete gamePuzzle.__typename;
+            await client.graphql({
+                query: mutations.updateGamePuzzle,
+                variables: {
+                    input: gamePuzzle
+                }
+            });
+            /* change the buttons back */
+            /* use state variable? */
+            let element =  document.getElementById("updatePuzzle");
+            element.classList.remove('show');
+            element.classList.add('hide');
+            let element2 =  document.getElementById("createPuzzle");
+            element2.classList.remove('hide');
+            element2.classList.add('show');
+            setGamePuzzleFormVisible(false);
+            setFormCreatePuzzleState(initialStateCreatePuzzle);
+            fetchGames();
+
+        } catch (err) {
+            console.log('error updating GamePuzzle:', err);
+        }
+    }
+    /* end puzzle */
+
+    /* textField */
+    const initialStateCreateTextField = {
+        puzzleID: 'xxxx',
+        name: '',
+        label: '',
+        answer: '',
+        order: 1,
+        disabled: false
+    };
+    const [formCreateTextFieldState, setFormCreateTextFieldState] = useState(initialStateCreateTextField);
+    function setInputCreateTextField(key, value) {
+        setFormCreateTextFieldState({ ...formCreateTextFieldState, [key]: value });
+        setGameTextFieldFormVisible(true);
+    }
+    useEffect(() => {
+        console.log("***useEffect***:  formCreateTextFieldState");
+        for (const key in formCreateTextFieldState) {
+            console.log(`${key}: ${formCreateTextFieldState[key]}`);
+        }
+    }, [formCreateTextFieldState]);
+
+    // createTextField
+    async function addTextField() {
+        console.log("addTextField");
+        try {
+            if (!formCreateTextFieldState.puzzleID || !formCreateTextFieldState.name) return;
+            const gameTextField = { ...formCreateTextFieldState };
+            console.log("addZone - gameTextField: " + gameTextField);
+            // setGames([...games, game]);
+            setFormCreateTextFieldState(initialStateCreateTextField);
+            await client.graphql({
+                query: mutations.createTextField,
+                variables: {
+                    input: gameTextField
+                }
+            });
+            setGameTextFieldFormVisible(false);
+            fetchGames();
+        } catch (err) {
+            console.log('error creating gameTextField:', err);
+        }
+    }
+    async function showUpdateTextField(props) {
+        console.log("props.textFieldID: " + props.textField);
+        /* first load up FormCreateGameState */
+        try {
+            const apiData = await client.graphql({
+                query: getTextField,
+                variables: {id: props.textFieldID}
+            });
+            const textFieldFromAPI = apiData.data.getTextField;
+            setFormCreateTextFieldState(textFieldFromAPI);
+            console.log("gamesFromAPI - update game")
+            for (const key in textFieldFromAPI) {
+                console.log(`${key}: ${textFieldFromAPI[key]}`);
+            }
+            let element =  document.getElementById("updateTextField");
+            element.classList.remove('hide');
+            element.classList.add('show');
+            let element2 =  document.getElementById("createTextField");
+            element2.classList.remove('show');
+            element2.classList.add('hide');
+            setGameTextFieldFormVisible(true);
+        } catch (err) {
+            console.log('error fetching getTextField', err);
+        }
+    }
+
+    async function updateTextField() {
+        console.log("updateTextField");
+        try {
+            if (!formCreateTextFieldState.puzzleID|| !formCreateTextFieldState.name) return;
+            const gameTextField = { ...formCreateTextFieldState };
+            console.log("formCreateTextFieldState - update gameTextField")
+            for (const key in gameTextField) {
+                console.log(`${key}: ${gameTextField[key]}`);
+            }
+            setFormCreateTextFieldState(initialStateCreateTextField);
+            delete gameTextField.updatedAt;
+            delete gameTextField.__typename;
+            await client.graphql({
+                query: mutations.updateTextField,
+                variables: {
+                    input: gameTextField
+                }
+            });
+            /* put the buttons back */
+            let element =  document.getElementById("updateTextField");
+            element.classList.remove('show');
+            element.classList.add('hide');
+            let element2 =  document.getElementById("createTextField");
+            element2.classList.remove('hide');
+            element2.classList.add('show');
+            setGameTextFieldFormVisible(false);
+            fetchGames();
+
+        } catch (err) {
+            console.log('error updating GameTextField:', err);
+        }
+    }
+    /* end TextField */
+
+    function setGameVisibleFunction(gameID,index) {
+        setGameVisible(gameID);
+        console.log("games[index].gamePlayzone.items: " + JSON.stringify(games[index].gamePlayZone.items));
+        let newObject = {};
+        for (let i=0; i<games[index].gamePlayZone.items.length; i++) {
+            let key = "id-" + games[index].gamePlayZone.items[i].id;
+            let value = games[index].gamePlayZone.items[i].gameZoneName;
+            newObject = {...newObject,[key]:value};
+        }
+       setGamePlayZoneObject(newObject);
+    }
+
+    useEffect(() => {
+        console.log("***useEffect***: gamePlayZoneObject: " + JSON.stringify(gamePlayZoneObject));
+        for (const key in gamePlayZoneObject) {
+            console.log(`${key}: ${ gamePlayZoneObject[key]}`);
+        }
+    }, [gamePlayZoneObject]);
     /* END ADMIN
 
      */
@@ -941,10 +1215,10 @@ export function Admin() {
                             {(disabledGame === true)? (<View>disabled: true</View>):null}
                             {(disabledGame === false)? (<View>disabled: false</View>):null}
                             <Button className={"show-button blue-duke"} onClick={() => {setFormCreateGameState(initialStateCreateGame);setGameFormVisible(true)}}>add game</Button>
-                            {games.map((game) => (
+                            {games.map((game,index) => (
                                 <View key={game.id} >
                                     <View className={(gameVisible==game.id)? "hide" : "show"}>
-                                        <Button className={"show-button blue-duke"} onClick={() => setGameVisible(game.id)}>show game detail:</Button>
+                                        <Button className={"show-button blue-duke"} onClick={() => setGameVisibleFunction(game.id,index)}>show game detail:</Button>
                                         <strong>name</strong>: {game.gameName} | <strong>type</strong>: {game.gameType} | <strong>place</strong>: {game.gameLocationPlace} | <strong>city</strong>: {game.gameLocationCity}|<strong>disabled</strong>: { game.disabled ? "true":"false"}
                                     </View>
                                     <View className={(gameVisible==game.id)? "show" : "hide"}>
@@ -959,37 +1233,70 @@ export function Admin() {
                                     <strong>gameGoals: </strong>{game.gameGoals} <br />
                                     <strong>gameImage: </strong>{game.gameImage} <br />
                                     <strong>gameMap: </strong>{game.gameMap} <br />
+                                        <hr />
                                     <strong>How many zones: {game.gamePlayZone.items.length}</strong><br />
                                     {game.gamePlayZone.items.map((zone) => (
                                         <View key={zone.id}>
-                                            <strong>zone id:</strong> {zone.id} | <strong>disabled</strong>: {zone.disabled ? "true" : "false"} | <strong>order: </strong>{zone.order}  | <strong>gameZoneName: </strong>{zone.gameZoneName}
+                                            <strong>name:</strong> {zone.gameZoneName} | <strong>disabled</strong>: {zone.disabled ? "true" : "false"} | <strong>order: </strong>{zone.order}
                                             <br />
                                             <Button marginRight="5px" className="button-small" onClick={() => showUpdateZone({"zoneID": zone.id})}>Update Zone</Button>
                                             <Button marginRight="5px" className="button-small" onClick={() => setInputCreateHintInitial('gameID',game.id,'gamePlayZoneID',zone.id)}>Add Game Hint</Button>
                                             <Button marginRight="5px" className="button-small" onClick={() => setInputCreateClueInitial('gameID',game.id,'gamePlayZoneID',zone.id)}>Add Clue</Button>
+                                            <Button marginRight="5px" className="button-small" onClick={() => setInputCreatePuzzleInitial('gameID',game.id,'gamePlayZoneID',zone.id)}>Add Puzzle</Button>
                                         </View>
                                     ))}
-                                    <strong>Hints: {game.gameHint.items.length}</strong><br />
-                                    {game.gameHint.items.map((hint) => (
-                                        <View key={hint.id}>
-                                            <strong>pzID:</strong>  {hint.gamePlayZoneID} | <strong>disabled</strong>: {hint.disabled ? "true" : "false"} | <strong>ord:</strong>  {hint.order} | <strong>hintName:</strong>  {hint.gameHintName} <strong>hint Description: </strong>{hint.gameHintDescription}
-                                            <br /><Button marginRight="5px" className="button-small" onClick={() => showUpdateHint({"hintID": hint.id})}>Update Hint</Button>
-                                            <Button marginRight="5px" className="button-small" onClick={() => deleteHint({"hintID": hint.id})}>Delete Hint</Button>
-                                        </View>
-                                    ))}
+                                        <hr />
+                                        <strong>Puzzles: {game.gamePuzzle.items.length}</strong><br />
+                                        {game.gamePuzzle.items.map((puzzle) => (
+                                            <View key={puzzle.id}>
+                                                <strong>puzzle name:</strong>  {puzzle.puzzleName} | <strong>ord:</strong> {puzzle.order} | <strong>zone name:</strong>  {gamePlayZoneObject[("id-"+ puzzle.gamePlayZoneID)]} | <strong>winGame</strong>: {puzzle.winGame? "true" : "false"} | <strong>disabled</strong>: {puzzle.disabled ? "true" : "false"} <br />
+                                                <strong>puzzle position</strong> {puzzle.puzzlePosition} | <strong>puzzleToolNeeded</strong> {puzzle.puzzleToolNeeded} | <strong>puzzle tool revealed</strong> {puzzle.puzzleToolRevealed} | <strong>object clue</strong> {puzzle.puzzleObjectClue} |
+                                                <br /><Button marginRight="5px" className="button-small" onClick={() => showUpdatePuzzle({"puzzleID": puzzle.id})}>Update Puzzle</Button>
+                                                <Button marginRight="5px" className="button-small" onClick={() => deletePuzzle({"puzzleID": puzzle.id})}>Delete Puzzle</Button>
+                                                <Button marginRight="5px" className="button-small" onClick={() => setInputCreateTextField('puzzleID',puzzle.id)}>Add TextField</Button>
+
+                                                <br />
+                                                <hr />
+                                                <View paddingLeft="10px"><strong>TextFields: {puzzle.textField.items.length}</strong><br />
+                                                {puzzle.textField.items.map((textField) => (
+                                                    <View key={textField.id}>
+                                                        <strong>textfield name:</strong>  {textField.name} | <strong>order:</strong> {textField.order} |
+                                                        <strong>label:</strong>  {textField.label} | <strong>disabled</strong>: {textField.disabled ? "true" : "false"} |
+                                                        <br /><Button marginRight="5px" className="button-small" onClick={() => showUpdateTextField({"textFieldID": textField.id})}>Update TextField</Button>
+                                                        <Button marginRight="5px" className="button-small" onClick={() => deleteTextField({"textFieldID": textField.id})}>Delete TextField</Button>
+
+                                                    </View>
+                                                ))}
+                                                 <hr />
+                                                </View>
+                                            </View>
+                                        ))}
+
+                                        <hr />
                                         <strong>Clues: {game.gameClue.items.length}</strong><br />
                                         {game.gameClue.items.map((clue) => (
                                             <View key={clue.id}>
-                                                <strong>pzID:</strong>  {clue.gamePlayZoneID} | <strong>disabled</strong>: {clue.disabled ? "true" : "false"} |
-                                                <strong>ord:</strong>  {clue.order} | <strong>clueName:</strong>  {clue.gameClueName} |
-                                                <strong>clue Position: </strong>{clue.gameCluePosition} |
-                                                <strong>clue Icon: </strong>{clue.gameClueIcon} |
-                                                <strong>clue Image: </strong>{clue.gameClueImage} |
-                                                <strong>clue Image: </strong>{clue.gameClueText}
+                                                <strong>clue name:</strong>  {clue.gameClueName} | <strong>zone name:</strong>  {gamePlayZoneObject[("id-"+ clue.gamePlayZoneID)]}| <strong>disabled</strong>: {clue.disabled ? "true" : "false"} |
+                                                <strong>ord:</strong>  {clue.order} |
+                                                <strong>clue position: </strong>{clue.gameCluePosition} <br />
+                                                <strong>clue text: </strong>{clue.gameClueText} <br />
+                                                <strong>clue Icon: </strong>{clue.gameClueIcon} <br />
+                                                <strong>clue Image: </strong>{clue.gameClueImage}
                                                 <br /><Button marginRight="5px" className="button-small" onClick={() => showUpdateClue({"clueID": clue.id})}>Update Clue</Button>
                                                 <Button marginRight="5px" className="button-small" onClick={() => deleteClue({"clueID": clue.id})}>Delete Clue</Button>
                                             </View>
                                         ))}
+                                        <hr />
+                                        <strong>Hints: {game.gameHint.items.length}</strong><br />
+                                        {game.gameHint.items.map((hint) => (
+                                            <View key={hint.id}>
+                                                <strong>hint name:</strong>  {hint.gameHintName} | <strong>ord:</strong> {hint.order} | <strong>zone name:</strong>  {gamePlayZoneObject[("id-"+ hint.gamePlayZoneID)]} | <strong>disabled</strong>: {hint.disabled ? "true" : "false"} | <strong>hint description: </strong> {hint.gameHintDescription}
+                                                <br /><Button marginRight="5px" className="button-small" onClick={() => showUpdateHint({"hintID": hint.id})}>Update Hint</Button>
+                                                <Button marginRight="5px" className="button-small" onClick={() => deleteHint({"hintID": hint.id})}>Delete Hint</Button>
+                                            </View>
+                                        ))}
+                                        <hr />
+
                                     <Button marginRight="5px" className="button" onClick={() => showGameStats({"gameID": game.id, "gameName": game.gameName})}>Game Stats</Button>
                                     <Button marginRight="5px" className="button" onClick={() => deleteGame({"gameID": game.id})}>Delete Game</Button>
                                     <Button marginRight="5px" className="button" onClick={() => showUpdateGame({"gameID": game.id})}>Update Game</Button>
@@ -1319,11 +1626,12 @@ export function Admin() {
                                         </View>
                                     </View>
                                 </View>
-                                <View className={gameClueFormVisible? "overlay" : "hide"}>
+
+
+                            <View className={gameClueFormVisible? "overlay" : "hide"}>
                                     <View className="popup">
                                         <View id="gameClueForm" className="show" as="form" margin="3rem 0" >
                                             <View><strong>Game Clue Form</strong></View>
-
                                             <Flex direction="column" justifyContent="center" gap="1rem">
                                                 <SwitchField
                                                     label="disabled"
@@ -1415,6 +1723,216 @@ export function Admin() {
                                                 </Button>
                                                 <Button id="updateClue" className="hide" onClick={updateClue} variation="primary">
                                                     Update Clue
+                                                </Button>
+                                            </Flex>
+                                        </View>
+                                    </View>
+                                </View>
+
+                            <View className={gameTextFieldFormVisible? "overlay" : "hide"}>
+                                <View className="popup">
+                                    <View id="gameTextFieldForm" className="show" as="form" margin="3rem 0" >
+                                        <View><strong>TextField Form</strong></View>
+
+                                        <Flex direction="column" justifyContent="center" gap="1rem">
+                                            <SwitchField
+                                                label="disabled"
+                                                isChecked={formCreateTextFieldState.disabled}
+                                                onChange={(e) => {
+                                                    console.log("e.target.checked: " + e.target.checked)
+                                                    setInputCreateTextField('disabled',e.target.checked);
+                                                }}
+                                            />
+                                            <View>Order</View>
+                                            <Input
+                                                name="order"
+                                                type="number"
+                                                size="small"
+                                                width="50px"
+                                                onChange={(event) => setInputCreateTextField('order', event.target.value)}
+                                                value={formCreateTextFieldState.order}
+                                            />
+                                            <TextField
+                                                onChange={(event) => setInputCreateTextField('puzzleID', event.target.value)}
+                                                name="puzzleID"
+                                                placeholder="Puzzle ID"
+                                                label="Puzzle ID"
+                                                variation="quiet"
+                                                value={formCreateTextFieldState.puzzleID}
+                                                required
+                                            />
+                                            <TextField
+                                                name="Name"
+                                                onChange={(event) => setInputCreateTextField('name', event.target.value)}
+                                                placeholder="Name"
+                                                label="Name"
+                                                variation="quiet"
+                                                value={formCreateTextFieldState.name}
+                                                required
+                                            />
+                                            <TextField
+                                                name="Label"
+                                                onChange={(event) => setInputCreateTextField('label', event.target.value)}
+                                                placeholder="Label"
+                                                label="Label"
+                                                variation="quiet"
+                                                value={formCreateTextFieldState.label}
+                                                required
+                                            />
+                                            <TextField
+                                                name="Answer"
+                                                onChange={(event) => setInputCreateTextField('answer', event.target.value)}
+                                                placeholder="Answer"
+                                                label="Answer"
+                                                variation="quiet"
+                                                value={formCreateTextFieldState.answer}
+                                                required
+                                            />
+
+                                        </Flex>
+                                        <Flex direction="row" justifyContent="center" marginTop="20px">
+                                            <Button className="show" onClick={() => setGameTextFieldFormVisible(false)} variation="primary">
+                                                Close
+                                            </Button>
+                                            <Button id="createTextField" className="show" onClick={addTextField} variation="primary">
+                                                Create TextField
+                                            </Button>
+                                            <Button id="updateTextField" className="hide" onClick={updateTextField} variation="primary">
+                                                Update TextField
+                                            </Button>
+                                        </Flex>
+                                    </View>
+                                </View>
+                            </View>
+
+                                <View className={gamePuzzleFormVisible? "overlay" : "hide"}>
+                                    <View className="popup">
+                                        <View id="gamePuzzleForm" className="show" as="form" margin="3rem 0" >
+                                            <View><strong>Game Puzzle Form</strong></View>
+
+                                            <Flex direction="column" justifyContent="center" gap="1rem">
+                                                <SwitchField
+                                                    label="disabled"
+                                                    isChecked={formCreatePuzzleState.disabled}
+                                                    onChange={(e) => {
+                                                        console.log("e.target.checked: " + e.target.checked)
+                                                        setInputCreatePuzzle('disabled',e.target.checked);
+                                                    }}
+                                                />
+                                                <SwitchField
+                                                    label="winGame"
+                                                    isChecked={formCreatePuzzleState.winGame}
+                                                    onChange={(e) => {
+                                                        console.log("e.target.checked: " + e.target.checked)
+                                                        setInputCreatePuzzle('winGame',e.target.checked);
+                                                    }}
+                                                />
+                                                <View>Order - for "top" clue is 60px times "order" from Top on left side, for "bottom", 60px times order from right</View>
+                                                <Input
+                                                    name="order"
+                                                    type="number"
+                                                    size="small"
+                                                    width="50px"
+                                                    onChange={(event) => setInputCreatePuzzle('order', event.target.value)}
+                                                    value={formCreatePuzzleState.order}
+                                                />
+                                                <TextField
+                                                    onChange={(event) => setInputCreatePuzzle('gameID', event.target.value)}
+                                                    name="gameID"
+                                                    placeholder="Game ID"
+                                                    label="Game ID"
+                                                    variation="quiet"
+                                                    value={formCreatePuzzleState.gameID}
+                                                    required
+                                                />
+                                                <TextField
+                                                    onChange={(event) => setInputCreatePuzzle('gamePlayZoneID', event.target.value)}
+                                                    name="gamePlayZoneID"
+                                                    placeholder="gamePlayZoneID"
+                                                    label="gamePlayZoneID"
+                                                    variation="quiet"
+                                                    value={formCreatePuzzleState.gamePlayZoneID}
+                                                    required
+                                                />
+                                                <TextField
+                                                    onChange={(event) => setInputCreatePuzzle('puzzleName', event.target.value)}
+                                                    name="puzzleName"
+                                                    placeholder="Puzzle Name"
+                                                    label="Puzzle Name"
+                                                    variation="quiet"
+                                                    value={formCreatePuzzleState.puzzleName}
+                                                    required
+                                                />
+                                                <TextField
+                                                    onChange={(event) => setInputCreatePuzzle('puzzlePosition', event.target.value)}
+                                                    name="puzzlePosition"
+                                                    placeholder="puzzlePosition"
+                                                    label="puzzle position"
+                                                    variation="quiet"
+                                                    value={formCreatePuzzleState.puzzlePosition}
+                                                    required
+                                                />
+                                                <TextField
+                                                    onChange={(event) => setInputCreatePuzzle('puzzleImage', event.target.value)}
+                                                    name="puzzleImage"
+                                                    placeholder="puzzle image"
+                                                    label="puzzle image"
+                                                    variation="quiet"
+                                                    value={formCreatePuzzleState.puzzleImage}
+                                                    required
+                                                />
+                                                <TextField
+                                                    onChange={(event) => setInputCreatePuzzle('puzzleImageSolved', event.target.value)}
+                                                    name="puzzleImageSolved"
+                                                    placeholder="puzzle Image Solved"
+                                                    label="puzzle Image Solved"
+                                                    variation="quiet"
+                                                    value={formCreatePuzzleState.puzzleImageSolved}
+                                                    required
+                                                />
+                                                <TextField
+                                                    onChange={(event) => setInputCreatePuzzle('puzzleObjectClue', event.target.value)}
+                                                    name="puzzleObjectClue"
+                                                    placeholder="puzzle Object Clue - show a clue object instead of tool - haven't tested code"
+                                                    label="puzzle Object Clue"
+                                                    variation="quiet"
+                                                    value={formCreatePuzzleState.puzzleObjectClue}
+                                                />
+
+                                                <TextField
+                                                    onChange={(event) => setInputCreatePuzzle('puzzleClueText', event.target.value)}
+                                                    name="puzzleClueText"
+                                                    placeholder="puzzle Clue Text"
+                                                    label="puzzle Clue Text"
+                                                    variation="quiet"
+                                                    value={formCreatePuzzleState.puzzleClueText}
+                                                />
+                                                <TextField
+                                                    onChange={(event) => setInputCreatePuzzle('puzzleToolRevealed', event.target.value)}
+                                                    name="puzzleToolRevealed"
+                                                    placeholder="puzzle Tool Revealed"
+                                                    label="puzzle Tool Revealed"
+                                                    variation="quiet"
+                                                    value={formCreatePuzzleState.puzzleToolRevealed}
+                                                />
+                                                <TextField
+                                                    onChange={(event) => setInputCreatePuzzle('puzzleToolNeeded', event.target.value)}
+                                                    name="puzzleToolNeeded"
+                                                    placeholder="puzzle Tool Needed"
+                                                    label="puzzle Tool Needed"
+                                                    variation="quiet"
+                                                    value={formCreatePuzzleState.puzzleToolNeeded}
+                                                />
+                                            </Flex>
+                                            <Flex direction="row" justifyContent="center" marginTop="20px">
+                                                <Button className="show" onClick={() => setGamePuzzleFormVisible(false)} variation="primary">
+                                                    Close
+                                                </Button>
+                                                <Button id="createPuzzle" className="show" onClick={addPuzzle} variation="primary">
+                                                    Create Puzzle
+                                                </Button>
+                                                <Button id="updatePuzzle" className="hide" onClick={updatePuzzle} variation="primary">
+                                                    Update Puzzle
                                                 </Button>
                                             </Flex>
                                         </View>

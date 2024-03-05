@@ -31,10 +31,40 @@ type Game @model @auth(rules: [ { allow: public } ] ) {
   gameHint: [GameHint] @hasMany(indexName: "byGameID", fields: ["id"])
   type: String! @index(name: "gamesByCity", queryField: "gamesByCity", sortKeyFields: ["gameLocationCity"])
   gameClue: [GameClue] @hasMany(indexName: "byGameID", fields: ["id"])
-  gamePuzzle: String
+  gamePuzzle: [GamePuzzle] @hasMany(indexName: "byGameID", fields: ["id"])
   createdAt: String!
   disabled: Boolean
   user:[User] @manyToMany(relationName: "UserGamePlay")
+ }
+
+type GamePuzzle @model @auth(rules: [ { allow: public } ] ) {
+  id: ID!
+  gameID: ID! @index(name: "byGameID", queryField: "gamePuzzleByGameID", sortKeyFields: ["order"])
+  gamePlayZoneID: String
+  puzzleName: String
+  puzzlePosition: String
+  puzzleImage: String
+  puzzleImageSolved: String
+  textField: [TextField] @hasMany(indexName: "byPuzzleID", fields: ["id"])
+  puzzleObjectClue: String
+  puzzleClueText: String
+  puzzleToolRevealed: String
+  puzzleToolNeeded: String
+  winGame: Boolean
+  order: Int!
+  createdAt: String!
+  disabled: Boolean
+ }
+
+type TextField @model @auth(rules: [ { allow: public } ] ) {
+  id: ID!
+  puzzleID: ID! @index(name: "byPuzzleID", queryField: "textFieldByPuzzleID", sortKeyFields: ["order"])
+  name: String
+  label: String
+  answer: String
+  order: Int!
+  createdAt: String!
+  disabled: Boolean
  }
 
  type GameStats @model @auth(rules: [ { allow: public } ] ) {
@@ -86,7 +116,7 @@ type GameClue @model @auth(rules: [ { allow: public } ] ) {
   gameClueImage: String
   gameClueText: String
   gameCluePosition: String
-  gameClueTool: String
+  gameClueToolNeeded: String
   order: Int!
   createdAt: String!
   disabled: Boolean

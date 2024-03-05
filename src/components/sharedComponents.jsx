@@ -17,6 +17,10 @@ import {
 } from "./helper";
 import {useNavigate} from "react-router-dom";
 
+export const ToolObject = {
+    key: 'https://escapeoutbucket213334-staging.s3.amazonaws.com/public/object-tools/key.png',
+    discs: 'https://escapeoutbucket213334-staging.s3.amazonaws.com/public/object-tools/discs.png'
+};
 export const TimeBlock = (props) => {
     console.log("props.realTimeStart: " + props.realTimeStart);
     let realTimeStart = new Date(props.realTimeStart).toLocaleString();

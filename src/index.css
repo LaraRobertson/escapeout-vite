@@ -369,8 +369,8 @@ button:focus-visible,
   background-color: #000;
   /*opacity: 1;*/
   z-index: 102;
-  transition: all .5s ease;
-  transition-delay: .5s;
+  transition: all .3s ease;
+  transition-delay: .1s;
   /*overflow-x:hidden;*/
 }
 .hide-gradual {
@@ -396,6 +396,73 @@ button:focus-visible,
   color:#fff;
   background-color: #000;
 }
+.black-box {
+  position:absolute;
+  right:0;
+  top:0;
+  width: 100%;
+  height:100%;
+  color: #fff;
+  text-align: center;
+  font-size: 16px;
+  background-color: rgb(0, 0, 0, 0.8);
+  padding:15px;
+  border: 2px solid var(--blue-color);
+  z-index:120;
+}
+.bottom {
+  position:absolute;
+  bottom:2em;
+  width:100%;
+  text-align: center;
+  z-index:125;
+}
+/* leader board */
+.table-container {
+  display: block;
+  margin: 1em auto;
+  width: 100%;
+  max-width: 900px;
+}
+.flex-table {
+  display: flex;
+  flex-flow: row wrap;
+  border-left: solid 1px #d9d9d9;
+  transition: 0.5s;
+}
+.flex-table:first-of-type {
+  border-top: solid 1px #0D5189;
+  border-left: solid 1px #0D5189;
+}
+.flex-table.header .flex-row {
+  background: #0D5189;
+  color: white;
+  border-color: #0D5189;
+}
+.flex-row {
+  width: calc(100% / 5);
+  text-align: center;
+  padding: 0.5em 0.5em;
+  border-right: solid 1px #d9d9d9;
+  border-bottom: solid 1px #d9d9d9;
+  background-color: #f4f2f1;
+  color:black;
+  font-size:.8em;
+}
+.fourths {
+  width: calc(100% / 4);
+}
+.four-width{
+  width: 80%;
+}
+.flex-table.row:nth-child(odd) .flex-row {
+  background: #f4f2f1;
+}
+.flex-table:hover {
+  background: #F5F5F5;
+  transition: 500ms;
+}
+
 @media all and (max-width: 500px) {
   .all-screen {
     top: 10px;
@@ -403,11 +470,18 @@ button:focus-visible,
     width: calc(100vw - 20px);
   }
 }
+.yellow-border {
+  border: 1px solid rgba(255, 255, 0, 0.5);
+  box-shadow: 0 0 2px rgba(255, 165, 0, 0.5);
+}
 .red-border {
-  border: 1px solid red;
+  border: 1px solid darkred;
+  box-shadow: 0 0 2px darkred;
 }
 .zone-border {
-  border: 1px solid red;
+  /*border: 1px solid red;*/
+  border: 1px solid  darkred;
+  box-shadow: 0 0px 5px darkred;
 }
 .admin {
   background-color:#fff;

@@ -30,6 +30,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import {removeLocalStorage, goHomeQuit} from "./helper";
 import {generateClient} from "aws-amplify/api";
+import { format } from 'date-fns'
 import {fetchUserAttributes} from "aws-amplify/auth";
 
 export function Home() {
@@ -228,7 +229,10 @@ export function Home() {
         /* check for Team Name */
         console.log("agreeToWaiverFunction - check team name: " + teamName);
         if (teamName != '') {
-            isWaiverVisible ? setIsWaiverVisible(false) : setIsWaiverVisible(true);
+            setTimeout(() => {
+                isWaiverVisible ? setIsWaiverVisible(false) : setIsWaiverVisible(true);
+            }, 3000);
+           // isWaiverVisible ? setIsWaiverVisible(false) : setIsWaiverVisible(true);
             isGameIntroVisible ? setIsGameIntroVisible(false) : setIsGameIntroVisible(true);
             console.log ("agreeToWaiverFunction");
             console.log("add game stat");
@@ -266,20 +270,11 @@ export function Home() {
             });
             const gameFromAPI = apiData.data.getGame;
             const gamePlayZones = gameFromAPI.gamePlayZone.items;
-            let playZoneImage1 ="xxx";
-            console.log("gamePlayZones for loop");
-            /* need to figure out a better way... maybe with::
-            myArray.filter(item => item.type === 'beta').map(item => item.name) */
-            for (const key in gamePlayZones) {
-                //console.log(`${key}: ${ gamePlayZones[key]}`);
-                for (const key1 in gamePlayZones[key]) {
-                    // console.log(`${key1}: ${ gamePlayZones[key][key1]}`);
-                    if (key1 === "order" && gamePlayZones[key][key1] === 1) {
-                        playZoneImage1 = gamePlayZones[key]["gameZoneImage"]
-                    }
-                }
+            let playZoneImage1 = "";
+            if (gamePlayZones.length > 0) {
+                playZoneImage1 = gamePlayZones[0].gameZoneImage;
             }
-            console.log("playzoneImage: " + playZoneImage1);
+            console.log("playzoneImage - goToGameDetail: " + playZoneImage1);
             const gameStateGame = {
                 gameName: gameFromAPI.gameName,
                 gameDescriptionH2: gameFromAPI.gameDescriptionH2,
@@ -312,20 +307,11 @@ export function Home() {
                 });
                 const gameFromAPI = apiData.data.getGame;
                 const gamePlayZones = gameFromAPI.gamePlayZone.items;
-                let playZoneImage1 ="xxx";
-                console.log("gamePlayZones for loop");
-                /* need to figure out a better way... maybe with::
-                myArray.filter(item => item.type === 'beta').map(item => item.name) */
-                for (const key in gamePlayZones) {
-                    //console.log(`${key}: ${ gamePlayZones[key]}`);
-                    for (const key1 in gamePlayZones[key]) {
-                       // console.log(`${key1}: ${ gamePlayZones[key][key1]}`);
-                        if (key1 === "order" && gamePlayZones[key][key1] === 1) {
-                            playZoneImage1 = gamePlayZones[key]["gameZoneImage"]
-                        }
-                    }
+                let playZoneImage1 = "";
+                if (gamePlayZones.length > 0) {
+                    playZoneImage1 = gamePlayZones[0].gameZoneImage;
                 }
-                console.log("playzoneImage: " + playZoneImage1);
+                console.log("playzoneImage (goToGame): " + playZoneImage1);
                 const gameStateGame = {
                     gameName: gameFromAPI.gameName,
                     gameDescriptionH2: gameFromAPI.gameDescriptionH2,
@@ -389,7 +375,7 @@ export function Home() {
                             setNumberOfTimes(gamesScoreFromAPI.length);
                         }
                         /* 2nd or more times for user */
-                        firstTime = false;
+                        if (gamesScoreFromAPI > 0) firstTime = false;
                     } else {
                        // localStorage.setItem("numberOfTimes", 0);
                         setNumberOfTimes(0);
@@ -400,6 +386,7 @@ export function Home() {
                         gameID: gamesStatsFromAPI.gameID,
                         gameTotalTime: 0,
                         gameHintTime: 0,
+                        teamName: teamName,
                         completed: false,
                         disabled: false,
                         firstTime: firstTime
@@ -508,30 +495,79 @@ export function Home() {
                         <View className="italics" paddingTop={"2px"}>Games are played at locations in Game List below.</View>
                     </View>
                     <View className="hero-accordion">
-                        <Accordion className="light-dark-accordion" allowMultiple
-                                   items={[
-                                       {
-                                           trigger: 'Where to Park?',
-                                           value: 'accessible',
-                                           content: 'Yes! It uses HTML native elements: <details> and <summary>.'
-                                       },
-                                       {
-                                           trigger: 'Can I customize the styling?',
-                                           value: 'styling',
-                                           content: 'Of course! See the section on CSS Styling below.'
-                                       },
-                                       {
-                                           trigger: 'Is it a great way to organize content?',
-                                           value: 'content',
-                                           content: 'Most definitely!'
-                                       },
-                                       {
-                                           trigger: 'Is it a great way to organize content?',
-                                           value: 'content!',
-                                           content: 'Most definitely!!!'
-                                       }
-                                   ]}
-                        />
+                        <Accordion.Container className="light-dark-accordion">
+                            <Accordion.Item value="Accordion-item">
+                                <Accordion.Trigger>
+                                    About Game
+                                    <Accordion.Icon />
+                                </Accordion.Trigger>
+                                <Accordion.Content>
+                                    <View>
+                                        <ul>
+                                            <li>Our games are played on location with your smartphone. </li>
+                                            <li>Gameplay has elements of geocaching, scavenger hunts, and even escape room style puzzles.</li>
+                                            <li>Gameplay is limited to a certain walkable area like a public park or business and surrounding area.</li>
+                                            <li>All information needed to solve puzzles in game are located within that area.</li>
+                                            <li>Once you start playing your time starts - time ends when you complete the game. Your time is your score.</li>
+
+                                            <li>View the leaderboard on individual game to see best times.</li>
+                                        </ul>
+
+
+                                    </View>
+                                </Accordion.Content>
+                            </Accordion.Item>
+                            <Accordion.Item value="how-to-play">
+                                <Accordion.Trigger>
+                                    How to Play
+                                    <Accordion.Icon />
+                                </Accordion.Trigger>
+                                <Accordion.Content>
+                                    <View>
+                                        <ol>
+                                            <li>Login or create an account with your smartphone and go to location.</li>
+                                            <li>Select game.</li>
+                                            <li>Hit Play and select a display name</li>
+                                            <li>Start game and solve the puzzles.</li>
+                                        </ol>
+                                    </View>
+                                </Accordion.Content>
+                            </Accordion.Item>
+
+                            <Accordion.Item value="levels">
+                                <Accordion.Trigger>
+                                    What are Levels?
+                                    <Accordion.Icon />
+                                </Accordion.Trigger>
+                                <Accordion.Content>
+                                    <View>
+                                        Games have different levels -
+                                        <ul>
+                                            <li><strong>level 1</strong> is more like a scavenger hunt.<br />
+                                            Requirements - reading comprehension, understanding orientation, counting, some light math.</li>
+                                            <li><strong>level 2</strong> is more like an escape-room style puzzle with elements of a scavenger hunt.  <br />
+                                                Find some items and use deduction to figure out the clues. <br />
+                                                Requirements: Attention to detail, knowing a little math, and understanding orientation, like north, south, etc is useful.</li>
+                                            <li><strong>level 3</strong> games are more elaborate escape-room style puzzles with elements of a scavenger hunt.  <br />
+                                                Find some items and use deduction to figure out the clues. <br />
+                                                Requirements: Attention to detail, knowing a little math, and understanding orientation, like north, south, etc is useful.</li>
+                                        </ul>
+                                    </View>
+                                </Accordion.Content>
+                            </Accordion.Item>
+                            <Accordion.Item value="play-zones">
+                                <Accordion.Trigger>
+                                    What are Play Zones?
+                                    <Accordion.Icon />
+                                </Accordion.Trigger>
+                                <Accordion.Content>
+                                    <View>
+                                       Play zones indicate the area that the clue references.  Most clues can be solved within a few hundred feet of the play zone image.
+                                    </View>
+                                </Accordion.Content>
+                            </Accordion.Item>
+                        </Accordion.Container>
+
                         <Tabs>
                             <Tabs.Item title="How to Play">
                                 <View>
@@ -802,6 +838,9 @@ export function Home() {
                         <View>
                             <Image maxHeight="150px" src={game.gamePlayZoneImage1} />
                         </View>
+                        <View>
+                            <Image maxHeight="150px" src={game.gameMap} />
+                        </View>
 
 
                         <View marginTop="10px">
@@ -814,7 +853,7 @@ export function Home() {
             </View>
 
             <View className={isWaiverVisible ? "hide" : "main-content light-dark show"} marginTop="1em">
-                <View textAlign="center" className={"light-dark"}> © 2023 EscapeOut.Games<br />
+                <View textAlign="center" className={"light-dark"}> © 2022 - {format(Date(), "yyyy")} EscapeOut.Games<br />
                     <Link
                         href="https://escapeout.games/privacy-policy/"
                         className={"light-dark"}
