@@ -73,6 +73,7 @@ button:focus-visible,
 }
 .blue-alert {
   background-color: var(--blue-color-alert);
+  color: black;
 }
 .red-alert {
   color: #7e0b0b;
@@ -186,6 +187,8 @@ button:focus-visible,
 @media (prefers-color-scheme: light) {
   .blue-light-dark {
     color: #0D5189;
+  }
+  .alert-light-dark {
   }
   .light-dark {
     color: #000;

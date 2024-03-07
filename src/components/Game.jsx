@@ -725,7 +725,7 @@ export function Game() {
                                    </View>
                                    <View className="bottom z-index125">
                                        <View color="white">Total Time: {gameTimeTotal}</View>
-                                       <Button className="button small" onClick={() => leaveComment(setShowComment)}>Tap to Leave Comment (to help make game better)</Button>
+                                       <Button className="button small hide" onClick={() => leaveComment(setShowComment)}>Tap to Leave Comment (to help make game better)</Button>
                                        <br /><Button className="button right-button small" onClick={() => goHomeQuit(navigate)}>Back Home</Button>
                                    </View>
 

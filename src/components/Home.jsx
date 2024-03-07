@@ -59,7 +59,7 @@ export function Home() {
     const [isWaiverVisible, setIsWaiverVisible] = useState(false);
     const [isGameIntroVisible, setIsGameIntroVisible] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [isHowToPlayVisible, setIsHowToPlayVisible] = useState(true);
+    const [isHowToPlayVisible, setIsHowToPlayVisible] = useState(false);
     const [teamName, setTeamName] = useState('');
     const [numberOfTimes, setNumberOfTimes] = useState(0);
     const [numberOfPlayersError, setNumberOfPlayersError] = useState('');
@@ -261,6 +261,9 @@ export function Home() {
         console.log("setTeamNameFunction: " + teamNameValue);
         localStorage.setItem("teamName", teamNameValue);
         setTeamName(teamNameValue);
+    }
+    async function goToWaiver(gameDetails) {
+
     }
     async function agreeToWaiverFunction() {
         console.log("agreeToWaiverFunction");
@@ -501,10 +504,14 @@ export function Home() {
         }
     }
 
-    function showHowToPlay() {
-        console.log("showHowToPlay: ");
-        setIsHowToPlayVisible(true);
-        window.scrollTo(0, 0);
+    function showGameList() {
+        console.log("showGameList");
+       // setIsHowToPlayVisible(true);
+        window.scrollTo({
+            top: 1800,
+            left: 0,
+            behavior: "smooth",
+        });
     }
 
     const divStyle = (src) => ({
@@ -530,19 +537,17 @@ export function Home() {
                                 {(authStatus === 'authenticated')&&(email === "lararobertson70@gmail.com") ? (
                                     <Button className="topLink" onClick={() => navigate('/admin')}>Admin</Button>
                                 ): null}
-                                <Button className="topLink hide" onClick={() => showHowToPlay()}>
+                                <Button className="topLink " onClick={() => setIsHowToPlayVisible(true)}>
                                     How to Play
-                                </Button>
-                                <Button className="topLink" onClick={() =>setIsHowToPlayVisible(false)}>
-                                    Game List by City
                                 </Button>
                             </View>
                     </Flex>
                 </View>
             <View className="main-content light-dark top-main show"  marginBottom="1em">
                 <View className="hero">
+
                     <Heading
-                        level={3}
+                        level={4}
                         textAlign="center"
                         className="hero-heading light-dark">
                         Go Outside and play an <span className="blue blue-light-dark">Intriguing Problem-Solving Game</span> with your family and friends!
@@ -667,8 +672,8 @@ export function Home() {
                         </Button>
                     </View>): null}
                 <View id="game-list"  className={isWaiverVisible ? "hide" : "show"}>
-                    <Heading level={"5"} className={"heading light-dark"} marginTop={"15px"} marginBottom={"15px"}>
-                        Game List by City:
+                    <Heading level={"6"} className={"heading light-dark"} marginBottom={"15px"}>
+                        Game List (select to see list by City):
                     </Heading>
                     <Button marginRight="5px" backgroundColor="#B8CEF9" onClick={() => setGameLocationCity("Tybee Island")}>Tybee Island, GA</Button>
 
@@ -735,12 +740,67 @@ export function Home() {
                     </Flex>
                 </View>
                 {/* Game Detail View */}
+                <View className={isHowToPlayVisible ? "overlay" : "hide"}>
+                    <View className="popup light-dark"
+                          ariaLabel="How to Play">
+                        <Heading level={4} marginBottom="10px" className={"heading light-dark"}>How To Play</Heading>
+                        <View width="100%" margin="0 auto" lineHeight="16px">
+                        <View>
+                            <strong>About Game</strong>
+                            <ul>
+                                <li>Our games are played on location with your smartphone. </li>
+                                <li>Gameplay has elements of geocaching, scavenger hunts, and even escape room style puzzles.</li>
+                                <li>Gameplay is limited to a certain walkable area like a public park or business and surrounding area.</li>
+                                <li>All information needed to solve puzzles in game are located within that area.</li>
+                                <li>Once you start playing your time starts - time ends when you complete the game. Your time is your score.</li>
 
+                                <li>View the leaderboard on individual game to see best times.</li>
+                            </ul>
+
+
+
+                        </View>
+                        <View>
+                            <strong>About Game</strong>
+                            <ol>
+                                <li>Login or create an account with your smartphone and go to location.</li>
+                                <li>Select game.</li>
+                                <li>Hit Play and select a display name</li>
+                                <li>Start game and solve the puzzles.</li>
+                            </ol>
+                        </View>
+                        <strong>What are Levels</strong>
+                        <View>
+                            Games have different levels -
+                            <ul>
+                                <li><strong>level 1</strong> is more like a scavenger hunt.<br />
+                                    Requirements - reading comprehension, understanding orientation, counting, some light math.</li>
+                                <li><strong>level 2</strong> is more like an escape-room style puzzle with elements of a scavenger hunt.  <br />
+                                    Find some items and use deduction to figure out the clues. <br />
+                                    Requirements: Attention to detail, knowing a little math, and understanding orientation, like north, south, etc is useful.</li>
+                                <li><strong>level 3</strong> games are more elaborate escape-room style puzzles with elements of a scavenger hunt.  <br />
+                                    Find some items and use deduction to figure out the clues. <br />
+                                    Requirements: Attention to detail, knowing a little math, and understanding orientation, like north, south, etc is useful.</li>
+                            </ul>
+                        </View>
+                        <View>
+                            <strong>What are Play Zones</strong><br />
+                            Play zones indicate the area that the clue references.  Most clues can be solved within a few hundred feet of the play zone image.
+                        </View>
+                    </View>
+
+                        <View marginTop="10px">
+                            <Button className="button right-button small" onClick={() => setIsHowToPlayVisible(false)}>close</Button>
+                        </View>
+                    </View>
+                </View>
+                {/* end Game Detail */}
+                {/* Game Detail View */}
                 <View className={isGameDetailVisible ? "overlay" : "hide"}>
-                    <View className="popup"
+                    <View className="popup light-dark"
                         ariaLabel="Game detail"
                         textAlign="center">
-                        <Heading level={4} marginBottom="10px" color="black">Game Name: {game.gameName}</Heading>
+                        <Heading level={4} marginBottom="10px" className={"heading light-dark"}>Game Name: {game.gameName}</Heading>
 
                         <View className={"blue-alert"} margin="10px auto" padding="5px" width="90%" lineHeight="18px">
                             <View color="#0D5189"><strong>{game.gameIntro}</strong></View>
@@ -763,7 +823,7 @@ export function Home() {
             game. These notes are not saved once you complete game.</span>
                                 </View>
                             </Flex>
-                        </View>f
+                        </View>
                         <View>
                             <span className="small"> <strong>Remember, your time to complete the game is your score and is calculated when you start playing. Hints add 5 minutes.</strong> </span><br />
                             <strong>Start Playing when you are here:</strong>
@@ -784,8 +844,8 @@ export function Home() {
                 </View>
                 {/* end Game Detail */}
                 <View className={(isWaiverVisible || isGameIntroVisible) ? "overlay" : "hide"}>
-                    <View className={isGameIntroVisible? "hide" : "popup" }>
-                        <Heading level={4} marginBottom="10px" color="black">Waiver for {game.gameName}</Heading>
+                    <View className={isGameIntroVisible? "hide" : "popup light-dark" }>
+                        <Heading level={4} marginBottom="10px" className={"heading light-dark"}>Waiver for {game.gameName}</Heading>
                         <Alert variation="info" hasIcon={false}><strong>I will respect all laws, rules, and property rights of the area.
                             I will try not to annoy those around me.</strong></Alert>
                         <View>
@@ -812,10 +872,10 @@ export function Home() {
                     <View
                         ariaLabel="Game intro"
                         textAlign="center"
-                        className={isGameIntroVisible? "popup" : "hide"}>
-                        <Heading level={4} marginBottom="10px" color="black">Game Name: {game.gameName}</Heading>
+                        className={isGameIntroVisible? "popup light-dark" : "hide"}>
+                        <Heading level={4} marginBottom="10px" className={"heading light-dark"}>Game Name: {game.gameName}</Heading>
 
-                        <View className={"blue-alert"} margin="10px auto" padding="5px" width="90%" lineHeight="18px">
+                        <View className={"blue-alert light-dark"} margin="10px auto" padding="5px" width="90%" lineHeight="18px">
                             <View color="#0D5189"><strong>{game.gameIntro}</strong></View>
                             <View>{game.gameGoals}</View>
                             <View className="small italics">{game.gameDescriptionP}</View>
