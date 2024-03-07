@@ -126,11 +126,13 @@ export const getGame = /* GraphQL */ `query GetGame($id: ID!) {
                 }
               nextToken
             }
-            puzzleObjectClue
+            puzzleClueRevealed
             puzzleClueText
             puzzleToolRevealed
             puzzleToolNeeded
             winGame
+            winGameImage
+            winGameMessage
             order
             createdAt
             updatedAt
@@ -225,11 +227,13 @@ export const listGames = /* GraphQL */ `query ListGames(
                 }
               nextToken
             }
-            puzzleObjectClue
+            puzzleClueRevealed
             puzzleClueText
             puzzleToolRevealed
             puzzleToolNeeded
             winGame
+            winGameImage
+            winGameMessage
             order
             createdAt
             updatedAt
@@ -704,11 +708,13 @@ export const gamePuzzleByGameID = /* GraphQL */ `query GamePuzzleByGameID(
       puzzlePosition
       puzzleImage
       puzzleImageSolved
-      puzzleObjectClue
+      puzzleClueRevealed
       puzzleClueText
       puzzleToolRevealed
       puzzleToolNeeded
       winGame
+      winGameImage
+      winGameMessage
       order
       createdAt
       disabled
@@ -1167,11 +1173,13 @@ export const getGamePuzzle = /* GraphQL */ `query GetGamePuzzle($id: ID!) {
     puzzlePosition
     puzzleImage
     puzzleImageSolved
-    puzzleObjectClue
+    puzzleClueRevealed
     puzzleClueText
     puzzleToolRevealed
     puzzleToolNeeded
     winGame
+    winGameImage
+    winGameMessage
     order
     createdAt
     disabled

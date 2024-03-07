@@ -224,11 +224,13 @@ export const onCreateGamePuzzle = /* GraphQL */ `subscription OnCreateGamePuzzle
       nextToken
       __typename
     }
-    puzzleObjectClue
+    puzzleClueRevealed
     puzzleClueText
     puzzleToolRevealed
     puzzleToolNeeded
     winGame
+    winGameImage
+    winGameMessage
     order
     createdAt
     disabled
@@ -255,11 +257,13 @@ export const onUpdateGamePuzzle = /* GraphQL */ `subscription OnUpdateGamePuzzle
       nextToken
       __typename
     }
-    puzzleObjectClue
+    puzzleClueRevealed
     puzzleClueText
     puzzleToolRevealed
     puzzleToolNeeded
     winGame
+    winGameImage
+    winGameMessage
     order
     createdAt
     disabled
@@ -286,11 +290,13 @@ export const onDeleteGamePuzzle = /* GraphQL */ `subscription OnDeleteGamePuzzle
       nextToken
       __typename
     }
-    puzzleObjectClue
+    puzzleClueRevealed
     puzzleClueText
     puzzleToolRevealed
     puzzleToolNeeded
     winGame
+    winGameImage
+    winGameMessage
     order
     createdAt
     disabled

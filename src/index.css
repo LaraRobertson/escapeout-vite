@@ -49,8 +49,9 @@ button:focus-visible,
 
 /* styles with light-dark */
 .hero-paragraph {
-  font-size: 1.1em;
+  font-size: 1em;
   font-weight:500;
+  padding: 2px 0;
 }
 .main-content {
   padding: 2em;
@@ -158,6 +159,8 @@ button:focus-visible,
   opacity: 1;
   height:100vh;
   overflow: auto;
+  /*topnav is 1 */
+  z-index: 2;
 }
 
 /* all-screen is popup window */
@@ -193,7 +196,8 @@ button:focus-visible,
     background-color: #fff;
   }
   .light-dark-accordion {
-    background-color: #e6eefe;
+    background-color: var(--blue-color-light);
+    color: #000;
   }
   .light-dark-mask {
     background: radial-gradient(circle, transparent 50%, white 75%);
@@ -215,7 +219,8 @@ button:focus-visible,
     background-color: #262626;
   }
   .light-dark-accordion {
-    color: #fff;
+    background-color: var(--blue-color-light);
+    color: #000;
   }
   .light-dark-mask {
     background: radial-gradient(circle, transparent 50%, #262626 75%);

@@ -558,7 +558,7 @@ export function Game() {
                                 ))}
                     </Flex>
                     <View className="backpack-holder">
-                        <Image src='/backpack-new.png' onClick={()=>setIsBackpackVisible(true)} />
+                        <Image src='https://escapeoutbucket213334-staging.s3.amazonaws.com/public/backpack-new.png' onClick={()=>setIsBackpackVisible(true)} />
                     </View>
 
                 </View>

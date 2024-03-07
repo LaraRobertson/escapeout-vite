@@ -243,11 +243,13 @@ export const createGamePuzzle = /* GraphQL */ `mutation CreateGamePuzzle(
       nextToken
       __typename
     }
-    puzzleObjectClue
+    puzzleClueRevealed
     puzzleClueText
     puzzleToolRevealed
     puzzleToolNeeded
     winGame
+    winGameImage
+    winGameMessage
     order
     createdAt
     disabled
@@ -275,11 +277,13 @@ export const updateGamePuzzle = /* GraphQL */ `mutation UpdateGamePuzzle(
       nextToken
       __typename
     }
-    puzzleObjectClue
+    puzzleClueRevealed
     puzzleClueText
     puzzleToolRevealed
     puzzleToolNeeded
     winGame
+    winGameImage
+    winGameMessage
     order
     createdAt
     disabled
@@ -307,11 +311,13 @@ export const deleteGamePuzzle = /* GraphQL */ `mutation DeleteGamePuzzle(
       nextToken
       __typename
     }
-    puzzleObjectClue
+    puzzleClueRevealed
     puzzleClueText
     puzzleToolRevealed
     puzzleToolNeeded
     winGame
+    winGameImage
+    winGameMessage
     order
     createdAt
     disabled
