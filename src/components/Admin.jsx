@@ -26,8 +26,6 @@ import { useNavigate } from 'react-router-dom';
 import {generateClient} from "aws-amplify/api";
 import { fetchUserAttributes } from 'aws-amplify/auth';
 import {deleteGameHint} from "../graphql/mutations";
-import {setGamePlayFunction} from "./helper";
-
 export function Admin() {
     const [email, setEmail] = useState();
     const [games, setGames] = useState([]);
@@ -746,6 +744,8 @@ export function Admin() {
         puzzleObjectClue: '',
         puzzleToolRevealed: '',
         puzzleToolNeeded: '',
+        winGameImage: '',
+        winGameMessage: '',
         winGame: false,
         order: 0,
         disabled: false
@@ -1922,6 +1922,22 @@ export function Admin() {
                                                     label="puzzle Tool Needed"
                                                     variation="quiet"
                                                     value={formCreatePuzzleState.puzzleToolNeeded}
+                                                />
+                                                <TextField
+                                                    onChange={(event) => setInputCreatePuzzle('winGameMessage', event.target.value)}
+                                                    name="winGameMessage"
+                                                    placeholder="win game message"
+                                                    label="win game message"
+                                                    variation="quiet"
+                                                    value={formCreatePuzzleState.winGameMessage}
+                                                />
+                                                <TextField
+                                                    onChange={(event) => setInputCreatePuzzle('winGameImage', event.target.value)}
+                                                    name="winGameImage"
+                                                    placeholder="win game image"
+                                                    label="win game image"
+                                                    variation="quiet"
+                                                    value={formCreatePuzzleState.winGameImage}
                                                 />
                                             </Flex>
                                             <Flex direction="row" justifyContent="center" marginTop="20px">

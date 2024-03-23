@@ -670,6 +670,21 @@ export const gamesByCity = /* GraphQL */ `query GamesByCity(
       gameGoals
       gameIntro
       gameMap
+      gamePlayZone {
+          items {
+            id
+            disabled
+            gameID
+            gameZoneName
+            gameZoneIcon
+            gameZoneImage
+            gameZoneDescription
+            order
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
       type
       createdAt
       disabled
@@ -895,6 +910,24 @@ export const gameStatsSortedByGameName = /* GraphQL */ `query GameStatsSortedByG
       gameLocationCity
       gameName
       gameStates
+       gameScore {
+          items {
+            id
+            gameStatsID
+            gameID
+            numberOfPlayers
+            teamName
+            teamLocation
+            gameComments
+            gameTotalTime
+            completed
+            firstTime
+            gameHintTime
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
       type
       createdAt
       disabled

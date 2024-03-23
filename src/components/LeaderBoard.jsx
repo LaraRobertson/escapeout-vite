@@ -17,7 +17,7 @@ import { format } from 'date-fns'
 import { useNavigate } from 'react-router-dom';
 import {generateClient} from "aws-amplify/api";
 
-export function LeaderBoard() {
+export function LeaderBoard(props) {
     const client = generateClient();
     const [leaderBoard, setLeaderBoard] = useState([]);
     const [showAllTimeButton, setShowAllTimeButton] = useState(false);
@@ -45,7 +45,7 @@ export function LeaderBoard() {
         try {
             const apiData = await client.graphql({
                 query: gameScoreByGameID,
-                variables: {filter: filter, sortDirection: "ASC", gameID:localStorage.getItem("gameID")}
+                variables: {filter: filter, sortDirection: "ASC", gameID:props.gameDetails.gameID}
             });
 
         const leaderBoardFromAPI = apiData.data.gameScoreByGameID.items;
@@ -56,31 +56,20 @@ export function LeaderBoard() {
     }
 
     const navigate = useNavigate();
-    useEffect(() => {
+    /*useEffect(() => {
         console.log("***useEffect***:  LeaderBoard()");
         leaderBoardFunction("2021-04-01");
-    }, []);
+    }, []);*/
 
     const today = new Date();
     const yesterday = new Date(today);
     yesterday.setDate(yesterday.getDate() - 1);
 
     return (
-        <View className="main-container">
-            <View className="topNav">
-                <Flex justifyContent="center">
-                    <View marginTop="10px">
-                        <Image src="https://escapeoutbucket213334-staging.s3.amazonaws.com/public/new-logo-light-smaller.png" />
-                    </View>
-                </Flex>
-                <Flex justifyContent="center">
-                    <Button className="topLink" onClick={() => navigate('/')}>Back to Home</Button>
-                </Flex>
-            </View>
-            <View className="main-content light-dark top-main">
-                <Heading level={2} className="heading">LeaderBoard</Heading>
+        <View>
+
+                <Heading level={4} className="heading">Leader Board for {props.gameDetails.gameName} game</Heading>
                 <View className="small">Only games played the first time will show on leaderboard.</View>
-                <Heading level={5} className="heading2">Game Name: {localStorage.getItem("gameName")}</Heading>
 
                 <Button className={showAllTimeButton ? "hide" : "button"} onClick={() => leaderBoardFunction(today.toLocaleDateString('en-CA'))}>
                     tap to see today</Button>&nbsp;
@@ -95,7 +84,7 @@ export function LeaderBoard() {
                         <div className="flex-row fourths" role="columnheader">Team Score</div>
                         <div className="flex-row fourths" role="columnheader">Played</div>
                     </div>
-                    {leaderBoard.map((game, index) => (
+                    {props.leaderBoard.map((game, index) => (
                         <div className="flex-table row" role="rowgroup" key={game.id}>
                             <div className="flex-row  fourths" role="cell">{game.teamName}</div>
                             <div className="flex-row fourths" role="cell">{Number(index) + 1}</div>
@@ -104,7 +93,7 @@ export function LeaderBoard() {
                         </div>
                     ))}
                 </div>
-            </View>
+
         </View>
     );
 }

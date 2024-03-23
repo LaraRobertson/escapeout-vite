@@ -1,20 +1,17 @@
 import React, {useEffect, useState} from "react"
-import {Button, View, Image, TextAreaField, TextField, Flex, Heading, Link, Text, SwitchField} from '@aws-amplify/ui-react';
+import {Button, View, Image, TextAreaField, TextField, Flex, Heading, Link, Text, SwitchField, Radio, RadioGroupField, Icon,ToggleButton} from '@aws-amplify/ui-react';
 import {useNavigate} from "react-router-dom";
+import DOMPurify from "dompurify";
 import {
-    toggleHelp,
-    toggleMap,
     toggleNotes,
     leaveComment,
-    winGameFunction,
-    toggleHint1,
-    toggleHint2,
-    toggleHint3,
-    toggleHint4, setGameNotesFunction, setGameTimeFunction, goHomeQuit,
+    setGameNotesFunction,
+    setGameTimeFunction,
+    goHomeQuit, removeLocalStorage, setCommentsFunction,
 } from "./helper";
 import { format } from 'date-fns'
 import {shallowEqual} from "./ShallowEqual";
-import {ToolObject, NotesOpen, TopRight, GameIntro, TimeBlock, CommentWindow} from "./sharedComponents";
+import {ToolObject, NotesOpen, CommentWindow} from "./sharedComponents";
 import {gameScoreByGameStatsID, getGame} from "../graphql/queries";
 import {generateClient} from "aws-amplify/api";
 import * as mutations from "../graphql/mutations";
@@ -24,10 +21,12 @@ export function Game() {
     const client = generateClient();
     /* for all games */
     const [isChecked, setIsChecked] = useState(false);
+    const [isPressed, setIsPressed] = useState(false);
     const [lightDark, setLightDark] = useState("");
     const [game, setGame] = useState([]);
     const [gameHint, setGameHint] = useState([]);
     const [gameHintVisible, setGameHintVisible] = useState({});
+    const [gameHintUsed, setGameHintUsed] = useState({});
     const [playZone, setPlayZone] = useState([]);
     const [zoneVisible, setZoneVisible] = useState("");
     const [clues, setClues] = useState();
@@ -47,17 +46,16 @@ export function Game() {
     const [toolVisible, setToolVisible] = useState({});
     const [backpackObject, setBackpackObject] = useState({});
     /* new above */
-
-
     const [isAlertVisible, setIsAlertVisible] = useState(false);
     const [isWinnerScreenVisible, setIsWinnerScreenVisible] = useState(false);
+    const [isCommentScreenVisible, setIsCommentScreenVisible] = useState(false);
     const [alertText, setAlertText] = useState('');
     const [showComment, setShowComment] = useState(false);
     const [areNotesVisible, setAreNotesVisible] = useState(false);
     const [isHelpVisible, setIsHelpVisible] = useState(false);
     const [gameNotes,setGameNotes] = useState('');
     const [isMapVisible, setIsMapVisible] = useState(false);
-    const [gameComments,setGameComments] = useState('');
+    const [gameComments,setGameComments] = useState({});
     const [isBackpackVisible, setIsBackpackVisible] = useState(false);
     const [gameTime, setGameTime] = useState(0);
     const [gameTimeHint, setGameTimeHint] = useState(0);
@@ -72,15 +70,6 @@ export function Game() {
     const [numberOfPlayers, setNumberOfPlayers] = useState('');
     const [numberOfPlayersError, setNumberOfPlayersError] = useState('');
     const [teamName, setTeamName] = useState('');
-    /* arrays */
-    const [isHint1Visible, setIsHint1Visible] = useState(false);
-    const [isHint2Visible, setIsHint2Visible] = useState(false);
-    const [isHint3Visible, setIsHint3Visible] = useState(false);
-    const [isHint4Visible, setIsHint4Visible] = useState(false);
-    const [hintTime1,setHintTime1] = useState(0);
-    const [hintTime2,setHintTime2] = useState(0);
-    const [hintTime3,setHintTime3] = useState(0);
-    const [hintTime4,setHintTime4] = useState(0);
     /*****/
 
     const navigate = useNavigate();
@@ -103,9 +92,16 @@ export function Game() {
             setRealTimeStart(localStorage.getItem("realTimeStart"));
             setTeamName(localStorage.getItem("teamName"));
             setGameScoreID(localStorage.getItem("gameScoreID"));
-            setGameTime(Number(localStorage.getItem('gameTime')));
-            setGameTimeHint(Number(localStorage.getItem('gameTimeHint')));
-            setGamePuzzleSolved(JSON.parse(localStorage.getItem("gamePuzzleSolved")));
+            if (localStorage.getItem("gameTimeHint")!=null) {
+                setGameTimeHint(Number(localStorage.getItem('gameTimeHint')));
+            }
+            if (localStorage.getItem("gameHintVisible")!=null) {
+                setGameHintVisible(JSON.parse(localStorage.getItem("gameHintVisible")));
+            }
+            if (localStorage.getItem("gamePuzzleSolved")!=null) {
+                /* check for all puzzles solved, need to do wingame */
+                setGamePuzzleSolved(JSON.parse(localStorage.getItem("gamePuzzleSolved")));
+            }
             /* if there */
             if (localStorage.getItem("backpackObject")!=null) {
                 setBackpackObject(JSON.parse(localStorage.getItem("backpackObject")));
@@ -139,11 +135,6 @@ export function Game() {
                     });
                     setGameHint(gameHintArray);
                     console.log("gamesFromAPI.gameHint.items.length: " + gamesFromAPI.gameHint.items.length);
-                    /* set up state visibility */
-                    for (let i=0; i <gamesFromAPI.gameHint.items.length; i++) {
-                        let key = "help" + (i + 1);
-                        setGameHintVisibleFunction(key, false);
-                    }
                 }
                 /* set up game clues: */
                 if (gamesFromAPI.gameClue.items.length > 0) {
@@ -159,12 +150,6 @@ export function Game() {
                             return a.order - b.order;
                         });
                     setGameBottomClues(gameClueBottomArray);
-            //console.log("gamesFromAPI.gameClue.items.length: " + gamesFromAPI.gameClue.items.length);
-            /* set up state visibility for clues */
-                    for (let i = 0; i < gamesFromAPI.gameClue.items; i++) {
-                        let key = "clue" + (gamesFromAPI.gameClue.items[i].id);
-                        setGameClueVisibleFunction(key, false);
-                    }
                 }
                 /* set up game Puzzle: */
                 if (gamesFromAPI.gamePuzzle.items.length > 0) {
@@ -173,9 +158,8 @@ export function Game() {
                     setGameBottomPuzzle(gamesFromAPI.gamePuzzle.items);
                     console.log("gamesFromAPI.gamePuzzle.items[0].id: " + gamesFromAPI.gamePuzzle.items[0].id);
                     //let gamePuzzleSolveID = gamesFromAPI.gamePuzzle.items[0].id;
-                   // setGamePuzzleSolved({...gamePuzzleSolved, [gamePuzzleSolveID]:false});
+                    //setGamePuzzleSolved({...gamePuzzleSolved, [gamePuzzleSolveID]:false});
                     //console.log("gamesFromAPI.gameClue.items.length: " + gamesFromAPI.gameClue.items.length);
-
                 }
             } catch (err) {
                 console.log('error fetching getGame', err);
@@ -248,11 +232,6 @@ export function Game() {
                     });
                     setGameHint(gameHintArray);
                     console.log("gamesFromAPI.gameHint.items.length: " + gamesFromAPI.gameHint.items.length);
-                    /* set up state visibility */
-                    for (let i=0; i <gamesFromAPI.gameHint.items.length; i++) {
-                        let key = "help" + (i + 1);
-                        setGameHintVisibleFunction(key, false);
-                    }
                 }
                 /* set up game clues: */
                 if (gamesFromAPI.gameClue.items.length > 0) {
@@ -268,12 +247,6 @@ export function Game() {
                             return a.order - b.order;
                         });
                     setGameBottomClues(gameClueBottomArray);
-                    //console.log("gamesFromAPI.gameClue.items.length: " + gamesFromAPI.gameClue.items.length);
-                    /* set up state visibility for clues */
-                    for (let i = 0; i < gamesFromAPI.gameClue.items; i++) {
-                        let key = "clue" + (gamesFromAPI.gameClue.items[i].id);
-                        setGameClueVisibleFunction(key, false);
-                    }
                 }
                 /* set up game Puzzle: */
                 if (gamesFromAPI.gamePuzzle.items.length > 0) {
@@ -299,6 +272,7 @@ export function Game() {
         if (key) {
             setGameHintVisible({...gameHintVisible, [key]: value})
         }
+
     }
 
 
@@ -307,11 +281,13 @@ export function Game() {
         /* set local storage for gameStop - only on mount - to recover from refresh */
         setGamePlayFunction();
     }, []);
+
     useEffect(() => {
         console.log("***useEffect***: isChecked: " + isChecked);
         /* set local storage for gameStop - only on mount - to recover from refresh */
         isChecked? setLightDark("background:white"): setLightDark("background:black");
     }, [isChecked]);
+
     useEffect(() => {
         let gamePuzzleSolvedTest = JSON.stringify(gamePuzzleSolved);
         console.log("***useEffect***:gamePuzzleSolved: " + gamePuzzleSolvedTest);
@@ -319,6 +295,26 @@ export function Game() {
             localStorage.setItem("gamePuzzleSolved", gamePuzzleSolvedTest);
         }
     }, [gamePuzzleSolved]);
+
+    useEffect(() => {
+        let gameHintVisibleTest = JSON.stringify(gameHintVisible);
+        console.log("***useEffect***:gameHintVisible: " + gameHintVisibleTest);
+        if (gameHintVisibleTest != "{}" &&  gameHintVisibleTest != "" &&  gameHintVisibleTest != null) {
+            localStorage.setItem("gameHintVisible", gameHintVisibleTest);
+        }
+        /* add 5 minutes */
+        /* check for true to calculate gameTimeHint */
+        let hintTime = 0;
+        for (const key in gameHintVisible) {
+            console.log(`${key}: ${gameHintVisible[key]}`);
+            if (gameHintVisible[key] === true) {
+                hintTime = hintTime + 5;
+            }
+        }
+        setGameTimeHint(hintTime);
+    }, [gameHintVisible]);
+
+
     useEffect(() => {
         let backpackObjectTest = JSON.stringify(backpackObject);
         console.log("***useEffect***: backpackObject: " +  backpackObjectTest);
@@ -326,10 +322,11 @@ export function Game() {
             localStorage.setItem("backpackObject", backpackObjectTest);
         }
     }, [backpackObject]);
+
     /* always scroll to top */
-    useEffect(() => {
+    /*useEffect(() => {
         window.scrollTo(0, 0);
-    });
+    });*/
 
     function setCluesFunction(clue) {
         setAlertText("clue added to notes");
@@ -341,40 +338,6 @@ export function Game() {
         setClues(clues + clue);
         localStorage.setItem("clues",clues + clue);
     }
-    /* end for all games */
-
-
-
-    /* FINAL: guessing states and answers for 2nd safe - 1 word */
-    const [guess4,setGuess4] = useState('');
-    const [haveGuessed4,setHaveGuessed4] = useState();
-    const [isWrong4, setIsWrong4] = useState(true);
-    const [answer4] = useState('wus');
-
-    function checkAnswer2(guess4Val) {
-        setGuess4(guess4Val);
-        console.log("guess: " + guess4Val);
-        if (shallowEqual(guess4Val,answer4)) {
-            console.log("guess 4 is right");
-            setHaveGuessed4(true);
-            setIsWrong4(false);
-            console.log("stop 1 win game");
-            setGameComplete(true);
-            /* set timeout to close window? */
-            /* isSafeInfoVisible */
-            setTimeout(() => {
-                setIsCementSafeInfoVisible(false);
-                setIsWinnerScreenVisible(true);
-            }, 3000);
-            winGameFunction(true,gameScoreID,gameTime,gameTimeTotal,setGameTimeTotal,gameTimeHint,numberOfPlayers,teamName, realTimeStart,
-                hintTime1,hintTime2,hintTime3,hintTime4);
-        } else {
-            console.log("wrong guess 4");
-            setHaveGuessed4(true);
-            setIsWrong4(true);
-        }
-    }
-
 
     function objectInBackpackFunction(key) {
         setToolVisible({...toolVisible, [key]:false});
@@ -394,13 +357,7 @@ export function Game() {
             setIsAlertVisible(false);
         }, 3000);
     }
-    const backgroundImage = (src) => (
-        "url("+ src + ")");
-    const keyID = (src,name) => (
-        name + "_"+ src);
-    const divStyle = (src) => ({
-        background:  "url(" + src + ") 0 0 / contain no-repeat"
-    });
+
 
     function setGameClueVisibleFunction(key, value) {
         console.log("setGameClueVisibleFunction: " + key);
@@ -494,14 +451,7 @@ export function Game() {
                            setIsAlertVisible(false);
                        }, 2000);
                        if (winGame) {
-                           setTimeout(() => {
-                               setIsWinnerScreenVisible(true);
-                           }, 1000);
-                           setTimeout(() => {
-                               goHomeQuit(navigate);;
-                           }, 15000);
-                           console.log("winGameFunction");
-                           updateGameScore();
+                           updateGameScoreFunction();
                        }
                    }
 
@@ -511,21 +461,21 @@ export function Game() {
         }
     }
 
-    async function updateGameScore() {
-        console.log("updateGameScore ");
+    async function updateGameScoreFunction() {
+        console.log("updateGameScore:  " + gameTimeHint);
         let startDate = new Date(realTimeStart);
         // Do your operations to calculate time
         let endDate   = new Date();
         localStorage.setItem("realTimeEnd",endDate);
-        let seconds = (endDate.getTime() - startDate.getTime()) / 60000;
-        let hintTimeTotalNum = Number(hintTime1 + hintTime2 + hintTime3 + hintTime4);
-        let GameTimeTotal = Number(seconds + hintTimeTotalNum).toFixed(2);
+        let minutes = (endDate.getTime() - startDate.getTime()) / 60000;
+        let GameTimeTotal = Number(minutes + gameTimeHint).toFixed(2);
         setGameTimeTotal(GameTimeTotal);
 
         try {
             const data = {
                 id: gameScoreID,
                 gameTotalTime: GameTimeTotal,
+                gameHintTime: gameTimeHint,
                 completed:true
             };
             await client.graphql({
@@ -533,11 +483,66 @@ export function Game() {
                 variables: {
                     input: data
                 }
-            });
+            })
+            removeLocalStorage();
+            setTimeout(() => {
+                setIsWinnerScreenVisible(true);
+            }, 1000);
+            setTimeout(() => {
+                //goHomeQuit(navigate);
+            }, 15000);
+            console.log("winGameFunction");
             console.log("gameTime = seconds: " + seconds);
         } catch (err) {
             console.log('error updating gamescore:', err);
         }
+    }
+    function setGameCommentsFunction(key, value) {
+        setGameComments({...gameComments, [key]: value})
+    }
+    async function updateGameScoreCommentsFunction(comment) {
+        removeLocalStorage();
+        try {
+            const data = {
+                id: gameScoreID,
+                gameComments: JSON.stringify(gameComments)
+            };
+            await client.graphql({
+                query: mutations.updateGameScore,
+                variables: {
+                    input: data
+                }
+            })
+            console.log("update comments");
+            localStorage.removeItem("gameScoreID");
+            if (comment) {
+                setIsAlertVisible(true);
+                setAlertText('Thank you for your comment');
+                setTimeout(() => {
+                    setIsAlertVisible(false);
+                    navigate('/');
+                }, 2000);
+            } else {
+                navigate('/');
+            }
+
+        } catch (err) {
+            console.log('error updating gamescore:', err);
+        }
+    }
+    const backgroundImage = (src) => (
+        "url("+ src + ")");
+
+    const keyID = (src,name) => (
+        name + "_"+ src);
+
+    const divStyle = (src) => ({
+        background:  "url(" + src + ") 0 0 / contain no-repeat"
+    });
+
+   function DangerouslySetInnerHTMLSanitized(htmlContent) {
+        const sanitizedHtmlContent = DOMPurify.sanitize(htmlContent);
+        return (sanitizedHtmlContent)
     }
 
     return (
@@ -620,9 +625,9 @@ export function Game() {
                                    <Heading level={"6"} className={isChecked? "heading dark" : "heading light"} paddingTop="10px">{clue.gameClueName}</Heading>
                                    <View paddingTop="10px">{clue.gameClueText}</View>
                                    <Flex className="window-button-bottom" justifyContent="center" gap="1rem">
-                                       <Button className="button small" onClick={()=>setCluesFunction("  ** start clue (" + clue.id + ") ==> " +
+                                       <Button className="button small" onClick={()=>setCluesFunction("  ** start clue (" + clue.gameClueName + ") ==> " +
                                            clue.gameClueText + " <== end clue ** ")}>add clue to notes</Button>
-                                       <Button className="button action-button small" onClick={()=>setGameClueVisibleFunction(["clue" + (clue.id)], false)}>close clue</Button>
+                                       <Button className="action-button small" onClick={()=>setGameClueVisibleFunction(["clue" + (clue.id)], false)}>close clue</Button>
                                    </Flex>
                                </View>
                            </View>
@@ -641,9 +646,9 @@ export function Game() {
                                     <Heading level={"6"} className={isChecked? "heading dark" : "heading light"} paddingTop="10px">{clue.gameClueName}</Heading>
                                     <View paddingTop="10px">{clue.gameClueText}</View>
                                     <Flex className="window-button-bottom" justifyContent="center" gap="1rem">
-                                        <Button className="button small" onClick={()=>setCluesFunction("  ** start clue (" + clue.gameClueName + ") ==> " +
+                                        <Button className="button button-small" onClick={()=>setCluesFunction("  ** start clue (" + clue.gameClueName + ") ==> " +
                                             clue.gameClueText + " <== end clue ** ")}>add clue to notes</Button>
-                                        <Button className="button action-button small" onClick={()=>setGameClueVisibleFunction(["clue" + (clue.id)], false)}>close clue</Button>
+                                        <Button className="action-button small" onClick={()=>setGameClueVisibleFunction(["clue" + (clue.id)], false)}>close clue</Button>
                                     </Flex>
                                 </View>
                             </View>
@@ -673,11 +678,13 @@ export function Game() {
                                            <View key={field.id}>
                                                {gamePuzzleGuess.hasOwnProperty(field.id) ?
                                                    (<TextField
+                                                       className={isChecked? "light-label" : 'dark-label '}
                                                        label={field.label}
                                                        value={gamePuzzleGuess[field.id]}
                                                        onChange={(event) => setGamePuzzleGuessFunction(field.id, event.target.value, field.answer, puzzle.id, puzzle.puzzleToolRevealed, puzzle.winGame)}
                                                    />) : (
                                                        <TextField
+                                                           className={isChecked? "light-label" : 'dark-label '}
                                                            label={field.label}
                                                            value=""
                                                            onChange={(event) => setGamePuzzleGuessFunction(field.id, event.target.value, field.answer, puzzle.id, puzzle.puzzleToolRevealed, puzzle.winGame)}
@@ -693,7 +700,7 @@ export function Game() {
                                    </View>
 
                                    <Flex className="window-button-bottom" justifyContent="center" gap="1rem">
-                                       <Button className="button action-button small" onClick={()=>setGamePuzzleVisibleFunction(["puzzle" + (puzzle.id)], false)}>close</Button>
+                                       <Button className="action-button small" onClick={()=>setGamePuzzleVisibleFunction(["puzzle" + (puzzle.id)], false)}>close puzzle</Button>
                                    </Flex>
                                </View>
                            </View>
@@ -715,22 +722,7 @@ export function Game() {
 
                                </View>
                            </View>
-                           <View className={isWinnerScreenVisible? "cover-screen show-gradual" : "cover-screen hide-gradual"}>
-                               <View className={isChecked? "all-screen " : "all-screen light-dark"}>
 
-                                   <View className="black-box">
-                                       <h3>WINNER!</h3>
-                                       <View>puzzle.winnerMessage</View>
-
-                                   </View>
-                                   <View className="bottom z-index125">
-                                       <View color="white">Total Time: {gameTimeTotal}</View>
-                                       <Button className="button small hide" onClick={() => leaveComment(setShowComment)}>Tap to Leave Comment (to help make game better)</Button>
-                                       <br /><Button className="button right-button small" onClick={() => goHomeQuit(navigate)}>Back Home</Button>
-                                   </View>
-
-                               </View>
-                           </View>
                        </View>
                    ))}
 
@@ -740,41 +732,113 @@ export function Game() {
 
                 <View ariaLabel="Time" className="time">
                     <View className="small">hint time: {gameTimeHint} mins | time started: {realTimeStart ? format(realTimeStart, "MM/dd/yyyy h:mma") : null} </View>
-                    <Button marginRight={"10px"} className="button button-small" onClick={() => isHelpVisible? setIsHelpVisible(false) : setIsHelpVisible(true)}>Help</Button>
+                    <Button marginRight={"10px"} className="button button-small" onClick={() => isHelpVisible? setIsHelpVisible(false) : setIsHelpVisible(true)}>Hints</Button>
                     <Button marginRight={"10px"} className="button button-small"  onClick={() => {console.log("noteclick"); areNotesVisible ? setAreNotesVisible(false) : setAreNotesVisible(true)}}>Notes</Button>
-                    <Button marginRight={"10px"} className="button button-small">Map</Button>
-                    <SwitchField
-                        isDisabled={false}
-                        label="dark/light"
-                        isChecked={isChecked}
-                        labelPosition="start"
-                        onChange={(e) => {
-                            setIsChecked(e.target.checked);
-                        }}
-                    />
+                    <Button marginRight={"10px"} className="button button-small" onClick={() => isMapVisible? setIsMapVisible(false) : setIsMapVisible(true)}>Map</Button>
+                    <Button marginRight={"10px"} className="button button-small quit-button"onClick={()=>goHomeQuit(navigate)}>Quit</Button>
+
+
+                    <ToggleButton
+                        className={isChecked? "dark-light-toggle dark-toggle" : "dark-light-toggle light"}
+                        isPressed={isChecked}
+                        onChange={() => setIsChecked(!isChecked)}
+                    >
+                        <Icon
+                            height={"30px"}
+                            width={"40px"}
+                            ariaLabel="Sun"
+                            viewBox={{ minX: 0,
+                                minY: 0,
+                                width: 64,
+                                height: 64 }}
+                            paths={[
+                                {
+                                    d: 'M36.4 20.4a16 16 0 1 0 16 16 16 16 0 0 0-16-16zm0 28a12 12 0 0 1-10.3-5.8l2.5.3A13.7 13.7 0 0 0 42 25.8a12 12 0 0 1-5.6 22.6z',
+                                    stroke: '#202020',
+                                },
+                                {
+                                    d: 'M36.4 16.4a2 2 0 0 0 2-2v-8a2 2 0 1 0-4 0v8a2 2 0 0 0 2 2zm-20 20a2 2 0 0 0-2-2h-8a2 2 0 0 0 0 4h8a2 2 0 0 0 2-2zm3-14.1a2 2 0 0 0 2.8-2.8l-5.7-5.7a2 2 0 0 0-2.8 2.8zM59 13.8a2 2 0 0 0-2.8 0l-5.7 5.7a2 2 0 1 0 2.8 2.8l5.7-5.7a2 2 0 0 0 0-2.8zM19.4 50.5l-5.7 5.7a2 2 0 1 0 2.9 2.8l5.7-5.7a2 2 0 1 0-2.8-2.8z',
+                                    stroke: '#202020',
+                                },
+                            ]}
+                        />
+                    </ToggleButton>
                 </View>
-                <NotesOpen areNotesVisible={areNotesVisible} clues={clues} setClues={setClues} setAreNotesVisible={setAreNotesVisible} toggleNotes={toggleNotes} gameNotes={gameNotes} setGameNotes={setGameNotes} setGameNotesFunction={setGameNotesFunction}/>
+                <NotesOpen areNotesVisible={areNotesVisible} clues={clues} setClues={setClues} setAreNotesVisible={setAreNotesVisible} toggleNotes={toggleNotes} gameNotes={gameNotes} setGameNotes={setGameNotes} setGameNotesFunction={setGameNotesFunction} isChecked={isChecked}/>
 
+                <View className={isWinnerScreenVisible? "cover-screen show-gradual" : "cover-screen hide-gradual"}>
+                    <View className={isChecked? "all-screen " : "all-screen light-dark"}>
 
+                        <View className="black-box">
+                            <h3>WINNER!</h3>
+                            <View>{game.gameLink}</View>
 
+                        </View>
+                        <View className="bottom z-index125">
+                            <View color="white">Total Time: {gameTimeTotal} minutes</View>
+                            <View color="white">Hint Time: {gameTimeHint} minutes </View>
+                            <Button className="button right-button small" onClick={() => setIsCommentScreenVisible(true)}>Back To Game List</Button>
+                        </View>
 
-            {(showComment) ? (
+                    </View>
+                </View>
+                <View className={isCommentScreenVisible? "cover-screen show-gradual" : "cover-screen hide-gradual"}>
+                    <View className={isChecked? "all-screen " : "all-screen light-dark"}>
+                        <Heading level={"4"} className={"heading light"} paddingTop="10px" paddingBottom={"10px"}>Comments</Heading>
+
+                        <Flex   direction="row"
+                                justifyContent="flex-start"
+                                alignItems="stretch"
+                                alignContent="flex-start"
+                                wrap="nowrap"
+                                gap="1rem" marginBottom={"10px"} className={"flex-container"}>
+                            <RadioGroupField legend="Did You Like Game?" name="likeGame" onChange={(e) => setGameCommentsFunction("likeGame",e.currentTarget.value)}>
+                                <Radio value="Yes">Yes</Radio>
+                                <Radio value="No">No</Radio>
+                                <Radio value="a little">a little</Radio>
+                            </RadioGroupField>
+                            <RadioGroupField legend="Would you play another?" name="playAnother"  onChange={(e) => setGameCommentsFunction("playAnother",e.currentTarget.value)}>
+                                <Radio value="Yes">Yes</Radio>
+                                <Radio value="No">No</Radio>
+                                <Radio value="Maybe">Maybe</Radio>
+                            </RadioGroupField>
+                        </Flex>
+                            <Flex   direction="row"
+                                    justifyContent="flex-start"
+                                    alignItems="stretch"
+                                    alignContent="flex-start"
+                                    wrap="nowrap"
+                                    gap="1rem" marginBottom={"10px"} className={"flex-container"}>
+                            <RadioGroupField legend="Was it Too Hard?" name="tooHard" onChange={(e) => setGameCommentsFunction("tooHard",e.currentTarget.value)}>
+                                <Radio value="Yes">Yes</Radio>
+                                <Radio value="No">No</Radio>
+                                <Radio value="a little">a little</Radio>
+                            </RadioGroupField>
+                            <RadioGroupField legend="Was it Fun?" name="fun"  onChange={(e) => setGameCommentsFunction("fun",e.currentTarget.value)}>
+                                <Radio value="Yes">Yes</Radio>
+                                <Radio value="No">No</Radio>
+                                <Radio value="Maybe">Maybe</Radio>
+                            </RadioGroupField>
+                        </Flex>
+                        <TextAreaField
+                            rows="6"
+                            onChange={(e) => setGameCommentsFunction("textAreaField",e.currentTarget.value)}
+                            descriptiveText="Any Issues or Problems?  Suggestions for improvement?"
+                        />
+                        <Flex className="window-button-bottom" justifyContent="center" gap="1rem">
+                            <Button className="button small" onClick={() => updateGameScoreCommentsFunction(true)}>Submit Comment</Button>
+                            <Button className="button right-button small" onClick={() => updateGameScoreCommentsFunction(false)}>Back To Game List</Button>
+                        </Flex>
+                    </View>
+                </View>
+            {/*(showComment) ? (
                 <CommentWindow setGameComments={setGameComments} gameComments={gameComments}/>
-            ) : null}
+            ) : null*/}
 
             <View className={isHelpVisible ? "cover-screen show-gradual" : "cover-screen hide-gradual"}>
                 <View className={isChecked? "all-screen dark" : "all-screen light"}>
-                    <SwitchField
-                        isDisabled={false}
-                        label="dark/light"
-                        isChecked={isChecked}
-                        labelPosition="start"
-                        onChange={(e) => {
-                            setIsChecked(e.target.checked);
-                        }}
-                    />
                     <Button  className={isChecked? "close-button dark" : "close-button light"}
-                             onClick={() => toggleHelp(isHelpVisible, setIsHelpVisible)}>X</Button>
+                            onClick={() => isHelpVisible ? setIsHelpVisible(false) : setIsHelpVisible(true)}>X</Button>
                     <View width="100%" padding="20px 10px">
                         <View paddingBottom="10px">
                             <strong>How to Play:</strong> Click around to open clues and get items. Click on puzzles to solve. If an item is in your backpack click on it to use.
@@ -789,92 +853,23 @@ export function Game() {
 
                         {gameHint.map((hint,index) => (
                             <Flex wrap="wrap" key={hint.id} ariaLabel={hint.id}>
-                                 <Button onClick={() => setGameHintVisibleFunction(["hint" + (index + 1)], true)}>{hint.gameHintName}</Button>
-                                 <View className={gameHintVisible.hint1 ? "show" : "hide"}>{hint.gameHintDescription}</View>
+                                <View>
+                                {gameHintVisible["hint" + (hint.id)]? (
+                                    <View backgroundColor={"lightgray"} color={"black"} marginTop={"10px"} padding={"0 5px"}><strong>{hint.gameHintName} - used</strong></View>
+                                    ) : (
+                                    <Button className={"button small"} marginTop={"10px"} onClick={() => setGameHintVisibleFunction(["hint" + (hint.id)], true)}>{hint.gameHintName} - adds 5 minutes</Button>
+                                    )
+                                }
+
+                                    <View dangerouslySetInnerHTML={ {__html: DangerouslySetInnerHTMLSanitized(hint.gameHintDescription)}} backgroundColor={"lightgray"}  color={"black"}  padding={"0 10px"} className={gameHintVisible["hint" + (hint.id)]? "show" : "hide"}>
+                                    </View>
+                                </View>
                             </Flex>
                         ))}
-                        <View>state hint1: {gameHintVisible.hint1 ? "true" : "false"}</View>
-                        <View>state hint2: {gameHintVisible.hint2 ? "true" : "false"}</View>
-                        <View>state hint3: {gameHintVisible.hint3 ? "true" : "false"}</View>
-                        <View>state hint4: {gameHintVisible.hint4 ? "true" : "false"}</View>
-                        <Flex wrap="wrap">
-
-                            <Button className={(hintTime1 == 0) ? "button small" : "hide"}
-                                    onClick={() => toggleHint1(setHintTime1, isHint1Visible, setIsHint1Visible, hintTime1, setGameTimeHint, gameTimeHint)}>Open Hint (engraved on panel) - adds 5 minutes</Button>
-                            <Button className={(hintTime1 == 0) ? "hide" : "button small"}
-                                    onClick={() => toggleHint1(setHintTime1, isHint1Visible, setIsHint1Visible, hintTime1, setGameTimeHint, gameTimeHint)}>Open Hint (engraved on panel) - free now</Button>
-                            <Button className={(hintTime2 == 0) ? "button small" : "hide"}
-                                    onClick={() => toggleHint2(setHintTime2, isHint2Visible, setIsHint2Visible, hintTime2, setGameTimeHint, gameTimeHint)}>Open Hint (name of house) - adds 5 minutes</Button>
-                            <Button className={(hintTime2 == 0) ? "hide" : "button small"}
-                                    onClick={() => toggleHint2(setHintTime2, isHint2Visible, setIsHint2Visible, hintTime2, setGameTimeHint, gameTimeHint)}>Open Hint (name of house) - free now</Button>
-                            <Button className={(hintTime3 == 0) ? "button small" : "hide"}
-                                    onClick={() => toggleHint3(setHintTime3, isHint3Visible, setIsHint3Visible, hintTime3, setGameTimeHint, gameTimeHint)}>Open Hint (sport) - adds 5 minutes</Button>
-                            <Button className={(hintTime3 == 0) ? "hide" : "button small"}
-                                    onClick={() => toggleHint3(setHintTime3, isHint3Visible, setIsHint3Visible, hintTime3, setGameTimeHint, gameTimeHint)}>Open Hint (sport) - free now</Button>
-                            <Button className={(hintTime4 == 0) ? "button small" : "hide"}
-                                    onClick={() => toggleHint4(setHintTime4, isHint4Visible, setIsHint4Visible, hintTime4, setGameTimeHint, gameTimeHint)}>Open Hint (name of field) - adds 5 minutes</Button>
-                            <Button className={(hintTime4 == 0) ? "hide" : "button small"}
-                                    onClick={() => toggleHint4(setHintTime4, isHint4Visible, setIsHint4Visible, hintTime4, setGameTimeHint, gameTimeHint)}>Open Hint (name of field) - free now</Button>
-                        </Flex>
-                        <br/><br/>
-                        <View className={isHint4Visible ? "cover-screen show-gradual" : "hide"}>
-                            <View className="winner show">
-                                <strong>Hint for somewhere order of numbers for safe:</strong>
-                                <strong>Hint for name of field</strong>
-                                <br /><br />There is a large sign on the fence at the field with the name.
-                                <br /><br /><View width="100%" textAlign='center'>
-                                    <Button className="button action-button"
-                                            onClick={() => toggleHint4(setHintTime4, isHint4Visible, setIsHint4Visible, hintTime4, setGameTimeHint, gameTimeHint)}>tap
-                                        to close hint 4</Button>
-                                </View>
-                            </View>
-                        </View>
-                        <View className={isHint3Visible ? "cover-screen show-gradual" : "hide"}>
-                            <View className="winner show">
-                                <strong>Hint for Sport:</strong>
-                                <br /><br />People do play soccer and disc golf but the closest field to the shelter is the baseball field.
-                                <br/><br/>
-                                <View width="100%" textAlign='center'>
-                                    <Button className="button action-button"
-                                            onClick={() => toggleHint3(setHintTime3, isHint3Visible, setIsHint3Visible, hintTime3, setGameTimeHint, gameTimeHint)}>tap
-                                        to close hint 3</Button>
-                                </View>
-                            </View>
-                        </View>
-                        <View className={isHint2Visible ? "cover-screen show-gradual" : "hide"}>
-                            <View className="winner show">
-                                <Button className="close-button" onClick={() => toggleHint2(setHintTime2,isHint2Visible,setIsHint2Visible)}>X</Button>
-                                <strong>Hint for name of house:</strong> <br /><br />
-                                Near the intersection of Solomon and N. Campbell there is a house that people use for events.<br /><br />
-                                Go over there and look for the name.
-                            <br /><br />
-                                <View width="100%" textAlign='center'>
-                                    <Button className="button action-button"
-                                            onClick={() => toggleHint2(setHintTime2, isHint2Visible, setIsHint2Visible, hintTime2, setGameTimeHint, gameTimeHint)}>tap
-                                        to close hint 2</Button>
-                                </View>
-                            </View>
-                        </View>
-                        <View className={isHint1Visible ? "cover-screen show-gradual" : "hide"}>
-                            <div className="winner show">
-                                <strong>Hint for engraved on panel:</strong> <br /><br />
-                                The <span className="bold-underline">first</span> is in reference to the first letter of the named field.
-                                And the pattern continues with name of house and name of sport.
-                                <br /><br />
-                                <View width="100%" textAlign='center'>
-                                    <Button className="button action-button"
-                                            onClick={() => toggleHint1(setHintTime1, isHint1Visible, setIsHint1Visible, hintTime1, setGameTimeHint, gameTimeHint)}>tap
-                                        to close hint 1</Button>
-                                </View>
-                            </div>
-                        </View>
                         <View width="100%" textAlign='center'>
-                            <Button className="button action-button"
-                                    onClick={() => toggleHelp(isHelpVisible, setIsHelpVisible)}>tap to close
-                                help</Button>
-                            <Button className="link-button"
-                                    onClick={() => toggleMap(isMapVisible, setIsMapVisible)}>tap to see location on
-                                map</Button>
+                            <Button className="action-button"  marginTop={"10px"}
+                                    onClick={() => isHelpVisible ? setIsHelpVisible(false) : setIsHelpVisible(true)}>close</Button>
+
                         </View>
                     </View>
                 </View>
@@ -884,14 +879,20 @@ export function Game() {
                 <div className='alert-inner'>{alertText}</div>
             </View>
 
-            <View className={isMapVisible ? "cover-screen show-gradual" : "hide"}>
-                <View textAlign="center" className="all-screen show">
-                    <Image maxHeight="300px"
-                           src="/jaycee-park-2pz-map.png"/>
-                    <Link href="https://goo.gl/maps/4FHz3mx5zdQjeGwy8?coh=178571&entry=tt" isExternal={true}>link to
-                        google maps</Link><br/>
-                    <Button className="button action-button"
-                            onClick={() => toggleHelp(isMapVisible, setIsMapVisible)}>tap to close map</Button>
+            <View className={isMapVisible ? "cover-screen show-gradual" : "cover-screen hide-gradual"}>
+                <View className={isChecked? "all-screen dark" : "all-screen light"}>
+                    <Button  className={isChecked? "close-button dark" : "close-button light"}
+                             onClick={() => isMapVisible ? setIsMapVisible(false) : setIsMapVisible(true)}>X</Button>
+                    <View width="100%" padding="20px 10px">
+                        <Image maxHeight="300px"
+                               src={game.gameMap}/>
+
+                        <View width="100%" textAlign='center'>
+                            <Button className="action-button"  marginTop={"10px"}
+                                    onClick={() => isMapVisible ? setIsMapVisible(false) : setIsMapVisible(true)}>close</Button>
+
+                        </View>
+                    </View>
                 </View>
             </View>
 

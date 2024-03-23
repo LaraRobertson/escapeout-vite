@@ -88,6 +88,12 @@ button:focus-visible,
   border-radius: 8px;
   border: 1px solid transparent;
 }
+.action-button {
+  background-color: gray;
+  color: #000;
+  border: 1px solid black;
+  padding: 5px 10px;
+}
 .game-container {
   max-width: 600px;
   margin: 0 auto;
@@ -119,12 +125,30 @@ button:focus-visible,
   left:0;
   z-index:2;
 }
+.dark-light-toggle {
+  position:relative;
+  left:0px;
+  border:none;
+  height: 20px;
+  width: 35px;
+  top: 10px;
+  background-color:transparent;
+}
+.dark-light-toggle:active {
+  border:none;
+}
+.dark-toggle {
+  color:#fff !important;
+}
 .button {
   background-color: var(--blue-color);
   color: white;
   border-radius: 8px;
   border: 1px solid transparent;
   font-weight: 500;
+}
+.quit-button {
+  background-color: var(--background-dark);
 }
 .button-center {
   margin: 10px auto;
@@ -194,6 +218,7 @@ button:focus-visible,
     color: #000;
     background-color: #fff;
   }
+
   .light-dark-2 {
     color:  #262626;
     background-color: #fff;
@@ -242,6 +267,24 @@ button:focus-visible,
   right:0;
   width:60px;
   top:8px;
+}
+.light-label label, light-label input, light-label textarea {
+  color:#fff;
+}
+.dark-label label, dark-label input, dark-label textarea  {
+  color:#000;
+}
+.flex-container fieldset {
+  padding:5px;
+  width:50%;
+}
+.flex-container > fieldset {
+  box-shadow: 0 0 0 1px black;
+  margin-bottom: 10px;
+  font-size: .8em;
+}
+.flex-container > label {
+  font-size:.8em;
 }
 .window-button-bottom {
   position:absolute;
@@ -422,6 +465,7 @@ button:focus-visible,
   position:absolute;
   bottom:2em;
   width:100%;
+  left:0;
   text-align: center;
   z-index:125;
 }
@@ -495,6 +539,7 @@ button:focus-visible,
   background-color:#fff;
   color:#000;
 }
+
 .close-button {
   background-color: transparent;
   /*color: #000;
