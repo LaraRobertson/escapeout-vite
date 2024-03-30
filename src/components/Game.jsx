@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react"
-import {Button, View, Image, TextAreaField, TextField, Flex, Heading, Link, Text, SwitchField, Radio, RadioGroupField, Icon,ToggleButton} from '@aws-amplify/ui-react';
+import {Button, View, Image, TextAreaField, TextField, Flex, Heading, Link, Text, SwitchField, Radio, RadioGroupField, Icon,ToggleButton, ToggleButtonGroup} from '@aws-amplify/ui-react';
 import {useNavigate} from "react-router-dom";
 import DOMPurify from "dompurify";
 import {
@@ -21,7 +21,14 @@ export function Game() {
     const client = generateClient();
     /* for all games */
     const [isChecked, setIsChecked] = useState(false);
-    const [isPressed, setIsPressed] = useState(false);
+    const [isPressed1, setIsPressed1] = useState(false);
+    const [isPressed2, setIsPressed2] = useState(false);
+    const [isPressed3, setIsPressed3] = useState(false);
+    const [multipleValue, setMultipleValue] = useState('')
+    const [exclusiveValue1, setExclusiveValue1] = useState('');
+    const [exclusiveValue2, setExclusiveValue2] = useState('');
+    const [exclusiveValue3, setExclusiveValue3] = useState('');
+    const [exclusiveValue4, setExclusiveValue4] = useState('');
     const [lightDark, setLightDark] = useState("");
     const [game, setGame] = useState([]);
     const [gameHint, setGameHint] = useState([]);
@@ -52,6 +59,7 @@ export function Game() {
     const [alertText, setAlertText] = useState('');
     const [showComment, setShowComment] = useState(false);
     const [areNotesVisible, setAreNotesVisible] = useState(false);
+    const [areNotesVisibleBottom, setAreNotesVisibleBottom] = useState(false);
     const [isHelpVisible, setIsHelpVisible] = useState(false);
     const [gameNotes,setGameNotes] = useState('');
     const [isMapVisible, setIsMapVisible] = useState(false);
@@ -726,17 +734,17 @@ export function Game() {
                        </View>
                    ))}
 
-                    <View className="right-side"></View>
-                {/* all games */}
-            </View>
+                   <View className="right-side"></View>
 
+
+               </View>
+                {/* end play area */}
                 <View ariaLabel="Time" className="time">
-                    <View className="small">hint time: {gameTimeHint} mins | time started: {realTimeStart ? format(realTimeStart, "MM/dd/yyyy h:mma") : null} </View>
+                    <View className="small">hint time: {gameTimeHint} mins | time started: {realTimeStart ? format(realTimeStart, "MM/dd/yy h:mma") : null} </View>
                     <Button marginRight={"10px"} className="button button-small" onClick={() => isHelpVisible? setIsHelpVisible(false) : setIsHelpVisible(true)}>Hints</Button>
                     <Button marginRight={"10px"} className="button button-small"  onClick={() => {console.log("noteclick"); areNotesVisible ? setAreNotesVisible(false) : setAreNotesVisible(true)}}>Notes</Button>
                     <Button marginRight={"10px"} className="button button-small" onClick={() => isMapVisible? setIsMapVisible(false) : setIsMapVisible(true)}>Map</Button>
                     <Button marginRight={"10px"} className="button button-small quit-button"onClick={()=>goHomeQuit(navigate)}>Quit</Button>
-
 
                     <ToggleButton
                         className={isChecked? "dark-light-toggle dark-toggle" : "dark-light-toggle light"}
@@ -764,20 +772,137 @@ export function Game() {
                         />
                     </ToggleButton>
                 </View>
-                <NotesOpen areNotesVisible={areNotesVisible} clues={clues} setClues={setClues} setAreNotesVisible={setAreNotesVisible} toggleNotes={toggleNotes} gameNotes={gameNotes} setGameNotes={setGameNotes} setGameNotesFunction={setGameNotesFunction} isChecked={isChecked}/>
 
                 <View className={isWinnerScreenVisible? "cover-screen show-gradual" : "cover-screen hide-gradual"}>
-                    <View className={isChecked? "all-screen " : "all-screen light-dark"}>
-
+                    <View className="all-screen dark">
                         <View className="black-box">
                             <h3>WINNER!</h3>
-                            <View>{game.gameLink}</View>
-
-                        </View>
-                        <View className="bottom z-index125">
+                            <View marginBottom={"30px"}>{game.gameWinMessage}</View>
                             <View color="white">Total Time: {gameTimeTotal} minutes</View>
                             <View color="white">Hint Time: {gameTimeHint} minutes </View>
-                            <Button className="button right-button small" onClick={() => setIsCommentScreenVisible(true)}>Back To Game List</Button>
+
+
+                            <Flex   direction="column"
+                                    justifyContent="flex-start"
+                                    alignItems="center"
+                                    alignContent="flex-start"
+                                    wrap="nowrap"
+                                    gap="1rem" marginBottom={"10px"} className={"flex-container"}>
+
+                                <Heading level={"5"} className={"heading"} paddingTop="5px" paddingBottom={"5px"}>Did you like Game?</Heading>
+                                <ToggleButtonGroup
+                                    value={exclusiveValue1}
+                                    onChange={(value) => {setGameCommentsFunction("like",value);setExclusiveValue1(value)}}
+                                    isExclusive
+                                    id={"1"}
+                                >
+                                    <ToggleButton value="yes">
+                                        Yes
+                                    </ToggleButton>
+                                    <ToggleButton value="no">
+                                       No
+                                    </ToggleButton>
+                                    <ToggleButton value="a little">
+                                        a little
+                                    </ToggleButton>
+                                </ToggleButtonGroup>
+
+
+                                <Heading level={"5"} className={"heading"} paddingTop="5px" paddingBottom={"5px"}>Was it Fun?</Heading>
+                                <ToggleButtonGroup
+                                    value={exclusiveValue2}
+                                    onChange={(value) => {setGameCommentsFunction("fun",value);setExclusiveValue2(value)}}
+                                    isExclusive
+                                    id={"1"}
+                                >
+                                    <ToggleButton value="it was fun">
+                                       it was fun
+                                    </ToggleButton>
+                                    <ToggleButton value="not fun">
+                                        not fun
+                                    </ToggleButton>
+                                    <ToggleButton value="a little">
+                                      a little
+                                    </ToggleButton>
+                                </ToggleButtonGroup>
+
+
+                                <Heading level={"5"} className={"heading"} paddingTop="5px" paddingBottom={"5px"}>Was it Hard?</Heading>
+                                <ToggleButtonGroup
+                                    value={exclusiveValue3}
+                                    onChange={(value) => {setGameCommentsFunction("Hard",value);setExclusiveValue3(value)}}
+                                    isExclusive
+                                    id={"2"}
+                                >
+                                    <ToggleButton value="too hard">
+                                        too hard
+                                    </ToggleButton>
+                                    <ToggleButton value="just right">
+                                        just right
+                                    </ToggleButton>
+                                    <ToggleButton value="too easy">
+                                       too easy
+                                    </ToggleButton>
+                                </ToggleButtonGroup>
+
+                                <Heading level={"5"} className={"heading"} paddingTop="5px" paddingBottom={"5px"}>Would you play another?</Heading>
+                                <ToggleButtonGroup
+                                    value={exclusiveValue4}
+                                    onChange={(value) => {setGameCommentsFunction("another",value);setExclusiveValue4(value)}}
+                                    isExclusive
+                                    id={"2"}
+                                >
+                                    <ToggleButton value="too hard">
+                                       YES!
+                                    </ToggleButton>
+                                    <ToggleButton value="just right">
+                                       never
+                                    </ToggleButton>
+                                    <ToggleButton value="too easy">
+                                        maybe
+                                    </ToggleButton>
+                                </ToggleButtonGroup>
+
+                                {/*<RadioGroupField className="comments" legend="Did You Like Game?" name="likeGame" onChange={(e) => setGameCommentsFunction("likeGame",e.currentTarget.value)}>
+                                    <Radio value="Yes">Yes</Radio>
+                                    <Radio value="No">No</Radio>
+                                    <Radio value="a little">a little</Radio>
+                                </RadioGroupField>
+                                <RadioGroupField legend="Would you play another?" name="playAnother"  onChange={(e) => setGameCommentsFunction("playAnother",e.currentTarget.value)}>
+                                    <Radio value="Yes">Yes</Radio>
+                                    <Radio value="No">No</Radio>
+                                    <Radio value="Maybe">Maybe</Radio>
+                                </RadioGroupField>
+                            </Flex>
+                            <Flex   direction="row"
+                                    justifyContent="flex-start"
+                                    alignItems="stretch"
+                                    alignContent="flex-start"
+                                    wrap="nowrap"
+                                    gap="1rem" marginBottom={"10px"} className={"flex-container"}>
+                                <RadioGroupField className="custom-radio" legend="Was it Too Hard?" name="tooHard" onChange={(e) => setGameCommentsFunction("tooHard",e.currentTarget.value)}>
+                                    <Radio value="Yes">Yes</Radio>
+                                    <Radio value="No">No</Radio>
+                                    <Radio value="a little">a little</Radio>
+                                </RadioGroupField>
+                                <RadioGroupField legend="Was it Fun?" name="fun"  onChange={(e) => setGameCommentsFunction("fun",e.currentTarget.value)}>
+                                    <Radio value="Yes">Yes</Radio>
+                                    <Radio value="No">No</Radio>
+                                    <Radio value="Maybe">Maybe</Radio>
+                                </RadioGroupField>*/}
+
+                            <TextAreaField
+                                rows="4"
+                                onChange={(e) => setGameCommentsFunction("textAreaField",e.currentTarget.value)}
+                                descriptiveText="Any Issues or Problems?  Suggestions for improvement?"
+                            />
+                            </Flex>
+                            <Flex marginTop={"20px"} justifyContent="center" gap="1rem">
+                                <Button className="button small" onClick={() => updateGameScoreCommentsFunction(true)}>Submit Comment</Button>
+                                <Button className="button right-button small" onClick={() => updateGameScoreCommentsFunction(false)}>Back To Game List</Button>
+                            </Flex>
+                            {/*<Button className="button right-button small" onClick={() => setIsCommentScreenVisible(true)}>Back To Game List</Button>*/}
+
                         </View>
 
                     </View>
@@ -834,12 +959,29 @@ export function Game() {
             {/*(showComment) ? (
                 <CommentWindow setGameComments={setGameComments} gameComments={gameComments}/>
             ) : null*/}
-
+                <View className={areNotesVisible ? "cover-screen show-gradual" : "cover-screen hide-gradual"}>
+                    <View className={isChecked? "all-screen dark" : "all-screen light"}>
+                        <NotesOpen clues={clues} setClues={setClues} gameNotes={gameNotes} setGameNotes={setGameNotes} setGameNotesFunction={setGameNotesFunction} isChecked={isChecked}/>
+                        <View width="100%" textAlign='center' paddingTop="10px">
+                            <Button className="button action-button small" onClick={() => setAreNotesVisible(false)}>close notes</Button>
+                            <Button className="button action-button small" onClick={() => {setAreNotesVisibleBottom(true);setAreNotesVisible(false)}}>move notes under game</Button>
+                        </View>
+                    </View>
+                </View>
+                <View className={areNotesVisibleBottom ? "notes show-gradual" : "hide-gradual"}>
+                    <View className={isChecked? "all-screen dark" : "all-screen light"}>
+                        <NotesOpen clues={clues} setClues={setClues} gameNotes={gameNotes} setGameNotes={setGameNotes} setGameNotesFunction={setGameNotesFunction} isChecked={isChecked}/>
+                        <View width="100%" textAlign='center' paddingTop="10px">
+                            <Button marginRight="5px" className="button action-button small" onClick={() => setAreNotesVisibleBottom(false)}>close notes</Button>
+                            <Button className="button action-button small" onClick={() => {setAreNotesVisibleBottom(false);setAreNotesVisible(true)}}>move notes to top</Button>
+                        </View>
+                    </View>
+                </View>
             <View className={isHelpVisible ? "cover-screen show-gradual" : "cover-screen hide-gradual"}>
                 <View className={isChecked? "all-screen dark" : "all-screen light"}>
                     <Button  className={isChecked? "close-button dark" : "close-button light"}
                             onClick={() => isHelpVisible ? setIsHelpVisible(false) : setIsHelpVisible(true)}>X</Button>
-                    <View width="100%" padding="20px 10px">
+                    <View width="100%" padding="40px 10px">
                         <View paddingBottom="10px">
                             <strong>How to Play:</strong> Click around to open clues and get items. Click on puzzles to solve. If an item is in your backpack click on it to use.
                         </View>
@@ -880,11 +1022,11 @@ export function Game() {
             </View>
 
             <View className={isMapVisible ? "cover-screen show-gradual" : "cover-screen hide-gradual"}>
-                <View className={isChecked? "all-screen dark" : "all-screen light"}>
-                    <Button  className={isChecked? "close-button dark" : "close-button light"}
+                <View height="400px" className={isChecked? "all-screen dark" : "all-screen light"}>
+                    <Button className={isChecked? "close-button dark" : "close-button light"}
                              onClick={() => isMapVisible ? setIsMapVisible(false) : setIsMapVisible(true)}>X</Button>
-                    <View width="100%" padding="20px 10px">
-                        <Image maxHeight="300px"
+                    <View width="100%" padding="50px 10px">
+                        <Image maxHeight="400px"
                                src={game.gameMap}/>
 
                         <View width="100%" textAlign='center'>

@@ -45,12 +45,11 @@ export const CommentWindow = (props) => {
 
 export const NotesOpen = (props) => {
     return (
-        <View className={props.areNotesVisible ? "cover-screen show-gradual" : "cover-screen hide-gradual"}>
-            <View className={props.isChecked? "all-screen " : "all-screen light-dark"}>
-            <strong>Notes:</strong>
-            <View className={(props.clues != '')?"small show":"hide"}>
+        <View>
+              <strong>Notes:</strong>
+            <View className={(props.clues != '' || props.clues != undefined)?"small show":"hide"}>
                 <strong>clues!</strong>: {props.clues}
-                <View textAlign="center"><Button className="link-button small" onClick={() => props.setClues('')}>clear clues</Button></View>
+                <View textAlign="center"><Button className={props.isChecked? "link-button small dark" : "link-button small light"} onClick={() => props.setClues('')}>clear clues</Button></View>
             </View>
             <TextAreaField
                 label="Notes"
@@ -60,10 +59,7 @@ export const NotesOpen = (props) => {
                 onChange={(e) =>  props.setGameNotesFunction(e.currentTarget.value,props.setGameNotes)}
                 descriptiveText="Take some Notes - close when done, they will still be here"
             />
-            <View width="100%" textAlign='center' paddingTop="10px">
-                <Button className="button action-button small" onClick={() => props.toggleNotes(props.areNotesVisible,props.setAreNotesVisible,props.isCoverScreenVisible,props.setIsCoverScreenVisible)}>tap to close notes</Button>
-            </View>
-        </View>
+
         </View>
     )
 }

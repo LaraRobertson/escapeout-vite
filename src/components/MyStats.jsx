@@ -19,14 +19,15 @@ import { useNavigate } from 'react-router-dom';
 
 export function MyStats(props) {
     const client = generateClient();
-    //const [myStats, setMyStats] = useState([]);
+    const [myStats, setMyStats] = useState([]);
+    const [myStatsEmail, setMyStatsEmail] = useState(props.email);
 
-    /*async function myStatsFunction() {
+    async function myStatsFunction() {
        // const email = localStorage.getItem("email");
         console.log("myStats: " + props.email);
         let filter = {
             userEmail: {
-                eq: props.email
+                eq: myStatsEmail
             }
         };
         const apiData = await client.graphql({
@@ -42,19 +43,15 @@ export function MyStats(props) {
              }
         }
         setMyStats(myStatsFromAPI);
-
-    }*/
+    }
 
     const navigate = useNavigate();
 
-  /*  useEffect(() => {
-        if (myStats.length>0) console.log("***useEffect***:  myStats" + myStats);
-    });*/
-    /*useEffect(() => {
-        console.log("***useEffect***:  fetchGames()");
+    useEffect(() => {
+        console.log("***useEffect***:  myStatsFunction(): " + myStatsEmail);
         //myStatsFunction();
         myStatsFunction();
-    }, []);*/
+    }, []);
 
 
     const GameScoreView = (props) => {
@@ -83,7 +80,7 @@ export function MyStats(props) {
                         </div>
                         <div className="flex-table row">
                             <div className="flex-row four-width" role="cell">{score.gameComments}</div>
-                            <div className="flex-row" role="cell"> {format(new Date(score.updatedAt), "MM/dd/yyyy H:mma")}</div>
+                            <div className="flex-row small" role="cell"> {format(new Date(score.updatedAt), "MM/dd/yy h:mma")}</div>
                         </div>
                     </div>
                 ))}
@@ -96,10 +93,10 @@ export function MyStats(props) {
             <View className="popup light-dark"
                   ariaLabel="MyStats"
                   textAlign="center">
-                <Heading level={2} className="heading">Stats</Heading>
-                <Heading level={5} className="heading2">{localStorage.getItem("email")}</Heading>
+                <Heading level={2} className="header">Stats</Heading>
+                <Heading level={5} className="header">{myStatsEmail}</Heading>
                 <View>
-                    {props.myStats.map((userStat, index) => (
+                    {myStats.map((userStat, index) => (
                         <View>
                             <div>Game: {userStat.gameName} | {userStat.gameLocationCity}</div>
                             <GameScoreView gameScoreArray = {userStat.gameScore.items} gameName={userStat.gameName}/>

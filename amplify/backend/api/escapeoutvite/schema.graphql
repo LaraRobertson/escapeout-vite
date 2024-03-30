@@ -22,9 +22,9 @@ type Game @model @auth(rules: [ { allow: public } ] ) {
   gameLocationPlace: String
   gameLocationPlaceDetails: String
   gameLocationCity: String!
+  gameDesigner: String
   gameImage: String
   gameType: String
-  gameLink: String
   gameWinMessage: String
   gameWinImage: String
   gameGoals: String

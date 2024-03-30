@@ -323,6 +323,8 @@ export function Admin() {
         gameLocationCity: '',
         gameLink: '',
         gameImage: '',
+        gameWinMessage: '',
+        gameWinImage: '',
         type: "game",
         gameDescriptionH2: '',
         gameDescriptionH3: '',
@@ -1232,6 +1234,7 @@ export function Admin() {
                                     <strong>gameIntro: </strong>{game.gameIntro} <br />
                                     <strong>gameGoals: </strong>{game.gameGoals} <br />
                                     <strong>gameImage: </strong>{game.gameImage} <br />
+                                        <strong>gameWinMessage: </strong>{game.gameWinMessage} <br />
                                     <strong>gameMap: </strong>{game.gameMap} <br />
                                         <hr />
                                     <strong>How many zones: {game.gamePlayZone.items.length}</strong><br />
@@ -1374,6 +1377,22 @@ export function Admin() {
                                             label="Game Image"
                                             variation="quiet"
                                             value={formCreateGameState.gameImage}
+                                        />
+                                        <TextField
+                                            onChange={(event) => setInputCreateGame('gameWinMessage', event.target.value)}
+                                            name="GameWinMessage"
+                                            placeholder="game win message"
+                                            label="Game Win Message"
+                                            variation="quiet"
+                                            value={formCreateGameState.gameWinMessage}
+                                        />
+                                        <TextField
+                                            onChange={(event) => setInputCreateGame('gameWinImage', event.target.value)}
+                                            name="GameWinImage"
+                                            placeholder="game Win Image"
+                                            label="Game Win Image"
+                                            variation="quiet"
+                                            value={formCreateGameState.gameWinImage}
                                         />
                                         <TextField
                                             onChange={(event) => setInputCreateGame('gameDescriptionH2', event.target.value)}
@@ -1923,14 +1942,7 @@ export function Admin() {
                                                     variation="quiet"
                                                     value={formCreatePuzzleState.puzzleToolNeeded}
                                                 />
-                                                <TextField
-                                                    onChange={(event) => setInputCreatePuzzle('winGameMessage', event.target.value)}
-                                                    name="winGameMessage"
-                                                    placeholder="win game message"
-                                                    label="win game message"
-                                                    variation="quiet"
-                                                    value={formCreatePuzzleState.winGameMessage}
-                                                />
+
                                                 <TextField
                                                     onChange={(event) => setInputCreatePuzzle('winGameImage', event.target.value)}
                                                     name="winGameImage"

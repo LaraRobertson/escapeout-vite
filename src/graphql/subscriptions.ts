@@ -79,10 +79,13 @@ export const onCreateGame = /* GraphQL */ `subscription OnCreateGame($filter: Mo
     gameDescriptionH3
     gameDescriptionP
     gameLocationPlace
+    gameLocationPlaceDetails
     gameLocationCity
+    gameDesigner
     gameImage
     gameType
-    gameLink
+    gameWinMessage
+    gameWinImage
     gameGoals
     gameIntro
     gameMap
@@ -125,10 +128,13 @@ export const onUpdateGame = /* GraphQL */ `subscription OnUpdateGame($filter: Mo
     gameDescriptionH3
     gameDescriptionP
     gameLocationPlace
+    gameLocationPlaceDetails
     gameLocationCity
+    gameDesigner
     gameImage
     gameType
-    gameLink
+    gameWinMessage
+    gameWinImage
     gameGoals
     gameIntro
     gameMap
@@ -171,10 +177,13 @@ export const onDeleteGame = /* GraphQL */ `subscription OnDeleteGame($filter: Mo
     gameDescriptionH3
     gameDescriptionP
     gameLocationPlace
+    gameLocationPlaceDetails
     gameLocationCity
+    gameDesigner
     gameImage
     gameType
-    gameLink
+    gameWinMessage
+    gameWinImage
     gameGoals
     gameIntro
     gameMap
@@ -708,10 +717,13 @@ export const onCreateUserGamePlay = /* GraphQL */ `subscription OnCreateUserGame
       gameDescriptionH3
       gameDescriptionP
       gameLocationPlace
+      gameLocationPlaceDetails
       gameLocationCity
+      gameDesigner
       gameImage
       gameType
-      gameLink
+      gameWinMessage
+      gameWinImage
       gameGoals
       gameIntro
       gameMap
@@ -755,10 +767,13 @@ export const onUpdateUserGamePlay = /* GraphQL */ `subscription OnUpdateUserGame
       gameDescriptionH3
       gameDescriptionP
       gameLocationPlace
+      gameLocationPlaceDetails
       gameLocationCity
+      gameDesigner
       gameImage
       gameType
-      gameLink
+      gameWinMessage
+      gameWinImage
       gameGoals
       gameIntro
       gameMap
@@ -802,10 +817,13 @@ export const onDeleteUserGamePlay = /* GraphQL */ `subscription OnDeleteUserGame
       gameDescriptionH3
       gameDescriptionP
       gameLocationPlace
+      gameLocationPlaceDetails
       gameLocationCity
+      gameDesigner
       gameImage
       gameType
-      gameLink
+      gameWinMessage
+      gameWinImage
       gameGoals
       gameIntro
       gameMap

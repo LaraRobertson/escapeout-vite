@@ -91,10 +91,13 @@ export const createGame = /* GraphQL */ `mutation CreateGame(
     gameDescriptionH3
     gameDescriptionP
     gameLocationPlace
+    gameLocationPlaceDetails
     gameLocationCity
+    gameDesigner
     gameImage
     gameType
-    gameLink
+    gameWinMessage
+    gameWinImage
     gameGoals
     gameIntro
     gameMap
@@ -140,10 +143,13 @@ export const updateGame = /* GraphQL */ `mutation UpdateGame(
     gameDescriptionH3
     gameDescriptionP
     gameLocationPlace
+    gameLocationPlaceDetails
     gameLocationCity
+    gameDesigner
     gameImage
     gameType
-    gameLink
+    gameWinMessage
+    gameWinImage
     gameGoals
     gameIntro
     gameMap
@@ -189,10 +195,13 @@ export const deleteGame = /* GraphQL */ `mutation DeleteGame(
     gameDescriptionH3
     gameDescriptionP
     gameLocationPlace
+    gameLocationPlaceDetails
     gameLocationCity
+    gameDesigner
     gameImage
     gameType
-    gameLink
+    gameWinMessage
+    gameWinImage
     gameGoals
     gameIntro
     gameMap
@@ -778,10 +787,13 @@ export const createUserGamePlay = /* GraphQL */ `mutation CreateUserGamePlay(
       gameDescriptionH3
       gameDescriptionP
       gameLocationPlace
+      gameLocationPlaceDetails
       gameLocationCity
+      gameDesigner
       gameImage
       gameType
-      gameLink
+      gameWinMessage
+      gameWinImage
       gameGoals
       gameIntro
       gameMap
@@ -826,10 +838,13 @@ export const updateUserGamePlay = /* GraphQL */ `mutation UpdateUserGamePlay(
       gameDescriptionH3
       gameDescriptionP
       gameLocationPlace
+      gameLocationPlaceDetails
       gameLocationCity
+      gameDesigner
       gameImage
       gameType
-      gameLink
+      gameWinMessage
+      gameWinImage
       gameGoals
       gameIntro
       gameMap
@@ -874,10 +889,13 @@ export const deleteUserGamePlay = /* GraphQL */ `mutation DeleteUserGamePlay(
       gameDescriptionH3
       gameDescriptionP
       gameLocationPlace
+      gameLocationPlaceDetails
       gameLocationCity
+      gameDesigner
       gameImage
       gameType
-      gameLink
+      gameWinMessage
+      gameWinImage
       gameGoals
       gameIntro
       gameMap
