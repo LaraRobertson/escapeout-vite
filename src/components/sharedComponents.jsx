@@ -47,8 +47,8 @@ export const NotesOpen = (props) => {
     return (
         <View>
               <strong>Notes:</strong>
-            <View className={(props.clues != '' || props.clues != undefined)?"small show":"hide"}>
-                <strong>clues!</strong>: {props.clues}
+            <View className={(props.clues != '' && props.clues != undefined)?"small show":"hide"}>
+                <strong>clues</strong>: {props.clues}
                 <View textAlign="center"><Button className={props.isChecked? "link-button small dark" : "link-button small light"} onClick={() => props.setClues('')}>clear clues</Button></View>
             </View>
             <TextAreaField

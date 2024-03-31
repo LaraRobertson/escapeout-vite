@@ -23,6 +23,9 @@ type Game @model @auth(rules: [ { allow: public } ] ) {
   gameLocationPlaceDetails: String
   gameLocationCity: String!
   gameDesigner: String
+  gameLevel: String
+  walkingDistance: String
+  playZones: String
   gameImage: String
   gameType: String
   gameWinMessage: String

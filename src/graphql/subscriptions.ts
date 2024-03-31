@@ -82,6 +82,9 @@ export const onCreateGame = /* GraphQL */ `subscription OnCreateGame($filter: Mo
     gameLocationPlaceDetails
     gameLocationCity
     gameDesigner
+    gameLevel
+    walkingDistance
+    playZones
     gameImage
     gameType
     gameWinMessage
@@ -131,6 +134,9 @@ export const onUpdateGame = /* GraphQL */ `subscription OnUpdateGame($filter: Mo
     gameLocationPlaceDetails
     gameLocationCity
     gameDesigner
+    gameLevel
+    walkingDistance
+    playZones
     gameImage
     gameType
     gameWinMessage
@@ -180,6 +186,9 @@ export const onDeleteGame = /* GraphQL */ `subscription OnDeleteGame($filter: Mo
     gameLocationPlaceDetails
     gameLocationCity
     gameDesigner
+    gameLevel
+    walkingDistance
+    playZones
     gameImage
     gameType
     gameWinMessage
@@ -720,6 +729,9 @@ export const onCreateUserGamePlay = /* GraphQL */ `subscription OnCreateUserGame
       gameLocationPlaceDetails
       gameLocationCity
       gameDesigner
+      gameLevel
+      walkingDistance
+      playZones
       gameImage
       gameType
       gameWinMessage
@@ -770,6 +782,9 @@ export const onUpdateUserGamePlay = /* GraphQL */ `subscription OnUpdateUserGame
       gameLocationPlaceDetails
       gameLocationCity
       gameDesigner
+      gameLevel
+      walkingDistance
+      playZones
       gameImage
       gameType
       gameWinMessage
@@ -820,6 +835,9 @@ export const onDeleteUserGamePlay = /* GraphQL */ `subscription OnDeleteUserGame
       gameLocationPlaceDetails
       gameLocationCity
       gameDesigner
+      gameLevel
+      walkingDistance
+      playZones
       gameImage
       gameType
       gameWinMessage

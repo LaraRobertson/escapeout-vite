@@ -70,7 +70,9 @@ export function LeaderBoard(props) {
         <View className="popup"
               ariaLabel="LeaderBoard"
               textAlign="center">
-
+            <View width="100%" margin="0 auto" lineHeight="17px">
+                <Button className="close-button light" onClick={() =>  props.setIsGameLeaderBoardVisible(false)}>X</Button>
+            </View>
                 <Heading level={4} className="heading light">Leaderboard for {props.gameName} game</Heading>
                 <View className="small">Only games played the first time will show on leaderboard.</View>
 
@@ -97,7 +99,7 @@ export function LeaderBoard(props) {
                     ))}
                 </div>
             <View marginTop="10px">
-                <Button className="button right-button small" onClick={() => props.setIsGameLeaderBoardVisible(false)}>close</Button>
+                <Button className="close light" onClick={() => props.setIsGameLeaderBoardVisible(false)}>close</Button>
             </View>
         </View>
         </View>

@@ -321,7 +321,9 @@ export function Admin() {
         gameType: '',
         gameLocationPlace: '',
         gameLocationCity: '',
-        gameLink: '',
+        gameDesigner: '',
+        gameLevel: '',
+        walkingDistance: '',
         gameImage: '',
         gameWinMessage: '',
         gameWinImage: '',
@@ -711,6 +713,8 @@ export function Admin() {
                 console.log(`${key}: ${gameClue[key]}`);
             }
             setFormCreateClueState(initialStateCreateClue);
+            delete gameClue.updatedAt;
+            delete gameClue.__typename;
             await client.graphql({
                 query: mutations.updateGameClue,
                 variables: {
@@ -1226,13 +1230,16 @@ export function Admin() {
                                     <View className={(gameVisible==game.id)? "show" : "hide"}>
                                         <Button className={"show-button blue-duke"} onClick={() => setGameVisible("")}>close game:</Button>
                                         <strong>name</strong>: {game.gameName} | <strong>type</strong>: {game.gameType} | <strong>place</strong>: {game.gameLocationPlace} | <strong>city</strong>: {game.gameLocationCity}|<strong>disabled</strong>: { game.disabled ? "true":"false"}
-                                        <br /><strong>game id</strong>: {game.id}| <strong>game link</strong>: {game.gameLink}
+                                        <br /><strong>game id</strong>: {game.id}| <strong>game level</strong>: {game.gameLevel}
                                         <br />
                                     <strong>gameDescriptionH2</strong>: {game.gameDescriptionH2} <br />
                                     <strong>gameDescriptionH3</strong>: {game.gameDescriptionH3} <br />
                                     <strong>gameDescriptionP</strong> {game.gameDescriptionP} <br />
                                     <strong>gameIntro: </strong>{game.gameIntro} <br />
                                     <strong>gameGoals: </strong>{game.gameGoals} <br />
+                                        <strong>gameLevels: </strong>{game.gameLevels} <br />
+                                        <strong>gameDesigner: </strong>{game.gameDesigner} <br />
+                                        <strong>walkingDistance: </strong>{game.walkingDistance} <br />
                                     <strong>gameImage: </strong>{game.gameImage} <br />
                                         <strong>gameWinMessage: </strong>{game.gameWinMessage} <br />
                                     <strong>gameMap: </strong>{game.gameMap} <br />
@@ -1339,15 +1346,6 @@ export function Admin() {
                                             label="Game Type"
                                             variation="quiet"
                                             value={formCreateGameState.gameType}
-                                            required
-                                        />
-                                        <TextField
-                                            onChange={(event) => setInputCreateGame('gameLink', event.target.value)}
-                                            name="GameLink"
-                                            placeholder="GameLink in app.js"
-                                            label="Game Link"
-                                            variation="quiet"
-                                            value={formCreateGameState.gameLink}
                                             required
                                         />
                                         <TextField
@@ -1463,6 +1461,31 @@ export function Admin() {
                                             label="Game Goals"
                                             variation="quiet"
                                             value={formCreateGameState.gameGoals}
+                                        />
+
+                                        <TextField
+                                            onChange={(event) => setInputCreateGame('gameLevel', event.target.value)}
+                                            name="Game Level"
+                                            placeholder="Game Level"
+                                            label="Game Level"
+                                            variation="quiet"
+                                            value={formCreateGameState.gameLevel}
+                                        />
+                                        <TextField
+                                            onChange={(event) => setInputCreateGame('walkingDistance', event.target.value)}
+                                            name="GameGoals"
+                                            placeholder="Walking Distance"
+                                            label="Walking Distance"
+                                            variation="quiet"
+                                            value={formCreateGameState.walkingDistance}
+                                        />
+                                        <TextField
+                                            onChange={(event) => setInputCreateGame('gameDesigner', event.target.value)}
+                                            name="GameGoals"
+                                            placeholder="Game Designer"
+                                            label="Game Designer"
+                                            variation="quiet"
+                                            value={formCreateGameState.gameDesigner}
                                         />
                                     </Flex>
                                     <Flex direction="row" justifyContent="center" marginTop="20px">
@@ -1740,7 +1763,7 @@ export function Admin() {
                                                 <Button id="createClue" className="show" onClick={addClue} variation="primary">
                                                     Create Clue
                                                 </Button>
-                                                <Button id="updateClue" className="hide" onClick={updateClue} variation="primary">
+                                                <Button id="updateClue" className="hide" onClick={() => {updateClue()}} variation="primary">
                                                     Update Clue
                                                 </Button>
                                             </Flex>

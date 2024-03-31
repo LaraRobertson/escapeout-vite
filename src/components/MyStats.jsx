@@ -93,6 +93,9 @@ export function MyStats(props) {
             <View className="popup light-dark"
                   ariaLabel="MyStats"
                   textAlign="center">
+                <View width="100%" margin="0 auto" lineHeight="17px">
+                    <Button className="close-button light" onClick={() => props.setIsMyStatsVisible(false)}>X</Button>
+                 </View>
                 <Heading level={2} className="header">Stats</Heading>
                 <Heading level={5} className="header">{myStatsEmail}</Heading>
                 <View>
@@ -104,7 +107,7 @@ export function MyStats(props) {
                     ))}
                 </View>
                 <View marginTop="10px">
-                    <Button className="button right-button small" onClick={() => props.setIsMyStatsVisible(false)}>close</Button>
+                    <Button className="close light" onClick={() => props.setIsMyStatsVisible(false)}>close</Button>
                 </View>
             </View>
         </View>

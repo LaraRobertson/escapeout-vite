@@ -94,6 +94,9 @@ export const createGame = /* GraphQL */ `mutation CreateGame(
     gameLocationPlaceDetails
     gameLocationCity
     gameDesigner
+    gameLevel
+    walkingDistance
+    playZones
     gameImage
     gameType
     gameWinMessage
@@ -146,6 +149,9 @@ export const updateGame = /* GraphQL */ `mutation UpdateGame(
     gameLocationPlaceDetails
     gameLocationCity
     gameDesigner
+    gameLevel
+    walkingDistance
+    playZones
     gameImage
     gameType
     gameWinMessage
@@ -198,6 +204,9 @@ export const deleteGame = /* GraphQL */ `mutation DeleteGame(
     gameLocationPlaceDetails
     gameLocationCity
     gameDesigner
+    gameLevel
+    walkingDistance
+    playZones
     gameImage
     gameType
     gameWinMessage
@@ -790,6 +799,9 @@ export const createUserGamePlay = /* GraphQL */ `mutation CreateUserGamePlay(
       gameLocationPlaceDetails
       gameLocationCity
       gameDesigner
+      gameLevel
+      walkingDistance
+      playZones
       gameImage
       gameType
       gameWinMessage
@@ -841,6 +853,9 @@ export const updateUserGamePlay = /* GraphQL */ `mutation UpdateUserGamePlay(
       gameLocationPlaceDetails
       gameLocationCity
       gameDesigner
+      gameLevel
+      walkingDistance
+      playZones
       gameImage
       gameType
       gameWinMessage
@@ -892,6 +907,9 @@ export const deleteUserGamePlay = /* GraphQL */ `mutation DeleteUserGamePlay(
       gameLocationPlaceDetails
       gameLocationCity
       gameDesigner
+      gameLevel
+      walkingDistance
+      playZones
       gameImage
       gameType
       gameWinMessage

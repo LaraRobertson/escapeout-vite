@@ -50,20 +50,23 @@ export const listUsers = /* GraphQL */ `query ListUsers(
 ` as GeneratedQuery<APITypes.ListUsersQueryVariables, APITypes.ListUsersQuery>;
 export const getGame = /* GraphQL */ `query GetGame($id: ID!) {
   getGame(id: $id) {
-      id
-      gameName
-      gameDescriptionH2
-      gameDescriptionH3
-      gameDescriptionP
-      gameLocationPlace
-      gameLocationCity
-      gameImage
-      gameType
-      gameLink
-      gameGoals
-      gameIntro
-      gameMap
-      gamePlayZone {
+    id
+    gameName
+    gameDescriptionH2
+    gameDescriptionH3
+    gameDescriptionP
+    gameLocationPlace
+    gameLocationPlaceDetails
+    gameLocationCity
+    gameDesigner
+    gameImage
+    gameType
+    gameWinMessage
+    gameWinImage
+    gameGoals
+    gameIntro
+    gameMap
+gamePlayZone {
           items {
             id
             disabled
@@ -139,9 +142,13 @@ export const getGame = /* GraphQL */ `query GetGame($id: ID!) {
           }
           nextToken
         }
-      createdAt
-      disabled
-      updatedAt
+    createdAt
+    disabled
+    user {
+      nextToken
+      __typename
+    }
+    updatedAt
     __typename
   }
 }
@@ -159,14 +166,17 @@ export const listGames = /* GraphQL */ `query ListGames(
       gameDescriptionH3
       gameDescriptionP
       gameLocationPlace
+      gameLocationPlaceDetails
       gameLocationCity
+      gameDesigner
       gameImage
       gameType
-      gameLink
+      gameWinMessage
+      gameWinImage
       gameGoals
       gameIntro
       gameMap
-      gamePlayZone {
+gamePlayZone {
           items {
             id
             disabled
@@ -240,6 +250,113 @@ export const listGames = /* GraphQL */ `query ListGames(
           }
           nextToken
         }
+      createdAt
+      disabled
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<APITypes.ListGamesQueryVariables, APITypes.ListGamesQuery>;
+export const getGamePuzzle = /* GraphQL */ `query GetGamePuzzle($id: ID!) {
+  getGamePuzzle(id: $id) {
+    id
+    gameID
+    gamePlayZoneID
+    puzzleName
+    puzzlePosition
+    puzzleImage
+    puzzleImageSolved
+    textField {
+      nextToken
+      __typename
+    }
+    puzzleClueRevealed
+    puzzleClueText
+    puzzleToolRevealed
+    puzzleToolNeeded
+    winGame
+    winGameImage
+    winGameMessage
+    order
+    createdAt
+    disabled
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetGamePuzzleQueryVariables,
+  APITypes.GetGamePuzzleQuery
+>;
+export const listGamePuzzles = /* GraphQL */ `query ListGamePuzzles(
+  $filter: ModelGamePuzzleFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listGamePuzzles(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      gameID
+      gamePlayZoneID
+      puzzleName
+      puzzlePosition
+      puzzleImage
+      puzzleImageSolved
+      puzzleClueRevealed
+      puzzleClueText
+      puzzleToolRevealed
+      puzzleToolNeeded
+      winGame
+      winGameImage
+      winGameMessage
+      order
+      createdAt
+      disabled
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListGamePuzzlesQueryVariables,
+  APITypes.ListGamePuzzlesQuery
+>;
+export const getTextField = /* GraphQL */ `query GetTextField($id: ID!) {
+  getTextField(id: $id) {
+    id
+    puzzleID
+    name
+    label
+    answer
+    order
+    createdAt
+    disabled
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetTextFieldQueryVariables,
+  APITypes.GetTextFieldQuery
+>;
+export const listTextFields = /* GraphQL */ `query ListTextFields(
+  $filter: ModelTextFieldFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listTextFields(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      puzzleID
+      name
+      label
+      answer
+      order
       createdAt
       disabled
       updatedAt
@@ -415,6 +532,8 @@ export const getGameClue = /* GraphQL */ `query GetGameClue($id: ID!) {
     order
     createdAt
     disabled
+    updatedAt
+    __typename
   }
 }
 ` as GeneratedQuery<
@@ -436,6 +555,7 @@ export const listGameClues = /* GraphQL */ `query ListGameClues(
       gameClueImage
       gameClueText
       gameCluePosition
+      gameClueToolNeeded
       order
       createdAt
       disabled
@@ -519,10 +639,13 @@ export const getUserGamePlay = /* GraphQL */ `query GetUserGamePlay($id: ID!) {
       gameDescriptionH3
       gameDescriptionP
       gameLocationPlace
+      gameLocationPlaceDetails
       gameLocationCity
+      gameDesigner
       gameImage
       gameType
-      gameLink
+      gameWinMessage
+      gameWinImage
       gameGoals
       gameIntro
       gameMap
@@ -619,10 +742,13 @@ export const gamesByGameNameAndType = /* GraphQL */ `query GamesByGameNameAndTyp
       gameDescriptionH3
       gameDescriptionP
       gameLocationPlace
+      gameLocationPlaceDetails
       gameLocationCity
+      gameDesigner
       gameImage
       gameType
-      gameLink
+      gameWinMessage
+      gameWinImage
       gameGoals
       gameIntro
       gameMap
@@ -663,10 +789,13 @@ export const gamesByCity = /* GraphQL */ `query GamesByCity(
       gameDescriptionH3
       gameDescriptionP
       gameLocationPlace
+      gameLocationPlaceDetails
       gameLocationCity
+      gameDesigner
       gameImage
       gameType
-      gameLink
+      gameWinMessage
+      gameWinImage
       gameGoals
       gameIntro
       gameMap
@@ -1197,48 +1326,3 @@ export const userGamePlaysByGameId = /* GraphQL */ `query UserGamePlaysByGameId(
   APITypes.UserGamePlaysByGameIdQueryVariables,
   APITypes.UserGamePlaysByGameIdQuery
 >;
-export const getGamePuzzle = /* GraphQL */ `query GetGamePuzzle($id: ID!) {
-  getGamePuzzle(id: $id) {
-    id
-    gameID
-    gamePlayZoneID
-    puzzleName
-    puzzlePosition
-    puzzleImage
-    puzzleImageSolved
-    puzzleClueRevealed
-    puzzleClueText
-    puzzleToolRevealed
-    puzzleToolNeeded
-    winGame
-    winGameImage
-    winGameMessage
-    order
-    createdAt
-    disabled
-    updatedAt
-    __typename
-  }
-}
-    ` as GeneratedQuery<
-    APITypes.UserGamePlaysByGameIdQueryVariables,
-    APITypes.UserGamePlaysByGameIdQuery
-    >;
-export const getTextField= /* GraphQL */ `query GetTextField($id: ID!) {
-  getTextField(id: $id) {
-    id
-    puzzleID
-    name
-    label
-    answer
-    order
-    createdAt
-    disabled
-    updatedAt
-    __typename
-  }
-}
-    ` as GeneratedQuery<
-    APITypes.UserGamePlaysByGameIdQueryVariables,
-    APITypes.UserGamePlaysByGameIdQuery
-    >;
