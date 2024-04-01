@@ -10,7 +10,7 @@ import {
     Image,
     useAuthenticator,
     Alert,
-    Accordion, Tabs, Link, TextField
+    Accordion, Tabs, Link, TextField, ToggleButton, Icon
 } from '@aws-amplify/ui-react';
 import {
     gamesByCity,
@@ -500,9 +500,9 @@ export function Home() {
                     <Flex justifyContent="center">
                             <View>
                                 {authStatus !== 'authenticated' ? (
-                                    <Button className="topLink" onClick={() => navigate('/login')}>Login to Play</Button>
+                                    <Button className="topLink" onClick={() => navigate('/login')}>Sign in to Play</Button>
                                 ):(
-                                   <Button className="topLink" onClick={() => logOut()}>Logout</Button>
+                                   <Button className="topLink" onClick={() => logOut()}>Sign Out</Button>
                                 )
                                 }
 
@@ -510,7 +510,7 @@ export function Home() {
                                 <Button className="topLink" onClick={() => goToMyStats()}>
                                     My Stats
                                 </Button> ):(null)}
-                                <Button className="topLink " onClick={() => {setIsHowToPlayVisible(true);window.scrollTo(0, 0);}}>
+                                <Button className="topLink " onClick={() => {setIsHowToPlayVisible(true);}}>
                                     How to Play
                                 </Button>
                                 {(authStatus === 'authenticated')&&(email === "lararobertson70@gmail.com") ? (
@@ -522,7 +522,7 @@ export function Home() {
             <View className="main-content top-main"  marginBottom="1em">
                 <View className="hero">
                     <Heading
-                        level={4}
+                        level={5}
                         textAlign="center"
                         className="heading">
                         Go Outside and play an <span className="blue-light">Intriguing Problem-Solving Game</span> with your family and friends!
@@ -571,13 +571,13 @@ export function Home() {
                         </Button>
                     </View></View></View>): null}
                 <View id="game-list"  className={isWaiverVisible ? "hide" : "show"}>
-                    <View className={"blue-alert"} margin="10px auto" fontSize={".8em"} padding="5px" lineHeight="1.2em">
-
-                        <strong>GAMES ARE IN BETA/TESTING MODE<br /> - no guarantees for perfect experience (but we hope you like them)</strong>
+                    <View className={"blue-alert"} margin="0 auto 5px auto" textAlign={"center"} fontSize={".8em"} padding="5px" lineHeight="1.2em">
+                        <strong>GAMES ARE IN TESTING MODE</strong>
                     </View>
-                    <Heading level={"6"} className="heading" marginBottom={"15px"}>
+                    <Heading level={"6"} className="heading" marginBottom={"10px"}>
                         Game List (select city):
                     </Heading>
+
                     <Flex
                         direction="row"
                         justifyContent="flex-start"
@@ -589,9 +589,9 @@ export function Home() {
                     <Button marginRight="5px" className={"button-small small"} backgroundColor={(localStorage.getItem("gameLocationCity") === "Tybee Island")? ("#7e0b0b" ): ("transparent")} color="white" onClick={() => setGameLocationCityFunction("Tybee Island")}>Tybee Island, GA
                         {(localStorage.getItem("gameLocationCity") === "Tybee Island")? (<View>&nbsp;- selected</View> ): (null)}
                     </Button>
-                        <Button marginRight="5px" className={"button-small small"} backgroundColor={(localStorage.getItem("gameLocationCity") === "Savannah")? ("#7e0b0b" ): ("transparent")} color="white"  onClick={() => setGameLocationCityFunction("Savannah")}>Savannah, GA
+                        {/*}   <Button marginRight="5px" className={"button-small small"} backgroundColor={(localStorage.getItem("gameLocationCity") === "Savannah")? ("#7e0b0b" ): ("transparent")} color="white"  onClick={() => setGameLocationCityFunction("Savannah")}>Savannah, GA
                             {(localStorage.getItem("gameLocationCity") === "Savannah")? (<View>&nbsp;- selected</View> ): (null)}
-                        </Button>
+                        </Button>*/}
                     </Flex>
 
                     <Flex className="flex-games">
@@ -609,14 +609,42 @@ export function Home() {
                                         <Text color="white"><span className="italics">City</span>: {game.gameLocationCity}</Text>
                                     </View>
                                     <View className="game-card-full">
-                                        <Text color="white"><span className="italics">level / walking distance</span>:<br /> {game.gameLevel} / {game.walkingDistance}</Text>
+                                        <Text color="white"><span className="italics">Level</span>:  {game.gameLevel}
+                                           &nbsp; <Button className="help" onClick={() => isHowToPlayVisible ? setIsHowToPlayVisible(false) : setIsHowToPlayVisible(true)}>
+                                                <Icon
+                                                    height={"25px"}
+                                                    width={"24px"}
+                                                    ariaLabel="Help"
+                                                    viewBox={{ minX: 0,
+                                                        minY: 0,
+                                                        width: 400,
+                                                        height: 400 }}
+                                                    paths={[
+                                                        {
+                                                            d: 'M199.996,0C89.719,0,0,89.72,0,200c0,110.279,89.719,200,199.996,200C310.281,400,400,310.279,400,200,C400,89.72,310.281,0,199.996,0z M199.996,373.77C104.187,373.77,26.23,295.816,26.23,200,c0-95.817,77.957-173.769,173.766-173.769c95.816,0,173.772,77.953,173.772,173.769,C373.769,295.816,295.812,373.77,199.996,373.77z',
+                                                            stroke: '#202020',
+                                                        },
+                                                        {
+                                                            d: 'M199.996,91.382c-35.176,0-63.789,28.616-63.789,63.793c0,7.243,5.871,13.115,13.113,13.115,c7.246,0,13.117-5.873,13.117-13.115c0-20.71,16.848-37.562,37.559-37.562c20.719,0,37.566,16.852,37.566,37.562,c0,20.714-16.849,37.566-37.566,37.566c-7.242,0-13.113,5.873-13.113,13.114v45.684c0,7.243,5.871,13.115,13.113,13.115,s13.117-5.872,13.117-13.115v-33.938c28.905-6.064,50.68-31.746,50.68-62.427C263.793,119.998,235.176,91.382,199.996,91.382z',
+                                                            stroke: '#202020',
+                                                        },
+                                                        {
+                                                            d: 'M200.004,273.738c-9.086,0-16.465,7.371-16.465,16.462s7.379,16.465,16.465,16.465c9.094,0,16.457-7.374,16.457-16.465,S209.098,273.738,200.004,273.738z',
+                                                            stroke: '#202020',
+                                                        },
+                                                    ]}
+                                                /></Button>
+                                        </Text>
+                                    </View>
+                                    <View className="game-card-full">
+                                        <Text color="white">{game.walkingDistance} walking distance</Text>
                                     </View>
                                 </View>
                                 <Flex justifyContent="center">
                                     {authStatus !== 'authenticated' ? (
                                     <View textAlign="center">
                                         <Button className="button button-center button-small show button-light-dark"  onClick={() => navigate('/login')}>
-                                            Login to Play Game
+                                            Sign in to Play Game
                                         </Button>
                                     </View> ):(
                                     <View textAlign="center">
@@ -667,21 +695,53 @@ export function Home() {
                         <Heading level={4} marginBottom="10px">How To Play</Heading>
                         <View width="100%" margin="0 auto" lineHeight="17px">
                             <Button className="close-button light" onClick={() => isHowToPlayVisible ? setIsHowToPlayVisible(false) : setIsHowToPlayVisible(true)}>X</Button>
-                        <View>
-                            <View className={"blue-alert"} margin="10px auto" padding="5px" width="90%" lineHeight="18px">
 
-                            <strong>GAMES ARE IN BETA/TESTING MODE<br /> - no guarantees for perfect experience (but we hope you like them)</strong>
+                            <View className={"blue-alert"} margin="10px auto" padding="5px" width="90%" lineHeight="1em" fontSize={".8em"}>
+                                <strong>GAMES ARE IN BETA/TESTING MODE<br /> - no guarantees for a perfect experience (but we hope you like them)</strong>
                             </View>
-                            <ol className={"how-to-play-bullets"}>
-                                <li>Login or create an account with your smartphone and go to location.</li>
-                                <li>Currently you can login with email/password - set an easy password, there will be no sensitive data here - or you can use your google account.</li>
-                                <li>Select game.</li>
-                                <li>Hit Play, agree to waiver, and select a display name - this is your team name.</li>
-                                <li>Start game and solve the puzzles.</li>
-                                <li>The BACK BUTTON is not needed - please don't use.</li>
-                            </ol>
-                        </View>
-                            <Accordion.Container allowMultiple>
+                            <Accordion.Container allowMultiple  defaultValue={['levels']}>
+                                <Accordion.Item value="how-to-play">
+                                    <Accordion.Trigger>
+                                        <strong>How to Play?</strong>
+                                        <Accordion.Icon />
+                                    </Accordion.Trigger>
+                                    <Accordion.Content>
+                                        <View>
+                                            <ol className={"how-to-play-bullets"}>
+                                                <li>Sign in or create an account with your smartphone:<br />
+                                                    <View className="small italics">Currently you can sign in with email/password. It's probably best to set an easy password, there will be no sensitive data to steal here or you can use your google account to sign in.
+                                                    </View>
+                                                </li>
+                                                <li>Go To Location.</li>
+                                                <li>Select game.</li>
+                                                <li>Hit Play, agree to waiver, and select a display name to use as your team name.</li>
+                                                <li>Start game and solve the puzzles.</li>
+                                                <li>The BACK BUTTON is not needed - please do not use.</li>
+                                            </ol>
+                                        </View>
+                                    </Accordion.Content>
+                                </Accordion.Item>
+                                <Accordion.Item value="levels">
+                                    <Accordion.Trigger>
+                                        <strong>What are Levels?</strong>
+                                        <Accordion.Icon />
+                                    </Accordion.Trigger>
+                                    <Accordion.Content>
+                                        <View>
+                                            <View marginTop={"10px"}>Games have different levels -</View>
+                                            <ul className={"how-to-play-bullets"}>
+                                                <li><strong>level 1</strong> is more like a scavenger hunt. You try to find items referenced in clues and provide numbers, or colors, or lists of things that match a certain criteria.<br />
+                                                    <View className="small italics"> Requirements - reading comprehension, understanding orientation, counting, some light math.</View></li>
+                                                <li><strong>level 2</strong> is more like an escape-room style puzzle with elements of a scavenger hunt.
+                                                    You try to find items referenced in clues and use deduction to figure out the clues. <br />
+                                                    <View className="small italics"> Requirements: Attention to detail, knowing a little math, and understanding orientation, like north, south, etc is useful</View></li>
+                                                <li><strong>level 3</strong> are more elaborate escape-room style puzzles with elements of a scavenger hunt.
+                                                    Find referenced items and use deduction to figure out the clues. <br />
+                                                    <View className="small italics">Requirements: Observation, Using Logic, Attention to detail, knowing a little math, and understanding orientation, like north, south, etc is useful.</View></li>
+                                            </ul>
+                                        </View>
+                                    </Accordion.Content>
+                                </Accordion.Item>
                                 <Accordion.Item value="About-Games">
                                     <Accordion.Trigger>
                                         <strong>About Games</strong>
@@ -699,27 +759,6 @@ export function Home() {
                                         </ul>
                                     </Accordion.Content>
                                 </Accordion.Item>
-                                <Accordion.Item value="levels">
-                                    <Accordion.Trigger>
-                                        <strong>What are Levels</strong>
-                                        <Accordion.Icon />
-                                    </Accordion.Trigger>
-                                    <Accordion.Content>
-                                        <View>
-                                            <View marginTop={"10px"}>Games have different levels -</View>
-                                            <ul className={"how-to-play-bullets"}>
-                                                <li><strong>level 1</strong> is more like a scavenger hunt.<br />
-                                                    Requirements - reading comprehension, understanding orientation, counting, some light math.</li>
-                                                <li><strong>level 2</strong> is more like an escape-room style puzzle with elements of a scavenger hunt.  <br />
-                                                    Find some items and use deduction to figure out the clues. <br />
-                                                    Requirements: Attention to detail, knowing a little math, and understanding orientation, like north, south, etc is useful.</li>
-                                                <li><strong>level 3</strong> games are more elaborate escape-room style puzzles with elements of a scavenger hunt.  <br />
-                                                    Find some items and use deduction to figure out the clues. <br />
-                                                    Requirements: Attention to detail, knowing a little math, and understanding orientation, like north, south, etc is useful.</li>
-                                            </ul>
-                                        </View>
-                                    </Accordion.Content>
-                                </Accordion.Item>
                                 <Accordion.Item value="group-play">
                                     <Accordion.Trigger>
                                         <strong>Group Play vs Individual Play</strong>
@@ -729,12 +768,12 @@ export function Home() {
                                         <View>
                                             Play can be group or individual -
                                             <ul className={"how-to-play-bullets"}>
-                                                <li> For individual play, login and select a display name that reflects your individuality.</li>
-                                                <li>For group play, one person logs in and selects the team name and hits play - game starts.
-                                                    The other players can use the same login and select the same game (and it doesn't matter what team name you select - probably best to choose the same one) because
-                                                    the only official score is the first time a single login plays a game).</li>
-                                                <li>That 2nd or 3rd login with same credentials can play a game multiple times but it does not go on the leaderboard.</li>
-                                                <li>If a person wants to do team play it is best to choose an email that can be easily verified and an easy password</li>
+                                                <li>For individual play, sign in and select a display name that reflects your individuality.</li>
+                                                <li>For group play, one person signs in and selects the display name (or team name) and hits play - the official timed game starts.
+                                                    The other players can use the same sign in and select the same game (and it doesn't matter what team name you select - probably best to choose the same one) because
+                                                    the only official score is the first time a single sign in (by email) plays a game.</li>
+                                                <li>That 2nd or 3rd attempt with with same credentials can play a game multiple times but it does not go on the leaderboard.</li>
+                                                <li>If a group wants to do team play it is best to choose an email that can be easily verified and an easy password</li>
 
                                             </ul>
                                         </View>
@@ -742,7 +781,7 @@ export function Home() {
                                 </Accordion.Item>
                                 <Accordion.Item value="play-zones">
                                     <Accordion.Trigger>
-                                        <strong>What are Play Zones</strong>
+                                        <strong>What are Play Zones?</strong>
                                         <Accordion.Icon />
                                     </Accordion.Trigger>
                                     <Accordion.Content>
@@ -764,12 +803,13 @@ export function Home() {
 
                                             <ul className={"how-to-play-bullets"}>
                                                 <li>EscapeOut.Games used to run the Escape Room on Tybee:<br />
-                                                    <Link href={"https://escapetybee.com/"}>Escape Tybee</Link> <br />
+                                                    <Link  href={"https://escapetybee.com/"} isExternal={true} >Escape Tybee</Link> <br />
                                                     - where friends and families had good experiences solving puzzles together.</li>
-                                                <li> Due to Covid and other factors that business closed, but the joy in creating fun experiences is still a goal so
+                                                <li>Due to Covid and other factors Escape Tybee closed, but the joy in creating fun experiences is still a goal so
                                                     EscapeOut.games was started.
                                                 </li>
-                                                <li>Getting friends and families outdoors and having fun experiences solving puzzles together is what EscapeOut.games is trying to do and any and all feedback is appreciated so this goal can be realized.</li>
+                                                <li>EscapeOut.Game's Mission: Getting friends and families outdoors and having fun experiences solving puzzles together.<br />
+                                                    <strong> Any and all feedback is appreciated so this goal can be realized.</strong></li>
                                                 <li>More information at: <br />
                                                     <Link href={"https://escapeout.games/"}>EscapeOut.games</Link> </li>
                                             </ul>
@@ -802,14 +842,15 @@ export function Home() {
                     <View className="popup"
                         ariaLabel="Game detail"
                         textAlign="center">
-                        <Heading level={4} marginBottom="10px" className={"heading light"}>Game Name: {gameDetails.gameName}</Heading>
+                        <Heading level={4} marginBottom="10px" className={"heading light"}>Game Name:<br /> {gameDetails.gameName}</Heading>
+                        <Button className="close-button light" onClick={() => setIsGameDetailVisible(false)}>X</Button>
 
                         <View className={"blue-alert"} margin="10px auto" padding="5px" width="90%" lineHeight="18px">
                             <View color="#0D5189"><strong>{gameDetails.gameIntro}</strong></View>
                             <View>{gameDetails.gameGoals}</View>
                             <View className="small italics">{gameDetails.gameDescriptionP}</View>
                         </View>
-                        <View width="90%" margin="0 auto" lineHeight="16px">
+                        <View width="90%" margin="0 auto" lineHeight="13px">
                             <Flex direction="row" justifyContent="center">
                                 <View marginBottom={"10px"}><strong>SCORE</strong>: <span className="small">Your score is your time. Time doesn't stop until you complete the game.</span>
                                 </View>
@@ -840,7 +881,7 @@ export function Home() {
                         </View>
 
                         <View marginTop="10px">
-                            <Button className="button right-button small" onClick={() => setIsGameDetailVisible(false)}>close</Button>
+                            <Button className="close small" onClick={() => setIsGameDetailVisible(false)}>close</Button>
                         </View>
                     </View>
                 </View>

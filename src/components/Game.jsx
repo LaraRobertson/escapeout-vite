@@ -333,9 +333,9 @@ export function Game() {
     }, [backpackObject]);
 
     /* always scroll to top */
-    /*useEffect(() => {
+    useEffect(() => {
         window.scrollTo(0, 0);
-    });*/
+    });
 
     function setCluesFunction(clue) {
         setAlertText("clue added to notes");

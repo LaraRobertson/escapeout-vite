@@ -584,6 +584,20 @@ isChecked is for light/dark
 .close {
   background-color: transparent;
 }
+.help {
+ /* padding: 0px 5px;
+  border-radius: 30px;
+  background-color: white;
+  color:black;
+  font-size: .8em;
+  border: 2px solid black;*/
+  border:none;
+  background-color: transparent;
+  color:white;
+  padding:0;
+  position: relative;
+  top: 5px;
+}
 .italics {
   font-style: italic;
 }
