@@ -529,7 +529,7 @@ export function Home() {
                     </Heading>
                     <View className="hero-paragraph">
                         Grab your phone, round up your family and friends, and head outside for a fun-filled day of creative puzzles, exploration, and excitement!
-                        <View className="italics" paddingTop={"2px"} fontSize={".8em"} textAlign={"center"}>Games are played at locations in Game List below.</View>
+                        <View className="italics" paddingTop={"2px"} fontSize={".8em"} textAlign={"center"}>Games are meant to be played on smartphone at locations in Game List below.</View>
                     </View>
                     <View>
 
@@ -558,7 +558,7 @@ export function Home() {
                               ariaLabel="Currently Playing">
 
                     <View textAlign="center" border="1px solid white" padding="10px">
-                        Currently Playing: {localStorage.getItem("gameName")} &nbsp;&nbsp;
+                        Currently Playing: {localStorage.getItem("gameName")} &nbsp;&nbsp;<br />
                         <Button className="go-to-game-button dark" onClick={() => goToCurrentGame({
                             gameName:localStorage.getItem("gameLink"),
                             gameID:localStorage.getItem("gameID"),
@@ -567,7 +567,7 @@ export function Home() {
                             go back to game
                         </Button><br />
                         <Button className="go-to-game-button dark" onClick={() => goHomeQuit(navigate)}>
-                            Quit Game and See Game List (you will not have a "first time" score)
+                            Quit Game (if this is your first time playing you will not have a "first time" score - no chance for leaderboard)
                         </Button>
                     </View></View></View>): null}
                 <View id="game-list"  className={isWaiverVisible ? "hide" : "show"}>
@@ -586,7 +586,7 @@ export function Home() {
                         wrap="wrap"
                         gap="1rem"
                     >
-                    <Button marginRight="5px" className={"button-small small"} backgroundColor={(localStorage.getItem("gameLocationCity") === "Tybee Island")? ("#7e0b0b" ): ("transparent")} color="white" onClick={() => setGameLocationCityFunction("Tybee Island")}>Tybee Island, GA
+                    <Button marginRight="5px" className={"button-small small"} backgroundColor={(localStorage.getItem("gameLocationCity") === "Tybee Island")? ("#0d5189" ): ("transparent")} color="white" onClick={() => setGameLocationCityFunction("Tybee Island")}>Tybee Island, GA
                         {(localStorage.getItem("gameLocationCity") === "Tybee Island")? (<View>&nbsp;- selected</View> ): (null)}
                     </Button>
                         {/*}   <Button marginRight="5px" className={"button-small small"} backgroundColor={(localStorage.getItem("gameLocationCity") === "Savannah")? ("#7e0b0b" ): ("transparent")} color="white"  onClick={() => setGameLocationCityFunction("Savannah")}>Savannah, GA

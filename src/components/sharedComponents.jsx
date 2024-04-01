@@ -45,7 +45,8 @@ export const CommentWindow = (props) => {
 
 export const NotesOpen = (props) => {
     return (
-        <View>
+        <View className="notes show-gradual">
+            <View className={props.isChecked? "all-screen dark" : "all-screen light"} height={"auto"}>
               <strong>Notes:</strong>
             <View className={(props.clues != '' && props.clues != undefined)?"small show":"hide"}>
                 <strong>clues</strong>: {props.clues}
@@ -60,6 +61,10 @@ export const NotesOpen = (props) => {
                 descriptiveText="Take some Notes - close when done, they will still be here"
             />
 
+                <View width="100%" textAlign='center' paddingTop="10px">
+                    <Button  className={props.isChecked? "close small dark" : "close small light"} onClick={() => props.setAreNotesVisible(false)}>close notes</Button>
+                </View>
+            </View>
         </View>
     )
 }

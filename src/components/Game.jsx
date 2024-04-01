@@ -37,7 +37,7 @@ export function Game() {
     const [gameHintUsed, setGameHintUsed] = useState({});
     const [playZone, setPlayZone] = useState([]);
     const [zoneVisible, setZoneVisible] = useState("");
-    const [clues, setClues] = useState();
+    const [clues, setClues] = useState("");
     const [gameClueVisible, setGameClueVisible] = useState({});
 
     const [gamePuzzleVisible, setGamePuzzleVisible] = useState({});
@@ -60,7 +60,6 @@ export function Game() {
     const [alertText, setAlertText] = useState('');
     const [showComment, setShowComment] = useState(false);
     const [areNotesVisible, setAreNotesVisible] = useState(false);
-    const [areNotesVisibleBottom, setAreNotesVisibleBottom] = useState(false);
     const [isHelpVisible, setIsHelpVisible] = useState(false);
     const [gameNotes,setGameNotes] = useState('');
     const [isMapVisible, setIsMapVisible] = useState(false);
@@ -335,7 +334,7 @@ export function Game() {
     /* always scroll to top */
     useEffect(() => {
         window.scrollTo(0, 0);
-    });
+    }, []);
 
     function setCluesFunction(clue) {
         setAlertText("clue added to notes");
@@ -452,6 +451,8 @@ export function Game() {
                    /* set an alert or something */
                    if (allCorrect) {
                        console.log("close puzzle window: " + puzzleToolRevealed);
+                       /* close notes */
+                       setAreNotesVisible(false);
                        /* set toolVisible */
                        setToolVisible({...toolVisible, [puzzleToolRevealed]:true});
                        setTimeout(() => {
@@ -746,7 +747,7 @@ export function Game() {
                 <View ariaLabel="Time" className="time">
                     <View className="small">hint time: {gameTimeHint} mins | time started: {realTimeStart ? format(realTimeStart, "MM/dd/yy h:mma") : null} </View>
                     <Button marginRight={"10px"} className="button button-small" onClick={() => isHelpVisible? setIsHelpVisible(false) : setIsHelpVisible(true)}>Hints</Button>
-                    <Button marginRight={"10px"} className="button button-small"  onClick={() => {console.log("noteclick"); areNotesVisible ? setAreNotesVisible(false) : setAreNotesVisible(true)}}>Notes</Button>
+                    <Button marginRight={"10px"} className="button button-small"  onClick={() => {setAlertTextFunction("Notes Below"); setAreNotesVisible(true)}}>Notes</Button>
                     <Button marginRight={"10px"} className="button button-small" onClick={() => isMapVisible? setIsMapVisible(false) : setIsMapVisible(true)}>Map</Button>
                     <Button marginRight={"10px"} className="button button-small quit-button"onClick={()=>goHomeQuit(navigate)}>Quit</Button>
 
@@ -781,7 +782,7 @@ export function Game() {
                     <View className="all-screen dark">
                         <View className="black-box">
                             <h3>WINNER!</h3>
-                            <View marginBottom={"30px"}>{game.gameWinMessage}</View>
+                            <View marginBottom={"10px"}>{game.gameWinMessage}</View>
                             <View color="white">Total Time: {gameTimeTotal} minutes</View>
                             <View color="white">Hint Time: {gameTimeHint} minutes </View>
 
@@ -791,7 +792,7 @@ export function Game() {
                                     alignItems="center"
                                     alignContent="flex-start"
                                     wrap="nowrap"
-                                    gap="1rem" marginBottom={"10px"} className={"flex-container"}>
+                                    gap=".4em" marginBottom={"10px"} className={"flex-container"}>
 
                                 <Heading level={"6"} className={"heading"} paddingTop="5px" paddingBottom={"5px"}>Did you like Game?</Heading>
                                 <ToggleButtonGroup
@@ -912,7 +913,7 @@ export function Game() {
                                 </RadioGroupField>*/}
 
                             <TextAreaField
-                                rows="4"
+                                rows="2"
                                 onChange={(e) => setGameCommentsFunction("textAreaField",e.currentTarget.value)}
                                 descriptiveText="Any Issues or Problems?  Suggestions for improvement?"
                             />
@@ -979,24 +980,17 @@ export function Game() {
             {/*(showComment) ? (
                 <CommentWindow setGameComments={setGameComments} gameComments={gameComments}/>
             ) : null*/}
-                <View className={areNotesVisible ? "cover-screen show-gradual" : "cover-screen hide-gradual"}>
+                {/*<View className={areNotesVisible ? "cover-screen show-gradual" : "cover-screen hide-gradual"}>
                     <View className={isChecked? "all-screen dark" : "all-screen light"}>
                         <NotesOpen clues={clues} setClues={setClues} gameNotes={gameNotes} setGameNotes={setGameNotes} setGameNotesFunction={setGameNotesFunction} isChecked={isChecked}/>
                         <View width="100%" textAlign='center' paddingTop="10px">
-                            <Button className="button small" marginRight={"5px"} onClick={() => {setAreNotesVisibleBottom(true);setAreNotesVisible(false)}}>move notes under game</Button>
+                            {/*<Button className="button small" marginRight={"5px"} onClick={() => {setAreNotesVisibleBottom(true);setAreNotesVisible(false)}}>move notes under game</Button>
                             <Button className={isChecked? "close small dark" : "close small light"} onClick={() => setAreNotesVisible(false)}>close notes</Button>
                          </View>
                     </View>
-                </View>
-                <View className={areNotesVisibleBottom ? "notes show-gradual" : "hide-gradual"}>
-                    <View className={isChecked? "all-screen dark" : "all-screen light"}>
-                        <NotesOpen clues={clues} setClues={setClues} gameNotes={gameNotes} setGameNotes={setGameNotes} setGameNotesFunction={setGameNotesFunction} isChecked={isChecked}/>
-                        <View width="100%" textAlign='center' paddingTop="10px">
-                            <Button marginRight="5px" className="button small" onClick={() => {setAreNotesVisibleBottom(false);setAreNotesVisible(true)}}>move notes to top</Button>
-                            <Button  className={isChecked? "close small dark" : "close small light"} onClick={() => setAreNotesVisibleBottom(false)}>close notes</Button>
-                        </View>
-                    </View>
-                </View>
+                </View>*/}
+                {areNotesVisible && <NotesOpen clues={clues} setClues={setClues} gameNotes={gameNotes} setGameNotes={setGameNotes} setGameNotesFunction={setGameNotesFunction} isChecked={isChecked} setAreNotesVisible={setAreNotesVisible}/>}
+
             <View className={isHelpVisible ? "cover-screen show-gradual" : "cover-screen hide-gradual"}>
                 <View className={isChecked? "all-screen dark" : "all-screen light"}>
                     <Button  className={isChecked? "close-button dark" : "close-button light"}
