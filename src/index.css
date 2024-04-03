@@ -67,6 +67,11 @@ button:focus-visible,
   color: var(--color-light);
   background-color: var(--background-dark);
 }
+.authenticator {
+  width: var(--amplify-components-authenticator-container-width-max);
+  margin: 0 auto;
+}
+
 .how-to-play-bullets li {
   margin-bottom: 5px;
 }
@@ -617,7 +622,11 @@ isChecked is for light/dark
   color:#fff;
   font-weight: bold;
   font-size: 1.3em;
-  margin-bottom:10px;
+  margin-bottom:5px;
+  line-height: .7em;
+  margin-top: 3px;
+}
+.played {
 }
 .game-card-bg-image {
   height:100%;

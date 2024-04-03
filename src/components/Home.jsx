@@ -19,7 +19,7 @@ import {
     gameStatsByGameID,
     gameScoreByGameStatsID,
     getGameStats,
-    getGameScore, gameStatsSortedByGameName, getGameHint, getGame, gameScoreByGameID
+    getGameScore, gameStatsSortedByGameName, getGameHint, getGame, gameScoreByGameID, listGameStats
 } from "../graphql/queries";
 import {
     createGameScore,
@@ -74,7 +74,8 @@ export function Home() {
     const [userName, setUserName] = useState("");
     const [userDB, setUserDB] = useState({});
     const [gamesIDUser, setGamesIDUser] = useState([]);
-
+    const [gamesIDUserPlayed, setGamesIDUserPlayed] = useState([]);
+    const [hidePlayedGames, setHidePlayedGames] = useState(false);
     /* display waiver */
     const [isWaiverVisible, setIsWaiverVisible] = useState(false);
     /* display game intro */
@@ -129,6 +130,7 @@ export function Home() {
                 console.log(`${key}: ${ user[key]}`);
             }*/
             handleFetchUserAttributes({"userName": user.username});
+
         }
     },[user]);
 
@@ -142,15 +144,6 @@ export function Home() {
             console.log(error);
         }
     }
-
-    async function logOut() {
-        console.log("logout");
-        /* save everything for game? */
-        /* warning? */
-        removeLocalStorage();
-        signOut();
-    }
-
 
     async function fetchUserDB(props) {
         /* check if user in database, if not create user and games */
@@ -178,13 +171,64 @@ export function Home() {
             }
             /* get userID */
             const userFromAPI = apiUserDB.data.usersByEmail.items[0];
-            console.log("userFromAPI: " + userFromAPI);
             setUserDB(userFromAPI);
         } catch (err) {
             console.log('error fetchUserDB..', err)
         }
     }
 
+    useEffect( () => {
+        fetchUserGamePlay();
+    }, [userDB]);
+
+    async function fetchUserGamePlay() {
+        console.log("fetchUserGamePlay - userID: " + userDB.id);
+        /* check if user in database, if not create user and games */
+        /* not sure this is doing that above */
+        /* this appears to be checking PAY list */
+        if (userDB.id != null){
+            try {
+                const apiUserGamePlay =  await client.graphql({
+                    query: userGamePlaysByUserId,
+                    variables: { userId: userDB.id}
+                });
+                console.log("apiUserGamePlay: " + JSON.stringify(apiUserGamePlay.data.userGamePlaysByUserId.items));
+                /* create array of gameIDs */
+                const gameIDsUser = apiUserGamePlay.data.userGamePlaysByUserId.items;
+                const gameIDsUserArray = gameIDsUser.map(item => {
+                    return item.gameId
+                })
+                console.log('gameIDsUserArray: ' + gameIDsUserArray);
+                setGamesIDUser(gameIDsUserArray);
+            } catch (err) {
+                console.log('error fetchUserGamePlay..', err)
+            }
+            /* now create a play list */
+            /* create gameStats if play game */
+            /* search on gameStats */
+            /* listGameStats filter is userEmail */
+            let filter = {
+                userEmail: {
+                    eq: email
+                }
+            };
+            try {
+                const apiListGameStats = await client.graphql({
+                    query:listGameStats,
+                    variables: {filter: filter}
+                    });
+                const gameIDUserPlayed = apiListGameStats.data.listGameStats.items;
+                const gameIDUserPlayedArray = gameIDUserPlayed.map(item => {
+                    return item.gameID
+                })
+                console.log('gameIDUserPlayedArray: ' + JSON.stringify(gameIDUserPlayedArray));
+                setGamesIDUserPlayed(gameIDUserPlayedArray);
+            } catch (err) {
+                console.log('error listGameStats..', err)
+            }
+        }
+
+    }
     function setFilterFetchGame(key, value) {
         console.log("setFilterCreateGame: " + key);
         if (key) {
@@ -195,6 +239,15 @@ export function Home() {
             //setGameType();
         }
     }
+
+    async function logOut() {
+        console.log("logout");
+        /* save everything for game? */
+        /* warning? */
+        removeLocalStorage();
+        signOut();
+    }
+
 
     function setGameLocationCityFunction (city) {
         console.log("setGameLocationCityFunction: " + city);
@@ -236,29 +289,6 @@ export function Home() {
         }
     }
 
-    async function fetchUserGamePlay() {
-        console.log("fetchUserGamePlay - userID: " + userDB.id);
-        /* check if user in database, if not create user and games */
-        if (userDB.id != null){
-            try {
-                const apiUserGamePlay =  await client.graphql({
-                    query: userGamePlaysByUserId,
-                    variables: { userId: userDB.id}
-                });
-                console.log("apiUserGamePlay: " + JSON.stringify(apiUserGamePlay.data.userGamePlaysByUserId.items));
-                /* create array of gameIDs */
-                const gameIDsUser = apiUserGamePlay.data.userGamePlaysByUserId.items;
-                const gameIDsUserArray = gameIDsUser.map(item => {
-                    return item.gameId
-                })
-                console.log('gameIDsUserArray: ' + gameIDsUserArray);
-                setGamesIDUser(gameIDsUserArray);
-            } catch (err) {
-                console.log('error fetchUserGamePlay..', err)
-            }
-        }
-    }
-
     async function goToMyStats() {
         console.log("goToMyStats (email): " + email);
         setIsMyStatsVisible(true);
@@ -267,8 +297,16 @@ export function Home() {
     function goToGameDetail(gameDetails) {
         /* set states */
         setGameDetails(gameDetails);
-        setGameID(gameDetails.gameID);
+        /*setGameID(gameDetails.gameID);*/
         setIsGameDetailVisible(true);
+    }
+
+    function goToLeaderBoard(gameDetails) {
+        /* set states */
+        console.log("goToLeaderBoard: " + gameDetails.gameID);
+        setGameDetails(gameDetails);
+        /*setGameID(gameDetails.gameID);*/
+        setIsGameLeaderBoardVisible(true);
     }
 
     function setTeamNameFunction(teamNameValue) {
@@ -575,7 +613,9 @@ export function Home() {
                         <strong>GAMES ARE IN TESTING MODE</strong>
                     </View>
                     <Heading level={"6"} className="heading" marginBottom={"10px"}>
-                        Game List (select city):
+                        Game List (select city) -
+                        <Button className={hidePlayedGames? "hide": "close dark small"} marginLeft="5px" padding="2px 4px" onClick={() => setHidePlayedGames(true)}>hide played games</Button>
+                        <Button className={hidePlayedGames? "close dark small": "hide"} marginLeft="5px"padding="2px 4px" onClick={() => setHidePlayedGames(false)}>show all games</Button>
                     </Heading>
 
                     <Flex
@@ -597,10 +637,17 @@ export function Home() {
                     <Flex className="flex-games">
                         {loading ? (<View>loading</View>):null}
                         {gameListByCity.map((game,index) => (
-                            <Card style={divStyle(game.gameImage)} className="game-card" variation="elevated" key={game.id || game.gameName}>
+                            <Card style={divStyle(game.gameImage)} className={(gamesIDUserPlayed.includes(game.id) && hidePlayedGames)? "hide" : "game-card"} variation="elevated" key={game.id || game.gameName}>
+
                                 <View className="inner-game-card">
                                     <View className="game-card-full">
-                                        <Text className="game-card-header">{game.gameName} <span className="small">({game.gameType})</span></Text>
+                                        {gamesIDUserPlayed.includes(game.id) ? (
+                                            <Text className="game-card-header played">{game.gameName} <span className="small">(played)</span></Text>
+
+                                        ):(
+                                            <Text className="game-card-header">{game.gameName} <span className="small">({game.gameType})</span></Text>
+                                        )}
+
                                     </View>
                                     <View className="game-card-full">
                                         <Text color="white" ><span className="italics">Location</span>: {game.gameLocationPlace}</Text>
@@ -612,8 +659,8 @@ export function Home() {
                                         <Text color="white"><span className="italics">Level</span>:  {game.gameLevel}
                                            &nbsp; <Button className="help" onClick={() => isHowToPlayVisible ? setIsHowToPlayVisible(false) : setIsHowToPlayVisible(true)}>
                                                 <Icon
-                                                    height={"25px"}
-                                                    width={"24px"}
+                                                    height={"20px"}
+                                                    width={"20px"}
                                                     ariaLabel="Help"
                                                     viewBox={{ minX: 0,
                                                         minY: 0,
@@ -640,6 +687,7 @@ export function Home() {
                                         <Text color="white">{game.walkingDistance} walking distance</Text>
                                     </View>
                                 </View>
+
                                 <Flex justifyContent="center">
                                     {authStatus !== 'authenticated' ? (
                                     <View textAlign="center">
@@ -648,6 +696,8 @@ export function Home() {
                                         </Button>
                                     </View> ):(
                                     <View textAlign="center">
+
+
                                     {(gamesIDUser.includes(game.id) || game.gameType === "free" || game.gameType === "free-test") ?
                                         (<div>
                                             <Button className="button button-small button-center button-light-dark show" onClick={() => goToWaiver({gameName:game.gameName,gameID:game.id,gameLocationCity:game.gameLocationCity,gameLink:game.gameLink,gameDescriptionP:game.gameDescriptionP,gameDescriptionH3:game.gameDescriptionH3,gameDescriptionH2:game.gameDescriptionH2,gamePlayZoneImage1: game.gamePlayZone.items[0].gameZoneImage,gameMap: game.gameMap})}>
@@ -657,15 +707,14 @@ export function Home() {
                                         (<div></div>)
                                     }
                                      </View>)}
-                                    <View>
+                                    <View ariaLabel={"leaderboard-"+ game.id}>
                                         {(game.gameLocationPlace == "memorial")? (
                                             <Button className="button button-small button-center show" onClick={() => leaderBoard2({gameName:game.gameName,gameID:game.id})}>
                                                 Leaderboard
                                             </Button>
-                                        ):(<Button className="button button-small button-center show" onClick={() => setIsGameLeaderBoardVisible(true)}>
+                                        ):(<Button className="button button-small button-center show" onClick={() => goToLeaderBoard({gameName:game.gameName,gameID:game.id})}>
                                             Leaderboard
                                         </Button>)}
-                                        {isGameLeaderBoardVisible && <LeaderBoard gameID = {game.id} gameName={game.gameName} isGameLeaderBoardVisible = {isGameLeaderBoardVisible} setIsGameLeaderBoardVisible = {setIsGameLeaderBoardVisible}/>}
                                     </View>
 
                                 </Flex>
@@ -688,6 +737,8 @@ export function Home() {
                         ))}
                     </Flex>
                 </View>
+                {isGameLeaderBoardVisible && <LeaderBoard gameID = {gameDetails.gameID} gameName={gameDetails.gameName} isGameLeaderBoardVisible = {isGameLeaderBoardVisible} setIsGameLeaderBoardVisible = {setIsGameLeaderBoardVisible}/>}
+
                 {/* How To Play View */}
                 <View className={isHowToPlayVisible ? "overlay" : "hide"}>
                     <View className="popup"

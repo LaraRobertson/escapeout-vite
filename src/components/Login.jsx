@@ -39,10 +39,10 @@ export function Login() {
                         <Button className="topLink" onClick={() => navigate('/')}>Back to Home</Button>
                     </Flex>
                 </View>
-            <View className="main-content light-dark top-main">
+            <View className="main-content  light-dark top-main">
                     <Heading
                         level={4}
-                        className={"light small"}
+                        className={"light small authenticator"}
                         textAlign="center"
                         padding="20px">
                         Create an Account or Sign In to play games. If you use your google account you do not have to authenticate your email. If you don't use your google account, A code will be sent to your email.

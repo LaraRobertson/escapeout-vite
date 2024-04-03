@@ -53,6 +53,7 @@ export function Game() {
     const [tool, setTool] = useState(ToolObject);
     const [toolVisible, setToolVisible] = useState({});
     const [backpackObject, setBackpackObject] = useState({});
+    const [isGoHomeQuitVisible, setIsGoHomeQuitVisible] = useState(false);
     /* new above */
     const [isAlertVisible, setIsAlertVisible] = useState(false);
     const [isWinnerScreenVisible, setIsWinnerScreenVisible] = useState(false);
@@ -749,7 +750,7 @@ export function Game() {
                     <Button marginRight={"10px"} className="button button-small" onClick={() => isHelpVisible? setIsHelpVisible(false) : setIsHelpVisible(true)}>Hints</Button>
                     <Button marginRight={"10px"} className="button button-small"  onClick={() => {setAlertTextFunction("Notes Below"); setAreNotesVisible(true)}}>Notes</Button>
                     <Button marginRight={"10px"} className="button button-small" onClick={() => isMapVisible? setIsMapVisible(false) : setIsMapVisible(true)}>Map</Button>
-                    <Button marginRight={"10px"} className="button button-small quit-button"onClick={()=>goHomeQuit(navigate)}>Quit</Button>
+                    <Button marginRight={"10px"} className="button button-small quit-button"onClick={()=>setIsGoHomeQuitVisible(true)}>Quit</Button>
 
                     <ToggleButton
                         className={isChecked? "dark-light-toggle dark-toggle" : "dark-light-toggle light"}
@@ -997,7 +998,8 @@ export function Game() {
                             onClick={() => isHelpVisible ? setIsHelpVisible(false) : setIsHelpVisible(true)}>X</Button>
                     <View width="100%" padding="40px 10px">
                         <View paddingBottom="10px">
-                            <strong>How to Play:</strong> Click around to open clues and get items. Click on puzzles to solve. If an item is in your backpack click on it to use.
+                            <strong>How to Play:</strong> Click around to open clues and get items. Click on puzzles to solve. If an item is in your backpack click on it to use. Clues on near Play Zone Image (around 100 feet or so)
+
                         </View>
                         <View paddingBottom="10px">
                             <strong>Game Goals:</strong> {game.gameGoals}
@@ -1034,6 +1036,12 @@ export function Game() {
             <View className={isAlertVisible ? "alert-container show" : "hide"}>
                 <div className='alert-inner'>{alertText}</div>
             </View>
+                <View className={isGoHomeQuitVisible ? "alert-container show" : "hide"}>
+                    <div className='alert-inner'>Do You Really Want To Quit?<br />
+                    <Button marginRight={"10px"} className="button button-small quit-button"onClick={()=>{setIsGoHomeQuitVisible(false);goHomeQuit(navigate)}}>Yes, I Want Quit</Button>
+                    <Button marginRight={"10px"} className="button button-small quit-button"onClick={()=>{setIsGoHomeQuitVisible(false)}}>No, I Want to Play</Button>
+                    </div>
+               </View>
 
             <View className={isMapVisible ? "cover-screen show-gradual" : "cover-screen hide-gradual"}>
                 <View height="400px" className={isChecked? "all-screen dark" : "all-screen light"}>
