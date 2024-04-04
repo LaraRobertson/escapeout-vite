@@ -43,6 +43,15 @@ if (isLocalhost) {
 
     amplifyconfig.oauth.redirectSignOut = "https://dev.play.escapeout.games/"
 
+} else if (window.location.hostname === 'play.escapeout.games'
+    // Add Your Application Domain here. For Example:
+    // https://{env}.{appID}.amplifyapp.com/
+) {
+
+    amplifyconfig.oauth.redirectSignIn = "https://play.escapeout.games/"
+
+    amplifyconfig.oauth.redirectSignOut = "https://play.escapeout.games/"
+
 } else {
     console.log('This is not possible')
 }
