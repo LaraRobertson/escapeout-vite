@@ -45,6 +45,8 @@ export function Game() {
     const [gameTopClues, setGameTopClues] = useState([]);
     const [gameBottomClues, setGameBottomClues] = useState([]);
     const [gameBottomPuzzle, setGameBottomPuzzle] = useState([]);
+    const [gameTopPuzzle, setGameTopPuzzle] = useState([]);
+    const [gamePuzzle, setGamePuzzle] = useState([]);
     /* guesses and answers */
     const [gamePuzzleGuess, setGamePuzzleGuess] = useState({});
     const [gamePuzzleAnswer, setGamePuzzleAnswer] = useState({});
@@ -108,7 +110,7 @@ export function Game() {
                 setGameHintVisible(JSON.parse(localStorage.getItem("gameHintVisible")));
             }
             if (localStorage.getItem("gamePuzzleSolved")!=null) {
-                /* check for all puzzles solved, need to do wingame */
+                /* check for all puzzles solved, need to do wingame? */
                 setGamePuzzleSolved(JSON.parse(localStorage.getItem("gamePuzzleSolved")));
             }
             /* if there */
@@ -161,14 +163,22 @@ export function Game() {
                     setGameBottomClues(gameClueBottomArray);
                 }
                 /* set up game Puzzle: */
+                setGamePuzzle(gamesFromAPI.gamePuzzle.items);
                 if (gamesFromAPI.gamePuzzle.items.length > 0) {
                     console.log("setGameBottomPuzzle: " + JSON.stringify(gamesFromAPI.gamePuzzle.items));
                     /* filter by position */
-                    setGameBottomPuzzle(gamesFromAPI.gamePuzzle.items);
-                    console.log("gamesFromAPI.gamePuzzle.items[0].id: " + gamesFromAPI.gamePuzzle.items[0].id);
-                    //let gamePuzzleSolveID = gamesFromAPI.gamePuzzle.items[0].id;
-                    //setGamePuzzleSolved({...gamePuzzleSolved, [gamePuzzleSolveID]:false});
-                    //console.log("gamesFromAPI.gameClue.items.length: " + gamesFromAPI.gameClue.items.length);
+                    let gameBottomPuzzleArray = gamesFromAPI.gamePuzzle.items.filter(puzzle => puzzle.puzzlePosition === "bottom")
+                        .sort((a, b) => {
+                            return a.order - b.order;
+                        });
+                    setGameBottomPuzzle(gameBottomPuzzleArray);
+                    let gameTopPuzzleArray = gamesFromAPI.gamePuzzle.items.filter(puzzle => puzzle.puzzlePosition === "top")
+                        .sort((a, b) => {
+                            return a.order - b.order;
+                        });
+                    setGameTopPuzzle(gameTopPuzzleArray);
+                    /* gamePuzzleSolved set in localStorage above */
+
                 }
             } catch (err) {
                 console.log('error fetching getGame', err);
@@ -258,10 +268,20 @@ export function Game() {
                     setGameBottomClues(gameClueBottomArray);
                 }
                 /* set up game Puzzle: */
+                setGamePuzzle(gamesFromAPI.gamePuzzle.items);
                 if (gamesFromAPI.gamePuzzle.items.length > 0) {
                     console.log("setGameBottomPuzzle: " + JSON.stringify(gamesFromAPI.gamePuzzle.items));
                     /* filter by position */
-                    setGameBottomPuzzle(gamesFromAPI.gamePuzzle.items);
+                    let gameBottomPuzzleArray = gamesFromAPI.gamePuzzle.items.filter(puzzle => puzzle.puzzlePosition === "bottom")
+                        .sort((a, b) => {
+                            return a.order - b.order;
+                        });
+                    setGameBottomPuzzle(gameBottomPuzzleArray);
+                    let gameTopPuzzleArray = gamesFromAPI.gamePuzzle.items.filter(puzzle => puzzle.puzzlePosition === "top")
+                        .sort((a, b) => {
+                            return a.order - b.order;
+                        });
+                    setGameTopPuzzle(gameTopPuzzleArray);
                     console.log("gamesFromAPI.gamePuzzle.items[0].id: " + gamesFromAPI.gamePuzzle.items[0].id);
                     let gamePuzzleSolveID = gamesFromAPI.gamePuzzle.items[0].id;
                     setGamePuzzleSolved({...gamePuzzleSolved, [gamePuzzleSolveID]:false});
@@ -392,86 +412,93 @@ export function Game() {
     function setGamePuzzleGuessFunction(textFieldID, guess, answer, puzzleID, puzzleToolRevealed, winGame) {
         console.log("setPuzzleGuessFunction - puzzleTool: " + puzzleToolRevealed);
         console.log("setPuzzleGuessFunction - puzzleID: " + puzzleID);
+        console.log("setPuzzleGuessFunction - textFieldID: " + textFieldID);
+        console.log("setPuzzleGuessFunction - answer: " + answer);
         if (textFieldID) {
             setGamePuzzleGuess({...gamePuzzleGuess, [textFieldID]: guess})
             setGamePuzzleAnswer({...gamePuzzleAnswer, [textFieldID]: answer})
-            let val = shallowEqual(guess,answer);
-            setGamePuzzleAnswerCorrect({...gamePuzzleAnswerCorrect, [textFieldID]: val})
-            /* loop through puzzle array */
-            console.log("gameBottomPuzzle.length: " + gameBottomPuzzle.length);
-            for (let i = 0; i < gameBottomPuzzle.length; i++) {
-                console.log("gameBottomPuzzle[i].id: " + gameBottomPuzzle[i].id + " | puzzleID: " + puzzleID);
-                if (gameBottomPuzzle[i].id == puzzleID) {
-                    /* check if all correct --> textfields have unique ids */
-                   let textFieldKey = false;
-                   let allTrue = true;
-                   let allCorrect = false;
-                   console.log("gameBottomPuzzle[i].textField.items.length: " + gameBottomPuzzle[i].textField.items.length);
-                   for (let j = 0; j < gameBottomPuzzle[i].textField.items.length; j++) {
-                       let key = gameBottomPuzzle[i].textField.items[j].id;
-                       console.log("key in for loop: " + key);
-                       console.log("textFieldID in puzzle check: " + textFieldID);
-                       /* is key in object? */
-                       if (gamePuzzleAnswerCorrect.hasOwnProperty(key) & key != textFieldID) {
-                           console.log("key in gamePuzzleAnswerCorrect: " + key);
-                           /* check if false */
-                           if (!gamePuzzleAnswerCorrect[key]) allTrue = false;
-                       } else {
-                           console.log("key not in gamePuzzleAnswerCorrect: " + key)
-                           if (key === textFieldID) {
-                               if (!val) {
-                                   console.log("key === textfieldID - !val");
-                                   allTrue = false;
-                               } else {
-                                   textFieldKey = true;
-                               }
-                           } else {
-                               allTrue = false;
-                           }
-                       }
-
-                   }
-                   /* if (allTrue) {
-                        console.log("allTrue is true! (test2)");
-                    } else  console.log("allTrue is false! (test2)");
-                    if (textFieldKey) {
-                        console.log(" textFieldKey is true! (test2)");
-                    } else  console.log(" textFieldKey is false! (test2)");*/
-                    if (allTrue &&  textFieldKey) {
-                        console.log("allCorrect is true! (test2)");
-                        allCorrect = true;
-                    } else  console.log("allCorrect is false! (test2)");
-                   /* should be set in useeffect (as a callback)
-                   let gamePuzzleSolvedLocal = gamePuzzleSolved;
-
-                   gamePuzzleSolvedLocal[puzzleID] = allCorrect;
-                   localStorage.setItem("gamePuzzleSolved", JSON.stringify(gamePuzzleSolvedLocal));
-                   */
-                   setGamePuzzleSolved({...gamePuzzleSolved, [puzzleID]:allCorrect});
-
-                   /* set an alert or something */
-                   if (allCorrect) {
-                       console.log("close puzzle window: " + puzzleToolRevealed);
-                       /* close notes */
-                       setAreNotesVisible(false);
-                       /* set toolVisible */
-                       setToolVisible({...toolVisible, [puzzleToolRevealed]:true});
-                       setTimeout(() => {
-                           setGamePuzzleVisibleFunction("puzzle" + puzzleID,false);
-                       }, 1000);
-                       setIsAlertVisible(true);
-                       setAlertText('puzzle solved');
-                       setTimeout(() => {
-                           setIsAlertVisible(false);
-                       }, 2000);
-                       if (winGame) {
-                           updateGameScoreFunction();
-                       }
-                   }
-
-                break;
+            const valArray = [];
+            /* loop through answer object - know it is an object if { in answer */
+            if (answer.includes("{")) {
+                console.log("answer has multiple options");
+                let answerObject = JSON.parse(answer);
+                for (const key in answerObject) {
+                    console.log("loop: " + `${key}: ${answerObject[key]}`);
+                    let val2 = shallowEqual(guess,String(answerObject[key]));
+                    console.log("val2: " + val2);
+                    valArray.push(val2);
                 }
+            } else {
+                let val = shallowEqual(guess,answer);
+                valArray.push(val);
             }
+            console.log("valArray: " + valArray);
+            if (valArray.includes(true)) {
+                setGamePuzzleAnswerCorrect({...gamePuzzleAnswerCorrect, [textFieldID]: true});
+                /* loop through puzzle array if answer is correct */
+                console.log("gamePuzzle.length: " + gamePuzzle.length);
+                for (let i = 0; i < gamePuzzle.length; i++) {
+                    console.log("gamePuzzle.length[i].id: " + gamePuzzle[i].id + " | puzzleID: " + puzzleID);
+                    /* find which puzzle */
+                    if (gamePuzzle[i].id == puzzleID) {
+                        /* check if all correct --> textfields have unique ids */
+                        const allCorrectArray = [];
+                        let textFieldLength = gamePuzzle[i].textField.items.length;
+                        console.log("gamePuzzle[i].textField.items.length: " + textFieldLength);
+                        if (textFieldLength > 1) {
+                            for (let j = 0; j < gamePuzzle[i].textField.items.length; j++) {
+                                let key = gamePuzzle[i].textField.items[j].id;
+                                console.log("key in for loop: " + key);
+                                console.log("textFieldID in puzzle check: " + textFieldID);
+                                /* is key in object? */
+                                if (gamePuzzleAnswerCorrect.hasOwnProperty(key) & key != textFieldID) {
+                                    console.log("key in gamePuzzleAnswerCorrect: " + key);
+                                    /* check if false */
+                                    if (gamePuzzleAnswerCorrect[key]) {
+                                        allCorrectArray.push(true);
+                                    } else {
+                                        allCorrectArray.push(false);
+                                    }
+                                }
+                            }
+
+                        } else {
+                            /* only 1 textfield so puzzle solved!*/
+                            allCorrectArray.push(true);
+                        }
+
+                        if (!allCorrectArray.includes(false)) {
+                            setGamePuzzleSolved({...gamePuzzleSolved, [puzzleID]: true});
+                            /* set an alert or something */
+                            console.log("close puzzle window: " + puzzleToolRevealed);
+                            /* close notes */
+                            setAreNotesVisible(false);
+                            /* set toolVisible */
+                            setToolVisible({...toolVisible, [puzzleToolRevealed]: true});
+                            setTimeout(() => {
+                                setGamePuzzleVisibleFunction("puzzle" + puzzleID, false);
+                            }, 1000);
+                            setIsAlertVisible(true);
+                            setAlertText('puzzle solved');
+                            setTimeout(() => {
+                                setIsAlertVisible(false);
+                            }, 2000);
+                            if (winGame) {
+                                updateGameScoreFunction();
+                            }
+                        } else {
+                            /* puzzle is not solved */
+                            setGamePuzzleSolved({...gamePuzzleSolved, [puzzleID]: false});
+                        }
+                        break;
+                    }
+                }
+
+
+            } else {
+                setGamePuzzleAnswerCorrect({...gamePuzzleAnswerCorrect, [textFieldID]: false});
+            }
+
         }
     }
 
@@ -639,8 +666,8 @@ export function Game() {
                                    <Heading level={"6"} className={isChecked? "heading dark" : "heading light"} paddingTop="10px">{clue.gameClueName}</Heading>
                                    <View paddingTop="10px">{clue.gameClueText}</View>
                                    <Flex className="window-button-bottom" justifyContent="center" gap="1rem">
-                                       <Button className="button small" onClick={()=>setCluesFunction("  ** start clue (" + clue.gameClueName + ") ==> " +
-                                           clue.gameClueText + " <== end clue ** ")}>add clue to notes</Button>
+                                       <Button className="button small" onClick={()=>setCluesFunction("<strong>" + clue.gameClueName + " </strong> ==> " +
+                                           clue.gameClueText + " <br />")}>add clue to notes</Button>
                                        <Button className={isChecked? "close dark" : "close light"} onClick={()=>setGameClueVisibleFunction(["clue" + (clue.id)], false)}>close clue</Button>
                                    </Flex>
                                </View>
@@ -660,14 +687,86 @@ export function Game() {
                                     <Heading level={"6"} className={isChecked? "heading dark" : "heading light"} paddingTop="10px">{clue.gameClueName}</Heading>
                                     <View paddingTop="10px">{clue.gameClueText}</View>
                                     <Flex className="window-button-bottom" justifyContent="center" gap="1rem">
-                                        <Button className="button button-small" onClick={()=>setCluesFunction("  ** start clue (" + clue.gameClueName + ") ==> " +
-                                            clue.gameClueText + " <== end clue ** ")}>add clue to notes</Button>
+                                        <Button className="button button-small" onClick={()=>setCluesFunction("<strong>" + clue.gameClueName + " </strong> ==> " +
+                                            clue.gameClueText + " <br />")}>add clue to notes</Button>
                                         <Button className={isChecked? "close dark" : "close light"} onClick={()=>setGameClueVisibleFunction(["clue" + (clue.id)], false)}>close clue</Button>
                                     </Flex>
                                 </View>
                             </View>
                         </View>
                     ))}
+
+                   {gameTopPuzzle.map(puzzle => (
+                       <View key = {puzzle.id} >
+                           <View className={(zoneVisible==puzzle.gamePlayZoneID)? "puzzle-holder-top" : "hide"}>
+                               <Image src={puzzle.puzzleImage} onClick={()=>setGamePuzzleVisibleFunction(["puzzle" + (puzzle.id)], true)} className={gamePuzzleSolved[puzzle.id]? "hide" : "show puzzle-item"} />
+                               <Image src={puzzle.puzzleImageSolved} className={gamePuzzleSolved[puzzle.id]? "show puzzle-item" : "hide"} />
+                               <Image src={puzzle.puzzleObjectClue} onClick={()=>setGamePuzzleVisibleFunction(["puzzle" + (puzzle.id)], true)} className={gamePuzzleSolved[puzzle.id]? "show clue-on-puzzle" : "hide"} />
+                               <Image className={(gamePuzzleSolved[puzzle.id] && puzzle.puzzleObjectClue != "")? "puzzle-object-tool show" : "hide"} src={puzzle.puzzleObjectClue} onClick={()=>setGamePuzzleClueVisibleFunction(["puzzle" + (puzzle.id)], true)} />
+                               {puzzle.winGame? (
+                                       <Image className={(gamePuzzleSolved[puzzle.id] && puzzle.puzzleToolRevealed != "")? "puzzle-object-tool show" : "hide"} src={puzzle.puzzleToolRevealed} />
+                                   ):
+                                   (
+                                       <Image className={(gamePuzzleSolved[puzzle.id] && puzzle.puzzleToolRevealed != "" && toolVisible[puzzle.puzzleToolRevealed])? "puzzle-object-tool yellow-border show" : "hide"} src={tool[puzzle.puzzleToolRevealed]} onClick={()=>objectInBackpackFunction(puzzle.puzzleToolRevealed)} />
+                                   )}
+                           </View>
+                           <View className={gamePuzzleVisible["puzzle" + (puzzle.id)]? "cover-screen show-gradual" : "cover-screen hide-gradual"}>
+                               <View className={isChecked? "all-screen dark" : "all-screen light"}>
+                                   <Button  className={isChecked? "close-button dark" : "close-button light"}  onClick={()=>setGamePuzzleVisibleFunction(["puzzle" + (puzzle.id)], false)}>X</Button>
+                                   <Heading level={"6"} className={isChecked? "heading dark" : "heading light"} paddingTop="10px">{puzzle.gameClueName}</Heading>
+                                   <View paddingTop="10px" className={gamePuzzleSolved[puzzle.id]? "hide" : "show"}>
+                                       {puzzle.textField.items.map((field,index) => (
+                                           <View key={field.id}>
+                                               {gamePuzzleGuess.hasOwnProperty(field.id) ?
+                                                   (<TextField
+                                                       className={isChecked? "light-label" : 'dark-label '}
+                                                       label={field.label}
+                                                       value={gamePuzzleGuess[field.id]}
+                                                       onChange={(event) => setGamePuzzleGuessFunction(field.id, event.target.value,field.answer, puzzle.id, puzzle.puzzleToolRevealed, puzzle.winGame)}
+                                                   />) : (
+                                                       <TextField
+                                                           className={isChecked? "light-label" : 'dark-label '}
+                                                           label={field.label}
+                                                           value=""
+                                                           onChange={(event) => setGamePuzzleGuessFunction(field.id, event.target.value, field.answer, puzzle.id, puzzle.puzzleToolRevealed, puzzle.winGame)}
+                                                       />)
+                                               }
+                                               { (gamePuzzleAnswerCorrect[field.id]  && gamePuzzleAnswer[field.id] != null && gamePuzzleGuess[field.id] != null) ? (
+                                                   <span className="green"> Right Answer!</span>
+                                               ) : null
+                                               }
+                                           </View>
+                                       ))}
+
+                                   </View>
+
+                                   <Flex className="window-button-bottom" justifyContent="center" gap="1rem">
+                                       <Button className={isChecked? "close dark" : "close light"} onClick={()=>setGamePuzzleVisibleFunction(["puzzle" + (puzzle.id)], false)}>close puzzle</Button>
+                                   </Flex>
+                               </View>
+                           </View>
+
+                           <View className={gamePuzzleClueVisible["puzzle" + (puzzle.id)]? "cover-screen show-gradual" : "cover-screen hide-gradual"}>
+                               <View className={isChecked? "all-screen " : "all-screen light-dark"}>
+
+                                   <Button  className={isChecked? "close-button " : "close-button light-dark"}  onClick={()=>setGamePuzzleClueVisibleFunction(["puzzle" + (puzzle.id)], false)}>X</Button>
+                                   <Heading level={"6"} className={isChecked? "heading dark" : "heading light"} paddingTop="10px">{puzzle.gameClueName}</Heading>
+
+                                   <View paddingTop="10px" className={(gamePuzzleSolved[puzzle.id] && puzzle.puzzleClueText != "")? "show" : "hide"}>
+                                       {puzzle.puzzleClueText}
+                                       <Flex className="window-button-bottom" justifyContent="center" gap="1rem">
+                                           <Button className="button small" onClick={()=>setCluesFunction("<strong>" + clue.gameClueName + " </strong> ==> " +
+                                               clue.gameClueText + " <br />")}>add clue to notes</Button>
+                                           <Button className="button action-button small" onClick={()=>setGamePuzzleClueVisibleFunction(["puzzle" + (puzzle.id)], false)}>close </Button>
+                                       </Flex>
+                                   </View>
+
+                               </View>
+                           </View>
+
+                       </View>
+                   ))}
+
 
                    {gameBottomPuzzle.map(puzzle => (
                        <View key = {puzzle.id} >
@@ -728,8 +827,8 @@ export function Game() {
                                    <View paddingTop="10px" className={(gamePuzzleSolved[puzzle.id] && puzzle.puzzleClueText != "")? "show" : "hide"}>
                                        {puzzle.puzzleClueText}
                                        <Flex className="window-button-bottom" justifyContent="center" gap="1rem">
-                                           <Button className="button small" onClick={()=>setCluesFunction("  ** start clue (" + puzzle.id + ") ==> " +
-                                               puzzle.puzzleClueText + " <== end clue ** ")}>add clue to notes</Button>
+                                           <Button className="button small" onClick={()=>setCluesFunction("<strong>" + clue.gameClueName + " </strong> ==> " +
+                                               clue.gameClueText + " <br />")}>add clue to notes</Button>
                                            <Button className="button action-button small" onClick={()=>setGamePuzzleClueVisibleFunction(["puzzle" + (puzzle.id)], false)}>close </Button>
                                        </Flex>
                                    </View>

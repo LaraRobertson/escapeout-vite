@@ -6,6 +6,7 @@ import {
 } from "./helper";
 
 import {useNavigate} from "react-router-dom";
+import DOMPurify from "dompurify";
 
 export const ToolObject = {
     key: 'https://escapeoutbucket213334-staging.s3.amazonaws.com/public/object-tools/key.png',
@@ -43,13 +44,20 @@ export const CommentWindow = (props) => {
     )
 }
 
+function DangerouslySetInnerHTMLSanitized(htmlContent) {
+    const sanitizedHtmlContent = DOMPurify.sanitize(htmlContent);
+    return (sanitizedHtmlContent)
+}
+
 export const NotesOpen = (props) => {
     return (
         <View className="notes show-gradual">
             <View className={props.isChecked? "all-screen dark" : "all-screen light"} height={"auto"}>
-              <strong>Notes:</strong>
+              <strong>Notes</strong>
             <View className={(props.clues != '' && props.clues != undefined)?"small show":"hide"}>
-                <strong>clues</strong>: {props.clues}
+                <strong>clues</strong>:
+                <View dangerouslySetInnerHTML={ {__html: DangerouslySetInnerHTMLSanitized(props.clues)}}  color={"black"}  padding={"0 10px"}>
+                </View>
                 <View textAlign="center"><Button className={props.isChecked? "link-button small dark" : "link-button small light"} onClick={() => props.setClues('')}>clear clues</Button></View>
             </View>
             <TextAreaField

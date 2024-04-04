@@ -9,7 +9,7 @@ import {
     TextAreaField,
     SwitchField,
     Input,
-    useAuthenticator
+    useAuthenticator, Image
 } from '@aws-amplify/ui-react';
 import {
     gamesByCity,
@@ -26,6 +26,8 @@ import { useNavigate } from 'react-router-dom';
 import {generateClient} from "aws-amplify/api";
 import { fetchUserAttributes } from 'aws-amplify/auth';
 import {deleteGameHint} from "../graphql/mutations";
+import { saveAs } from 'file-saver';
+
 export function Admin() {
     const [email, setEmail] = useState();
     const [games, setGames] = useState([]);
@@ -56,6 +58,11 @@ export function Admin() {
         context.route
     ]);
     const navigate = useNavigate();
+
+
+
+
+
 
     async function getUserGamePlay() {
         const apiData = await client.graphql({
@@ -315,6 +322,46 @@ export function Admin() {
         event.target.reset();
     }
     /* GAME */
+    /* copy game */
+    const initialStateCopyGame = {
+    disabled:
+        false,
+    gameDescriptionH2:
+        "You want to play disc golf but have no discs.",
+    gameDescriptionH3:
+        "Try and find some discs!",
+    gameDescriptionP:
+        "This is a level 2 game. It is a short game with some logic. There are 2 play zones.",
+    gameDesigner:
+        "EscapeOut.games",
+    gameGoals:
+        "Find Discs!",
+    gameImage:
+        "https://escapeoutbucket213334-staging.s3.amazonaws.com/public/Jaycee-Park-Game-Image.jpg",
+    gameIntro:
+        "Discs are hidden somewhere.  Use the clues to find the discs.",
+    gameLevel:
+        "level 2",
+    gameLocationCity:
+        "Tybee Island",
+    gameLocationPlace:
+        "Jaycee Park",
+    gameLocationPlaceDetails:
+        null,
+    gameMap:
+        "https://escapeoutbucket213334-staging.s3.amazonaws.com/public/game-maps/jaycee-park-2pz-map.jpg",
+    gameName:
+        "Disc Golf Hunt and Think",
+    gameType:
+        "free",
+    gameWinMessage:
+        "Great Job On Winning!!!",
+    type:
+        "game",
+    walkingDistance:
+        "500 feet"
+};
+
     const initialStateCreateGame = {
         gameID: '',
         gameName: '',
@@ -833,6 +880,7 @@ export function Admin() {
                 console.log(`${key}: ${gamePuzzle[key]}`);
             }
             setFormCreatePuzzleState(initialStateCreatePuzzle);
+            delete gamePuzzle.textField;
             delete gamePuzzle.updatedAt;
             delete gamePuzzle.__typename;
             await client.graphql({
@@ -1136,7 +1184,11 @@ export function Admin() {
     const initialStateShowHideLabel = {
         gameForm: 'Hide',
         gameSection: 'Hide',
-        userSection: 'Hide'
+        userSection: 'Hide',
+        clueSection: 'Hide',
+        puzzleSection: 'Hide',
+        toolSection: 'Hide',
+        imageSection: 'Hide'
     };
     const [showHideLabel, setShowHideLabel] = useState(initialStateShowHideLabel)
     function divShowHide(divID) {
@@ -1168,7 +1220,20 @@ export function Admin() {
         }
     }, [showHideLabel]);
 
+    async function copyGame(props) {
+        try {
+            const apiData = await client.graphql({
+                query: getGame,
+                variables: {id: props.gameID}
+            });
+            const gamesFromAPI = apiData.data.getGame;
+            const file = new Blob([JSON.stringify(gamesFromAPI)], { type: 'text/plain;charset=utf-8' });
+            saveAs(file, 'game.txt');
+        } catch (err) {
+            console.log('error fetching getGame', err);
+        }
 
+    }
 
     return (
             <View className="main-container" >
@@ -1180,7 +1245,8 @@ export function Admin() {
                         <View padding=".5rem 0">
                             <Button marginRight="5px" onClick={() => navigate('/')}>Home</Button>
                             <Button marginRight="5px" onClick={() => divShowHide("gameSection")}>{showHideLabel.gameSection} Games</Button>
-                            <Button onClick={() =>  divShowHide("userSection")}>{showHideLabel.userSection} Users</Button>
+                            <Button marginRight="5px" onClick={() =>  divShowHide("userSection")}>{showHideLabel.userSection} Users</Button>
+                            <Button marginRight="5px" onClick={() => divShowHide("imageSection")}>{showHideLabel.imageSection} Images</Button>
                         </View>
                         <View as="form" margin="3rem 0" onSubmit={createUserGamePlay}>
                             <Flex direction="row" justifyContent="center">
@@ -1209,6 +1275,28 @@ export function Admin() {
                             </Flex>
                         </View>
                         <UserStatsView title={statsTitle} />
+                        <View id={"imageSection"} className={"show section"}>
+                            <Button marginRight="5px" onClick={() => divShowHide("toolSection")}>{showHideLabel.toolSection} Tools</Button>
+                            <Button marginRight="5px" onClick={() =>  divShowHide("clueSection")}>{showHideLabel.clueSection} Clues</Button>
+                            <Button marginRight="5px" onClick={() => divShowHide("puzzleSection")}>{showHideLabel.puzzleSection} Puzzles</Button>
+
+                            <View id={"toolSection"} className={"show section"}>
+                                <strong>tool section</strong><br />
+                                <Image src={"https://escapeoutbucket213334-staging.s3.amazonaws.com/public/object-tools/discs.png"} /><br />
+                                "discs": https://escapeoutbucket213334-staging.s3.amazonaws.com/public/object-tools/discs.png
+                                <hr />
+                                <Image src={"https://escapeoutbucket213334-staging.s3.amazonaws.com/public/object-tools/key.png"} /><br />
+                                "key": https://escapeoutbucket213334-staging.s3.amazonaws.com/public/object-tools/key.png
+                                <hr />
+                            </View>
+                            <View id={"clueSection"} className={"show section"}>
+                                <strong>clue section</strong><br />
+                            </View>
+                            <View id={"puzzleSection"} className={"show section"}>
+                                <strong>puzzle section</strong><br />
+                            </View>
+
+                        </View>
                         <View id="gameSection" className="show section">
                             <Heading level={3} color="black">Games</Heading>
 
@@ -1224,10 +1312,18 @@ export function Admin() {
                             {games.map((game,index) => (
                                 <View key={game.id} >
                                     <View className={(gameVisible==game.id)? "hide" : "show"}>
+
                                         <Button className={"show-button blue-duke"} onClick={() => setGameVisibleFunction(game.id,index)}>show game detail:</Button>
                                         <strong>name</strong>: {game.gameName} | <strong>type</strong>: {game.gameType} | <strong>place</strong>: {game.gameLocationPlace} | <strong>city</strong>: {game.gameLocationCity}|<strong>disabled</strong>: { game.disabled ? "true":"false"}
                                     </View>
                                     <View className={(gameVisible==game.id)? "show" : "hide"}>
+                                        <hr />
+                                        <Button marginRight="5px" className="button" onClick={() => showGameStats({"gameID": game.id, "gameName": game.gameName})}>Game Stats</Button>
+                                        <Button marginRight="5px" className="button" onClick={() => deleteGame({"gameID": game.id})}>Delete Game</Button>
+                                        <Button marginRight="5px" className="button" onClick={() => showUpdateGame({"gameID": game.id})}>Update Game</Button>
+                                        <Button marginRight="5px" className="button" onClick={() => copyGame({"gameID": game.id})}>Copy Game</Button>
+                                        <Button marginRight="5px" className="button" onClick={() => setInputCreateZone('gameID',game.id)}>Add Game Play Zone</Button>
+                                        <br />
                                         <Button className={"show-button blue-duke"} onClick={() => setGameVisible("")}>close game:</Button>
                                         <strong>name</strong>: {game.gameName} | <strong>type</strong>: {game.gameType} | <strong>place</strong>: {game.gameLocationPlace} | <strong>city</strong>: {game.gameLocationCity}|<strong>disabled</strong>: { game.disabled ? "true":"false"}
                                         <br /><strong>game id</strong>: {game.id}| <strong>game level</strong>: {game.gameLevel}
@@ -1307,11 +1403,7 @@ export function Admin() {
                                         ))}
                                         <hr />
 
-                                    <Button marginRight="5px" className="button" onClick={() => showGameStats({"gameID": game.id, "gameName": game.gameName})}>Game Stats</Button>
-                                    <Button marginRight="5px" className="button" onClick={() => deleteGame({"gameID": game.id})}>Delete Game</Button>
-                                    <Button marginRight="5px" className="button" onClick={() => showUpdateGame({"gameID": game.id})}>Update Game</Button>
-                                    <Button marginRight="5px" className="button" onClick={() => setInputCreateZone('gameID',game.id)}>Add Game Play Zone</Button>
-                                    <hr />
+
                                 </View>
                                 </View>
 

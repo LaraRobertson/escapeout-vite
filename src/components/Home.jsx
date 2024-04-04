@@ -1,5 +1,5 @@
 // components/Home.js
-import React, {useEffect, useState} from "react";
+import React, {useRef, useEffect, useState} from "react";
 import {
     Flex,
     Button,
@@ -40,6 +40,7 @@ import { format } from 'date-fns'
 import {fetchUserAttributes} from "aws-amplify/auth";
 import {LeaderBoard} from "./LeaderBoard";
 import {MyStats} from "./MyStats";
+import emailjs from "@emailjs/browser";
 
 export function Home() {
     const client = generateClient();
@@ -78,6 +79,7 @@ export function Home() {
     const [hidePlayedGames, setHidePlayedGames] = useState(false);
     /* display waiver */
     const [isWaiverVisible, setIsWaiverVisible] = useState(false);
+    const [waiverSigned, setWaiverSigned] = useState("");
     /* display game intro */
     const [isGameIntroVisible, setIsGameIntroVisible] = useState(false);
     /* while game list is loading... maybe should use an icon */
@@ -100,6 +102,9 @@ export function Home() {
 
     const navigate = useNavigate();
 
+    /*const emailRef = useRef<HTMLInputElement>();
+    const nameRef = useRef<HTMLInputElement>();*/
+    const [loadingEmailJS, setLoadingEmailJS] = useState(false);
     /* useEffects */
     /*
     So if you want to perform an action immediately after setting state on a state variable,
@@ -107,44 +112,47 @@ export function Home() {
     But in a functional component no such callback is allowed with useState hook.
     In that case we can use the useEffect hook to achieve it.
      */
-
-  /*
-  using localStorage instead...
-  useEffect(() => {
+    /*
+    using localStorage instead...
+    useEffect(() => {
         console.log("***useEffect***:  fetchGames() - gameLocationCity: " + gameLocationCity);
         fetchGames();
     }, [gameLocationCity]);*/
 
+    /* fetchgames() - on load only */
     useEffect(() => {
         console.log("***useEffect***:  fetchGames():");
         fetchGames();
     }, []);
 
+    useEffect(() => emailjs.init("S1A6humzl0zJ6Jerb"), []);
     /* get email and other user information using amplify's methods */
     /* https://docs.amplify.aws/react/build-a-backend/auth/manage-user-session/ */
     /* https://docs.amplify.aws/react/build-a-backend/auth/manage-user-profile/ */
+    /* user - set by authenticator*/
     useEffect(() => {
         if (user) {
             console.log("***useEffect***: fetchUserDB user.username: " + user.username);
-            /*for (const key in user) {
-                console.log(`${key}: ${ user[key]}`);
-            }*/
             handleFetchUserAttributes({"userName": user.username});
-
         }
     },[user]);
 
+    /* called from useEffect above */
     async function handleFetchUserAttributes(props) {
         try {
             const userAttributes = await fetchUserAttributes();
             console.log("userAttributes.email (home) " + userAttributes.email);
             setEmail(userAttributes.email);
+            if (userAttributes.email != ("lararobertson70@gmail.com" || "rosyrobertson@gmail.com" || "lara@lararobertson.com" || "coastalinitiativellc@gmail.com" || "lara@tybeewebdesign.com")) {
+                handleSubmit({"email": userAttributes.email});
+            }
             fetchUserDB({"email":userAttributes.email, "userName": props.userName});
         } catch (error) {
             console.log(error);
         }
     }
 
+    /* called from handleFetchUserAttributes above */
     async function fetchUserDB(props) {
         /* check if user in database, if not create user and games */
         try {
@@ -177,10 +185,28 @@ export function Home() {
         }
     }
 
+    /* userDB - set above */
     useEffect( () => {
         fetchUserGamePlay();
     }, [userDB]);
 
+    const handleSubmit = async (e) => {
+        /*e.preventDefault();*/
+        const serviceId = "service_adu68mo";
+        const templateId = "template_9qbop4t";
+        try {
+            setLoadingEmailJS(true);
+            await emailjs.send(serviceId, templateId, {
+                from_name: e.email,
+                to_name: "Lara"
+            });
+            console.log("email successfully sent check inbox");
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoadingEmailJS(false);
+        }
+    };
     async function fetchUserGamePlay() {
         console.log("fetchUserGamePlay - userID: " + userDB.id);
         /* check if user in database, if not create user and games */
@@ -229,6 +255,7 @@ export function Home() {
         }
 
     }
+
     function setFilterFetchGame(key, value) {
         console.log("setFilterCreateGame: " + key);
         if (key) {
@@ -247,7 +274,6 @@ export function Home() {
         removeLocalStorage();
         signOut();
     }
-
 
     function setGameLocationCityFunction (city) {
         console.log("setGameLocationCityFunction: " + city);
@@ -296,8 +322,8 @@ export function Home() {
 
     function goToGameDetail(gameDetails) {
         /* set states */
+        console.log("goToGameDetail: " + gameDetails.gameID);
         setGameDetails(gameDetails);
-        /*setGameID(gameDetails.gameID);*/
         setIsGameDetailVisible(true);
     }
 
@@ -305,7 +331,6 @@ export function Home() {
         /* set states */
         console.log("goToLeaderBoard: " + gameDetails.gameID);
         setGameDetails(gameDetails);
-        /*setGameID(gameDetails.gameID);*/
         setIsGameLeaderBoardVisible(true);
     }
 
@@ -323,6 +348,7 @@ export function Home() {
     }
 
     async function goToWaiver(gameDetailsVar) {
+        console.log("goToWaiver");
         /* set gameDetails state */
         setGame(gameDetailsVar);
         /* check if waiver signed */
@@ -342,6 +368,9 @@ export function Home() {
                 /* create a new gameScore and get number of times */
                 const gamesStatsFromAPI = apiGameStats.data.gameStatsByGameID.items[0];
                 localStorage.setItem("gameStatsID", gamesStatsFromAPI.id);
+                /* set waiver signed for game */
+                setWaiverSigned(gameDetailsVar.gameID);
+
                 /* check number of times */
                 /* get game score */
                 try {
@@ -359,6 +388,7 @@ export function Home() {
                         }
                     } else {
                         // localStorage.setItem("numberOfTimes", 0);
+                        /* shouldn't happen now */
                         setNumberOfTimes(0);
                     }
 
@@ -367,12 +397,13 @@ export function Home() {
                 }
                 /* go to game intro */
                 console.log("show game intro: gotowaiver()");
-                setTeamName('');
+                setTeamName("");
                 setNumberOfPlayersError("");
                 setIsGameIntroVisible(true);
             } else {
                 /* go to waiver */
                 console.log("show waiver");
+                setNumberOfTimes(0);
                 setIsWaiverVisible(true);
             }
         } catch (err) {
@@ -383,60 +414,12 @@ export function Home() {
 
     async function agreeToWaiverFunction() {
         console.log("agreeToWaiverFunction");
-        if (isWaiverVisible) {
-            console.log ("agreeToWaiverFunction");
-            console.log("add game stat: (gameID): " + game.gameID);
-            const gameStatsValues = {
-                waiverSigned: true
-            }
-            const data = {
-                gameID: game.gameID,
-                userEmail: email,
-                gameName: game.gameName,
-                gameLocationCity: game.gameLocationCity,
-                gameStates: JSON.stringify(gameStatsValues),
-                type: "gameStats",
-                disabled: false
-            };
-            console.log("data for createGameStats: " + JSON.stringify(data));
-            try {
-                await client.graphql({
-                    query: createGameStats,
-                    variables: {input: data},
-                });
-                /* get gameStatsID */
-                let filter = {
-                    userEmail: {
-                        eq: email
-                    }
-                };
-                try {
-                    const apiGameStats = await client.graphql({
-                        query: gameStatsByGameID,
-                        variables: {filter: filter, gameID: game.gameID}
-                    });
-                    if (apiGameStats.data.gameStatsByGameID.items.length > 0) {
-                        /* means user has signed waiver and there is a gameStat and user has either signed waiver or played before */
-                        const gamesStatsFromAPI = apiGameStats.data.gameStatsByGameID.items[0];
-                        localStorage.setItem("gameStatsID", gamesStatsFromAPI.id);
-                        setIsWaiverVisible(false);
-                        /* go to game intro */
-                        console.log("show game intro - agreetowaiver()");
-                        setTeamName('');
-                        setNumberOfPlayersError("");
-                        setIsGameIntroVisible(true);
-                    } else {
-                        /* go to waiver */
-                        console.log("show waiver");
-                        setIsWaiverVisible(true);
-                    }
-                } catch (err) {
-                    console.log('error gameScoreByGameStatsID..', err)
-                }
-            } catch (err) {
-                console.log('error createGameStats..', err)
-            }
-        }
+        /* set waiver signed for game */
+        setWaiverSigned(game.gameID);
+        setTeamName("");
+        setNumberOfPlayersError("");
+        setIsWaiverVisible(false);
+        setIsGameIntroVisible(true);
 
     }
 
@@ -445,43 +428,103 @@ export function Home() {
         /* A GameStats entry is added the first time a player plays and signs Waiver */
         /* if player agrees to Waiver there will be an entry in GameStats and a GameScore entry is created in goToGame below */
         /* a player may have multiple GameScore entries because they can play more than once */
+        /*
         /* check for team name */
-        if (teamName != "") {
+        if ((teamName != "" && waiverSigned === game.gameID)) {
             /* get game score */
-                setIsGameIntroVisible(false);
-                setNumberOfPlayersError("");
-                let firstTime = true;
-                if (numberOfTimes > 0) {
-                    firstTime = false;
+            setNumberOfPlayersError("");
+            let firstTime=false;
+            /* if first time */
+            if (numberOfTimes === 0) {
+                firstTime=true;
+                console.log("add game stat: (gameID): " + game.gameID);
+                const gameStatsValues = {
+                    waiverSigned: true
                 }
-                /* add new game score */
                 const data = {
-                    gameStatsID: localStorage.getItem("gameStatsID"),
                     gameID: game.gameID,
-                    gameTotalTime: 0,
-                    gameHintTime: 0,
-                    teamName: teamName,
-                    completed: false,
-                    disabled: false,
-                    firstTime: firstTime
+                    userEmail: email,
+                    gameName: game.gameName,
+                    gameLocationCity: game.gameLocationCity,
+                    gameStates: JSON.stringify(gameStatsValues),
+                    type: "gameStats",
+                    disabled: false
                 };
+                console.log("data for createGameStats: " + JSON.stringify(data));
                 try {
                     await client.graphql({
-                        query: createGameScore,
+                        query: createGameStats,
                         variables: {input: data},
                     });
-                    localStorage.setItem("gameID", game.gameID);
-                    localStorage.setItem("gameName",game.gameName);
-                    console.log("go to page: " + '/game');
-                    navigate('/game');
+                    /* get gameStatsID */
+                    let filter = {
+                        userEmail: {
+                            eq: email
+                        }
+                    };
+                    try {
+                        const apiGameStats = await client.graphql({
+                            query: gameStatsByGameID,
+                            variables: {filter: filter, gameID: game.gameID}
+                        });
+                        if (apiGameStats.data.gameStatsByGameID.items.length > 0) {
+                            /* means user has signed waiver and there is a gameStat and user has either signed waiver or played before */
+                            const gamesStatsFromAPI = apiGameStats.data.gameStatsByGameID.items[0];
+                            localStorage.setItem("gameStatsID", gamesStatsFromAPI.id);
+                        } else {
+                            /* go to waiver */
+                            /* should not happen */
+                            console.log("show waiver");
+                            setIsWaiverVisible(true);
+                        }
+                    } catch (err) {
+                        console.log('error gameScoreByGameStatsID..', err)
+                    }
                 } catch (err) {
-                    console.log('error createGameScore..', err)
+                    console.log('error createGameStats..', err)
                 }
+            }
+            /* add new game score */
+            const data = {
+                gameStatsID: localStorage.getItem("gameStatsID"),
+                gameID: game.gameID,
+                gameTotalTime: 0,
+                gameHintTime: 0,
+                teamName: teamName,
+                completed: false,
+                disabled: false,
+                firstTime: firstTime
+            };
+            try {
+                await client.graphql({
+                    query: createGameScore,
+                    variables: {input: data},
+                });
+                localStorage.setItem("gameID", game.gameID);
+                localStorage.setItem("gameName", game.gameName);
+                setIsGameIntroVisible(false);
+                console.log("go to page: " + '/game');
+                navigate('/game');
+            } catch (err) {
+                console.log('error createGameScore..', err)
+            }
+
+
         } else {
             console.log("show game intro: gotogame()");
-            setTeamName('');
-            setNumberOfPlayersError("Please provide a Display Name");
-            setIsGameIntroVisible(true);
+            setTeamName("");
+            /* check if waiver signed*/
+            if (waiverSigned === game.gameID) {
+                console.log("waiver signed (go to game)");
+                setNumberOfPlayersError("Please provide a Display Name");
+                setIsGameIntroVisible(true);
+            } else {
+                /* go to waiver */
+                /* may never happen */
+                console.log("show waiver (go to game)");
+                setIsGameIntroVisible(false);
+                setIsWaiverVisible(true);
+            }
         }
     }
 
@@ -596,15 +639,15 @@ export function Home() {
                               ariaLabel="Currently Playing">
 
                     <View textAlign="center" border="1px solid white" padding="10px">
-                        Currently Playing: {localStorage.getItem("gameName")} &nbsp;&nbsp;<br />
-                        <Button className="go-to-game-button dark" onClick={() => goToCurrentGame({
+                        Currently Playing: {localStorage.getItem("gameName")} &nbsp;&nbsp;<br /><br />
+                        <Button className="go-to-game-button light" onClick={() => goToCurrentGame({
                             gameName:localStorage.getItem("gameLink"),
                             gameID:localStorage.getItem("gameID"),
                             gameScoreID:localStorage.getItem("gameScoreID"),
                             gameStatsID:localStorage.getItem("gameStatsID")})}>
                             go back to game
-                        </Button><br />
-                        <Button className="go-to-game-button dark" onClick={() => goHomeQuit(navigate)}>
+                        </Button><br /><br />
+                        <Button className="go-to-game-button light" onClick={() => goHomeQuit(navigate)}>
                             Quit Game (if this is your first time playing you will not have a "first time" score - no chance for leaderboard)
                         </Button>
                     </View></View></View>): null}
@@ -613,10 +656,13 @@ export function Home() {
                         <strong>GAMES ARE IN TESTING MODE</strong>
                     </View>
                     <Heading level={"6"} className="heading" marginBottom={"10px"}>
-                        Game List (select city) -
-                        <Button className={hidePlayedGames? "hide": "close dark small"} marginLeft="5px" padding="2px 4px" onClick={() => setHidePlayedGames(true)}>hide played games</Button>
-                        <Button className={hidePlayedGames? "close dark small": "hide"} marginLeft="5px"padding="2px 4px" onClick={() => setHidePlayedGames(false)}>show all games</Button>
-                    </Heading>
+                        Game List (select city):
+                        {authStatus === 'authenticated' ? (
+                        <Button className="close dark small" marginLeft="5px" padding="2px 4px" onClick={() => (hidePlayedGames? setHidePlayedGames(false) : setHidePlayedGames(true)) }>
+                            {hidePlayedGames? "show" : "hide"} played games
+                        </Button>
+                            ): (<View></View>) }
+                        </Heading>
 
                     <Flex
                         direction="row"
@@ -978,13 +1024,12 @@ export function Home() {
                             <View>{game.gameGoals}</View>
                             <View className="small italics">{game.gameDescriptionP}</View>
                         </View>
-                        <View>
+                        {/* show/hide? <View>
                             <strong>Game Map</strong><br />
                             <Image maxHeight="100px" src={game.gameMap} />
-                        </View>
+                        </View>*/}
                         <View lineHeight={".9em"}>
                             <span className="small"> <strong>Remember, your time to complete the game is your score and is calculated when you start playing. Each Hint adds 5 minutes to your time.</strong> </span><br />
-
                         </View>
                         <View>
                             <strong>Start Playing when you are here:</strong><br />
@@ -994,13 +1039,13 @@ export function Home() {
                         {(numberOfTimes != 0) ? (
                             <View className="small italics"  margin="0 0 5px 0"> You have played {numberOfTimes} time(s) before - good luck this time! </View>
                         ) : <View className="small italics"  color={"red"}>This is your first time playing this game. Once you hit <strong>PLAY</strong> the game starts. Only first time game scores are competitive with others.</View>}
-
+                        <View className={"small"}><strong>{(waiverSigned === game.gameID)? "(waiver signed - you agree to respect the area around you while playing this game)":"need to sign waiver"}</strong></View>
                         <TextField
                             name="TeamNameField"
                             margin="10px auto"
                             maxWidth="300px"
                             placeholder=""
-                            label="Your Display Name for this game?"
+                            label="Your Display or Team Name for this game?"
                             required
                             value={teamName}
                             onChange={(e) => setTeamNameFunction(e.target.value)}

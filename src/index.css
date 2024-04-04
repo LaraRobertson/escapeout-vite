@@ -71,7 +71,12 @@ button:focus-visible,
   width: var(--amplify-components-authenticator-container-width-max);
   margin: 0 auto;
 }
-
+@media (max-width:480px) {
+  .authenticator {
+    width: 333px;
+    margin: 0 auto;
+  }
+}
 .how-to-play-bullets li {
   margin-bottom: 5px;
 }
@@ -317,6 +322,15 @@ fieldset.comments legend {
   z-index:10;
 }
 
+.puzzle-holder-top {
+  position:absolute;
+  top:0;
+  right:0;
+  width: 100px;
+  height:100px;
+  z-index:10;
+}
+
 .puzzle-object-tool {
   position:absolute;
   bottom: 10px;
@@ -325,6 +339,7 @@ fieldset.comments legend {
 .puzzle-item {
   position:absolute;
   bottom:0;
+  right:0;
 }
 
 .notes {
@@ -626,8 +641,7 @@ isChecked is for light/dark
   line-height: .7em;
   margin-top: 3px;
 }
-.played {
-}
+
 .game-card-bg-image {
   height:100%;
   position:absolute;
