@@ -9,7 +9,6 @@ to your backend configuration using the Amplify CLI, the configuration in
 amplifyconfiguration.json will update automatically. */
 import { Amplify } from 'aws-amplify';
 import amplifyconfig from './amplifyconfiguration.json';
-
 const isLocalhost = Boolean(
 
     window.location.hostname === 'localhost' ||
@@ -34,6 +33,15 @@ if (isLocalhost) {
     amplifyconfig.oauth.redirectSignIn = "http://localhost:5173/"
 
     amplifyconfig.oauth.redirectSignOut = "http://localhost:5173/"
+
+} else if (window.location.hostname === 'dev.play.escapeout.games'
+    // Add Your Application Domain here. For Example:
+    // https://{env}.{appID}.amplifyapp.com/
+) {
+
+    amplifyconfig.oauth.redirectSignIn = "https://dev.play.escapeout.games/"
+
+    amplifyconfig.oauth.redirectSignOut = "https://dev.play.escapeout.games/"
 
 } else if (window.location.hostname === 'play.escapeout.games'
     // Add Your Application Domain here. For Example:

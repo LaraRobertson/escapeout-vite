@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react"
 import {Button, View, Image, TextAreaField, TextField, Flex, Heading, Link, Text, SwitchField} from '@aws-amplify/ui-react';
 import {useNavigate} from "react-router-dom";
 import {
-    toggleIntro,
     toggleHelp,
     toggleMap,
     toggleNotes,
@@ -29,6 +28,28 @@ export function Hurricane1Easy() {
     const [gameHintVisible, setGameHintVisible] = useState({});
     const [playZone, setPlayZone] = useState([]);
     const [zoneVisible, setZoneVisible] = useState("");
+    const [clues, setClues] = useState();
+    const [gameClueVisible, setGameClueVisible] = useState({});
+
+    const [gamePuzzleVisible, setGamePuzzleVisible] = useState({});
+    const [gamePuzzleClueVisible, setGamePuzzleClueVisible] = useState({});
+    const [gameTopClues, setGameTopClues] = useState([]);
+    const [gameBottomClues, setGameBottomClues] = useState([]);
+    const [gameBottomPuzzle, setGameBottomPuzzle] = useState([]);
+    /* guesses and answers */
+    const [gamePuzzleGuess, setGamePuzzleGuess] = useState({});
+    const [gamePuzzleAnswer, setGamePuzzleAnswer] = useState({});
+    const [gamePuzzleAnswerCorrect, setGamePuzzleAnswerCorrect] = useState({});
+    const [gamePuzzleSolved, setGamePuzzleSolved] = useState({});
+    const toolObject = {
+        key: '/key.png',
+        discs: '/discs.png'
+    };
+    const [tool, setTool] = useState(toolObject);
+    const [toolVisible, setToolVisible] = useState({});
+    const [backpackObject, setBackpackObject] = useState({});
+    /* new above */
+
 
     const [isAlertVisible, setIsAlertVisible] = useState(false);
     const [isWinnerScreenVisible, setIsWinnerScreenVisible] = useState(false);
@@ -40,7 +61,6 @@ export function Hurricane1Easy() {
     const [isMapVisible, setIsMapVisible] = useState(false);
     const [gameComments,setGameComments] = useState('');
     const [isBackpackVisible, setIsBackpackVisible] = useState(false);
-    const [gameBackpack, setGameBackpack] = useState([]);
     const [gameTime, setGameTime] = useState(0);
     const [gameTimeHint, setGameTimeHint] = useState(0);
     const [gameTimeTotal, setGameTimeTotal] = useState(0);
@@ -72,6 +92,7 @@ export function Hurricane1Easy() {
         //* check if already playing */
         console.log ("localStorage.getItem('gameTime'): " + localStorage.getItem('gameTime'));
         console.log ("gameTime: " + gameTime);
+
         if (localStorage.getItem("realTimeStart")) {
             setStopClock(false);
             setIsAlertVisible(true);
@@ -86,6 +107,8 @@ export function Hurricane1Easy() {
             setGameScoreID(localStorage.getItem("gameScoreID"));
             setGameTime(Number(localStorage.getItem('gameTime')));
             setGameTimeHint(Number(localStorage.getItem('gameTimeHint')));
+            setGamePuzzleSolved(JSON.parse(localStorage.getItem("gamePuzzleSolved")));
+            setBackpackObject(JSON.parse(localStorage.getItem("backpackObject")));
             /* get game details */
             try {
                 const apiData = await client.graphql({
@@ -96,6 +119,8 @@ export function Hurricane1Easy() {
                 setGame(gamesFromAPI);
                 console.log("getGameDetails resuming: " + gamesFromAPI.gameName);
                 /* already playing - need to make this a function... */
+                //should probably set everything in localstorage...
+                //encrypt answers?
                 /* set up Play Zones: */
                 if (gamesFromAPI.gamePlayZone.items.length > 0) {
                     let gameZoneArray = gamesFromAPI.gamePlayZone.items.sort((a, b) => {
@@ -107,19 +132,82 @@ export function Hurricane1Easy() {
                 }
                 /* set up game hints: */
                 if (gamesFromAPI.gameHint.items.length > 0) {
+
                     let gameHintArray = gamesFromAPI.gameHint.items.sort((a, b) => {
                         return a.order - b.order;
                     });
                     setGameHint(gameHintArray);
                     console.log("gamesFromAPI.gameHint.items.length: " + gamesFromAPI.gameHint.items.length);
                     /* set up state visibility */
-                    let i = 0;
-                    while (i <gamesFromAPI.gameHint.items.length) {
+                    for (let i=0; i <gamesFromAPI.gameHint.items.length; i++) {
                         let key = "help" + (i + 1);
                         setGameHintVisibleFunction(key, false);
-                        i++;
                     }
                 }
+                /* set up game clues: */
+                if (gamesFromAPI.gameClue.items.length > 0) {
+                    /* filter by position */
+                    let gameClueTopArray = gamesFromAPI.gameClue.items.filter(clue => clue.gameCluePosition === "top")
+                        .sort((a, b) => {
+                        return a.order - b.order;
+                    });
+                    setGameTopClues(gameClueTopArray);
+                    console.log("gameClueTopArray: " + gameClueTopArray);
+                    let gameClueBottomArray = gamesFromAPI.gameClue.items.filter(clue => clue.gameCluePosition === "bottom")
+                        .sort((a, b) => {
+                            return a.order - b.order;
+                        });
+                    setGameBottomClues(gameClueBottomArray);
+            //console.log("gamesFromAPI.gameClue.items.length: " + gamesFromAPI.gameClue.items.length);
+            /* set up state visibility for clues */
+                    for (let i = 0; i < gamesFromAPI.gameClue.items; i++) {
+                        let key = "clue" + (gamesFromAPI.gameClue.items[i].id);
+                        setGameClueVisibleFunction(key, false);
+                    }
+                }
+                let puzzleArray = [
+                    {
+                        id: "xxx2",
+                        gameID: '',
+                        gamePlayZoneID: 'b2972f95-7b36-4e81-aaeb-baa7d9ccd440',
+                        puzzleName: 'puzzle test',
+                        puzzlePosition: '',
+                        puzzleImage: '/safe.png',
+                        puzzleImageSolved: '/open-safe.png',
+                        textField: [
+                            {id:"1",name:"textfield1", label:"Word 1 (9 letters - hanging sign)", answer:"1"},
+                            {id:"2",name:"textfield2", label:"Word 2 (5 letters - torn diary page)", answer:"2"},
+                            {id:"3",name:"textfield3", label:"Word 3 (8 letters - diary)", answer:"3"},
+                        ],
+                        puzzleObjectClue:  '',
+                        puzzleClueText: '',
+                        puzzleTool: 'key',
+                        order: '',
+                        winGame: false,
+                        disabled: false
+                    },
+                    {
+                        id: "xxx3",
+                        gameID: '',
+                        gamePlayZoneID: 'f06d403c-54bf-4dca-8041-d64c09dd473f',
+                        puzzleName: 'puzzle test 2',
+                        puzzlePosition: '',
+                        puzzleImage: '/metal-cage-closed.png',
+                        puzzleImageSolved: '/metal-cage-open.png',
+                        textField: [
+                            {id:"1",name:"textfield1", label:"Word 1 (9 letters - hanging sign)", answer:"1"},
+                            {id:"2",name:"textfield2", label:"Word 2 (5 letters - torn diary page)", answer:"2"},
+                            {id:"3",name:"textfield3", label:"Word 3 (8 letters - diary)", answer:"3"},
+                        ],
+                        puzzleObjectClue:  '',
+                        puzzleClueText: '',
+                        puzzletool: 'discs',
+                        order: '',
+                        winGame: true,
+                        disabled: false
+                    },
+                ];
+                setGameBottomPuzzle(puzzleArray);
             } catch (err) {
                 console.log('error fetching getGame', err);
             }
@@ -180,25 +268,90 @@ export function Hurricane1Easy() {
                         return a.order - b.order;
                     });
                     setPlayZone(gameZoneArray);
+                    setZoneVisible(gameZoneArray[0].id);
                     console.log("gamesFromAPI.gamePlayZone.items.length: " + gamesFromAPI.gamePlayZone.items.length);
-
                 }
                 /* set up game hints: */
                 if (gamesFromAPI.gameHint.items.length > 0) {
+
                     let gameHintArray = gamesFromAPI.gameHint.items.sort((a, b) => {
                         return a.order - b.order;
                     });
                     setGameHint(gameHintArray);
                     console.log("gamesFromAPI.gameHint.items.length: " + gamesFromAPI.gameHint.items.length);
                     /* set up state visibility */
-                    let i = 0;
-                    while (i <gamesFromAPI.gameHint.items.length) {
+                    for (let i=0; i <gamesFromAPI.gameHint.items.length; i++) {
                         let key = "help" + (i + 1);
                         setGameHintVisibleFunction(key, false);
-                        i++;
                     }
                 }
-
+                /* set up game clues: */
+                if (gamesFromAPI.gameClue.items.length > 0) {
+                    /* filter by position */
+                    let gameClueTopArray = gamesFromAPI.gameClue.items.filter(clue => clue.gameCluePosition === "top")
+                        .sort((a, b) => {
+                            return a.order - b.order;
+                        });
+                    setGameTopClues(gameClueTopArray);
+                    console.log("gameClueTopArray: " + gameClueTopArray);
+                    let gameClueBottomArray = gamesFromAPI.gameClue.items.filter(clue => clue.gameCluePosition === "bottom")
+                        .sort((a, b) => {
+                            return a.order - b.order;
+                        });
+                    setGameBottomClues(gameClueBottomArray);
+                    //console.log("gamesFromAPI.gameClue.items.length: " + gamesFromAPI.gameClue.items.length);
+                    /* set up state visibility for clues */
+                    for (let i = 0; i < gamesFromAPI.gameClue.items; i++) {
+                        let key = "clue" + (gamesFromAPI.gameClue.items[i].id);
+                        setGameClueVisibleFunction(key, false);
+                    }
+                }
+                let puzzleArray = [
+                    {
+                        id: "xxx2",
+                        gameID: '',
+                        gamePlayZoneID: 'b2972f95-7b36-4e81-aaeb-baa7d9ccd440',
+                        puzzleName: 'puzzle test',
+                        puzzlePosition: '',
+                        puzzleImage: '/safe.png',
+                        puzzleImageSolved: '/open-safe.png',
+                        textField: [
+                            {id:"1",name:"textfield1", label:"Word 1 (9 letters - hanging sign)", answer:"1"},
+                            {id:"2",name:"textfield2", label:"Word 2 (5 letters - torn diary page)", answer:"2"},
+                            {id:"3",name:"textfield3", label:"Word 3 (8 letters - diary)", answer:"3"},
+                        ],
+                        puzzleObjectClue: '',
+                        puzzleClueText: '',
+                        puzzletool: 'key',
+                        order: '',
+                        winGame: false,
+                        disabled: false
+                    },
+                    {
+                        id: "xxx3",
+                        gameID: '',
+                        gamePlayZoneID: 'f06d403c-54bf-4dca-8041-d64c09dd473f',
+                        puzzleName: 'puzzle test 2',
+                        puzzlePosition: '',
+                        puzzleImage: '/metal-cage-closed.png',
+                        puzzleImageSolved: '/metal-cage-open.png',
+                        textField: [
+                            {id:"1",name:"textfield1", label:"Word 1 (9 letters - hanging sign)", answer:"1"},
+                            {id:"2",name:"textfield2", label:"Word 2 (5 letters - torn diary page)", answer:"2"},
+                            {id:"3",name:"textfield3", label:"Word 3 (8 letters - diary)", answer:"3"},
+                        ],
+                        puzzleObjectClue:  '',
+                        puzzleClueText: '',
+                        puzzleTool: 'discs',
+                        order: '',
+                        winGame: true,
+                        disabled: false
+                    },
+                ];
+                setGameBottomPuzzle(puzzleArray);
+                console.log("puzzleArray[0].id: " + puzzleArray[0].id);
+                let gamePuzzleSolveID = puzzleArray[0].id;
+                setGamePuzzleSolved({...gamePuzzleSolved, [gamePuzzleSolveID]:false});
             } catch (err) {
                 console.log('error fetching getGame', err);
             }
@@ -223,6 +376,20 @@ export function Hurricane1Easy() {
         /* set local storage for gameStop - only on mount - to recover from refresh */
         isChecked? setLightDark("background:white"): setLightDark("background:black");
     }, [isChecked]);
+    useEffect(() => {
+        let gamePuzzleSolvedTest = JSON.stringify(gamePuzzleSolved);
+        console.log("***useEffect***:gamePuzzleSolved: " + gamePuzzleSolvedTest);
+        if (gamePuzzleSolvedTest != "{}" &&  gamePuzzleSolvedTest != "" &&  gamePuzzleSolvedTest != null) {
+            localStorage.setItem("gamePuzzleSolved", gamePuzzleSolvedTest);
+        }
+    }, [gamePuzzleSolved]);
+    useEffect(() => {
+        let backpackObjectTest = JSON.stringify(backpackObject);
+        console.log("***useEffect***: backpackObject: " +  backpackObjectTest);
+        if (backpackObjectTest != "{}" &&  backpackObjectTest != "" &&  backpackObjectTest != null) {
+            localStorage.setItem("backpackObject", backpackObjectTest);
+        }
+    }, [backpackObject]);
     /* always scroll to top */
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -240,80 +407,7 @@ export function Hurricane1Easy() {
     }
     /* end for all games */
 
-    /* STOP 1 */
-    /* guessing states and answers for 1st safe - 3 words */
-    /* game answers */
-    const [guess1, setGuess1] = useState('');
-    const [haveGuessed1, setHaveGuessed1] = useState(false);
-    const [isWrong1, setIsWrong1] = useState(true);
-    const [answer1] = useState("Wesseling");
 
-    const [guess2, setGuess2] = useState('');
-    const [haveGuessed2, setHaveGuessed2] = useState(false);
-    const [isWrong2, setIsWrong2] = useState(true);
-    const [answer2] = useState("Guard");
-
-    const [guess3, setGuess3] = useState('');
-    const [haveGuessed3, setHaveGuessed3] = useState(false);
-    const [isWrong3, setIsWrong3] = useState(true);
-    const [answer3] = useState("baseball");
-
-    /* end guessing states and answers for 1st safe - 3 words */
-
-    function checkAnswer(guess1Val, guess2Val, guess3Val) {
-        setGuess1(guess1Val);
-        setGuess2(guess2Val);
-        setGuess3(guess3Val);
-        let x = 0;
-        console.log("guess: " + guess1);
-        if (guess1Val != '' && shallowEqual(guess1Val,answer1)) {
-            console.log("guess 1 is right");
-            setHaveGuessed1(true);
-            setIsWrong1(false);
-            x = x + 1;
-        } else {
-            console.log("wrong guess1");
-            if (guess1Val != '') {
-                setHaveGuessed1(true);
-                setIsWrong1(true);
-            }
-        }
-        if (guess2Val != '' && shallowEqual(guess2Val,answer2)) {
-            console.log("guess 2 is right");
-            setHaveGuessed2(true);
-            setIsWrong2(false);
-            x = x + 1;
-        } else {
-            console.log("wrong guess2");
-            if (guess2Val != '') {
-                setHaveGuessed2(true);
-                setIsWrong2(true);
-            }
-        }
-        if (guess3Val != '' && shallowEqual(guess3Val,answer3)) {
-            console.log("guess 3 is right");
-            setHaveGuessed3(true);
-            setIsWrong3(false);
-            x = x + 1;
-        } else {
-            console.log("wrong guess3");
-            if (guess3Val != '') {
-                setHaveGuessed3(true);
-                setIsWrong3(true);
-            }
-        }
-        /* set wingame */
-        if (x == 3) {
-            console.log("stop 1 open safe");
-            /* set timeout to close window? */
-            /* isSafeInfoVisible - close in 3 seconds because solved*/
-            setTimeout(() => {
-                setIsSafeInfoVisible(false);
-            }, 3000);
-
-        }
-    }
-    /* end guessing states and answers for 1st  safe - 3 words */
 
     /* FINAL: guessing states and answers for 2nd safe - 1 word */
     const [guess4,setGuess4] = useState('');
@@ -345,106 +439,25 @@ export function Hurricane1Easy() {
         }
     }
 
-    /* game action */
-    /* sign is hanging */
-    const [isSignVisible, setIsSignVisible] = useState(false);
-    function toggleSign() {
-        isSignVisible ? setIsSignVisible(false) : setIsSignVisible(true);
-     }
-    /* torn diary with message */
-    const [isTornDiaryVisible, setIsTornDiaryVisible] = useState(false);
-    function toggleTornDiary() {
-        isTornDiaryVisible ? setIsTornDiaryVisible(false) : setIsTornDiaryVisible(true);
-    }
-    /* diary with message */
-    const [isDiaryVisible, setIsDiaryVisible] = useState(false);
-    function toggleDiary() {
-        isDiaryVisible ? setIsDiaryVisible(false) : setIsDiaryVisible(true);
-     }
-    /* need to click on safe */
-    const [isSafeInfoVisible, setIsSafeInfoVisible] = useState(false);
-    function toggleSafe() {
-        isSafeInfoVisible ? setIsSafeInfoVisible(false) : setIsSafeInfoVisible(true);
-    }
-    /* need to select prybar and then click on cement marking */
-    const [isCementSafeInfoVisible, setIsCementSafeInfoVisible] = useState(false);
-    function toggleCementSafeInfo() {
-        isCementSafeInfoVisible ? setIsCementSafeInfoVisible(false) : setIsCementSafeInfoVisible(true);
-    }
-    /* show 2nd safe and message */
-    const [isCementSafeOpen, setIsCementSafeOpen] = useState(false);
-    function toggleCementSafe() {
-        isCementSafeOpen ? setIsCementSafeOpen(false) : setIsCementSafeOpen(true);
-    }
 
-    /* Finish Game (not move on to next stop) */
-    const [isSandbagMessageVisible, setIsSandbagMessageVisible] = useState(false);
-    function toggleSandbagMessages() {
-        isSandbagMessageVisible ? setIsSandbagMessageVisible(false) : setIsSandbagMessageVisible(true);
-    }
-    /* backpack functions */
-    /* backpack items: key */
-    /* key is used to open sandbag vault */
-    const [isKeyOn, setIsKeyOn] = useState(false);
-    function showItemContents(value) {
-        console.log("show contents value: " + value);
-        switch (value) {
-            case 'key':
-                console.log("isKeyOn 1: " + isKeyOn);
-                setIsKeyOn(!isKeyOn);
-                // change image
-                for (var i = 0; i < gameBackpack.length; i++) {
-                    if (gameBackpack[i].key === "key") {
-                        console.log("turn on/off key - state");
-                        if (!isKeyOn) {
-                            gameBackpack[i].src = "https://escapeoutbucket213334-staging.s3amazonaws.com/public/hurricane/key-using.png"
-                            localStorage.setItem("key", "https://escapeoutbucket213334-staging.s3amazonaws.com/public/hurricane/key-using.png");
-                        } else {
-                            gameBackpack[i].src = "https://escapeoutbucket213334-staging.s3amazonaws.com/public/hurricane/key-not-using.png"
-                            localStorage.setItem("key", "https://escapeoutbucket213334-staging.s3amazonaws.com/public/hurricane/key-not-using.png");
-                        }
-                    }
-                }
-                break;
-            default:
-        }
-    }
-    /* remove key from window and put in backpack and turn off on in backpack */
-    const [isKeyVisible, setIsKeyVisible] = useState(true);
-    function keyInBackpack() {
-        setIsKeyVisible(false);
+    function objectInBackpackFunction(key) {
+        setToolVisible({...toolVisible, [key]:false});
+        setBackpackObject({...backpackObject, [key]:"off"});
         setIsAlertVisible(true);
-        setAlertText('Key is in backpack')
+        setAlertText(key + " is in backpack");
         setTimeout(() => {
             setIsAlertVisible(false);
          }, 3000);
-        console.log("put key in backpack");
-        localStorage.setItem("key", "https://escapeoutbucket213334-staging.s3amazonaws.com/public/hurricane/key-not-using.png");
-        /* check if there */
-        if (gameBackpack.length > 0) {
-            for (var i = 0; i < gameBackpack.length; i++) {
-                var bptest = true;
-                if (gameBackpack[i].key === "key") {
-                    console.log("key is already there");
-                    bptest = false;
-                }
-            }
-            if (bptest === true) {
-                console.log("push key to backpack");
-                gameBackpack.push({
-                    src: 'https://escapeoutbucket213334-staging.s3amazonaws.com/public/hurricane/key-not-using.png',
-                    key: 'key'
-                })
-            }
-        } else {
-            console.log("push key to backpack (1st item)");
-            gameBackpack.push({
-                src: 'https://escapeoutbucket213334-staging.s3amazonaws.com/public/hurricane/key-not-using.png',
-                key: 'key'
-            })
-        }
+        console.log(key + " is in backpack");
     }
-    /* end stop 1 - game specific */
+
+    function setAlertTextFunction(alertText) {
+        setIsAlertVisible(true);
+        setAlertText(alertText);
+        setTimeout(() => {
+            setIsAlertVisible(false);
+        }, 3000);
+    }
     const backgroundImage = (src) => (
         "url("+ src + ")");
     const keyID = (src,name) => (
@@ -453,74 +466,108 @@ export function Hurricane1Easy() {
         background:  "url(" + src + ") 0 0 / contain no-repeat"
     });
 
-
-   const clueTopArray = {
-        items: [
-               {
-                   clue_id: 1,
-                   clue_name: "clue name 1",
-                   clue_image: "/hanging-sign-tree.png",
-                   clue_text: "The hanging sign on tree clue is don't come around here no more.",
-                   playzone_id: "b2972f95-7b36-4e81-aaeb-baa7d9ccd440",
-                   position: "top",
-                   order: 2
-               },
-               {
-                   clue_id: 2,
-                   clue_name: "clue name 2",
-                   clue_image: "/torndiarypage.png",
-                   clue_text: "the torn diary page clue is mysterious.",
-                   playzone_id: "b2972f95-7b36-4e81-aaeb-baa7d9ccd440",
-                   position: "top",
-                   order: 3
-               },
-                {
-                    clue_id: 3,
-                    clue_name: "clue name 3",
-                    clue_image: "/torndiarypage.png",
-                    clue_text: "the torn diary page clue is mysterious.",
-                    playzone_id: "f06d403c-54bf-4dca-8041-d64c09dd473f",
-                    position: "top",
-                    order: 3
-                },
-       ]};
-   /* remove below */
-    const [clues, setClues] = useState();
-    /* end */
-
-    const [gameClueVisible, setGameClueVisible] = useState({});
-
-    /* create function,  useeffect on load? */
-    /* will move up to 103 or where hintArray is set */
-    const clueTopArraySorted = clueTopArray.items.sort((a, b) => {
-        return a.order - b.order;
-    });
-    const [gameTopClues, setGameTopClues] = useState(clueTopArraySorted);
-    //setGameClues(clueHintArray);
-    //console.log("gamesFromAPI.gameClue.items.length: " + gamesFromAPI.gameClue.items.length);
-    /* set up state visibility for clues */
-    let i = 0;
-    while (i < clueTopArraySorted) {
-        /* should key be hint id? */
-        let key = "clue" + (i + 1);
-        setGameClueVisibleFunction(key, false);
-        i++;
-    }
-
     function setGameClueVisibleFunction(key, value) {
         console.log("setGameClueVisibleFunction: " + key);
         if (key) {
             setGameClueVisible({...gameClueVisible, [key]: value})
         }
     }
-
-    function toggleClue(clueID) {
-        isSignVisible ? setIsSignVisible(false) : setIsSignVisible(true);
+    function setGamePuzzleVisibleFunction(key, value) {
+        console.log("setGamePuzzleVisibleFunction: " + key);
+        if (key) {
+            setGamePuzzleVisible({...gamePuzzleVisible, [key]: value})
+        }
     }
+    function setGamePuzzleClueVisibleFunction(key, value) {
+        console.log("setGamePuzzleClueVisibleFunction: " + key);
+        if (key) {
+            setGamePuzzleClueVisible({...gamePuzzleClueVisible, [key]: value})
+        }
+    }
+    function setGamePuzzleGuessFunction(textFieldID, guess, answer, puzzleID, puzzleTool, winGame) {
+        console.log("setPuzzleGuessFunction - puzzleTool: " + puzzleTool);
+        console.log("setPuzzleGuessFunction - puzzleID: " + puzzleID);
+        if (textFieldID) {
+            setGamePuzzleGuess({...gamePuzzleGuess, [textFieldID]: guess})
+            setGamePuzzleAnswer({...gamePuzzleAnswer, [textFieldID]: answer})
+            let val = shallowEqual(guess,answer);
+            setGamePuzzleAnswerCorrect({...gamePuzzleAnswerCorrect, [textFieldID]: val})
+            /* loop through puzzle array */
+            for (let i = 0; i < gameBottomPuzzle.length; i++) {
+                if (gameBottomPuzzle[i].id == puzzleID) {
+                    /* check if all correct --> textfields have unique ids */
+                   let textFieldKey = false;
+                   let allTrue = true;
+                   let allCorrect = false;
+                   for (let j = 0; j < gameBottomPuzzle[i].textField.length; j++) {
+                       let key = gameBottomPuzzle[i].textField[j].id;
+                       console.log("key in for loop: " + key);
+                       console.log("textFieldID in puzzle check: " + textFieldID);
+                       /* is key in object? */
+                       if (gamePuzzleAnswerCorrect.hasOwnProperty(key) & key != textFieldID) {
+                           console.log("key in gamePuzzleAnswerCorrect: " + key);
+                           /* check if false */
+                           if (!gamePuzzleAnswerCorrect[key]) allTrue = false;
+                       } else {
+                           console.log("key not in gamePuzzleAnswerCorrect: " + key)
+                           if (key === textFieldID) {
+                               if (!val) {
+                                   console.log("key === textfieldID - !val");
+                                   allTrue = false;
+                               } else {
+                                   textFieldKey = true;
+                               }
+                           } else {
+                               allTrue = false;
+                           }
+                       }
+
+                   }
+                   /* if (allTrue) {
+                        console.log("allTrue is true! (test2)");
+                    } else  console.log("allTrue is false! (test2)");
+                    if (textFieldKey) {
+                        console.log(" textFieldKey is true! (test2)");
+                    } else  console.log(" textFieldKey is false! (test2)");*/
+                    if (allTrue &&  textFieldKey) {
+                        console.log("allCorrect is true! (test2)");
+                        allCorrect = true;
+                    } else  console.log("allCorrect is false! (test2)");
+                   /* should be set in useeffect (as a callback)
+                   let gamePuzzleSolvedLocal = gamePuzzleSolved;
+
+                   gamePuzzleSolvedLocal[puzzleID] = allCorrect;
+                   localStorage.setItem("gamePuzzleSolved", JSON.stringify(gamePuzzleSolvedLocal));
+                   */
+                   setGamePuzzleSolved({...gamePuzzleSolved, [puzzleID]:allCorrect});
+
+                   /* set an alert or something */
+                   if (allCorrect) {
+                       console.log("close puzzle window: " + puzzleTool);
+                       /* set toolVisible */
+                       setToolVisible({...toolVisible, [puzzleTool]:true});
+                       setTimeout(() => {
+                           setGamePuzzleVisibleFunction("puzzle" + puzzleID,false);
+                       }, 2000);
+                       setIsAlertVisible(true);
+                       setAlertText('puzzle solved');
+                       setTimeout(() => {
+                           setIsAlertVisible(false);
+                       }, 3000);
+                   }
+
+                break;
+                }
+            }
+        }
+    }
+
+
+
     return (
         <View position="relative" height="100%">
-            <View className={isChecked? "game-container " : "game-container light-dark"}>
-                <View className="top-bar light-dark">
+            <View className={isChecked? "game-container dark" : "game-container light"}>
+                <View className="top-bar">
                     <Flex className="zone-holder"
                           direction="row"
                           justifyContent="flex-start"
@@ -530,164 +577,183 @@ export function Hurricane1Easy() {
                           gap="1rem">
                         {playZone.map((zone,index) => (
                             <View key={zone.id} ariaLabel={zone.id}>
-                                <Image className={(zoneVisible==zone.id)? "zone-border show" : "show"} src={zone.gameZoneDescription}  onClick={() => setZoneVisible(zone.id)} />
+                                <Image className={(zoneVisible==zone.id)? "zone-border show" : "show"} src={zone.gameZoneIcon}  onClick={() => setZoneVisible(zone.id)} />
                             </View>
                                 ))}
                     </Flex>
                     <View className="backpack-holder">
-                        <Image src='/backpack-new.png' />
+                        <Image src='/backpack-new.png' onClick={()=>setIsBackpackVisible(true)} />
                     </View>
 
                 </View>
 
                <View className="play-area">
-                <View className="image-mask light-dark-mask"></View>
+
+                <View className="image-mask"></View>
 
                    {playZone.map((zone,index) => (
                        <View aria-label={keyID(zone.id,"zone")} key={keyID(zone.id,"zone")} className={(zoneVisible==zone.id)? "image-holder show" : "hide"} backgroundImage={backgroundImage(zone.gameZoneImage)}></View>
                    ))}
 
-                    <View className="clue-holder-bottom">
-                            <Image src='/torndiarypage.png' />
-                            <Image src='/diary.png' />
-                    </View>
+                   <View className={isBackpackVisible? "cover-screen show-gradual" : "cover-screen hide-gradual"}>
+                       <View className={isChecked? "all-screen dark" : "all-screen light"}>
+                           <Button className={isChecked? "close-button dark" : "close-button light"} onClick={()=>setIsBackpackVisible(false)}>X</Button>
+                           <Heading level={"6"} className={isChecked? "heading dark" : "heading light"} paddingTop="10px">Backpack Contents</Heading>
+                           <View paddingTop="10px">
+                           {Object.entries(backpackObject).map(([key, value]) => (
+                               <View key={key}>
 
+                                   <Image className={(value==="on")? "red-border show" : "hide"} src={tool[key]}
+                                          onClick={()=>setBackpackObject({...backpackObject, [key]:"off"})} />
+                                   <Image className={(value==="off")? "show" : "hide"} src={tool[key]}
+                                          onClick={()=>setBackpackObject({...backpackObject, [key]:"on"})} />
+                                  <span className={"small"}>{key}:{value}</span>
+                                   <br />
+
+                               </View>
+                               ))}
+                            </View>
+                       </View>
+                   </View>
 
                    {gameTopClues.map((clue,index) => (
-                       <View key={clue.clue_id} ariaLabel={clue.clue_id}>
-                           <View ariaLabel={clue.clue_name} top={((index)*60) + "px"} className="clickable clue-top" onClick={()=>setGameClueVisibleFunction(["clue" + (index + 1)], true)}>
-                               <Image src = {clue.clue_image} />
-                           </View>
-                           <View className={gameClueVisible["clue" + (index+1)]? "cover-screen show-gradual" : "cover-screen hide-gradual"}>
-                               <View className="all-screen light-dark">
-                                   <Button className="close-button light-dark" onClick={()=>setGameClueVisibleFunction(["clue" + (index + 1)], false)}>X</Button>
-                                   <Heading level={"6"} className="heading  light-dark" paddingTop="10px">{clue.clue_name}</Heading>
-                                   <View paddingTop="10px">{clue.clue_text}</View>
+                       <View key={clue.id} ariaLabel={clue.id}>
+                           {/* if clue.gameTool then Tool is required and must be turned on and using clue.gameImage for now */
+                               (clue.gameClueImage != '' && clue.gameClueImage !=null)? (
+
+                                           <View ariaLabel={clue.gameClueName} top={((clue.order-1)*60) + "px"}
+                                                 className={(zoneVisible==clue.gamePlayZoneID)? "clue-top" : "hide"}>
+                                               <Image src = {clue.gameClueIcon}  className={(backpackObject[clue.gameClueImage] === "on")? "clickable" : "hide"} onClick={()=>setGameClueVisibleFunction(["clue" + (clue.id)], true)}/>
+                                               <Image src = {clue.gameClueIcon}  className={(backpackObject[clue.gameClueImage] === "off")? "clickable" : "hide"} onClick={()=>setAlertTextFunction("object needed")}/>
+                                           </View>
+
+                               ) : (
+                                   <View ariaLabel={clue.gameClueName} top={((clue.order-1)*60) + "px"}
+                                         className={(zoneVisible==clue.gamePlayZoneID)? "clickable clue-top" : "hide"}>
+                                       <Image src = {clue.gameClueIcon} onClick={()=>setGameClueVisibleFunction(["clue" + (clue.id)], true)}/>
+                                   </View>
+
+                               )
+
+
+                           }
+
+                           <View className={gameClueVisible["clue" + (clue.id)]? "cover-screen show-gradual" : "cover-screen hide-gradual"}>
+                               <View className={isChecked? "all-screen dark" : "all-screen light"}>
+                                   <Button className={isChecked? "close-button dark" : "close-button light"} onClick={()=>setGameClueVisibleFunction(["clue" + (clue.id)], false)}>X</Button>
+                                   <Heading level={"6"} className={isChecked? "heading dark" : "heading light"} paddingTop="10px">{clue.gameClueName}</Heading>
+                                   <View paddingTop="10px">{clue.gameClueText}</View>
                                    <Flex className="window-button-bottom" justifyContent="center" gap="1rem">
-                                       <Button className="button small" onClick={()=>setCluesFunction("  ** start clue (" + clue.clue_name + ") ==> " +
-                                           clue.clue_text + " <== end clue ** ")}>add clue to notes</Button>
-                                       <Button className="button action-button small" onClick={()=>setGameClueVisibleFunction(["clue" + (index + 1)], false)}>close clue</Button>
+                                       <Button className="button small" onClick={()=>setCluesFunction("  ** start clue (" + clue.id + ") ==> " +
+                                           clue.gameClueText + " <== end clue ** ")}>add clue to notes</Button>
+                                       <Button className="button action-button small" onClick={()=>setGameClueVisibleFunction(["clue" + (clue.id)], false)}>close clue</Button>
                                    </Flex>
                                </View>
                            </View>
                        </View>
                    ))}
-                    {gameTopClues.map((clue,index) => (
-                        <View key={keyID(clue.clue_id,"clue")} ariaLabel={keyID(clue.clue_id,"clue")}>
-                            <View ariaLabel={clue.clue_name} top={((index)*60) + "px"} className="clickable clue-top" onClick={()=>setGameClueVisibleFunction(["clue" + (index + 1)], true)}>
-                                <Image src = {clue.clue_image} />
+                    {gameBottomClues.map((clue,index) => (
+                        <View key={keyID(clue.id,"clue")} ariaLabel={keyID(clue.id,"clue")}>
+                            <View ariaLabel={clue.gameClueName} left={((clue.order-1)*60) + "px"}
+                                  className={(zoneVisible==clue.gamePlayZoneID)? "clickable clue-holder-bottom" : "hide"}
+                                  onClick={()=>setGameClueVisibleFunction(["clue" + (clue.id)], true)}>
+                                <Image src = {clue.gameClueIcon} />
                             </View>
-                            <View className={gameClueVisible["clue" + (index+1)]? "cover-screen show-gradual" : "cover-screen hide-gradual"}>
-                                <View className="all-screen light-dark">
-                                    <Button className="close-button light-dark" onClick={()=>setGameClueVisibleFunction(["clue" + (index + 1)], false)}>X</Button>
-                                    <Heading level={"6"} className="heading  light-dark" paddingTop="10px">{clue.clue_name}</Heading>
-                                    <View paddingTop="10px">{clue.clue_text}</View>
+                            <View className={gameClueVisible["clue" + (clue.id)]? "cover-screen show-gradual" : "cover-screen hide-gradual"}>
+                                <View className={isChecked? "all-screen dark" : "all-screen light"}>
+                                    <Button  className={isChecked? "close-button dark" : "close-button light"}  onClick={()=>setGameClueVisibleFunction(["clue" + (clue.id)], false)}>X</Button>
+                                    <Heading level={"6"} className={isChecked? "heading dark" : "heading light"} paddingTop="10px">{clue.gameClueName}</Heading>
+                                    <View paddingTop="10px">{clue.gameClueText}</View>
                                     <Flex className="window-button-bottom" justifyContent="center" gap="1rem">
-                                        <Button className="button small" onClick={()=>setCluesFunction("  ** start clue (" + clue.clue_name + ") ==> " +
-                                            clue.clue_text + " <== end clue ** ")}>add clue to notes</Button>
-                                        <Button className="button action-button small" onClick={()=>setGameClueVisibleFunction(["clue" + (index + 1)], false)}>close clue</Button>
+                                        <Button className="button small" onClick={()=>setCluesFunction("  ** start clue (" + clue.gameClueName + ") ==> " +
+                                            clue.gameClueText + " <== end clue ** ")}>add clue to notes</Button>
+                                        <Button className="button action-button small" onClick={()=>setGameClueVisibleFunction(["clue" + (clue.id)], false)}>close clue</Button>
                                     </Flex>
                                 </View>
                             </View>
                         </View>
                     ))}
-                    <View className="puzzle-holder-bottom">
-                        <Image src='/safe.png' />
-                    </View>
+
+                   {gameBottomPuzzle.map(puzzle => (
+                       <View key = {puzzle.id} >
+                           <View className={(zoneVisible==puzzle.gamePlayZoneID)? "puzzle-holder-bottom" : "hide"}>
+                               <Image src={puzzle.puzzleImage} onClick={()=>setGamePuzzleVisibleFunction(["puzzle" + (puzzle.id)], true)} className={gamePuzzleSolved[puzzle.id]? "hide" : "show puzzle-item"} />
+                               <Image src={puzzle.puzzleImageSolved} className={gamePuzzleSolved[puzzle.id]? "show puzzle-item" : "hide"} />
+                               <Image src={puzzle.puzzleImageClue} onClick={()=>setGamePuzzleVisibleFunction(["puzzle" + (puzzle.id)], true)} className={gamePuzzleSolved[puzzle.id]? "show clue-on-puzzle" : "hide"} />
+                               <Image className={(gamePuzzleSolved[puzzle.id] && puzzle.puzzleObjectClue != "")? "puzzle-object-tool show" : "hide"} src={puzzle.puzzleObjectClue} onClick={()=>setGamePuzzleClueVisibleFunction(["puzzle" + (puzzle.id)], true)} />
+                               {puzzle.winGame? (
+                                       <Image className={(gamePuzzleSolved[puzzle.id] && puzzle.puzzleTool != "" && toolVisible[puzzle.puzzleTool])? "puzzle-object-tool show" : "hide"} src={tool[puzzle.puzzleTool]} />
+
+                                   ):
+                                   (
+                               <Image className={(gamePuzzleSolved[puzzle.id] && puzzle.puzzleTool != "" && toolVisible[puzzle.puzzleTool])? "puzzle-object-tool show" : "hide"} src={tool[puzzle.puzzleTool]} onClick={()=>objectInBackpackFunction(puzzle.puzzleTool)} />
+                                   )}
+                           </View>
+                           <View className={gamePuzzleVisible["puzzle" + (puzzle.id)]? "cover-screen show-gradual" : "cover-screen hide-gradual"}>
+                               <View className={isChecked? "all-screen dark" : "all-screen light"}>
+                                   <Button  className={isChecked? "close-button dark" : "close-button light"}  onClick={()=>setGamePuzzleVisibleFunction(["puzzle" + (puzzle.id)], false)}>X</Button>
+                                   <Heading level={"6"} className={isChecked? "heading dark" : "heading light"} paddingTop="10px">{puzzle.gameClueName}</Heading>
+                                   <View paddingTop="10px" className={gamePuzzleSolved[puzzle.id]? "hide" : "show"}>
+                                       {puzzle.textField.map((field,index) => (
+                                           <View key={field.id}>
+                                               {gamePuzzleGuess.hasOwnProperty(field.id) ?
+                                                   (<TextField
+                                                       label={field.label}
+                                                       value={gamePuzzleGuess[field.id]}
+                                                       onChange={(event) => setGamePuzzleGuessFunction(field.id, event.target.value, field.answer, puzzle.id, puzzle.puzzleTool, puzzle.winGame)}
+                                                   />) : (
+                                                       <TextField
+                                                           label={field.label}
+                                                           value=""
+                                                           onChange={(event) => setGamePuzzleGuessFunction(field.id, event.target.value, field.answer, puzzle.id, puzzle.puzzleTool, puzzle.winGame)}
+                                                       />)
+                                               }
+                                               { (gamePuzzleAnswerCorrect[field.id]  && gamePuzzleAnswer[field.id] != null && gamePuzzleGuess[field.id] != null) ? (
+                                                   <span className="green"> Right Answer!</span>
+                                               ) : null
+                                               }
+                                           </View>
+                                       ))}
+
+                                   </View>
+
+                                   <Flex className="window-button-bottom" justifyContent="center" gap="1rem">
+                                       <Button className="button action-button small" onClick={()=>setGamePuzzleVisibleFunction(["puzzle" + (puzzle.id)], false)}>close</Button>
+                                   </Flex>
+                               </View>
+                           </View>
+
+                           <View className={gamePuzzleClueVisible["puzzle" + (puzzle.id)]? "cover-screen show-gradual" : "cover-screen hide-gradual"}>
+                               <View className={isChecked? "all-screen " : "all-screen light-dark"}>
+                                   <Button  className={isChecked? "close-button " : "close-button light-dark"}  onClick={()=>setGamePuzzleClueVisibleFunction(["puzzle" + (puzzle.id)], false)}>X</Button>
+                                   <Heading level={"6"} className={isChecked? "heading dark" : "heading light"} paddingTop="10px">{puzzle.gameClueName}</Heading>
+
+                                   <View paddingTop="10px" className={(gamePuzzleSolved[puzzle.id] && puzzle.puzzleClueText != "")? "show" : "hide"}>
+                                       {puzzle.puzzleClueText}
+                                       <Flex className="window-button-bottom" justifyContent="center" gap="1rem">
+                                           <Button className="button small" onClick={()=>setCluesFunction("  ** start clue (" + puzzle.id + ") ==> " +
+                                               puzzle.puzzleClueText + " <== end clue ** ")}>add clue to notes</Button>
+                                           <Button className="button action-button small" onClick={()=>setGamePuzzleClueVisibleFunction(["puzzle" + (puzzle.id)], false)}>close </Button>
+                                       </Flex>
+                                   </View>
+
+                               </View>
+                           </View>
+                       </View>
+                   ))}
+
                     <View className="right-side"></View>
                 {/* all games */}
-                <TopRight isHelpVisible={isHelpVisible} setIsHelpVisible={setIsHelpVisible}
-                          areNotesVisible={areNotesVisible} setAreNotesVisible={setAreNotesVisible}
-                          isBackpackVisible={isBackpackVisible} setIsBackpackVisible={setIsBackpackVisible}
-                          gameBackpack={gameBackpack} showItemContents={showItemContents} />
-                {/* end all games */}
-                {/* static, non-clickable items */}
-
-                {/* end static, non-clickable items */}
-                <View ariaLabel="Torn Diary" className="torn-diary-jaycee clickable" onClick={()=>toggleTornDiary()}>
-                    <Image src="https://escapeoutbucket213334-staging.s3amazonaws.com/public/hurricane/torndiarypage.png" />
-                </View>
-                <View className={isTornDiaryVisible? "cover-screen show-gradual" : "hide-gradual"}>
-                    <View className="all-screen show">
-                        <Button className="close-button" onClick={()=>toggleTornDiary()}>X</Button>
-                        <View textAlign="center">
-                            <Button className="button small" onClick={()=>setCluesFunction(
-                                "  ** start clue (torn diary page) ==> What is the name of the house Northwest" +
-                                "of here? (not a bathroom) <== end clue ** "
-                                ,setAlertText,setIsAlertVisible,setClues)}>add clue below to notes</Button>
-                        </View>
-                     <View className="torn-diary-big-jaycee">
-                        What is the name of the <br /><br />house Northwest <br /><br />of here? (not a bathroom)
-                    </View>
-                        <View width="100%" textAlign='center' marginTop="5px">
-                            <Button className="button action-button small" onClick={()=>toggleTornDiary()}>tap to close this window</Button>
-                        </View>
-                    </View>
-                </View>
-
-
-
-                <View ariaLabel="Diary" className="diary-jaycee clickable" onClick={()=>toggleDiary()}>
-                    <Image src="https://escapeoutbucket213334-staging.s3amazonaws.com/public/hurricane/diary.png" />
-                </View>
-                <View className={isDiaryVisible? "cover-screen show-gradual" : "all-screen hide"}>
-                    <View className="all-screen show">
-                        <View textAlign="center">
-                            <Button className="button small" onClick={()=>setCluesFunction(
-                                "  ** start clue (diary) ==> Dear Diary, I love playing" +
-                                " the sport on the field closest to the shelter. <== end clue ** "
-                                ,setAlertText,setIsAlertVisible,setClues)}>add clue below to notes</Button>
-                        </View>
-                    <Button className="close-button" onClick={()=>toggleDiary()}>X</Button>
-                    <View className="diary-big-jaycee">
-                        Dear Diary, <br /><br />I love playing.<br/><br/>the sport<br /><br />on the field<br /><br />closest to the shelter.
-                    </View>
-                        <View width="100%" textAlign='center' marginTop="5px">
-                            <Button className="button action-button small" onClick={()=>toggleDiary()}>tap to close this window</Button>
-                        </View>
-                    </View>
-                </View>
-
-                { (!isWrong1 && !isWrong2 && !isWrong3)  ? (
-                    <View>
-                        <View className="safe-shelter clickable show">
-                            <Image src="https://escapeoutbucket213334-staging.s3amazonaws.com/public/hurricane/open-safe.png" />
-                            <View marginBottom="10px" marginRight="10px" className={isKeyVisible ? "safe-shelter inside-safe clickable show" : "hide"}
-                                  onClick={()=>keyInBackpack()}>
-                                <Image src="https://escapeoutbucket213334-staging.s3amazonaws.com/public/hurricane/key.png"/>
-                            </View>
-                        </View>
-                    </View>
-                ) :  <View ariaLabel="Safe Shelter" className="safe-shelter clickable" onClick={()=>toggleSafe()}>
-                    <Image src="https://escapeoutbucket213334-staging.s3amazonaws.com/public/hurricane/safe.png"/>
-                </View> }
-
-                <View className={!isKeyOn? "cement-safe  z-Index-not-clicked show" : "hide"}>
-                    <Image alt="test" src="https://escapeoutbucket213334-staging.s3amazonaws.com/public/hurricane/cementsafe-closed-keyhole.png" />
-                </View>
-                <View className={isKeyOn? "cement-safe clickable show" : "hide"}
-                      onClick={()=>toggleCementSafe()}>
-                    <Image alt="test" src="https://escapeoutbucket213334-staging.s3amazonaws.com/public/hurricane/cementsafe-closed-keyhole.png" />
-                </View>
-                <View className={isCementSafeOpen && isKeyOn? "cement-safe clickable show" : "hide"}
-                      onClick={()=>toggleCementSafeInfo()}>
-                    <Image alt="test" src="https://escapeoutbucket213334-staging.s3amazonaws.com/public/hurricane/cementsafeopencode.png" />
-                </View>
-
-                <View className={(!isWrong4)? "cement-safe show" : "hide"}
-                      onClick={()=>toggleSandbagMessages()}>
-                    <Image alt="test" src="https://escapeoutbucket213334-staging.s3amazonaws.com/public/hurricane/cementsafe-shelter-easy-discs.png" />
-                </View>
             </View>
 
-                <View ariaLabel="Time" className="time light-dark">
+                <View ariaLabel="Time" className="time">
                     <View className="small">hint time: {gameTimeHint} mins | time started: {realTimeStart ? format(realTimeStart, "MM/dd/yyyy H:mma") : null} </View>
                     <Button marginRight={"10px"} className="button button-small" onClick={() => isHelpVisible? setIsHelpVisible(false) : setIsHelpVisible(true)}>Help</Button>
                     <Button marginRight={"10px"} className="button button-small"  onClick={() => {console.log("noteclick"); areNotesVisible ? setAreNotesVisible(false) : setAreNotesVisible(true)}}>Notes</Button>
                     <Button marginRight={"10px"} className="button button-small">Map</Button>
                     <SwitchField
                         isDisabled={false}
-                        label="light/dark"
+                        label="dark/light"
                         isChecked={isChecked}
                         labelPosition="start"
                         onChange={(e) => {
@@ -697,111 +763,7 @@ export function Hurricane1Easy() {
                 </View>
                 <NotesOpen areNotesVisible={areNotesVisible} clues={clues} setClues={setClues} setAreNotesVisible={setAreNotesVisible} toggleNotes={toggleNotes} gameNotes={gameNotes} setGameNotes={setGameNotes} setGameNotesFunction={setGameNotesFunction}/>
 
-           {/* puzzle solving */}
-            <View className={isSafeInfoVisible ? "cover-screen show-gradual" : "all-screen hide"}>
-                <View className="all-screen show">
-                <Button className="close-button" onClick={()=>toggleSafe()}>X</Button>
-                <br />
-                <TextField
-                    label="Word 1 (9 letters - hanging sign)"
-                    value={guess1}
-                    onChange={(e) => checkAnswer(e.currentTarget.value,guess2,guess3)}/>
-                {
-                    (haveGuessed1 && isWrong1 && !showComment)  ? (
-                        <span className="red"> Wrong Answer!</span>
-                    ) : null
-                }
-                {
-                    (!isWrong1 && !showComment)  ? (
-                        <span className="green"> Right Answer!</span>
-                    ) : null
-                }
-                <TextField
-                    label="Word 2 (5 letters - torn diary page)"
-                    value={guess2}
-                    onChange={(e) => checkAnswer(guess1,e.currentTarget.value,guess3)}/>
-                {
-                    (haveGuessed2 && isWrong2 && !showComment)  ? (
-                        <span className="red"> Wrong Answer!</span>
-                    ) : null
-                }
-                {
-                    (!isWrong2 && !showComment)  ? (
-                        <span className="green"> Right Answer!</span>
-                    ) : null
-                }
-                <TextField
-                    label="Word 3 (8 letters - diary)"
-                    value={guess3}
-                    onChange={(e) => checkAnswer(guess1,guess2,e.currentTarget.value)}/>
-                {
-                    (haveGuessed3 && isWrong3 && !showComment)   ? (
-                        <span className="red"> Wrong Answer!</span>
-                    ) : null
-                }
-                {
-                    (!isWrong3 && !showComment)  ? (
-                        <span className="green"> Right Answer!</span>
-                    ) : null
-                }
-                <View width="100%" textAlign='center' marginTop="5px">
-                    <Button className="button action-button small" onClick={()=>toggleSafe()}>tap to close this window</Button>
-                    <br/><Button className={areNotesVisible ? "hide" : "link-button small"}
-                                 onClick={() => toggleNotes(areNotesVisible, setAreNotesVisible)}>open
-                    notes</Button>
-                </View>
-                    {(!isWrong1 && !isWrong2 && !isWrong3 && !showComment) ? (
-                        <View textAlign="center" marginTop="1em">
-                            <View className="green"> Right Answer! <br/>(window will close in 3 seconds)</View>
-                        </View>
-                    ) : (
-                        <NotesOpen areNotesVisible={areNotesVisible} clues={clues} setClues={setClues} setAreNotesVisible={setAreNotesVisible} toggleNotes={toggleNotes} gameNotes={gameNotes} setGameNotes={setGameNotes} setGameNotesFunction={setGameNotesFunction}/>
 
-                    )
-                    }
-            </View>
-            </View>
-            {/* puzzle solving */}
-            <View className={isCementSafeInfoVisible ? "cover-screen show-gradual" : "all-screen hide"}>
-                <View className="all-screen show">
-                <Button className="close-button" onClick={()=>toggleCementSafeInfo()}>X</Button>
-                <TextField
-                    label="Try to Open Floor Safe! (3 letters)"
-                    value={guess4}
-                    onChange={(e) => checkAnswer2(e.currentTarget.value)}/>
-                {
-                    haveGuessed4 && isWrong4 && !showComment ? (
-                        <span className="red"> Wrong Answer!</span>
-                    ) : null
-                }
-
-                { !isWrong4  && !showComment  ? (
-                    <View textAlign="center" marginTop="1em">
-                        <View className="green"> Right Answer! <br/>(window will close in 3 seconds)</View>
-                    </View>
-                ) : (
-                    <View>
-                        <div>
-                            <br /><h3>Engraved on Panel:</h3>
-                            The <span className="bold-underline">first</span> thing I did was visit <br />
-                            the named field.<br />
-                            The <span className="bold-underline">second</span> thing I did was visit the house.<br />
-                            The <span className="bold-underline">third</span> thing I did was<br />
-                            play a sport.
-                        </div>
-                        <View width="100%" textAlign='center' marginTop="5px">
-                        <Button className="button action-button small" onClick={()=>toggleCementSafeInfo()}>tap to close this window</Button>
-                        <br/><Button className={areNotesVisible ? "hide" : "link-button small"}
-                        onClick={() => toggleNotes(areNotesVisible, setAreNotesVisible)}>open
-                        notes</Button>
-                        </View>
-                        <NotesOpen areNotesVisible={areNotesVisible} clues={clues} setClues={setClues} setAreNotesVisible={setAreNotesVisible} toggleNotes={toggleNotes} gameNotes={gameNotes} setGameNotes={setGameNotes} setGameNotesFunction={setGameNotesFunction}/>
-
-                    </View>
-
-                )}
-                </View>
-            </View>
             {(!isWrong4 && !showComment)? (
                     <View className={isWinnerScreenVisible ? "show" : "hide"}>
                         <View className="black-box">
@@ -825,17 +787,25 @@ export function Hurricane1Easy() {
                 <CommentWindow setGameComments={setGameComments} gameComments={gameComments}/>
             ) : null}
 
-            <View className={isHelpVisible ? "cover-screen show-gradual help" : "help hide"}>
-                <View className="all-screen show">
-                    <Button className="close-button"
-                            onClick={() => toggleHelp(isHelpVisible, setIsHelpVisible)}>X</Button>
-                    <View width="100%" padding="10px">
+            <View className={isHelpVisible ? "cover-screen show-gradual" : "cover-screen hide-gradual"}>
+                <View className={isChecked? "all-screen dark" : "all-screen light"}>
+                    <SwitchField
+                        isDisabled={false}
+                        label="dark/light"
+                        isChecked={isChecked}
+                        labelPosition="start"
+                        onChange={(e) => {
+                            setIsChecked(e.target.checked);
+                        }}
+                    />
+                    <Button  className={isChecked? "close-button dark" : "close-button light"}
+                             onClick={() => toggleHelp(isHelpVisible, setIsHelpVisible)}>X</Button>
+                    <View width="100%" padding="20px 10px">
                         <View paddingBottom="10px">
-                            <strong>How to Play:</strong> Click around - some items will disappear and then appear
-                            in your backpack. If it is in your backpack you may be able to use it by clicking on it.
+                            <strong>How to Play:</strong> Click around to open clues and get items. Click on puzzles to solve. If an item is in your backpack click on it to use.
                         </View>
                         <View paddingBottom="10px">
-                            <strong>Goal for this stop:</strong> {game.gameGoals}
+                            <strong>Game Goals:</strong> {game.gameGoals}
                         </View>
                         <View paddingBottom="10px">
                             <strong>Hints:</strong> Clicking on a Hint costs <span
@@ -942,7 +912,7 @@ export function Hurricane1Easy() {
             <View className={isMapVisible ? "cover-screen show-gradual" : "hide"}>
                 <View textAlign="center" className="all-screen show">
                     <Image maxHeight="300px"
-                           src="https://escapeoutbucket213334-staging.s3amazonaws.com/public/hurricane/jaycee-park-map.png"/>
+                           src="/jaycee-park-2pz-map.png"/>
                     <Link href="https://goo.gl/maps/4FHz3mx5zdQjeGwy8?coh=178571&entry=tt" isExternal={true}>link to
                         google maps</Link><br/>
                     <Button className="button action-button"

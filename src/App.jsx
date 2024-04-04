@@ -8,9 +8,8 @@ import { Login } from './components/Login';
 import { Home } from './components/Home';
 import { Admin } from './components/Admin';
 import { Waiver } from './components/Waiver';
-
-/* games */
-import { Hurricane1Easy } from './games/hurricane1Easy/Hurricane1Easy';
+import { Game } from './components/Game';
+import { LeaderBoard } from './components/LeaderBoard';
 
 
 /* header and footer */
@@ -35,7 +34,7 @@ const App = () => {
                             path="/game"
                             element={
                                 <RequireAuth>
-                                    <Hurricane1Easy />
+                                    <Game />
                                 </RequireAuth>
                             }
                         />
@@ -53,6 +52,12 @@ const App = () => {
                                 <RequireAuth>
                                     <Waiver />
                                 </RequireAuth>
+                            }
+                        />
+                        <Route
+                            path="/leaderboard"
+                            element={
+                                <LeaderBoard />
                             }
                         />
                         <Route

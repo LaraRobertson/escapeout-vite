@@ -20,10 +20,16 @@ type Game @model @auth(rules: [ { allow: public } ] ) {
   gameDescriptionH3: String
   gameDescriptionP: String
   gameLocationPlace: String
+  gameLocationPlaceDetails: String
   gameLocationCity: String!
+  gameDesigner: String
+  gameLevel: String
+  walkingDistance: String
+  playZones: String
   gameImage: String
   gameType: String
-  gameLink: String
+  gameWinMessage: String
+  gameWinImage: String
   gameGoals: String
   gameIntro: String
   gameMap: String
@@ -31,11 +37,42 @@ type Game @model @auth(rules: [ { allow: public } ] ) {
   gameHint: [GameHint] @hasMany(indexName: "byGameID", fields: ["id"])
   type: String! @index(name: "gamesByCity", queryField: "gamesByCity", sortKeyFields: ["gameLocationCity"])
   gameClue: [GameClue] @hasMany(indexName: "byGameID", fields: ["id"])
-  gamePuzzle: String
-  gameObject: String
+  gamePuzzle: [GamePuzzle] @hasMany(indexName: "byGameID", fields: ["id"])
   createdAt: String!
   disabled: Boolean
   user:[User] @manyToMany(relationName: "UserGamePlay")
+ }
+
+type GamePuzzle @model @auth(rules: [ { allow: public } ] ) {
+  id: ID!
+  gameID: ID! @index(name: "byGameID", queryField: "gamePuzzleByGameID", sortKeyFields: ["order"])
+  gamePlayZoneID: String
+  puzzleName: String
+  puzzlePosition: String
+  puzzleImage: String
+  puzzleImageSolved: String
+  textField: [TextField] @hasMany(indexName: "byPuzzleID", fields: ["id"])
+  puzzleClueRevealed: String
+  puzzleClueText: String
+  puzzleToolRevealed: String
+  puzzleToolNeeded: String
+  winGame: Boolean
+  winGameImage: String
+  winGameMessage: String
+  order: Int!
+  createdAt: String!
+  disabled: Boolean
+ }
+
+type TextField @model @auth(rules: [ { allow: public } ] ) {
+  id: ID!
+  puzzleID: ID! @index(name: "byPuzzleID", queryField: "textFieldByPuzzleID", sortKeyFields: ["order"])
+  name: String
+  label: String
+  answer: String
+  order: Int!
+  createdAt: String!
+  disabled: Boolean
  }
 
  type GameStats @model @auth(rules: [ { allow: public } ] ) {
@@ -70,6 +107,7 @@ type GameScore @model @auth(rules: [ { allow: public } ] ) {
 type GameHint @model @auth(rules: [ { allow: public } ] ) {
   id: ID!
   gameID: ID! @index(name: "byGameID", queryField: "gameHintByGameID", sortKeyFields: ["order"])
+  gamePlayZoneID: String
   gameHintName: String
   gameHintDescription: String
   order: Int!
@@ -82,9 +120,11 @@ type GameClue @model @auth(rules: [ { allow: public } ] ) {
   gameID: ID! @index(name: "byGameID", queryField: "gameClueByGameID", sortKeyFields: ["order"])
   gamePlayZoneID: String
   gameClueName: String
+  gameClueIcon: String
   gameClueImage: String
   gameClueText: String
   gameCluePosition: String
+  gameClueToolNeeded: String
   order: Int!
   createdAt: String!
   disabled: Boolean

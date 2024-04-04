@@ -59,9 +59,6 @@ export const getGame = /* GraphQL */ `query GetGame($id: ID!) {
     gameLocationPlaceDetails
     gameLocationCity
     gameDesigner
-    gameLevel
-    walkingDistance
-    playZones
     gameImage
     gameType
     gameWinMessage
@@ -172,9 +169,6 @@ export const listGames = /* GraphQL */ `query ListGames(
       gameLocationPlaceDetails
       gameLocationCity
       gameDesigner
-      gameLevel
-      walkingDistance
-      playZones
       gameImage
       gameType
       gameWinMessage
@@ -648,9 +642,6 @@ export const getUserGamePlay = /* GraphQL */ `query GetUserGamePlay($id: ID!) {
       gameLocationPlaceDetails
       gameLocationCity
       gameDesigner
-      gameLevel
-      walkingDistance
-      playZones
       gameImage
       gameType
       gameWinMessage
@@ -754,9 +745,6 @@ export const gamesByGameNameAndType = /* GraphQL */ `query GamesByGameNameAndTyp
       gameLocationPlaceDetails
       gameLocationCity
       gameDesigner
-      gameLevel
-      walkingDistance
-      playZones
       gameImage
       gameType
       gameWinMessage
@@ -804,9 +792,6 @@ export const gamesByCity = /* GraphQL */ `query GamesByCity(
       gameLocationPlaceDetails
       gameLocationCity
       gameDesigner
-      gameLevel
-      walkingDistance
-      playZones
       gameImage
       gameType
       gameWinMessage

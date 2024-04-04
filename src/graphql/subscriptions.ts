@@ -79,10 +79,16 @@ export const onCreateGame = /* GraphQL */ `subscription OnCreateGame($filter: Mo
     gameDescriptionH3
     gameDescriptionP
     gameLocationPlace
+    gameLocationPlaceDetails
     gameLocationCity
+    gameDesigner
+    gameLevel
+    walkingDistance
+    playZones
     gameImage
     gameType
-    gameLink
+    gameWinMessage
+    gameWinImage
     gameGoals
     gameIntro
     gameMap
@@ -99,8 +105,10 @@ export const onCreateGame = /* GraphQL */ `subscription OnCreateGame($filter: Mo
       nextToken
       __typename
     }
-    gamePuzzle
-    gameObject
+    gamePuzzle {
+      nextToken
+      __typename
+    }
     createdAt
     disabled
     user {
@@ -123,10 +131,16 @@ export const onUpdateGame = /* GraphQL */ `subscription OnUpdateGame($filter: Mo
     gameDescriptionH3
     gameDescriptionP
     gameLocationPlace
+    gameLocationPlaceDetails
     gameLocationCity
+    gameDesigner
+    gameLevel
+    walkingDistance
+    playZones
     gameImage
     gameType
-    gameLink
+    gameWinMessage
+    gameWinImage
     gameGoals
     gameIntro
     gameMap
@@ -143,8 +157,10 @@ export const onUpdateGame = /* GraphQL */ `subscription OnUpdateGame($filter: Mo
       nextToken
       __typename
     }
-    gamePuzzle
-    gameObject
+    gamePuzzle {
+      nextToken
+      __typename
+    }
     createdAt
     disabled
     user {
@@ -167,10 +183,16 @@ export const onDeleteGame = /* GraphQL */ `subscription OnDeleteGame($filter: Mo
     gameDescriptionH3
     gameDescriptionP
     gameLocationPlace
+    gameLocationPlaceDetails
     gameLocationCity
+    gameDesigner
+    gameLevel
+    walkingDistance
+    playZones
     gameImage
     gameType
-    gameLink
+    gameWinMessage
+    gameWinImage
     gameGoals
     gameIntro
     gameMap
@@ -187,8 +209,10 @@ export const onDeleteGame = /* GraphQL */ `subscription OnDeleteGame($filter: Mo
       nextToken
       __typename
     }
-    gamePuzzle
-    gameObject
+    gamePuzzle {
+      nextToken
+      __typename
+    }
     createdAt
     disabled
     user {
@@ -202,6 +226,159 @@ export const onDeleteGame = /* GraphQL */ `subscription OnDeleteGame($filter: Mo
 ` as GeneratedSubscription<
   APITypes.OnDeleteGameSubscriptionVariables,
   APITypes.OnDeleteGameSubscription
+>;
+export const onCreateGamePuzzle = /* GraphQL */ `subscription OnCreateGamePuzzle(
+  $filter: ModelSubscriptionGamePuzzleFilterInput
+) {
+  onCreateGamePuzzle(filter: $filter) {
+    id
+    gameID
+    gamePlayZoneID
+    puzzleName
+    puzzlePosition
+    puzzleImage
+    puzzleImageSolved
+    textField {
+      nextToken
+      __typename
+    }
+    puzzleClueRevealed
+    puzzleClueText
+    puzzleToolRevealed
+    puzzleToolNeeded
+    winGame
+    winGameImage
+    winGameMessage
+    order
+    createdAt
+    disabled
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateGamePuzzleSubscriptionVariables,
+  APITypes.OnCreateGamePuzzleSubscription
+>;
+export const onUpdateGamePuzzle = /* GraphQL */ `subscription OnUpdateGamePuzzle(
+  $filter: ModelSubscriptionGamePuzzleFilterInput
+) {
+  onUpdateGamePuzzle(filter: $filter) {
+    id
+    gameID
+    gamePlayZoneID
+    puzzleName
+    puzzlePosition
+    puzzleImage
+    puzzleImageSolved
+    textField {
+      nextToken
+      __typename
+    }
+    puzzleClueRevealed
+    puzzleClueText
+    puzzleToolRevealed
+    puzzleToolNeeded
+    winGame
+    winGameImage
+    winGameMessage
+    order
+    createdAt
+    disabled
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateGamePuzzleSubscriptionVariables,
+  APITypes.OnUpdateGamePuzzleSubscription
+>;
+export const onDeleteGamePuzzle = /* GraphQL */ `subscription OnDeleteGamePuzzle(
+  $filter: ModelSubscriptionGamePuzzleFilterInput
+) {
+  onDeleteGamePuzzle(filter: $filter) {
+    id
+    gameID
+    gamePlayZoneID
+    puzzleName
+    puzzlePosition
+    puzzleImage
+    puzzleImageSolved
+    textField {
+      nextToken
+      __typename
+    }
+    puzzleClueRevealed
+    puzzleClueText
+    puzzleToolRevealed
+    puzzleToolNeeded
+    winGame
+    winGameImage
+    winGameMessage
+    order
+    createdAt
+    disabled
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteGamePuzzleSubscriptionVariables,
+  APITypes.OnDeleteGamePuzzleSubscription
+>;
+export const onCreateTextField = /* GraphQL */ `subscription OnCreateTextField($filter: ModelSubscriptionTextFieldFilterInput) {
+  onCreateTextField(filter: $filter) {
+    id
+    puzzleID
+    name
+    label
+    answer
+    order
+    createdAt
+    disabled
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateTextFieldSubscriptionVariables,
+  APITypes.OnCreateTextFieldSubscription
+>;
+export const onUpdateTextField = /* GraphQL */ `subscription OnUpdateTextField($filter: ModelSubscriptionTextFieldFilterInput) {
+  onUpdateTextField(filter: $filter) {
+    id
+    puzzleID
+    name
+    label
+    answer
+    order
+    createdAt
+    disabled
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateTextFieldSubscriptionVariables,
+  APITypes.OnUpdateTextFieldSubscription
+>;
+export const onDeleteTextField = /* GraphQL */ `subscription OnDeleteTextField($filter: ModelSubscriptionTextFieldFilterInput) {
+  onDeleteTextField(filter: $filter) {
+    id
+    puzzleID
+    name
+    label
+    answer
+    order
+    createdAt
+    disabled
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteTextFieldSubscriptionVariables,
+  APITypes.OnDeleteTextFieldSubscription
 >;
 export const onCreateGameStats = /* GraphQL */ `subscription OnCreateGameStats($filter: ModelSubscriptionGameStatsFilterInput) {
   onCreateGameStats(filter: $filter) {
@@ -345,6 +522,7 @@ export const onCreateGameHint = /* GraphQL */ `subscription OnCreateGameHint($fi
   onCreateGameHint(filter: $filter) {
     id
     gameID
+    gamePlayZoneID
     gameHintName
     gameHintDescription
     order
@@ -362,6 +540,7 @@ export const onUpdateGameHint = /* GraphQL */ `subscription OnUpdateGameHint($fi
   onUpdateGameHint(filter: $filter) {
     id
     gameID
+    gamePlayZoneID
     gameHintName
     gameHintDescription
     order
@@ -379,6 +558,7 @@ export const onDeleteGameHint = /* GraphQL */ `subscription OnDeleteGameHint($fi
   onDeleteGameHint(filter: $filter) {
     id
     gameID
+    gamePlayZoneID
     gameHintName
     gameHintDescription
     order
@@ -398,9 +578,11 @@ export const onCreateGameClue = /* GraphQL */ `subscription OnCreateGameClue($fi
     gameID
     gamePlayZoneID
     gameClueName
+    gameClueIcon
     gameClueImage
     gameClueText
     gameCluePosition
+    gameClueToolNeeded
     order
     createdAt
     disabled
@@ -418,9 +600,11 @@ export const onUpdateGameClue = /* GraphQL */ `subscription OnUpdateGameClue($fi
     gameID
     gamePlayZoneID
     gameClueName
+    gameClueIcon
     gameClueImage
     gameClueText
     gameCluePosition
+    gameClueToolNeeded
     order
     createdAt
     disabled
@@ -438,9 +622,11 @@ export const onDeleteGameClue = /* GraphQL */ `subscription OnDeleteGameClue($fi
     gameID
     gamePlayZoneID
     gameClueName
+    gameClueIcon
     gameClueImage
     gameClueText
     gameCluePosition
+    gameClueToolNeeded
     order
     createdAt
     disabled
@@ -540,16 +726,20 @@ export const onCreateUserGamePlay = /* GraphQL */ `subscription OnCreateUserGame
       gameDescriptionH3
       gameDescriptionP
       gameLocationPlace
+      gameLocationPlaceDetails
       gameLocationCity
+      gameDesigner
+      gameLevel
+      walkingDistance
+      playZones
       gameImage
       gameType
-      gameLink
+      gameWinMessage
+      gameWinImage
       gameGoals
       gameIntro
       gameMap
       type
-      gamePuzzle
-      gameObject
       createdAt
       disabled
       updatedAt
@@ -589,16 +779,20 @@ export const onUpdateUserGamePlay = /* GraphQL */ `subscription OnUpdateUserGame
       gameDescriptionH3
       gameDescriptionP
       gameLocationPlace
+      gameLocationPlaceDetails
       gameLocationCity
+      gameDesigner
+      gameLevel
+      walkingDistance
+      playZones
       gameImage
       gameType
-      gameLink
+      gameWinMessage
+      gameWinImage
       gameGoals
       gameIntro
       gameMap
       type
-      gamePuzzle
-      gameObject
       createdAt
       disabled
       updatedAt
@@ -638,16 +832,20 @@ export const onDeleteUserGamePlay = /* GraphQL */ `subscription OnDeleteUserGame
       gameDescriptionH3
       gameDescriptionP
       gameLocationPlace
+      gameLocationPlaceDetails
       gameLocationCity
+      gameDesigner
+      gameLevel
+      walkingDistance
+      playZones
       gameImage
       gameType
-      gameLink
+      gameWinMessage
+      gameWinImage
       gameGoals
       gameIntro
       gameMap
       type
-      gamePuzzle
-      gameObject
       createdAt
       disabled
       updatedAt

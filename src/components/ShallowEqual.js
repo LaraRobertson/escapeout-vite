@@ -1,4 +1,7 @@
 const shallowEqual = (object1, object2) => {
+    /* guess(value) , answer(object) */
+    console.log("guess: " + object1);
+    console.log("answer: " + object2);
     const keys1 = Object.keys(object1);
     console.log("keys1: " + keys1.length);
     const keys2 = Object.keys(object2);

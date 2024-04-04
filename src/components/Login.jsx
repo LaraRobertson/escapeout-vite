@@ -39,14 +39,15 @@ export function Login() {
                         <Button className="topLink" onClick={() => navigate('/')}>Back to Home</Button>
                     </Flex>
                 </View>
-            <View className="main-content light-dark top-main">
+            <View className="main-content  light-dark top-main">
                     <Heading
                         level={4}
-                        className={"light-dark"}
+                        className={"light small authenticator"}
                         textAlign="center"
-                        padding="0px 20px 20px 20px">
-                        Create an Account or Login to play games.
-                    </Heading>
+                        padding="20px">
+                        Create an Account or Sign In to play games. If you use your google account you do not have to authenticate your email. If you don't use your google account, A code will be sent to your email.
+                    <br />note: if you want to play with other people and let them use your email to sign in, create an account with your email and a simple password so you can share. We do
+                    not collect any sensitive data.</Heading>
                 <View className="auth-wrapper">
                     <Authenticator></Authenticator>
                 </View>

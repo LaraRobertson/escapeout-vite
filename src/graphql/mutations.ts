@@ -91,10 +91,16 @@ export const createGame = /* GraphQL */ `mutation CreateGame(
     gameDescriptionH3
     gameDescriptionP
     gameLocationPlace
+    gameLocationPlaceDetails
     gameLocationCity
+    gameDesigner
+    gameLevel
+    walkingDistance
+    playZones
     gameImage
     gameType
-    gameLink
+    gameWinMessage
+    gameWinImage
     gameGoals
     gameIntro
     gameMap
@@ -111,8 +117,10 @@ export const createGame = /* GraphQL */ `mutation CreateGame(
       nextToken
       __typename
     }
-    gamePuzzle
-    gameObject
+    gamePuzzle {
+      nextToken
+      __typename
+    }
     createdAt
     disabled
     user {
@@ -138,10 +146,16 @@ export const updateGame = /* GraphQL */ `mutation UpdateGame(
     gameDescriptionH3
     gameDescriptionP
     gameLocationPlace
+    gameLocationPlaceDetails
     gameLocationCity
+    gameDesigner
+    gameLevel
+    walkingDistance
+    playZones
     gameImage
     gameType
-    gameLink
+    gameWinMessage
+    gameWinImage
     gameGoals
     gameIntro
     gameMap
@@ -158,8 +172,10 @@ export const updateGame = /* GraphQL */ `mutation UpdateGame(
       nextToken
       __typename
     }
-    gamePuzzle
-    gameObject
+    gamePuzzle {
+      nextToken
+      __typename
+    }
     createdAt
     disabled
     user {
@@ -185,10 +201,16 @@ export const deleteGame = /* GraphQL */ `mutation DeleteGame(
     gameDescriptionH3
     gameDescriptionP
     gameLocationPlace
+    gameLocationPlaceDetails
     gameLocationCity
+    gameDesigner
+    gameLevel
+    walkingDistance
+    playZones
     gameImage
     gameType
-    gameLink
+    gameWinMessage
+    gameWinImage
     gameGoals
     gameIntro
     gameMap
@@ -205,8 +227,10 @@ export const deleteGame = /* GraphQL */ `mutation DeleteGame(
       nextToken
       __typename
     }
-    gamePuzzle
-    gameObject
+    gamePuzzle {
+      nextToken
+      __typename
+    }
     createdAt
     disabled
     user {
@@ -220,6 +244,171 @@ export const deleteGame = /* GraphQL */ `mutation DeleteGame(
 ` as GeneratedMutation<
   APITypes.DeleteGameMutationVariables,
   APITypes.DeleteGameMutation
+>;
+export const createGamePuzzle = /* GraphQL */ `mutation CreateGamePuzzle(
+  $input: CreateGamePuzzleInput!
+  $condition: ModelGamePuzzleConditionInput
+) {
+  createGamePuzzle(input: $input, condition: $condition) {
+    id
+    gameID
+    gamePlayZoneID
+    puzzleName
+    puzzlePosition
+    puzzleImage
+    puzzleImageSolved
+    textField {
+      nextToken
+      __typename
+    }
+    puzzleClueRevealed
+    puzzleClueText
+    puzzleToolRevealed
+    puzzleToolNeeded
+    winGame
+    winGameImage
+    winGameMessage
+    order
+    createdAt
+    disabled
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateGamePuzzleMutationVariables,
+  APITypes.CreateGamePuzzleMutation
+>;
+export const updateGamePuzzle = /* GraphQL */ `mutation UpdateGamePuzzle(
+  $input: UpdateGamePuzzleInput!
+  $condition: ModelGamePuzzleConditionInput
+) {
+  updateGamePuzzle(input: $input, condition: $condition) {
+    id
+    gameID
+    gamePlayZoneID
+    puzzleName
+    puzzlePosition
+    puzzleImage
+    puzzleImageSolved
+    textField {
+      nextToken
+      __typename
+    }
+    puzzleClueRevealed
+    puzzleClueText
+    puzzleToolRevealed
+    puzzleToolNeeded
+    winGame
+    winGameImage
+    winGameMessage
+    order
+    createdAt
+    disabled
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateGamePuzzleMutationVariables,
+  APITypes.UpdateGamePuzzleMutation
+>;
+export const deleteGamePuzzle = /* GraphQL */ `mutation DeleteGamePuzzle(
+  $input: DeleteGamePuzzleInput!
+  $condition: ModelGamePuzzleConditionInput
+) {
+  deleteGamePuzzle(input: $input, condition: $condition) {
+    id
+    gameID
+    gamePlayZoneID
+    puzzleName
+    puzzlePosition
+    puzzleImage
+    puzzleImageSolved
+    textField {
+      nextToken
+      __typename
+    }
+    puzzleClueRevealed
+    puzzleClueText
+    puzzleToolRevealed
+    puzzleToolNeeded
+    winGame
+    winGameImage
+    winGameMessage
+    order
+    createdAt
+    disabled
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteGamePuzzleMutationVariables,
+  APITypes.DeleteGamePuzzleMutation
+>;
+export const createTextField = /* GraphQL */ `mutation CreateTextField(
+  $input: CreateTextFieldInput!
+  $condition: ModelTextFieldConditionInput
+) {
+  createTextField(input: $input, condition: $condition) {
+    id
+    puzzleID
+    name
+    label
+    answer
+    order
+    createdAt
+    disabled
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateTextFieldMutationVariables,
+  APITypes.CreateTextFieldMutation
+>;
+export const updateTextField = /* GraphQL */ `mutation UpdateTextField(
+  $input: UpdateTextFieldInput!
+  $condition: ModelTextFieldConditionInput
+) {
+  updateTextField(input: $input, condition: $condition) {
+    id
+    puzzleID
+    name
+    label
+    answer
+    order
+    createdAt
+    disabled
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateTextFieldMutationVariables,
+  APITypes.UpdateTextFieldMutation
+>;
+export const deleteTextField = /* GraphQL */ `mutation DeleteTextField(
+  $input: DeleteTextFieldInput!
+  $condition: ModelTextFieldConditionInput
+) {
+  deleteTextField(input: $input, condition: $condition) {
+    id
+    puzzleID
+    name
+    label
+    answer
+    order
+    createdAt
+    disabled
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteTextFieldMutationVariables,
+  APITypes.DeleteTextFieldMutation
 >;
 export const createGameStats = /* GraphQL */ `mutation CreateGameStats(
   $input: CreateGameStatsInput!
@@ -384,6 +573,7 @@ export const createGameHint = /* GraphQL */ `mutation CreateGameHint(
   createGameHint(input: $input, condition: $condition) {
     id
     gameID
+    gamePlayZoneID
     gameHintName
     gameHintDescription
     order
@@ -404,6 +594,7 @@ export const updateGameHint = /* GraphQL */ `mutation UpdateGameHint(
   updateGameHint(input: $input, condition: $condition) {
     id
     gameID
+    gamePlayZoneID
     gameHintName
     gameHintDescription
     order
@@ -424,6 +615,7 @@ export const deleteGameHint = /* GraphQL */ `mutation DeleteGameHint(
   deleteGameHint(input: $input, condition: $condition) {
     id
     gameID
+    gamePlayZoneID
     gameHintName
     gameHintDescription
     order
@@ -446,9 +638,11 @@ export const createGameClue = /* GraphQL */ `mutation CreateGameClue(
     gameID
     gamePlayZoneID
     gameClueName
+    gameClueIcon
     gameClueImage
     gameClueText
     gameCluePosition
+    gameClueToolNeeded
     order
     createdAt
     disabled
@@ -469,9 +663,11 @@ export const updateGameClue = /* GraphQL */ `mutation UpdateGameClue(
     gameID
     gamePlayZoneID
     gameClueName
+    gameClueIcon
     gameClueImage
     gameClueText
     gameCluePosition
+    gameClueToolNeeded
     order
     createdAt
     disabled
@@ -492,9 +688,11 @@ export const deleteGameClue = /* GraphQL */ `mutation DeleteGameClue(
     gameID
     gamePlayZoneID
     gameClueName
+    gameClueIcon
     gameClueImage
     gameClueText
     gameCluePosition
+    gameClueToolNeeded
     order
     createdAt
     disabled
@@ -598,16 +796,20 @@ export const createUserGamePlay = /* GraphQL */ `mutation CreateUserGamePlay(
       gameDescriptionH3
       gameDescriptionP
       gameLocationPlace
+      gameLocationPlaceDetails
       gameLocationCity
+      gameDesigner
+      gameLevel
+      walkingDistance
+      playZones
       gameImage
       gameType
-      gameLink
+      gameWinMessage
+      gameWinImage
       gameGoals
       gameIntro
       gameMap
       type
-      gamePuzzle
-      gameObject
       createdAt
       disabled
       updatedAt
@@ -648,16 +850,20 @@ export const updateUserGamePlay = /* GraphQL */ `mutation UpdateUserGamePlay(
       gameDescriptionH3
       gameDescriptionP
       gameLocationPlace
+      gameLocationPlaceDetails
       gameLocationCity
+      gameDesigner
+      gameLevel
+      walkingDistance
+      playZones
       gameImage
       gameType
-      gameLink
+      gameWinMessage
+      gameWinImage
       gameGoals
       gameIntro
       gameMap
       type
-      gamePuzzle
-      gameObject
       createdAt
       disabled
       updatedAt
@@ -698,16 +904,20 @@ export const deleteUserGamePlay = /* GraphQL */ `mutation DeleteUserGamePlay(
       gameDescriptionH3
       gameDescriptionP
       gameLocationPlace
+      gameLocationPlaceDetails
       gameLocationCity
+      gameDesigner
+      gameLevel
+      walkingDistance
+      playZones
       gameImage
       gameType
-      gameLink
+      gameWinMessage
+      gameWinImage
       gameGoals
       gameIntro
       gameMap
       type
-      gamePuzzle
-      gameObject
       createdAt
       disabled
       updatedAt
