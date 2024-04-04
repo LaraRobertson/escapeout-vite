@@ -143,9 +143,7 @@ export function Home() {
             const userAttributes = await fetchUserAttributes();
             console.log("userAttributes.email (home) " + userAttributes.email);
             setEmail(userAttributes.email);
-            if (userAttributes.email != ("lararobertson70@gmail.com" || "rosyrobertson@gmail.com" || "lara@lararobertson.com" || "coastalinitiativellc@gmail.com" || "lara@tybeewebdesign.com")) {
-                handleSubmit({"email": userAttributes.email});
-            }
+            localStorage.setItem("email",userAttributes.email);
             fetchUserDB({"email":userAttributes.email, "userName": props.userName});
         } catch (error) {
             console.log(error);
@@ -271,6 +269,8 @@ export function Home() {
         console.log("logout");
         /* save everything for game? */
         /* warning? */
+        localStorage.removeItem("gameScoreID");
+        localStorage.removeItem("email");
         removeLocalStorage();
         signOut();
     }
@@ -681,6 +681,7 @@ export function Home() {
                     </Flex>
 
                     <Flex className="flex-games">
+                        <strong>games coming soon</strong>
                         {loading ? (<View>loading</View>):null}
                         {gameListByCity.map((game,index) => (
                             <Card style={divStyle(game.gameImage)} className={(gamesIDUserPlayed.includes(game.id) && hidePlayedGames)? "hide" : "game-card"} variation="elevated" key={game.id || game.gameName}>

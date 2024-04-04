@@ -322,48 +322,8 @@ export function Admin() {
         event.target.reset();
     }
     /* GAME */
-    /* copy game */
-    const initialStateCopyGame = {
-    disabled:
-        false,
-    gameDescriptionH2:
-        "You want to play disc golf but have no discs.",
-    gameDescriptionH3:
-        "Try and find some discs!",
-    gameDescriptionP:
-        "This is a level 2 game. It is a short game with some logic. There are 2 play zones.",
-    gameDesigner:
-        "EscapeOut.games",
-    gameGoals:
-        "Find Discs!",
-    gameImage:
-        "https://escapeoutbucket213334-staging.s3.amazonaws.com/public/Jaycee-Park-Game-Image.jpg",
-    gameIntro:
-        "Discs are hidden somewhere.  Use the clues to find the discs.",
-    gameLevel:
-        "level 2",
-    gameLocationCity:
-        "Tybee Island",
-    gameLocationPlace:
-        "Jaycee Park",
-    gameLocationPlaceDetails:
-        null,
-    gameMap:
-        "https://escapeoutbucket213334-staging.s3.amazonaws.com/public/game-maps/jaycee-park-2pz-map.jpg",
-    gameName:
-        "Disc Golf Hunt and Think",
-    gameType:
-        "free",
-    gameWinMessage:
-        "Great Job On Winning!!!",
-    type:
-        "game",
-    walkingDistance:
-        "500 feet"
-};
 
     const initialStateCreateGame = {
-        gameID: '',
         gameName: '',
         gameType: '',
         gameLocationPlace: '',
@@ -394,6 +354,8 @@ export function Admin() {
         }
     }, [formCreateGameState]);
 
+
+
     async function showUpdateGame(props) {
         console.log("props.gameID: " + props.gameID);
         setGameID(props.gameID);
@@ -409,25 +371,39 @@ export function Admin() {
             setGameFormVisible(true);
             /*for (const key in gamesFromAPI) {
                 console.log(`${key}: ${gamesFromAPI[key]}`);
-            }
+            }*/
             let element =  document.getElementById("updateGame");
             element.classList.remove('hide');
             element.classList.add('show');
             let element2 =  document.getElementById("createGame");
             element2.classList.remove('show');
-            element2.classList.add('hide');*/
+            element2.classList.add('hide');
         } catch (err) {
             console.log('error fetching getGame', err);
         }
     }
-
-    async function addGame() {
+    async function addGameFromFile() {
         try {
-            if (!formCreateGameState.gameName || !formCreateGameState.gameLink) return;
+        const gameString = '{"gameName":"Disc Golf Hunt and Think2","gameDescriptionH2":"You want to play disc golf but have no discs.","gameDescriptionH3":"Try and find some discs!","gameDescriptionP":"This is a level 2 game. It is a short game with some logic. There are 2 play zones.","gameLocationPlace":"Jaycee Park","gameLocationPlaceDetails":null,"gameLocationCity":"Tybee Island","gameDesigner":"EscapeOut.games","gameLevel":"level 2","walkingDistance":"500 feet","playZones":null,"gameImage":"https://escapeoutbucket213334-staging.s3.amazonaws.com/public/Jaycee-Park-Game-Image.jpg","gameType":"free","gameWinMessage":"Great Job On Winning!!!","gameWinImage":null,"gameGoals":"Find Discs!","gameIntro":"Discs are hidden somewhere.  Use the clues to find the discs.","gameMap":"https://escapeoutbucket213334-staging.s3.amazonaws.com/public/game-maps/jaycee-park-2pz-map.jpg","type":"game","createdAt":"2024-01-07T20:21:02.214Z","disabled":false}'
+            console.log("addGame: " + gameString);
+            await client.graphql({
+                query: mutations.createGame,
+                variables: {
+                    input: JSON.parse(gameString)
+                }
+            });
+            fetchGames();
+        } catch (err) {
+            console.log('error creating games:', err);
+        }
+    }
+     async function addGame() {
+        try {
+            if (!formCreateGameState.gameName ) return;
             const game = { ...formCreateGameState };
 
             console.log("addGame: " + game);
-            setGames([...games, game]);
+           /* setGames([...games, game]);*/
             setFormCreateGameState(initialStateCreateGame);
             await client.graphql({
                 query: mutations.createGame,
@@ -435,6 +411,8 @@ export function Admin() {
                     input: game
                 }
             });
+            setGameFormVisible(false);
+            fetchGames();
         } catch (err) {
             console.log('error creating games:', err);
         }
@@ -1227,8 +1205,16 @@ export function Admin() {
                 variables: {id: props.gameID}
             });
             const gamesFromAPI = apiData.data.getGame;
+            /*delete gamesFromAPI.updatedAt;
+            delete gamesFromAPI.user;
+            delete gamesFromAPI.__typename;
+            delete gamesFromAPI.gameHint;
+            delete gamesFromAPI.gamePlayZone;
+            delete gamesFromAPI.gameClue;
+            delete gamesFromAPI.gamePuzzle;*/
+            delete gamesFromAPI.id;
             const file = new Blob([JSON.stringify(gamesFromAPI)], { type: 'text/plain;charset=utf-8' });
-            saveAs(file, 'game.txt');
+            saveAs(file, 'Disc-Golf-Hunt-and-Think.txt');
         } catch (err) {
             console.log('error fetching getGame', err);
         }
@@ -1309,6 +1295,7 @@ export function Admin() {
                             {(disabledGame === true)? (<View>disabled: true</View>):null}
                             {(disabledGame === false)? (<View>disabled: false</View>):null}
                             <Button className={"show-button blue-duke"} onClick={() => {setFormCreateGameState(initialStateCreateGame);setGameFormVisible(true)}}>add game</Button>
+                            (<Button className={"show-button blue-duke small"} onClick={() => addGameFromFile()}>add game from file (paste text)</Button>)
                             {games.map((game,index) => (
                                 <View key={game.id} >
                                     <View className={(gameVisible==game.id)? "hide" : "show"}>
@@ -1584,10 +1571,10 @@ export function Admin() {
                                         <Button className="show" onClick={() => setGameFormVisible(false)} variation="primary">
                                             Close
                                         </Button>
-                                        <Button id="createGame" className={(formCreateGameState.gameID=='')? "show" : "hide"} onClick={addGame} variation="primary">
+                                        <Button id="createGame" className="show" onClick={addGame} variation="primary">
                                             Create Game
                                         </Button>
-                                        <Button id="updateGame" className={(formCreateGameState.gameID!='')? "show" : "hide"} onClick={updateGame} variation="primary">
+                                        <Button id="updateGame"  className="hide" onClick={updateGame} variation="primary">
                                             Update Game
                                         </Button>
                                     </Flex>
