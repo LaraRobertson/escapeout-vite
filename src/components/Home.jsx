@@ -143,14 +143,28 @@ export function Home() {
             const userAttributes = await fetchUserAttributes();
             console.log("userAttributes.email (home) " + userAttributes.email);
             setEmail(userAttributes.email);
-            if (userAttributes.email != ("lararobertson70@gmail.com" && "rosyrobertson@gmail.com" && "lara@lararobertson.com" && "coastalinitiativellc@gmail.com" && "lara@tybeewebdesign.com")) {
-                handleSubmit({"email": userAttributes.email});
-            }
+            localStorage.setItem("email",userAttributes.email);
             fetchUserDB({"email":userAttributes.email, "userName": props.userName});
+
+          /*  if (userAttributes.email === ("lararobertson70@gmail.com") ||
+                userAttributes.email === ("rosyrobertson@gmail.com") ||
+                userAttributes.email === ("lara@tybeewebdesign.com") ||
+                userAttributes.email === ("coastalinitiativellc@gmail.com") ||
+                userAttributes.email === ("lara@lararobertson.com")
+            ) {*/
+                /* handleSubmit({"email": userAttributes.email});*/
+                /*console.log("hi lara");*/
+                /* alert("hi lara");*/
+            /*} else {
+                if (userAttributes.email != localStorage.getItem("email")) {
+                     alert(userAttributes.email);
+                }
+            }*/
         } catch (error) {
             console.log(error);
         }
     }
+
 
     /* called from handleFetchUserAttributes above */
     async function fetchUserDB(props) {
@@ -682,6 +696,7 @@ export function Home() {
 
                     <Flex className="flex-games">
                         {loading ? (<View>loading</View>):null}
+                        {(gameListByCity.length === 0) ? (<View>Games Coming Soon!</View>):null}
                         {gameListByCity.map((game,index) => (
                             <Card style={divStyle(game.gameImage)} className={(gamesIDUserPlayed.includes(game.id) && hidePlayedGames)? "hide" : "game-card"} variation="elevated" key={game.id || game.gameName}>
 
