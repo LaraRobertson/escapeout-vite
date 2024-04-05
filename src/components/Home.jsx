@@ -697,7 +697,6 @@ export function Home() {
                     </Flex>
 
                     <Flex className="flex-games">
-                        <strong>games coming soon</strong>
                         {loading ? (<View>loading</View>):null}
                         {(gameListByCity.length === 0) ? (<View>Games Coming Soon!</View>):null}
                         {gameListByCity.map((game,index) => (
