@@ -50,6 +50,7 @@ type GamePuzzle @model @auth(rules: [ { allow: public } ] ) {
   puzzleName: String
   puzzlePosition: String
   puzzleImage: String
+  puzzleImageOpen: String
   puzzleImageSolved: String
   textField: [TextField] @hasMany(indexName: "byPuzzleID", fields: ["id"])
   puzzleClueRevealed: String

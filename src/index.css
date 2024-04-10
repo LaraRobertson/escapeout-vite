@@ -243,7 +243,13 @@ button:focus-visible,
   width:60px;
   top:8px;
 }
-
+.puzzleTextField {
+  width: 95%;
+}
+.right-answer {
+  width: 5%;
+  color: green;
+}
 .light, .light-label label, .light-label input, .light-label textarea {
   color: var(--color-light);
 }
@@ -268,7 +274,9 @@ button:focus-visible,
 .amplify-field__description, .flex-container  .amplify-textarea {
   color:white !important;
 }
-
+.amplify-field {
+  gap:0!important;
+}
 .flex-container .amplify-togglebuttongroup button.amplify-togglebutton--pressed {
   background-color: var(--red-alert);
 }
@@ -318,8 +326,12 @@ fieldset.comments legend {
   bottom:0;
   right:0;
   width: 100px;
-  height:50px;
+  height:100px;
   z-index:10;
+}
+.puzzle-holder-bottom .clickable{
+  position:absolute;
+  bottom:0;
 }
 
 .puzzle-holder-top {
@@ -330,7 +342,10 @@ fieldset.comments legend {
   height:100px;
   z-index:10;
 }
-
+.puzzle-holder-top img{
+  position:absolute;
+  right:0;
+}
 .puzzle-object-tool {
   position:absolute;
   bottom: 10px;
@@ -595,8 +610,8 @@ isChecked is for light/dark
   padding: 3px;
   margin-bottom: 15px;
   position: absolute;
-  top: 15px;
-  right: 20px;
+  top: 5px;
+  right: 5px;
   font-size: 20px;
   width: 30px;
   height: 30px;

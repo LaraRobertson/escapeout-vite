@@ -229,6 +229,21 @@ export function Admin() {
         }
         fetchGames();
     }
+    async function deleteZone(props) {
+        console.log("props.zoneID: " + props.zoneID);
+        try {
+            const zoneDetails = {
+                id: props.zoneID
+            };
+            await client.graphql({
+                query: mutations.deleteGamePlayZone,
+                variables: { input:zoneDetails }
+            });
+        } catch (err) {
+            console.log('error deleting zone:', err);
+        }
+        fetchGames();
+    }
 
     async function deleteHint(props) {
         console.log("props.hintID: " + props.hintID);
@@ -460,14 +475,18 @@ export function Admin() {
         gameID: 'xxxx',
         gameZoneName: '',
         gameZoneImage: '',
+        gameZoneIcon: '',
         gameZoneDescription: '',
         order: 1,
         disabled: false
     };
     const [formCreateZoneState, setFormCreateZoneState] = useState(initialStateCreateZone);
+    function setInputCreateZoneInitial(key, value) {
+        setFormCreateZoneState({ ...initialStateCreateZone, [key]: value });
+        setGameZoneFormVisible(true);
+    }
     function setInputCreateZone(key, value) {
         setFormCreateZoneState({ ...formCreateZoneState, [key]: value });
-        setGameZoneFormVisible(true);
     }
     useEffect(() => {
         console.log("***useEffect***:  formCreateZoneState");
@@ -491,6 +510,8 @@ export function Admin() {
                     input: gameZone
                 }
             });
+            setGameZoneFormVisible(false);
+            fetchGames();
         } catch (err) {
             console.log('error creating gamePlayZone:', err);
         }
@@ -771,8 +792,10 @@ export function Admin() {
         puzzleName: '',
         puzzlePosition: '',
         puzzleImage: '',
+        puzzleImageOpen: '',
         puzzleImageSolved: '',
-        puzzleObjectClue: '',
+        puzzleClueRevealed: '',
+        puzzleClueText: '',
         puzzleToolRevealed: '',
         puzzleToolNeeded: '',
         winGameImage: '',
@@ -783,10 +806,28 @@ export function Admin() {
     };
     const [formCreatePuzzleState, setFormCreatePuzzleState] = useState(initialStateCreatePuzzle);
     function setInputCreatePuzzleInitial(key1, value1, key2, value2) {
+        let element =  document.getElementById("updatePuzzle");
+        element.classList.remove('show');
+        element.classList.add('hide');
+        let element2 =  document.getElementById("createPuzzle");
+        element2.classList.remove('hide');
+        element2.classList.add('show');
         console.log("formCreatePuzzleInitial: " + key1 + "|" + value1 + "|" + key2 + "|" + value2 );
         let dynamicObject = {
             [key1]: value1,
             [key2]: value2,
+            puzzleName: '',
+            puzzlePosition: '',
+            puzzleImage: '',
+            puzzleImageOpen: '',
+            puzzleImageSolved: '',
+            puzzleToolRevealed: '',
+            puzzleToolNeeded: '',
+            winGameImage: '',
+            winGameMessage: '',
+            winGame: false,
+            order: 0,
+            disabled: false
         };
         setFormCreatePuzzleState(dynamicObject);
         setGamePuzzleFormVisible(true);
@@ -895,6 +936,16 @@ export function Admin() {
         disabled: false
     };
     const [formCreateTextFieldState, setFormCreateTextFieldState] = useState(initialStateCreateTextField);
+    function setInputCreateTextFieldInitial(key, value) {
+        setFormCreateTextFieldState({ ...initialStateCreateTextField, [key]: value });
+        let element =  document.getElementById("updateTextField");
+        element.classList.remove('show');
+        element.classList.add('hide');
+        let element2 =  document.getElementById("createTextField");
+        element2.classList.remove('hide');
+        element2.classList.add('show');
+        setGameTextFieldFormVisible(true);
+    }
     function setInputCreateTextField(key, value) {
         setFormCreateTextFieldState({ ...formCreateTextFieldState, [key]: value });
         setGameTextFieldFormVisible(true);
@@ -1309,7 +1360,7 @@ export function Admin() {
                                         <Button marginRight="5px" className="button" onClick={() => deleteGame({"gameID": game.id})}>Delete Game</Button>
                                         <Button marginRight="5px" className="button" onClick={() => showUpdateGame({"gameID": game.id})}>Update Game</Button>
                                         <Button marginRight="5px" className="button" onClick={() => copyGame({"gameID": game.id})}>Copy Game</Button>
-                                        <Button marginRight="5px" className="button" onClick={() => setInputCreateZone('gameID',game.id)}>Add Game Play Zone</Button>
+                                        <Button marginRight="5px" className="button" onClick={() => setInputCreateZoneInitial('gameID',game.id)}>Add Game Play Zone</Button>
                                         <br />
                                         <Button className={"show-button blue-duke"} onClick={() => setGameVisible("")}>close game:</Button>
                                         <strong>name</strong>: {game.gameName} | <strong>type</strong>: {game.gameType} | <strong>place</strong>: {game.gameLocationPlace} | <strong>city</strong>: {game.gameLocationCity}|<strong>disabled</strong>: { game.disabled ? "true":"false"}
@@ -1323,16 +1374,18 @@ export function Admin() {
                                         <strong>gameLevels: </strong>{game.gameLevels} <br />
                                         <strong>gameDesigner: </strong>{game.gameDesigner} <br />
                                         <strong>walkingDistance: </strong>{game.walkingDistance} <br />
-                                    <strong>gameImage: </strong>{game.gameImage} <br />
+                                    <strong>gameImage: </strong><Image src={game.gameImage} /> <br />
                                         <strong>gameWinMessage: </strong>{game.gameWinMessage} <br />
                                     <strong>gameMap: </strong>{game.gameMap} <br />
                                         <hr />
                                     <strong>How many zones: {game.gamePlayZone.items.length}</strong><br />
                                     {game.gamePlayZone.items.map((zone) => (
                                         <View key={zone.id}>
-                                            <strong>name:</strong> {zone.gameZoneName} | <strong>disabled</strong>: {zone.disabled ? "true" : "false"} | <strong>order: </strong>{zone.order}
+                                            <strong>name:</strong> {zone.gameZoneName} | <strong>disabled</strong>: {zone.disabled ? "true" : "false"} | <strong>order: </strong>{zone.order}<br />
+                                            <Image src={zone.gameZoneIcon}/><Image src={zone.gameZoneImage}/>
                                             <br />
                                             <Button marginRight="5px" className="button-small" onClick={() => showUpdateZone({"zoneID": zone.id})}>Update Zone</Button>
+                                            <Button marginRight="5px" className="button-small" onClick={() => deleteZone({"zoneID": zone.id})}>Delete Zone</Button>
                                             <Button marginRight="5px" className="button-small" onClick={() => setInputCreateHintInitial('gameID',game.id,'gamePlayZoneID',zone.id)}>Add Game Hint</Button>
                                             <Button marginRight="5px" className="button-small" onClick={() => setInputCreateClueInitial('gameID',game.id,'gamePlayZoneID',zone.id)}>Add Clue</Button>
                                             <Button marginRight="5px" className="button-small" onClick={() => setInputCreatePuzzleInitial('gameID',game.id,'gamePlayZoneID',zone.id)}>Add Puzzle</Button>
@@ -1343,10 +1396,11 @@ export function Admin() {
                                         {game.gamePuzzle.items.map((puzzle) => (
                                             <View key={puzzle.id}>
                                                 <strong>puzzle name:</strong>  {puzzle.puzzleName} | <strong>ord:</strong> {puzzle.order} | <strong>zone name:</strong>  {gamePlayZoneObject[("id-"+ puzzle.gamePlayZoneID)]} | <strong>winGame</strong>: {puzzle.winGame? "true" : "false"} | <strong>disabled</strong>: {puzzle.disabled ? "true" : "false"} <br />
-                                                <strong>puzzle position</strong> {puzzle.puzzlePosition} | <strong>puzzleToolNeeded</strong> {puzzle.puzzleToolNeeded} | <strong>puzzle tool revealed</strong> {puzzle.puzzleToolRevealed} | <strong>object clue</strong> {puzzle.puzzleObjectClue} |
+                                                <strong>puzzle position</strong> {puzzle.puzzlePosition} | <strong>puzzleToolNeeded</strong> {puzzle.puzzleToolNeeded} | <strong>puzzle tool revealed</strong> {puzzle.puzzleToolRevealed} | <strong>clue revealed</strong> {puzzle.puzzleClueRevealed} |
+                                                <br /><Image src={puzzle.puzzleImage} /> <Image src={puzzle.puzzleImageOpen} /> <Image src={puzzle.puzzleImageSolved} />
                                                 <br /><Button marginRight="5px" className="button-small" onClick={() => showUpdatePuzzle({"puzzleID": puzzle.id})}>Update Puzzle</Button>
                                                 <Button marginRight="5px" className="button-small" onClick={() => deletePuzzle({"puzzleID": puzzle.id})}>Delete Puzzle</Button>
-                                                <Button marginRight="5px" className="button-small" onClick={() => setInputCreateTextField('puzzleID',puzzle.id)}>Add TextField</Button>
+                                                <Button marginRight="5px" className="button-small" onClick={() => {setInputCreateTextFieldInitial('puzzleID',puzzle.id);}}>Add TextField</Button>
 
                                                 <br />
                                                 <hr />
@@ -1373,8 +1427,9 @@ export function Admin() {
                                                 <strong>ord:</strong>  {clue.order} |
                                                 <strong>clue position: </strong>{clue.gameCluePosition} <br />
                                                 <strong>clue text: </strong>{clue.gameClueText} <br />
-                                                <strong>clue Icon: </strong>{clue.gameClueIcon} <br />
-                                                <strong>clue Image: </strong>{clue.gameClueImage}
+                                                <strong>clue Icon: </strong><Image src={clue.gameClueIcon} />
+                                                <strong>Tool Needed: </strong>{clue.gameClueToolNeeded}&nbsp;
+                                                <strong>clue Image: </strong><Image src={clue.gameClueImage} />
                                                 <br /><Button marginRight="5px" className="button-small" onClick={() => showUpdateClue({"clueID": clue.id})}>Update Clue</Button>
                                                 <Button marginRight="5px" className="button-small" onClick={() => deleteClue({"clueID": clue.id})}>Delete Clue</Button>
                                             </View>
@@ -1820,7 +1875,7 @@ export function Admin() {
                                                     onChange={(event) => setInputCreateClue('gameCluePosition', event.target.value)}
                                                     name="gameCluePosition"
                                                     placeholder="Game Clue Position"
-                                                    label="Game Clue Position - top or bottom"
+                                                    label="Game Clue Position - top or bottom or tRight"
                                                     variation="quiet"
                                                     value={formCreateClueState.gameCluePosition}
                                                     required
@@ -1832,6 +1887,15 @@ export function Admin() {
                                                     label="Game Clue Image"
                                                     variation="quiet"
                                                     value={formCreateClueState.gameClueImage}
+                                                    required
+                                                />
+                                                <TextField
+                                                    onChange={(event) => setInputCreateClue('gameClueToolNeeded', event.target.value)}
+                                                    name="gameClueToolNeeded"
+                                                    placeholder="Game Clue Tool Needed"
+                                                    label="Game Clue Tool Needed (keyword)"
+                                                    variation="quiet"
+                                                    value={formCreateClueState.gameClueToolNeeded}
                                                     required
                                                 />
                                             </Flex>
@@ -2003,6 +2067,15 @@ export function Admin() {
                                                     required
                                                 />
                                                 <TextField
+                                                    onChange={(event) => setInputCreatePuzzle('puzzleImageOpen', event.target.value)}
+                                                    name="puzzleImageOpen"
+                                                    placeholder="puzzle Image Open"
+                                                    label="puzzle Image Open"
+                                                    variation="quiet"
+                                                    value={formCreatePuzzleState.puzzleImageOpen}
+                                                    required
+                                                />
+                                                <TextField
                                                     onChange={(event) => setInputCreatePuzzle('puzzleImageSolved', event.target.value)}
                                                     name="puzzleImageSolved"
                                                     placeholder="puzzle Image Solved"
@@ -2011,15 +2084,6 @@ export function Admin() {
                                                     value={formCreatePuzzleState.puzzleImageSolved}
                                                     required
                                                 />
-                                                <TextField
-                                                    onChange={(event) => setInputCreatePuzzle('puzzleObjectClue', event.target.value)}
-                                                    name="puzzleObjectClue"
-                                                    placeholder="puzzle Object Clue - show a clue object instead of tool - haven't tested code"
-                                                    label="puzzle Object Clue"
-                                                    variation="quiet"
-                                                    value={formCreatePuzzleState.puzzleObjectClue}
-                                                />
-
                                                 <TextField
                                                     onChange={(event) => setInputCreatePuzzle('puzzleClueText', event.target.value)}
                                                     name="puzzleClueText"

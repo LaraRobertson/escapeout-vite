@@ -256,6 +256,7 @@ export const createGamePuzzle = /* GraphQL */ `mutation CreateGamePuzzle(
     puzzleName
     puzzlePosition
     puzzleImage
+    puzzleImageOpen
     puzzleImageSolved
     textField {
       nextToken
@@ -290,6 +291,7 @@ export const updateGamePuzzle = /* GraphQL */ `mutation UpdateGamePuzzle(
     puzzleName
     puzzlePosition
     puzzleImage
+    puzzleImageOpen
     puzzleImageSolved
     textField {
       nextToken
@@ -324,6 +326,7 @@ export const deleteGamePuzzle = /* GraphQL */ `mutation DeleteGamePuzzle(
     puzzleName
     puzzlePosition
     puzzleImage
+    puzzleImageOpen
     puzzleImageSolved
     textField {
       nextToken

@@ -10,7 +10,9 @@ import DOMPurify from "dompurify";
 
 export const ToolObject = {
     key: 'https://escapeoutbucket213334-staging.s3.amazonaws.com/public/object-tools/key.png',
-    discs: 'https://escapeoutbucket213334-staging.s3.amazonaws.com/public/object-tools/discs.png'
+    discs: 'https://escapeoutbucket213334-staging.s3.amazonaws.com/public/object-tools/discs.png',
+    prybar: 'https://escapeoutbucket213334-staging.s3.amazonaws.com/public/object-tools/prybar.png',
+    keyTubular: 'https://escapeoutbucket213334-staging.s3.amazonaws.com/public/object-tools/key-tubular.png'
 };
 
 export const TimeBlock = (props) => {
