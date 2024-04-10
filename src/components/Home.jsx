@@ -787,7 +787,7 @@ export function Home() {
                                             <Text color="white">{game.walkingDistance} walking distance</Text>
                                         </View>
                                     </View>
-
+                                    <View className="inner-game-card1">
                                     <Flex justifyContent="center">
                                         {authStatus !== 'authenticated' ? (
                                             <View textAlign="center">
@@ -840,6 +840,7 @@ export function Home() {
                                         </View>
 
                                     </Flex>
+
                                     <View className="game-card-full light-dark">
                                         <View id={game.id}>
                                             <Heading level={"6"} className="heading light-dark"
@@ -868,6 +869,7 @@ export function Home() {
 
                                             <span className="italics">Tap on Leaderboard to see average time.</span>
                                         </View>
+                                    </View>
                                     </View>
                                 </Card>
                             ))}

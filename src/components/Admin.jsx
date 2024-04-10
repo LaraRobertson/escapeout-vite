@@ -1408,7 +1408,7 @@ export function Admin() {
                                                 {puzzle.textField.items.map((textField) => (
                                                     <View key={textField.id}>
                                                         <strong>textfield name:</strong>  {textField.name} | <strong>order:</strong> {textField.order} |
-                                                        <strong>label:</strong>  {textField.label} | <strong>disabled</strong>: {textField.disabled ? "true" : "false"} |
+                                                        <strong>label:</strong>  {textField.label} | <strong>disabled</strong>: {textField.disabled ? "true" : "false"} | <strong>{textField.answer}</strong>
                                                         <br /><Button marginRight="5px" className="button-small" onClick={() => showUpdateTextField({"textFieldID": textField.id})}>Update TextField</Button>
                                                         <Button marginRight="5px" className="button-small" onClick={() => deleteTextField({"textFieldID": textField.id})}>Delete TextField</Button>
 

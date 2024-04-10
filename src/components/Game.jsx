@@ -756,6 +756,12 @@ export function Game() {
                                    <Button  className={isChecked? "close-button dark" : "close-button light"}  onClick={()=>setGameClueVisibleFunction(["clue" + (clue.id)], false)}>X</Button>
                                    <Heading level={"6"} className={isChecked? "heading dark" : "heading light"} paddingTop="10px">Clue Name: {clue.gameClueName}</Heading>
                                    <View  dangerouslySetInnerHTML={ {__html: DangerouslySetInnerHTMLSanitized(clue.gameClueText)}} paddingTop="10px"></View>
+                                   {(clue.gameClueImage != "" && clue.gameClueImage != null)?
+                                       (
+                                           <Image src={clue.gameClueImage} />
+
+
+                                       ):(null)}
                                    <Flex className="window-button-bottom" justifyContent="center" gap="1rem">
                                        <Button className="button button-small" onClick={()=>setCluesFunction("<strong>" + clue.gameClueName + " </strong> ==> " +
                                            clue.gameClueText + " <br />")}>add clue to notes</Button>
@@ -1284,10 +1290,11 @@ export function Game() {
                             <strong>Game Goals:</strong> {game.gameGoals}
                         </View>
                         <View paddingBottom="10px">
-                            <strong>Hints:</strong> Clicking on a Hint costs <span
+                            <strong>Hints:</strong> Clicking on a Hint Below adds <span
                             className="italics"> 5 Minutes!</span> Use Hints if you really need them.
                         </View>
-
+                        {/* HINTS */}
+                        <hr />
                         {gameHint.map((hint,index) => (
                             <Flex wrap="wrap" key={hint.id} ariaLabel={hint.id}>
                                 <View>
@@ -1303,6 +1310,7 @@ export function Game() {
                                 </View>
                             </Flex>
                         ))}
+                        <hr />
                         <View width="100%" textAlign='center'>
                             <Button className={isChecked? "close dark" : "close light"}  marginTop={"10px"}
                                     onClick={() => isHelpVisible ? setIsHelpVisible(false) : setIsHelpVisible(true)}>close</Button>

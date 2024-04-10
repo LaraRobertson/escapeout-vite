@@ -58,7 +58,7 @@ export const NotesOpen = (props) => {
               <strong>Notes</strong>
             <View className={(props.clues != '' && props.clues != undefined)?"small show":"hide"}>
                 <strong>clues</strong>:
-                <View dangerouslySetInnerHTML={ {__html: DangerouslySetInnerHTMLSanitized(props.clues)}}  color={"black"}  padding={"0 10px"}>
+                <View dangerouslySetInnerHTML={ {__html: DangerouslySetInnerHTMLSanitized(props.clues)}}   padding={"0 10px"}>
                 </View>
                 <View textAlign="center"><Button className={props.isChecked? "link-button small dark" : "link-button small light"} onClick={() => props.setClues('')}>clear clues</Button></View>
             </View>
