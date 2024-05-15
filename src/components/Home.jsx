@@ -581,10 +581,9 @@ export function Home() {
             behavior: "smooth",
         });
     }
-
     const divStyle = (src) => ({
         background:  "url(" + src + ") 0 0 / contain no-repeat"
-    })
+    });
 
     if (password != "go" && authStatus != 'authenticated') {
         return (
@@ -728,7 +727,7 @@ export function Home() {
                             {loading ? (<View>loading</View>) : null}
                             {((gameListByCity.length === 0) & !loading) ? (<View>Games Coming Soon!</View>) : null}
                             {gameListByCity.map((game, index) => (
-                                <Card style={divStyle(game.gameImage)}
+                                <Card style={divStyle(game.gamePlayZone.items[0].gameZoneImage)}
                                       className={(gamesIDUserPlayed.includes(game.id) && hidePlayedGames) ? "hide" : "game-card"}
                                       variation="elevated" key={game.id || game.gameName}>
 

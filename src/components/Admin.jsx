@@ -27,6 +27,10 @@ import {generateClient} from "aws-amplify/api";
 import { fetchUserAttributes } from 'aws-amplify/auth';
 import {deleteGameHint} from "../graphql/mutations";
 import { saveAs } from 'file-saver';
+/* backups - manual */
+import * as backups from "../backups/backups";
+import data from '../backups/data.json';
+import data2 from '../backups/SecretPapersAll.json';
 
 export function Admin() {
     const [email, setEmail] = useState();
@@ -50,6 +54,7 @@ export function Admin() {
     const [gameClueFormVisible, setGameClueFormVisible] = useState(false);
     const [gamePuzzleFormVisible, setGamePuzzleFormVisible] = useState(false);
     const [gameTextFieldFormVisible, setGameTextFieldFormVisible] = useState(false);
+    const [backupsVisible, setBackupsVisible] = useState(false);
 
     const client = generateClient();
     const {  authStatus, user, route } = useAuthenticator((context) => [
@@ -399,7 +404,16 @@ export function Admin() {
     }
     async function addGameFromFile() {
         try {
-        const gameString = '{"gameName":"Disc Golf Hunt and Think2","gameDescriptionH2":"You want to play disc golf but have no discs.","gameDescriptionH3":"Try and find some discs!","gameDescriptionP":"This is a level 2 game. It is a short game with some logic. There are 2 play zones.","gameLocationPlace":"Jaycee Park","gameLocationPlaceDetails":null,"gameLocationCity":"Tybee Island","gameDesigner":"EscapeOut.games","gameLevel":"level 2","walkingDistance":"500 feet","playZones":null,"gameImage":"https://escapeoutbucket213334-staging.s3.amazonaws.com/public/Jaycee-Park-Game-Image.jpg","gameType":"free","gameWinMessage":"Great Job On Winning!!!","gameWinImage":null,"gameGoals":"Find Discs!","gameIntro":"Discs are hidden somewhere.  Use the clues to find the discs.","gameMap":"https://escapeoutbucket213334-staging.s3.amazonaws.com/public/game-maps/jaycee-park-2pz-map.jpg","type":"game","createdAt":"2024-01-07T20:21:02.214Z","disabled":false}'
+        const gameString = '{"gameName":"Disc Golf Hunt and Think2","gameDescriptionH2":"You want to play disc golf but have no discs.",' +
+            '"gameDescriptionH3":"Try and find some discs!",' +
+            '"gameDescriptionP":"This is a level 2 game. It is a short game with some logic. There are 2 play zones.",' +
+            '"gameLocationPlace":"Jaycee Park","gameLocationPlaceDetails":null,"gameLocationCity":"Tybee Island",' +
+            '"gameDesigner":"EscapeOut.games","gameLevel":"level 2","walkingDistance":"500 feet","playZones":null,' +
+            '"gameImage":"https://escapeoutbucket213334-staging.s3.amazonaws.com/public/Jaycee-Park-Game-Image.jpg",' +
+            '"gameType":"free","gameWinMessage":"Great Job On Winning!!!","gameWinImage":null,"gameGoals":"Find Discs!",' +
+            '"gameIntro":"Discs are hidden somewhere.  Use the clues to find the discs.",' +
+            '"gameMap":"https://escapeoutbucket213334-staging.s3.amazonaws.com/public/game-maps/jaycee-park-2pz-map.jpg",' +
+            '"type":"game","createdAt":"2024-01-07T20:21:02.214Z","disabled":false}'
             console.log("addGame: " + gameString);
             await client.graphql({
                 query: mutations.createGame,
@@ -688,10 +702,17 @@ export function Admin() {
     };
     const [formCreateClueState, setFormCreateClueState] = useState(initialStateCreateClue);
     function setInputCreateClueInitial(key1, value1, key2, value2) {
+        let element =  document.getElementById("updateClue");
+        element.classList.remove('show');
+        element.classList.add('hide');
+        let element2 =  document.getElementById("createClue");
+        element2.classList.remove('hide');
+        element2.classList.add('show');
         console.log("formCreateClueInitial: " + key1 + "|" + value1 + "|" + key2 + "|" + value2 );
         setFormCreateClueState({ ...formCreateClueState, [key1]: value1, [key2]: value2});
         setGameClueFormVisible(true);
     }
+
     function setInputCreateClue(key, value) {
         console.log("setInputCreateClue: " + key +"|" + value);
         setFormCreateClueState({ ...formCreateClueState, [key]: value });
@@ -1250,12 +1271,22 @@ export function Admin() {
     }, [showHideLabel]);
 
     async function copyGame(props) {
+        console.log("gameName: " + props.gameName);
+        const fileName1 = props.gameName + ".txt";
+        const fileName2 = props.gameName + "-All.json";
         try {
             const apiData = await client.graphql({
                 query: getGame,
                 variables: {id: props.gameID}
             });
             const gamesFromAPI = apiData.data.getGame;
+           /* const fs = require('fs');
+            fs.writeFileSync(
+                'data.json',
+                JSON.stringify(objJson)
+            )*/
+            const file = new Blob([apiData], { type: 'application/json' });
+            saveAs(file, fileName2);
             /*delete gamesFromAPI.updatedAt;
             delete gamesFromAPI.user;
             delete gamesFromAPI.__typename;
@@ -1264,8 +1295,8 @@ export function Admin() {
             delete gamesFromAPI.gameClue;
             delete gamesFromAPI.gamePuzzle;*/
             delete gamesFromAPI.id;
-            const file = new Blob([JSON.stringify(gamesFromAPI)], { type: 'text/plain;charset=utf-8' });
-            saveAs(file, 'Disc-Golf-Hunt-and-Think.txt');
+            const file2 = new Blob([JSON.stringify(gamesFromAPI)], { type: 'text/plain;charset=utf-8' });
+            saveAs(file2, fileName1);
         } catch (err) {
             console.log('error fetching getGame', err);
         }
@@ -1347,6 +1378,7 @@ export function Admin() {
                             {(disabledGame === false)? (<View>disabled: false</View>):null}
                             <Button className={"show-button blue-duke"} onClick={() => {setFormCreateGameState(initialStateCreateGame);setGameFormVisible(true)}}>add game</Button>
                             (<Button className={"show-button blue-duke small"} onClick={() => addGameFromFile()}>add game from file (paste text)</Button>)
+                            <br /><Button className={"show-button blue-duke"} onClick={() =>  setBackupsVisible(true)}>Show Backups</Button>
                             {games.map((game,index) => (
                                 <View key={game.id} >
                                     <View className={(gameVisible==game.id)? "hide" : "show"}>
@@ -1359,7 +1391,7 @@ export function Admin() {
                                         <Button marginRight="5px" className="button" onClick={() => showGameStats({"gameID": game.id, "gameName": game.gameName})}>Game Stats</Button>
                                         <Button marginRight="5px" className="button" onClick={() => deleteGame({"gameID": game.id})}>Delete Game</Button>
                                         <Button marginRight="5px" className="button" onClick={() => showUpdateGame({"gameID": game.id})}>Update Game</Button>
-                                        <Button marginRight="5px" className="button" onClick={() => copyGame({"gameID": game.id})}>Copy Game</Button>
+                                        <Button marginRight="5px" className="button" onClick={() => copyGame({"gameID": game.id, "gameName": game.gameName})}>Copy Game</Button>
                                         <Button marginRight="5px" className="button" onClick={() => setInputCreateZoneInitial('gameID',game.id)}>Add Game Play Zone</Button>
                                         <br />
                                         <Button className={"show-button blue-duke"} onClick={() => setGameVisible("")}>close game:</Button>
@@ -1505,7 +1537,7 @@ export function Admin() {
                                         <TextField
                                             onChange={(event) => setInputCreateGame('gameImage', event.target.value)}
                                             name="GameImage"
-                                            placeholder="game Image"
+                                            placeholder="game Image - don't need anymore, just using first playzoneimage"
                                             label="Game Image"
                                             variation="quiet"
                                             value={formCreateGameState.gameImage}
@@ -2117,6 +2149,22 @@ export function Admin() {
                                                     variation="quiet"
                                                     value={formCreatePuzzleState.winGameImage}
                                                 />
+                                                <TextField
+                                                    onChange={(event) => setInputCreatePuzzle('winGameMessage', event.target.value)}
+                                                    name="winGameMessage"
+                                                    placeholder="win game message"
+                                                    label="win game message"
+                                                    variation="quiet"
+                                                    value={formCreatePuzzleState.winGameMessage}
+                                                />
+                                                <TextField
+                                                    onChange={(event) => setInputCreatePuzzle('puzzleClueText', event.target.value)}
+                                                    name="puzzleClueText"
+                                                    placeholder="puzzle clue Text"
+                                                    label="puzzle Clue Text"
+                                                    variation="quiet"
+                                                    value={formCreatePuzzleState.puzzleClueText}
+                                                />
                                             </Flex>
                                             <Flex direction="row" justifyContent="center" marginTop="20px">
                                                 <Button className="show" onClick={() => setGamePuzzleFormVisible(false)} variation="primary">
@@ -2130,6 +2178,35 @@ export function Admin() {
                                                 </Button>
                                             </Flex>
                                         </View>
+                                    </View>
+                                </View>
+                                <View className={backupsVisible? "overlay" : "hide"}>
+                                    <View className="popup">
+                                        backups:
+                                        <View>
+                                            <Button onClick={() => divShowHide("backup1")}>{showHideLabel.backup1} Disc Golf Hunt And Think</Button>
+                                            <View id="backup1" className="hide">
+                                                <pre>{JSON.stringify(backups.discGolfHunt2, null, 2)}</pre>
+                                            </View>
+                                        </View>
+                                        <View>
+                                            <Button onClick={() => divShowHide("backup2")}>{showHideLabel.backup2} Disc Golf Hunt</Button>
+                                            <View id="backup2" className="hide">
+                                                <pre>{JSON.stringify(backups.discGolfHunt1, null, 2)}</pre>
+                                            </View>
+                                        </View>
+                                        <View>
+                                            <Button onClick={() => divShowHide("backup3")}>{showHideLabel.backup3} Secret Papers</Button>
+                                            <View id="backup3" className="hide">
+                                                <pre>{JSON.stringify(backups.secretPapers, null, 2)}</pre>
+                                            </View>
+                                        </View>
+                                        <Flex direction="row" justifyContent="center" marginTop="20px">
+                                            <Button className="show" onClick={() => setBackupsVisible(false)} variation="primary">
+                                                Close
+                                            </Button>
+
+                                        </Flex>
                                     </View>
                                 </View>
                             </View>

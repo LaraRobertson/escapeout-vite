@@ -93,6 +93,7 @@ export function Game() {
         console.log ("gameTime: " + gameTime);
 
         if (localStorage.getItem("realTimeStart")) {
+            /* have already started game - user refreshed (or something) and wants to continue */
             setStopClock(false);
             setIsAlertVisible(true);
             setAlertText('resuming game');
@@ -113,6 +114,10 @@ export function Game() {
             if (localStorage.getItem("gamePuzzleSolved")!=null) {
                 /* check for all puzzles solved, need to do wingame? */
                 setGamePuzzleSolved(JSON.parse(localStorage.getItem("gamePuzzleSolved")));
+            }
+            if (localStorage.getItem("gamePuzzleGuess")!=null) {
+                /* check for all puzzles solved, need to do wingame? */
+                setGamePuzzleGuess(JSON.parse(localStorage.getItem("gamePuzzleGuess")));
             }
             /* if there */
             if (localStorage.getItem("backpackObject")!=null) {
@@ -337,6 +342,14 @@ export function Game() {
             localStorage.setItem("gamePuzzleSolved", gamePuzzleSolvedTest);
         }
     }, [gamePuzzleSolved]);
+
+    useEffect(() => {
+        let gamePuzzleGuessTest = JSON.stringify(gamePuzzleGuess);
+        console.log("***useEffect***:gamePuzzleGuess: " + gamePuzzleGuessTest);
+        if (gamePuzzleGuessTest != "{}" &&  gamePuzzleGuessTest != "" &&  gamePuzzleGuessTest != null) {
+            localStorage.setItem("gamePuzzleGuess", gamePuzzleGuessTest);
+        }
+    }, [gamePuzzleGuess]);
 
     useEffect(() => {
         let gameHintVisibleTest = JSON.stringify(gameHintVisible);
@@ -696,7 +709,7 @@ export function Game() {
                        </View>
                    ))}
                     {gameTopClues.map((clue,index) => (
-                        <View aria-label={"gameBottomClues: " + clue.gameClueName} key={keyID(clue.id,"clue")} >
+                        <View aria-label={"gameTopClues: " + clue.gameClueName} key={keyID(clue.id,"clue")} >
                             {/* if clue.gameTool then Tool is required and must be turned on and using clue.gameImage for now */
                                 (clue.gameClueToolNeeded != '' && clue.gameClueToolNeeded !=null)? (
 
@@ -721,6 +734,13 @@ export function Game() {
                                     <Button  className={isChecked? "close-button dark" : "close-button light"}  onClick={()=>setGameClueVisibleFunction(["clue" + (clue.id)], false)}>X</Button>
                                     <Heading level={"6"} className={isChecked? "heading dark" : "heading light"} paddingTop="10px">Clue Name: {clue.gameClueName}</Heading>
                                     <View  dangerouslySetInnerHTML={ {__html: DangerouslySetInnerHTMLSanitized(clue.gameClueText)}} paddingTop="10px"></View>
+                                    {(clue.gameClueImage != "" && clue.gameClueImage != null)?
+                                        (
+                                            <Image src={clue.gameClueImage} />
+
+
+                                        ):(null)}
+
                                     <Flex className="window-button-bottom" justifyContent="center" gap="1rem">
                                         <Button className="button button-small" onClick={()=>setCluesFunction("<strong>" + clue.gameClueName + " </strong> ==> " +
                                             clue.gameClueText + " <br />")}>add clue to notes</Button>
@@ -731,7 +751,7 @@ export function Game() {
                         </View>
                     ))}
                    {gameBottomClues.map((clue,index) => (
-                       <View aria-label={"gameTopClues: " + clue.gameClueName} key={keyID(clue.id,"clue")} >
+                       <View aria-label={"gameBottomClues: " + clue.gameClueName} key={keyID(clue.id,"clue")} >
                            {/* if clue.gameTool then Tool is required and must be turned on and using clue.gameImage for now */
                                (clue.gameClueToolNeeded != '' && clue.gameClueToolNeeded !=null)? (
 
@@ -937,11 +957,19 @@ export function Game() {
                                <Image src={puzzle.puzzleImageSolved} className={gamePuzzleSolved[puzzle.id]? "show puzzle-item" : "hide"} />
                                {/*<Image src={puzzle.puzzleObjectClue} onClick={()=>setGamePuzzleVisibleFunction(["puzzle" + (puzzle.id)], true)} className={gamePuzzleSolved[puzzle.id]? "show clue-on-puzzle" : "hide"} />
                                 <Image className={(gamePuzzleSolved[puzzle.id] && puzzle.puzzleObjectClue != "")? "puzzle-object-tool show" : "hide"} src={puzzle.puzzleClueRevealed} onClick={()=>setGamePuzzleClueVisibleFunction(["puzzle" + (puzzle.id)], true)} />*/}
-                               {puzzle.winGame? (
-                                       <Image className={(gamePuzzleSolved[puzzle.id] && puzzle.puzzleToolRevealed != "")? "puzzle-object-tool show" : "hide"} src={puzzle.puzzleToolRevealed} />
+                               {(puzzle.winGame && puzzle.puzzleToolRevealed != "")? (
+                                       <Image className={(gamePuzzleSolved[puzzle.id])? "puzzle-object-tool show" : "hide"} src={puzzle.puzzleToolRevealed} />
                                    ):
                                    (
-                               <Image className={(gamePuzzleSolved[puzzle.id] && puzzle.puzzleToolRevealed != "" && toolVisible[puzzle.puzzleToolRevealed])? "puzzle-object-tool yellow-border show" : "hide"} src={tool[puzzle.puzzleToolRevealed]} onClick={()=>objectInBackpackFunction(puzzle.puzzleToolRevealed)} />
+                               <Image className={(gamePuzzleSolved[puzzle.id] && toolVisible[puzzle.puzzleToolRevealed])? "puzzle-object-tool yellow-border show" : "hide"} src={tool[puzzle.puzzleToolRevealed]} onClick={()=>objectInBackpackFunction(puzzle.puzzleToolRevealed)} />
+                                   )}
+                               {/* haven't finished yet... showing clue icon that opens a picture .. will do later*/
+                                   (puzzle.winGame && puzzle.puzzleClueText != "")? (
+
+                                       <Image className={(gamePuzzleSolved[puzzle.id])? "puzzle-object-tool show" : "hide"} src={puzzle.puzzleToolRevealed} />
+                                   ):
+                                   (
+                                       <Image className={(gamePuzzleSolved[puzzle.id] && toolVisible[puzzle.puzzleToolRevealed])? "puzzle-object-tool yellow-border show" : "hide"} src={tool[puzzle.puzzleToolRevealed]} onClick={()=>objectInBackpackFunction(puzzle.puzzleToolRevealed)} />
                                    )}
                            </View>
                            <View className={gamePuzzleVisible["puzzleVisible-" + (puzzle.id)]? "cover-screen show-gradual" : "cover-screen hide-gradual"}>
