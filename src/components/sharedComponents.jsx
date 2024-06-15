@@ -1,5 +1,6 @@
 import {Button, Image, SelectField, TextAreaField, TextField, View, Flex, Heading} from "@aws-amplify/ui-react";
 import React from "react";
+
 import {
     toggleNotes,
     setCommentsFunction, goHome
@@ -7,6 +8,39 @@ import {
 
 import {useNavigate} from "react-router-dom";
 import DOMPurify from "dompurify";
+import Close from "../assets/times-solid-svgrepo-com.svg";
+import "../assets/modal.css";
+
+
+
+export const Modal2 = ({ show, close, title, children }) => {
+    return (
+        <>
+             <div
+                        className={`modalContainer ${show ? "showModal" : ""} `}
+                        onClick={() => close()}
+                    >
+                        <div className="modal" onClick={(e) => e.stopPropagation()}>
+                            <header className="modal_header">
+                                <h2 className="modal_header-title"> {title} </h2>
+                                <button className="close" onClick={() => close()}>
+                                    <img src={Close} alt="close" />
+                                </button>
+                            </header>
+                            <main className="modal_content"> {children} </main>
+                            <footer className="modal_footer">
+                                <button className="modal-close" onClick={() => close()}>
+                                    Cancel
+                                </button>
+
+                                <button className="submit">Submit</button>
+                            </footer>
+                        </div>
+                    </div>
+        </>
+    );
+};
+
 
 export const ToolObject = {
     key: 'https://escapeoutbucket213334-staging.s3.amazonaws.com/public/object-tools/key.png',
@@ -53,27 +87,25 @@ function DangerouslySetInnerHTMLSanitized(htmlContent) {
 
 export const NotesOpen = (props) => {
     return (
-        <View className="notes show-gradual">
-            <View className={props.isChecked? "all-screen dark" : "all-screen light"} height={"auto"}>
+        <View className="notes notes-change show-gradual">
+            <View className={props.isChecked? "dark" : "light"} height={"auto"}>
               <strong>Notes</strong>
-            <View className={(props.clues != '' && props.clues != undefined)?"small show":"hide"}>
-                <strong>clues</strong>:
-                <View dangerouslySetInnerHTML={ {__html: DangerouslySetInnerHTMLSanitized(props.clues)}}   padding={"0 10px"}>
+                <View className={(props.clues != '' && props.clues != undefined)?"small show":"hide"}>
+                    <strong>clues</strong>:
+                    <View dangerouslySetInnerHTML={ {__html: DangerouslySetInnerHTMLSanitized(props.clues)}}   padding={"0 10px"}>
+                    </View>
+                    <View textAlign="center"><Button className={props.isChecked? "link-button small dark" : "link-button small light"} onClick={() => props.setClues('')}>clear clues</Button></View>
                 </View>
-                <View textAlign="center"><Button className={props.isChecked? "link-button small dark" : "link-button small light"} onClick={() => props.setClues('')}>clear clues</Button></View>
-            </View>
-            <TextAreaField
-                label="Notes"
-                labelHidden
-                value={props.gameNotes}
-                rows="5"
-                onChange={(e) =>  props.setGameNotesFunction(e.currentTarget.value,props.setGameNotes)}
-                descriptiveText="Take some Notes - close when done, they will still be here"
-            />
+                <TextAreaField
+                    label="Notes"
+                    labelHidden
+                    value={props.gameNotes}
+                    rows="5"
+                    onChange={(e) =>  props.setGameNotesFunction(e.currentTarget.value,props.setGameNotes)}
+                    descriptiveText="Take some Notes - close when done, they will still be here"
+                />
 
-                <View width="100%" textAlign='center' paddingTop="10px">
-                    <Button  className={props.isChecked? "close small dark" : "close small light"} onClick={() => props.setAreNotesVisible(false)}>close notes</Button>
-                </View>
+
             </View>
         </View>
     )

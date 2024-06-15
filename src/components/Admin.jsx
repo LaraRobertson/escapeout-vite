@@ -1414,7 +1414,7 @@ export function Admin() {
                                     {game.gamePlayZone.items.map((zone) => (
                                         <View key={zone.id}>
                                             <strong>name:</strong> {zone.gameZoneName} | <strong>disabled</strong>: {zone.disabled ? "true" : "false"} | <strong>order: </strong>{zone.order}<br />
-                                            <Image src={zone.gameZoneIcon}/><Image src={zone.gameZoneImage}/>
+                                            <Image src={zone.gameZoneIcon}/>|<Image src={zone.gameZoneImage} />
                                             <br />
                                             <Button marginRight="5px" className="button-small" onClick={() => showUpdateZone({"zoneID": zone.id})}>Update Zone</Button>
                                             <Button marginRight="5px" className="button-small" onClick={() => deleteZone({"zoneID": zone.id})}>Delete Zone</Button>
@@ -1711,7 +1711,7 @@ export function Admin() {
                                             value={formCreateZoneState.gameZoneName}
                                             required
                                         />
-                                        <TextField
+                                        <TextAreaField
                                             name="GameLocationImage"
                                             onChange={(event) => setInputCreateZone('gameZoneImage', event.target.value)}
                                             placeholder="Game Zone Image"

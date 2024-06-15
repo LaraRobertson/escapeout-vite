@@ -9,6 +9,7 @@ import { Home } from './components/Home';
 import { Admin } from './components/Admin';
 import { Waiver } from './components/Waiver';
 import { Game } from './components/Game';
+import { GameV3 } from './components/GameV3';
 import { LeaderBoard } from './components/LeaderBoard';
 
 
@@ -35,6 +36,14 @@ const App = () => {
                             element={
                                 <RequireAuth>
                                     <Game />
+                                </RequireAuth>
+                            }
+                        />
+                        <Route
+                            path="/gameV3"
+                            element={
+                                <RequireAuth>
+                                    <GameV3 />
                                 </RequireAuth>
                             }
                         />

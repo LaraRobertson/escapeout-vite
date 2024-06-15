@@ -1,0 +1,146 @@
+#modal {
+  position: relative;
+  z-index: 2;
+}
+.modalContainer {
+  align-items: center;
+  background-color: rgba(0,0,0,.35);
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  left: 0;
+  opacity: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  transition: all .2s ease;
+  visibility: hidden
+}
+
+.modalContainer .modal {
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  background-color: hsla(0,0%,100%,.35);
+  border-radius: 20px;
+  box-shadow: 0 0 1rem 0 rgba(0,0,0,.2);
+  height: auto;
+  padding: 2rem;
+  /*transition: all .6s ease-in-out 0s;
+  -webkit-transform: translateX(-50%) scaleY(0);
+  -o-transform: translateX(-50%) scaleY(0);
+  -ms-transform: translateX(-50%) scaleY(0);
+  transform: translateX(-50%) scaleY(0);
+  -webkit-transform-origin: top;
+  -o-transform-origin: top;
+  -ms-transform-origin: top;
+  transform-origin: top;*/
+  -webkit-transform: translateY(-600px);
+  transform: translateY(-600px);
+  transition: all .4s ease;
+  width: calc(15rem + 15vw)
+}
+.modalContainer.showModal {
+  opacity: 1;
+  visibility: visible
+}
+.modalContainer.showModal .modal {
+ /* -webkit-transform: translateX(-50%) scaleY(1);
+  -o-transform: translateX(-50%) scaleY(1);
+  -ms-transform: translateX(-50%) scaleY(1);
+  transform: translateX(-50%) scaleY(1);*/
+  -webkit-transform: translateY(0);
+  transform: translateY(0)
+}
+
+.modalContainer .modal_header {
+  border-bottom: 1px solid #ddd;
+  position: relative
+}
+
+.modalContainer .modal_header-title {
+  text-align: center
+}
+
+.modalContainer .modal_header .close {
+  background: transparent;
+  position: absolute;
+  right: 0;
+  top: 0
+}
+
+.modalContainer .modal_header .close img {
+  height: auto;
+  transition: all .2s ease;
+  width: 1rem
+}
+
+.modalContainer .modal_header .close:hover img {
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1)
+}
+
+.modalContainer .modal_content {
+  border-bottom: 1px solid #ddd;
+  padding: 2rem 0
+}
+
+.modalContainer .modal_footer {
+  padding: 2rem 0 0
+}
+
+.modalContainer .modal_footer button {
+  border-radius: 8px;
+  float: right;
+  padding: .5rem
+}
+
+.modalContainer .modal_footer .submit {
+  background-color: #364348;
+  color: #fff;
+  margin-right: 1rem
+}
+
+.modalContainer .modal_footer .submit:hover {
+  background-color: rgba(54,67,72,.8)
+}
+
+.modalContainer .modal_footer .modal-close {
+  background-color: transparent;
+  font-weight: 600
+}
+
+.modalContainer .modal_footer .modal-close:hover {
+  color: rgba(54,67,72,.8)
+}
+
+/* react-modal */
+.modalContent {
+ /* top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);*/
+  margin: 20px auto 0 auto;
+  padding: 40px 30px 50px 30px;
+  border-radius: 5px;
+  width: 90%;
+  transition: all 5s ease-in-out;
+  overflow-y: auto;
+  position: relative;
+  height: calc(100vh - 50px);
+  max-width: 500px;
+  background: white;
+}
+.ReactModal__Overlay {
+  opacity: 0;
+  transition: opacity 500ms ease-in-out;
+}
+
+.ReactModal__Overlay--after-open{
+  opacity: 1;
+}
+
+.ReactModal__Overlay--before-close{
+  opacity: 0;
+}
