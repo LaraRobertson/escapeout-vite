@@ -74,13 +74,13 @@ button:focus-visible,
   width: var(--amplify-components-authenticator-container-width-max);
   margin: 0 auto;
 }
-.right-buttons {
-  position: absolute;
-  right: 5px;
-  top: 0;
-  width: 40px;
-  height:90px;
+
+.quit-button {
+  background-color: transparent;
+  padding: .2em .5em;
+  font-size: .8em;
 }
+
 @media (max-width:480px) {
   .authenticator {
     width: 333px;
@@ -91,16 +91,94 @@ button:focus-visible,
   margin-bottom: 5px;
 }
 /* top of game screen */
-
+/* flexbox for game */
+.game-container {
+  /*max-width: 600px;
+  margin: 0 auto;
+  position: relative;*/
+  display:flex;
+  flex-direction: column;
+  min-height:100vh;
+  background-color:var(--background-light);
+  max-width: 500px;
+  margin: 0 auto;
+}
 .top-bar {
   height: 80px;
-  padding: 10px 10px 0 10px;
-  border-top: 2px solid var(--background-dark);
+  padding: 1.5em;
+  position:relative;
+  /*border-top: 2px solid var(--background-dark);
   border-right: 2px solid var(--background-dark);
-  border-left: 2px solid var(--background-dark);
+  border-left: 2px solid var(--background-dark);*/
 }
 .top-bar-change {
-  height: 100px;
+  height: 85px;
+}
+
+.play-area {
+  /*position:absolute;
+  height:400px;
+  width:100%;
+  top:75px;
+  left:0;*/
+  border-right: 2px solid var(--background-dark);
+  border-left: 2px solid var(--background-dark);
+  z-index:1;
+}
+.play-area-change {
+  position:relative;
+  height:300px;
+}
+.notes-area{
+  position:relative;
+  position: relative;
+  height: calc(100vh - 385px);
+  overflow: auto;
+}
+.game-container-bottom {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  z-index: 2;
+  text-align: center;
+  background: linear-gradient(0deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
+}
+.game-container-top {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height:30px;
+  color:black;
+  font-weight:bold;
+  z-index: 2;
+  text-align: center;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
+}
+.logo-container {
+  position: absolute;
+  width: 100%;
+  height: 21px;
+  top: 0;
+  left: 0;
+  background: black;
+}
+.logo{
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  font-size: .8em;
+  line-height:1em;
+}
+.right-buttons {
+  position: absolute;
+  right: 5px;
+  top: 3px;
+  width: 50px;
+  line-height:1em;
+  text-align:right;
+}
+.right-buttons button {
+  background: black;
 }
 .blue {
   color: var(--blue-color-light);
@@ -119,6 +197,14 @@ button:focus-visible,
 .alert {
   padding: .8em;
 }
+.game-details-content h5 {
+  padding: 10px 0;
+}
+.end-paragraph {
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgb(220, 222, 224);
+}
+
 .button {
   background-color: var(--blue-color);
   color: var(--color-light);
@@ -131,13 +217,7 @@ button:focus-visible,
   margin-top:20px;
   border:1px solid black;
 }
-.quit-button {
-  background-color: transparent;
-  display:inline-block;
-  padding: .2em .5em;
-  font-size: .8em;
-  margin-left:5px;
-}
+
 .button-center {
   margin: 10px auto;
 }
@@ -157,17 +237,10 @@ button:focus-visible,
   border: 1px solid var(--black);
   padding: 5px 10px;
 }
-.game-container {
-  max-width: 600px;
-  margin: 0 auto;
-  position: relative;
-  min-height:100vh;
-  background-color:var(--background-light);
-}
+
 .time {
-  position: absolute;
+  /*position: absolute;*/
   height: 80px;
-  top: 470px;
   padding: 10px;
   font-weight:bold;
   width:100%;
@@ -179,13 +252,11 @@ button:focus-visible,
   text-align:center;
 }
 .time-change {
-  padding:0;
-  top:68px;
   height: 40px;
 }
 .image-mask {
-  background: radial-gradient(circle, transparent 50%, var(--background-light) 75%);
-  opacity:.8;
+  /*background: radial-gradient(circle, transparent 50%, var(--background-light) 75%);
+  opacity:.8;*/
   position:absolute;
   height:400px;
   width:100%;
@@ -195,6 +266,28 @@ button:focus-visible,
 }
 .image-mask-change {
   height: 300px;
+}
+.clue-sidebar {
+  position: absolute;
+  width: 30%;
+  left: 0;
+  top: 0;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
+  /* opacity: .4; */
+  z-index: 2;
+  height: 300px;
+  color: black;
+}
+.puzzle-sidebar {
+  position: absolute;
+  width: 30%;
+  right: 0;
+  top: 0;
+  background: linear-gradient(270deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
+  /* opacity: .4; */
+  z-index: 2;
+  height: 300px;
+  color: black;
 }
 .dark-light-toggle {
   height:20px;
@@ -406,30 +499,15 @@ fieldset.comments legend {
 }
 
 .notes {
-  padding: 490px 20px 20px 20px;
+  /*padding: 490px 20px 20px 20px;
   position: absolute;
-  top: 545px;
+  top: 545px;*/
   width:100%;
 }
 .notes-change {
-  top: 395px;
-  padding:20px;
+  padding: 0 20px 20px;
 }
 
-.play-area {
-  position:absolute;
-  height:400px;
-  width:100%;
-  top:75px;
-  left:0;
-  border-right: 2px solid var(--background-dark);
-  border-left: 2px solid var(--background-dark);
-  z-index:1;
-}
-.play-area-change {
-  top: 105px;
-  height:300px;
-}
 
 /* added from other app */
 .image-holder {
@@ -472,8 +550,12 @@ fieldset.comments legend {
     max-width: 1200px;
   }
 }
-.amplify-accordion {
+.amplify-accordion__item {
  /* --amplify-components-accordion-background-color: var(--blue-color);*/
+  border: none;
+  border-bottom: 1px solid rgb(220, 222, 224);
+  border-top: 1px solid rgb(220, 222, 224);
+  padding:20px 0;
 }
 
 .custom-card-class {
@@ -652,10 +734,24 @@ isChecked is for light/dark
   border: 1px solid darkred;
   box-shadow: 0 0 2px darkred;
 }
+.zone-icon-container {
+  height:55px;
+  width:60px;
+  position:relative;
+  text-align: center;
+  display:block;
+}
 .zone-border {
   /*border: 1px solid red;*/
-  border: 1px solid darkred;
-  box-shadow: 0 0px 5px darkred;
+  border: 1px solid #0D5189;
+  box-shadow: 0 0px 5px #0D5189;
+}
+.zone-text {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  width: 100%;
+  text-align: center;
 }
 .admin {
   background-color:#fff;
@@ -712,7 +808,7 @@ isChecked is for light/dark
   font-weight: bold;
   font-size: 1.3em;
   margin-bottom:5px;
-  line-height: .7em;
+  line-height: .9em;
   margin-top: 3px;
 }
 

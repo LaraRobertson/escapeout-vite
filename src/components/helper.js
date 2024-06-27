@@ -35,7 +35,9 @@ export function setCommentsFunction(notes,setGameComments) {
 
 export async function goHomeQuit(navigate) {
     removeLocalStorage();
+    localStorage.removeItem("gameScoreID");
     /* remove gameStat and gameScore - why?? lnr 3/23/24 */
+    /* do not set numberOfTimes in local storage and not sure why doing this because it never fires */
     if (localStorage.getItem("numberOfTimes") == 0) {
         const gameStatDetails = {
             id: localStorage.getItem("gameStatsID"),

@@ -66,14 +66,9 @@ export function LeaderBoard(props) {
 
 
     return (
-        <View className={"overlay"}>
-        <View className="popup"
-              ariaLabel="LeaderBoard"
-              textAlign="center">
-            <View width="100%" margin="0 auto" lineHeight="17px">
-                <Button className="close-button light" onClick={() =>  props.setIsGameLeaderBoardVisible(false)}>X</Button>
-            </View>
-                <Heading level={4} className="heading light">Leaderboard for {props.gameName} game</Heading>
+        <View>
+
+                <Heading level={4} className="heading light">Game: {props.gameName} game</Heading>
                 <View className="small">Only games played the first time will show on leaderboard.</View>
 
                 <Button className={showAllTimeButton ? "hide" : "button"} onClick={() => leaderBoardFunction(today.toLocaleDateString('en-CA'))}>
@@ -98,10 +93,7 @@ export function LeaderBoard(props) {
                         </div>
                     ))}
                 </div>
-            <View marginTop="10px">
-                <Button className="close light" onClick={() => props.setIsGameLeaderBoardVisible(false)}>close</Button>
-            </View>
-        </View>
+
         </View>
     );
 }

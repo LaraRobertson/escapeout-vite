@@ -89,26 +89,22 @@ export function MyStats(props) {
     }
 
     return (
-        <View className={props.isMyStatsVisible ? "overlay" : "hide"}>
-            <View className="popup light-dark"
-                  ariaLabel="MyStats"
-                  textAlign="center">
-                <View width="100%" margin="0 auto" lineHeight="17px">
-                    <Button className="close-button light" onClick={() => props.setIsMyStatsVisible(false)}>X</Button>
-                 </View>
-                <Heading level={2} className="header">Stats</Heading>
-                <Heading level={5} className="header">{myStatsEmail}</Heading>
-                <View>
-                    {myStats.map((userStat, index) => (
-                        <View>
-                            <div>Game: {userStat.gameName} | {userStat.gameLocationCity}</div>
-                            <GameScoreView gameScoreArray = {userStat.gameScore.items} gameName={userStat.gameName}/>
-                        </View>
-                    ))}
-                </View>
-                <View marginTop="10px">
-                    <Button className="close light" onClick={() => props.setIsMyStatsVisible(false)}>close</Button>
-                </View>
+        <View>
+            <View className={"modal-top-bar"}>
+                <Heading level={4} marginBottom="10px" className={"modal-header"}>Stats</Heading>
+                <Button className="close-button-modal light" onClick={props.closeModalStats}>X</Button>
+            </View>
+            <Heading level={5} className="header">{myStatsEmail}</Heading>
+            <View>
+                {myStats.map((userStat, index) => (
+                    <View>
+                        <div>Game: {userStat.gameName} | {userStat.gameLocationCity}</div>
+                        <GameScoreView gameScoreArray = {userStat.gameScore.items} gameName={userStat.gameName}/>
+                    </View>
+                ))}
+            </View>
+            <View marginTop="10px">
+                <Button className="close light" onClick={() => props.setIsMyStatsVisible(false)}>close</Button>
             </View>
         </View>
     );
