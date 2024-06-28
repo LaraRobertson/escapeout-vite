@@ -708,7 +708,7 @@ export function Home() {
                             <Button className="topLink " onClick={openModalHowTo}>
                                 How to Play
                             </Button>
-                            <Button onClick={() => Toggle()}>Modal</Button>
+                            {/*<Button onClick={() => Toggle()}>ModalLink</Button>*/}
                             {(authStatus === 'authenticated') && (email === "lararobertson70@gmail.com") ? (
                                 <Button className="topLink" onClick={() => navigate('/admin')}>Admin</Button>
                             ) : null}
@@ -1230,12 +1230,12 @@ export function Home() {
                             />
                             </View>
                             <View className={"red-alert"} textAlign={"center"}><strong>{numberOfPlayersError}</strong></View>
-                            <Flex justifyContent="center" marginTop={"10px"}>
-                                <Button margin="0 0 0 0" className="button small"
-                                        onClick={() => goToGame(gameDetails)}>PLAY - time starts</Button>
+                            <View className={"modal-bottom-bar"}>
+                                    <Button margin="0 0 0 0" className="button small"
+                                            onClick={() => goToGame(gameDetails)}>PLAY - time starts</Button>
 
-                                <Button className="close light" onClick={closeModalGameIntro}>close</Button>
-                            </Flex>
+                                    <Button className="close light" onClick={closeModalGameIntro}>close</Button>
+                            </View>
 
                         </Modal>,
                         document.getElementById("modal")
@@ -1283,7 +1283,7 @@ export function Home() {
 
                             </View>
 
-                            <View paddingTop="10px" textAlign={"center"} width={"100%"}>
+                            <View className={"modal-bottom-bar"}>
                                 <Button className="close light" onClick={closeModalGameDetail}>close</Button>
                             </View>
                         </Modal>,

@@ -753,12 +753,7 @@ export function GameV3() {
         <View position="relative">
             <View className={isChecked? "game-container dark" : "game-container light"}>
                 <View className="top-bar top-bar-change">
-                    <View className={"logo-container"}>
-                        <View className={"logo"}>EscapeOut.Games</View>
-                        <View className={"right-buttons"}>
-                            <Button margin={"0"} lineHeight={"1em"} padding={"0"} border={"none"} fontWeight={"normal"} className={isChecked? "quit-button dark " : "quit-button light "} onClick={()=>{setIsGoHomeQuitVisible(true)}}>Quit</Button>
-                        </View>
-                    </View>
+
                     <Flex className="zone-holder zone-holder-change"
                           direction="row"
                           justifyContent="center"
@@ -811,10 +806,7 @@ export function GameV3() {
                    ))}
                    </View>
                    <View className={"game-container-bottom"}>
-                        <Button  className="quit-button dark" onClick={() => isModalHintOpen? setIsModalHintOpen(false) : setIsModalHintOpen(true)}>Hints</Button>
-                        <Button  className={isChecked? "quit-button dark" : "help-button light"} onClick={() => isModalHelpOpen? setIsModalHelpOpen(false) : setIsModalHelpOpen(true)}>
-                            Help
-                        </Button><br />
+
                    </View>
                    <View className={"puzzle-sidebar"}>
                    {gamePuzzles.map((puzzle,index) => (
@@ -859,83 +851,6 @@ export function GameV3() {
                                        <Image className={(gamePuzzleSolved[puzzle.id] && toolVisible[puzzle.puzzleToolRevealed])? "puzzle-object-tool yellow-border show" : "hide"} src={tool[puzzle.puzzleToolRevealed]} onClick={()=>objectInBackpackFunction(puzzle.puzzleToolRevealed)} />
                                    )}
                            </View>
-                           <View className={gamePuzzleVisible["puzzleVisible-" + (puzzle.id)]? "cover-screen show-gradual" : "cover-screen hide-gradual"}>
-                               <View className={isChecked? "all-screen dark" : "all-screen light"}>
-                                   <Button  className={isChecked? "close-button dark" : "close-button light"}  onClick={()=>setGamePuzzleVisibleFunction(["puzzleVisible-" + (puzzle.id)], false)}>X</Button>
-                                   <Heading level={"6"} className={isChecked? "heading dark" : "heading light"} paddingTop="10px">{puzzle.gameClueName}</Heading>
-                                   <View paddingTop="10px" className={gamePuzzleSolved[puzzle.id]? "hide" : "show"}>
-                                       {puzzle.textField.items.map((field,index) => (
-                                           <Flex
-                                               direction="row"
-                                               justifyContent="flex-start"
-                                               alignItems="flex-start"
-                                               alignItems="center"
-                                               wrap="nowrap"
-                                               gap="1rem"
-                                               key={field.id}>
-                                               {gamePuzzleGuess.hasOwnProperty(field.id) ?
-                                                   (<TextField
-                                                       className={isChecked? "puzzleTextField light-label" : 'puzzleTextField dark-label '}
-                                                       label={field.label}
-                                                       value={gamePuzzleGuess[field.id]}
-                                                       onChange={(event) => setGamePuzzleGuessFunction(field.id, event.target.value, field.answer, puzzle.id, puzzle.puzzleToolRevealed, puzzle.winGame)}
-                                                   />) : (
-                                                       <TextField
-                                                           className={isChecked? "puzzleTextField light-label" : 'puzzleTextField dark-label '}
-                                                           label={field.label}
-                                                           value=""
-                                                           onChange={(event) => setGamePuzzleGuessFunction(field.id, event.target.value, field.answer, puzzle.id, puzzle.puzzleToolRevealed, puzzle.winGame)}
-                                                       />)
-                                               }
-                                               { (gamePuzzleAnswerCorrect[field.id]  && gamePuzzleAnswer[field.id] != null && gamePuzzleGuess[field.id] != null) ? (
-                                                   <View className="right-answer">
-                                                       <Icon
-                                                           height={"20px"}
-                                                           width={"20px"}
-                                                           ariaLabel="CheckMark"
-                                                           viewBox={{ minX: 0,
-                                                               minY: 0,
-                                                               width: 500,
-                                                               height: 500 }}
-                                                           paths={[
-                                                               {
-                                                                   d: "m7.7,404.6c0,0 115.2,129.7 138.2,182.68l99,0c41.5-126.7 202.7-429.1 340.92-535.1c28.6-36.8-43.3-52-101.35-27.62-87.5,36.7-252.5,317.2-283.3,384.64-43.7,11.5-89.8-73.7-89.84-73.7z",
-                                                                   fill:"#6c4",
-                                                               },
-                                                           ]}
-                                                       />
-                                                   </View>
-                                               ) : (<View className="right-answer"></View>)
-                                               }
-                                           </Flex>
-                                       ))}
-
-                                   </View>
-
-                                   <Flex className="window-button-bottom" justifyContent="center" gap="1rem">
-                                       <Button className={isChecked? "close dark" : "close light"} onClick={()=>setGamePuzzleVisibleFunction(["puzzleVisible-" + (puzzle.id)], false)}>close puzzle</Button>
-                                   </Flex>
-                               </View>
-                           </View>
-
-                           <View className={gamePuzzleClueVisible["puzzle" + (puzzle.id)]? "cover-screen show-gradual" : "cover-screen hide-gradual"}>
-                               <View className={isChecked? "all-screen " : "all-screen light-dark"}>
-
-                                   <Button  className={isChecked? "close-button " : "close-button light-dark"}  onClick={()=>setGamePuzzleClueVisibleFunction(["puzzle" + (puzzle.id)], false)}>X</Button>
-                                   <Heading level={"6"} className={isChecked? "heading dark" : "heading light"} paddingTop="10px">{puzzle.gameClueName}</Heading>
-
-                                   <View paddingTop="10px" className={(gamePuzzleSolved[puzzle.id] && puzzle.puzzleClueText != "")? "show" : "hide"}>
-                                       {puzzle.puzzleClueText}
-                                       <Flex className="window-button-bottom" justifyContent="center" gap="1rem">
-                                           <Button className="button small" onClick={()=>setCluesFunction("<strong>" + clue.gameClueName + " </strong> ==> " +
-                                               clue.gameClueText + " <br />")}>add clue to notes</Button>
-                                           <Button className="button action-button small" onClick={()=>setGamePuzzleClueVisibleFunction(["puzzle" + (puzzle.id)], false)}>close </Button>
-                                       </Flex>
-                                   </View>
-
-                               </View>
-                           </View>
-
                        </View>
                    ))}
                    </View>
@@ -1194,7 +1109,7 @@ export function GameV3() {
                 )}
 
             {createPortal(
-                <Modal3 show={isModalPuzzleOpen} modalClass={"from-left"} close={TogglePuzzle}>
+                <Modal3 show={isModalPuzzleOpen} modalClass={"from-right"} close={TogglePuzzle}>
                     <View className={isChecked? "dark" : "light"}>
                         <View paddingTop="10px" className={gamePuzzleSolved[puzzleID]? "hide" : "show"}>
                             {puzzleTextFields.map((field,index) => (
@@ -1257,6 +1172,7 @@ export function GameV3() {
                         onRequestClose={closeModalHelp}
                         className={"modalContent"}
                         contentLabel={"Example Modal"}
+                        overlayClassName={"slide-from-bottom"}
                         parentSelector={() => document.querySelector('#modal')}
                         preventScroll={
                             false
@@ -1443,6 +1359,7 @@ export function GameV3() {
                         onRequestClose={closeModalHint}
                         className={"modalContent"}
                         contentLabel={"Example Modal"}
+                        overlayClassName={"slide-from-bottom"}
                         parentSelector={() => document.querySelector('#modal')}
                         preventScroll={
                             false
@@ -1498,24 +1415,17 @@ export function GameV3() {
                     </div>
                </View>
 
-                <View className={isMapVisible ? "cover-screen show-gradual" : "cover-screen hide-gradual"}>
-                    <View height="400px" className={isChecked? "all-screen dark" : "all-screen light"}>
-                        <Button className={isChecked? "close-button dark" : "close-button light"}
-                                 onClick={() => isMapVisible ? setIsMapVisible(false) : setIsMapVisible(true)}>X</Button>
-                        <View width="100%" padding="50px 10px">
-                            <Image maxHeight="400px"
-                                   src={game.gameMap}/>
+            <View className={"game-bottom-bar"}>
 
-                            <View width="100%" textAlign='center'>
-                                <Button className={isChecked? "close dark" : "close light"}  marginTop={"10px"}
-                                        onClick={() => isMapVisible ? setIsMapVisible(false) : setIsMapVisible(true)}>close</Button>
-
-                            </View>
-                        </View>
-                    </View>
-                </View>
+                    <View className={"logo"}>EscapeOut.Games</View>
+                <Button  className="quit-button dark" onClick={() => isModalHintOpen? setIsModalHintOpen(false) : setIsModalHintOpen(true)}>Hints</Button>
+                <Button  className={isChecked? "quit-button dark" : "help-button light"} onClick={() => isModalHelpOpen? setIsModalHelpOpen(false) : setIsModalHelpOpen(true)}>
+                    Help
+                </Button>
+                        <Button className={isChecked? "quit-button dark " : "quit-button light "} onClick={()=>{setIsGoHomeQuitVisible(true)}}>Quit</Button>
 
 
+            </View>
         </View>
     )
 }
