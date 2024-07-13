@@ -1,15 +1,13 @@
 // components/Layout.jsx
-import React, {useEffect, useState} from 'react';
-import { Outlet, useNavigate, NavLink as ReactRouterLink, useLocation } from 'react-router-dom';
-import {useAuthenticator, Link, Button, Heading, View, Image, Flex, Card, Text, Tabs, Accordion } from '@aws-amplify/ui-react';
-//import {updateGameStats as updateGameStatsMutation} from "../graphql/mutations";
-import {removeLocalStorage} from "./helper";
+import React, {useState} from 'react';
+import { Outlet, useLocation } from 'react-router-dom';
+import {View} from '@aws-amplify/ui-react';
 
 /***** reference for hooks/methods for auth ******/
 /* https://docs.amplify.aws/react/build-a-backend/auth/manage-user-profile/ */
 /*************************************************/
-import { fetchUserAttributes } from 'aws-amplify/auth';
 
+/* do not think we are setting errorInternet - could set if api call doesn't work? */
 export function Layout() {
     const [errorInternet, setErrorInternet] = useState(false);
 
@@ -29,9 +27,7 @@ export function Layout() {
         )
     }
 
-
     const location = useLocation();
-
     console.log("location: " + location.pathname);
 
     return (

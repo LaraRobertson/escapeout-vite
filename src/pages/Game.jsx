@@ -8,10 +8,10 @@ import {
     setGameNotesFunction,
     setGameTimeFunction,
     goHomeQuit, removeLocalStorage, setCommentsFunction,
-} from "./helper";
+} from "../components/helper";
 import { format } from 'date-fns'
-import {shallowEqual} from "./ShallowEqual";
-import {ToolObject, NotesOpen, CommentWindow} from "./sharedComponents";
+import {shallowEqual} from "../components/ShallowEqual";
+import {NotesOpen, CommentWindow} from "../components/sharedComponents";
 import {gameScoreByGameStatsID, getGame} from "../graphql/queries";
 import {generateClient} from "aws-amplify/api";
 import * as mutations from "../graphql/mutations";
@@ -53,7 +53,6 @@ export function Game() {
     const [gamePuzzleAnswer, setGamePuzzleAnswer] = useState({});
     const [gamePuzzleAnswerCorrect, setGamePuzzleAnswerCorrect] = useState({});
     const [gamePuzzleSolved, setGamePuzzleSolved] = useState({});
-    const [tool, setTool] = useState(ToolObject);
     const [toolVisible, setToolVisible] = useState({});
     const [backpackObject, setBackpackObject] = useState({});
     const [isGoHomeQuitVisible, setIsGoHomeQuitVisible] = useState(false);

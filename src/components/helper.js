@@ -5,6 +5,10 @@ import {generateClient} from "aws-amplify/api";
 
 const client = generateClient();
 
+export function keyID(src,name) {
+    return (name + "_" + src)
+}
+
 export function setGameNotesFunction(gameNotes,setGameNotes) {
     console.log("gameNotes: " + gameNotes);
     setGameNotes(gameNotes);

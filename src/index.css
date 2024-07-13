@@ -1,21 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Delicious+Handrawn&family=Open+Sans:ital,wght@0,400;0,500;0,700;1,500;1,700&family=Roboto&display=swap');
-#root {
-  position: relative;
-  z-index: 1;
-}
-:root {
-  /*font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;*/
-  font-family: "Open Sans", Helvetica, system-ui, Verdana, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-  color-scheme: light dark;
-  color: #213547;
-  background-color: #000;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+
 /* overrides / variables */
 :root, [data-amplify-theme] {
   --amplify-colors-primary-80:  #0D5189;
@@ -35,6 +19,23 @@
   --yellow-boarder: rgba(255, 255, 0, 0.5);
   --red-border: #8B0000FF;
   --zone-border: #8B0000FF;
+}
+#root {
+  position: relative;
+  z-index: 1;
+}
+:root {
+  /*font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;*/
+  font-family: "Open Sans", Helvetica, system-ui, Verdana, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: light dark;
+  color: #213547;
+  background-color: #000;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 a {
   font-weight: 500 !important;
@@ -74,7 +75,6 @@ button:focus-visible,
   width: var(--amplify-components-authenticator-container-width-max);
   margin: 0 auto;
 }
-
 .quit-button {
   background-color: transparent;
   padding: .2em .5em;
@@ -185,20 +185,18 @@ button:focus-visible,
 }
 .game-bottom-bar {
   position: fixed;
-  bottom: 20px;
   width: 100%;
   background: white;
   max-width: 500px;
-  padding: 10px 20px 5px 20px;
+  padding: 10px 20px 25px 20px;
   z-index: 10;
   border-top: 1px solid rgb(220, 222, 224);
   display:flex;
   gap: 20px;
   justify-content: center;
   align-items: center;
-  bottom: 5%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  bottom: 0;
+  left: 0;
 }
 .blue {
   color: var(--blue-color-light);

@@ -1,30 +1,24 @@
 // components/MyStats.jsx
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
-    Flex,
     Button,
-    useTheme,
     Heading,
-    View,
-    Card,
-    Text,
-    TextField,
-    TextAreaField,
-    useAuthenticator
+    View
 } from '@aws-amplify/ui-react';
 import {generateClient} from "aws-amplify/api";
-import {gamesByCity, gameScoreByGameID, gameStatsByGameID,gameStatsByUserEmail,gameStatsSortedByGameName} from "../graphql/queries";
+import {gamesByCity, gameScoreByGameID, gameStatsByGameID,gameStatsByUserEmail,gameStatsSortedByGameName} from "../../graphql/queries";
 import { format } from 'date-fns'
-import { useNavigate } from 'react-router-dom';
+import {MyAuthContext} from "../../MyContext";
 
-export function MyStats(props) {
+export default function MyStats(props) {
     const client = generateClient();
+    const { email } = useContext(MyAuthContext);
     const [myStats, setMyStats] = useState([]);
-    const [myStatsEmail, setMyStatsEmail] = useState(props.email);
+    const [myStatsEmail, setMyStatsEmail] = useState(email);
 
     async function myStatsFunction() {
        // const email = localStorage.getItem("email");
-        console.log("myStats: " + props.email);
+        console.log("myStats: " + email);
         let filter = {
             userEmail: {
                 eq: myStatsEmail
@@ -44,8 +38,6 @@ export function MyStats(props) {
         }
         setMyStats(myStatsFromAPI);
     }
-
-    const navigate = useNavigate();
 
     useEffect(() => {
         console.log("***useEffect***:  myStatsFunction(): " + myStatsEmail);
@@ -89,23 +81,16 @@ export function MyStats(props) {
     }
 
     return (
-        <View>
-            <View className={"modal-top-bar"}>
-                <Heading level={4} marginBottom="10px" className={"modal-header"}>Stats</Heading>
-                <Button className="close-button-modal light" onClick={props.closeModalStats}>X</Button>
-            </View>
+        <>
             <Heading level={5} className="header">{myStatsEmail}</Heading>
             <View>
                 {myStats.map((userStat, index) => (
-                    <View>
+                    <View key={index}>
                         <div>Game: {userStat.gameName} | {userStat.gameLocationCity}</div>
                         <GameScoreView gameScoreArray = {userStat.gameScore.items} gameName={userStat.gameName}/>
                     </View>
                 ))}
             </View>
-            <View marginTop="10px">
-                <Button className="close light" onClick={() => props.setIsMyStatsVisible(false)}>close</Button>
-            </View>
-        </View>
+        </>
     );
 }

@@ -22,10 +22,10 @@ import {
     setGameNotesFunction,
     setGameTimeFunction,
     goHomeQuit, removeLocalStorage, setCommentsFunction, goHome,
-} from "./helper";
+} from "../components/helper";
 import { format } from 'date-fns'
-import {shallowEqual} from "./ShallowEqual";
-import {ToolObject, NotesOpen, CommentWindow, Modal2, Modal3} from "./sharedComponents";
+import {shallowEqual} from "../components/ShallowEqual";
+import {ToolObject, NotesOpen, CommentWindow, Modal2, Modal3} from "../components/sharedComponents";
 import {gameScoreByGameStatsID, getGame} from "../graphql/queries";
 import {generateClient} from "aws-amplify/api";
 import * as mutations from "../graphql/mutations";

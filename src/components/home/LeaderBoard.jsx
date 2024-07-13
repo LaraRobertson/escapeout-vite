@@ -5,13 +5,13 @@ import {
     Heading,
     View,
 } from '@aws-amplify/ui-react';
-import {gameScoreByGameID} from "../graphql/queries";
+import {gameScoreByGameID} from "../../graphql/queries";
 import { format } from 'date-fns'
 import {generateClient} from "aws-amplify/api";
 
-export function LeaderBoard(props) {
+export default function LeaderBoard(props) {
     const client = generateClient();
-    const [leaderBoardGameID, setLeaderBoardGameID] = useState(props.gameID);
+    const [leaderBoardGameID, setLeaderBoardGameID] = useState(props.gameDetails.gameID);
     const [leaderBoard, setLeaderBoard] = useState([]);
     const [showAllTimeButton, setShowAllTimeButton] = useState(false);
 
@@ -67,8 +67,7 @@ export function LeaderBoard(props) {
 
     return (
         <View>
-
-                <Heading level={4} className="heading light">Game: {props.gameName} game</Heading>
+                <Heading level={4} className="heading light">Game: {props.gameDetails.gameName}</Heading>
                 <View className="small">Only games played the first time will show on leaderboard.</View>
 
                 <Button className={showAllTimeButton ? "hide" : "button"} onClick={() => leaderBoardFunction(today.toLocaleDateString('en-CA'))}>

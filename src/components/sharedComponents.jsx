@@ -1,16 +1,14 @@
 import {Button, Image, SelectField, TextAreaField, TextField, View, Flex, Heading} from "@aws-amplify/ui-react";
 import React from "react";
-
 import {
     toggleNotes,
-    setCommentsFunction, goHome
+    setCommentsFunction,
+    goHome
 } from "./helper";
-
 import {useNavigate} from "react-router-dom";
 import DOMPurify from "dompurify";
 import Close from "../assets/times-solid-svgrepo-com.svg";
 import "../assets/modal.css";
-
 
 
 export const Modal2 = ({ show, close, title, setCluesFunction, modalClass, children }) => {
@@ -42,7 +40,10 @@ export const Modal2 = ({ show, close, title, setCluesFunction, modalClass, child
         </>
     );
 };
-export const Modal3 = ({ show, close, modalClass, children }) => {
+export const Modal3 = ({ show, modalClass, setModalPuzzleContent, children }) => {
+    function close() {
+        setModalPuzzleContent({show:false,content:""});
+    }
     return (
         <>
             <div
@@ -70,12 +71,6 @@ export const Modal3 = ({ show, close, modalClass, children }) => {
     );
 };
 
-export const ToolObject = {
-    key: 'https://escapeoutbucket213334-staging.s3.amazonaws.com/public/object-tools/key.png',
-    discs: 'https://escapeoutbucket213334-staging.s3.amazonaws.com/public/object-tools/discs.png',
-    prybar: 'https://escapeoutbucket213334-staging.s3.amazonaws.com/public/object-tools/prybar.png',
-    keyTubular: 'https://escapeoutbucket213334-staging.s3.amazonaws.com/public/object-tools/key-tubular.png'
-};
 
 export const TimeBlock = (props) => {
     console.log("props.realTimeStart: " + props.realTimeStart);
