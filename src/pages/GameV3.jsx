@@ -593,8 +593,6 @@ export function GameV3() {
                             gamePuzzleSolved={gamePuzzleSolved}
                             gamePuzzleAnswer={gamePuzzleAnswer}
                             gamePuzzleAnswerCorrect={gamePuzzleAnswerCorrect}
-
-
                             />
                     </ModalPuzzle>
                    <View className="right-side"></View>
