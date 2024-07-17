@@ -73,7 +73,7 @@ export function ModalClue({modalClueContent,setModalClueContent,clueDetails,setC
                         </View>
                     </main>
                     <footer className="modal_footer">
-                        <button className="submit" onClick={()=>setCluesFunction("<strong>" + clueDetails.gameClueName + " </strong> ==> " +
+                        <button className="submit" onClick={()=>setCluesFunction("<strong>CLUE</strong> ==> " +
                             clueDetails.gameClueText + " <br />")}>add clue to notes</button>
                         <button className="modal-close" onClick={() => close()}>
                             Close
@@ -122,6 +122,75 @@ export function ReactModal({modalContent,children}) {
             </Modal>,
             document.getElementById("modal")
         )}
+        </>
+    )
+}
+export function ReactModalFromBottom({modalContent,children}) {
+    console.log("ReactModalFromBottom");
+    const { setModalContent } = useContext(MyGameContext);
+    Modal.setAppElement("#modal");
+    function closeModal() {
+        setModalContent({open:false,content:""});
+    }
+    return (
+        <>
+            {createPortal(<Modal
+                    closeTimeoutMS={200}
+                    isOpen={modalContent.open}
+                    onRequestClose={closeModal}
+                    className={"modalContent-" + modalContent.content}
+                    contentLabel={"General"}
+                    overlayClassName={"slide-from-bottom"}
+                    parentSelector={() => document.querySelector("#modal")}
+                    preventScroll={
+                        false
+                        /* Boolean indicating if the modal should use the preventScroll flag when
+                           restoring focus to the element that had focus prior to its display. */}
+                >
+                    <View className={"modal-top-bar"}>
+                        <Heading level={4} marginBottom="10px" className={"modal-header"}>{modalContent.content}</Heading>
+                        <Button className="close-button-modal light"
+                                onClick={closeModal}>X</Button>
+                    </View>
+                    {children}
+
+                    <View className="modal-from-top-close" paddingTop="10px" textAlign={"center"} width={"100%"}>
+                        <Button className="close light" onClick={closeModal}>close</Button>
+                    </View>
+                </Modal>,
+                document.getElementById("modal")
+            )}
+        </>
+    )
+}
+export function ReactModalWinner({gameTimeTotal,children}) {
+    console.log("ReactModalWinner");
+    let openModal = false;
+    if (gameTimeTotal > 0) openModal = true;
+    const { setModalContent } = useContext(MyGameContext);
+    Modal.setAppElement("#modal");
+    function closeModal() {
+        setModalContent({open:false,content:""});
+    }
+    return (
+        <>
+            {createPortal(<Modal
+                    closeTimeoutMS={200}
+                    isOpen={openModal}
+                    onRequestClose={closeModal}
+                    className={"modalContent"}
+                    contentLabel={"General"}
+                    overlayClassName={"slide-from-bottom"}
+                    parentSelector={() => document.querySelector("#modal")}
+                    preventScroll={
+                        false
+                        /* Boolean indicating if the modal should use the preventScroll flag when
+                           restoring focus to the element that had focus prior to its display. */}
+                >
+                    {children}
+                </Modal>,
+                document.getElementById("modal")
+            )}
         </>
     )
 }

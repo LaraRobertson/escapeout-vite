@@ -10,7 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@aws-amplify/geo": "^3.0.37",
     "@aws-amplify/ui-react": "^6.1.13",
+    "@aws-amplify/ui-react-geo": "^2.0.17",
     "@emailjs/browser": "^4.4.1",
     "aws-amplify": "^6.4.0",
     "date-fns": "^3.6.0",

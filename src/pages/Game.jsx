@@ -626,7 +626,6 @@ export function Game() {
                     <Flex className="zone-holder"
                           direction="row"
                           justifyContent="flex-start"
-                          alignItems="flex-start"
                           alignContent="center"
                           wrap="nowrap"
                           gap="1rem">
@@ -847,7 +846,6 @@ export function Game() {
                                            <Flex
                                                direction="row"
                                                justifyContent="flex-start"
-                                               alignItems="flex-start"
                                                alignItems="center"
                                                wrap="nowrap"
                                                gap="1rem"
@@ -982,7 +980,6 @@ export function Game() {
                                            <Flex
                                                direction="row"
                                                justifyContent="flex-start"
-                                               alignItems="flex-start"
                                                alignItems="center"
                                                wrap="nowrap"
                                                gap="1rem"

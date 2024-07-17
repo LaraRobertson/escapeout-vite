@@ -19,6 +19,14 @@ export type AmplifyDependentResourcesAttributes = {
       "UserPoolName": "string"
     }
   },
+  "geo": {
+    "GameMap": {
+      "Arn": "string",
+      "Name": "string",
+      "Region": "string",
+      "Style": "string"
+    }
+  },
   "storage": {
     "images": {
       "BucketName": "string",

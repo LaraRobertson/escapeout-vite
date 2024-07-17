@@ -164,12 +164,15 @@ button:focus-visible,
   background: black;
 }
 .logo{
-  /*position: absolute;
-  top: 5px;
-  left: 5px;*/
-  width:50%;
-  font-size: .8em;
-  line-height:1em;
+  font-size: 8px;
+  position: absolute;
+  line-height: 1em;
+  bottom: 0;
+  width: 100%;
+  color: black;
+  height: 10px;
+  z-index: 10;
+  text-align: center;
 }
 .right-buttons {
   /*position: absolute;
@@ -183,9 +186,13 @@ button:focus-visible,
 .right-buttons button {
   background: black;
 }
-.game-bottom-bar {
+.game-bottom-bar-container {
   position: fixed;
   width: 100%;
+  bottom: 0;
+  left: 0;
+}
+.game-bottom-bar {
   background: white;
   max-width: 500px;
   padding: 10px 20px 25px 20px;
@@ -195,8 +202,8 @@ button:focus-visible,
   gap: 20px;
   justify-content: center;
   align-items: center;
-  bottom: 0;
-  left: 0;
+  margin:0 auto;
+
 }
 .blue {
   color: var(--blue-color-light);
@@ -287,14 +294,25 @@ button:focus-visible,
 }
 .clue-sidebar {
   position: absolute;
-  width: 30%;
+  width: 140px;
   left: 0;
-  top: 0;
+  bottom: 0;
   background: linear-gradient(90deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
   /* opacity: .4; */
   z-index: 2;
   height: 300px;
   color: black;
+}
+.clue-sidebar {
+  height: 300px;
+  display: flex;
+  flex-direction: column-reverse;
+  flex-wrap: wrap;
+}
+.clue-sidebar>* {
+  flex: 0 1 70px;
+  height:70px;
+  width:70px;
 }
 .puzzle-sidebar {
   position: absolute;
@@ -674,9 +692,9 @@ isChecked is for light/dark
   background-color: var(--background-dark);
 }
 .black-box {
-  position:absolute;
+  /*position:absolute;
   right:0;
-  top:0;
+  top:0;*/
   width: 100%;
   color: var(--color-light);
   text-align: center;

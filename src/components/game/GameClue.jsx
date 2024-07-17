@@ -25,12 +25,14 @@ export default function GameClue(props) {
 
 
     const IconClueDisplay = (props) => {
-        console.log("props.index: " + props.index);
-        console.log("props.hide: " + props.hide);
         switch (true) {
             case (props.index == 0):
                 return (
                     <Image height="70px" width="70px" src={diary} alt="diary" />
+                );
+            case (props.index == 1):
+                return (
+                    <Image height="70px" width="70px" src={tornPaper} alt="torn paper" />
                 );
             case (props.index % 5 == 0):
                 return (

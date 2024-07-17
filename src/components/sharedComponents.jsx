@@ -8,7 +8,6 @@ import {
 import {useNavigate} from "react-router-dom";
 import DOMPurify from "dompurify";
 import Close from "../assets/times-solid-svgrepo-com.svg";
-import "../assets/modal.css";
 
 
 export const Modal2 = ({ show, close, title, setCluesFunction, modalClass, children }) => {

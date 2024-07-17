@@ -2,227 +2,145 @@
   position: relative;
   z-index: 2;
 }
-/*https://dev.to/codebucks/how-to-create-an-efficient-modal-component-in-react-using-hooks-and-portals-360p*/
 .modalContainer {
   align-items: center;
   background-color: rgba(255, 255, 255, 0.75);
-  /*bottom: 0;*/
   display: flex;
   flex-direction: column;
-  align-items:flex-start;
+  align-items: flex-start;
   text-align: center;
   left: 0;
   opacity: 0;
   position: fixed;
-  /*right: 0;*/
   top: 0;
   transition: all .2s ease;
   visibility: hidden;
-  width:100vw;
-  height:100vh;
-}
-
-.modalContainer .modal {
-  width: 90vw;
-  margin: 50px auto;
-  /*-webkit-backdrop-filter: blur(5px);
-  backdrop-filter: blur(5px);*/
-  /*background-color: rgba(0, 0, 0, .9);*/
-  border-radius: 20px;
-  box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .2);
-  height: auto;
-  padding: 10px;
-  max-width: 450px;
-  /*transition: all .6s ease-in-out 0s;
-  -webkit-transform: translateX(-50%) scaleY(0);
-  -o-transform: translateX(-50%) scaleY(0);
-  -ms-transform: translateX(-50%) scaleY(0);
-  transform: translateX(-50%) scaleY(0);
-  -webkit-transform-origin: top;
-  -o-transform-origin: top;
-  -ms-transform-origin: top;
-  transform-origin: top;*/
-}
+  width: 100vw;
+  height: 100vh; }
+  .modalContainer .modal {
+    width: 90vw;
+    margin: 50px auto;
+    border-radius: 20px;
+    box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.2);
+    height: auto;
+    padding: 10px;
+    max-width: 450px; }
+  .modalContainer .modal_header {
+    border-bottom: 1px solid #ddd;
+    position: relative; }
+    .modalContainer .modal_header .close {
+      background: transparent;
+      position: absolute;
+      right: 0;
+      top: 0; }
+      .modalContainer .modal_header .close img {
+        height: auto;
+        transition: all .2s ease;
+        width: 1rem; }
+      .modalContainer .modal_header .close:hover img {
+        -webkit-transform: scale(1.1);
+        transform: scale(1.1); }
+  .modalContainer .modal_header-title {
+    text-align: center; }
+  .modalContainer .modal_content {
+    border-bottom: 1px solid #ddd;
+    padding: 1rem 0; }
+  .modalContainer .modal_footer {
+    padding: 20px 0 0 0;
+    height: 70px; }
+    .modalContainer .modal_footer button {
+      border-radius: 8px;
+      float: right;
+      padding: .5rem; }
+    .modalContainer .modal_footer .submit {
+      background-color: #364348;
+      color: #fff;
+      margin-right: 1rem; }
+      .modalContainer .modal_footer .submit:hover {
+        background-color: rgba(54, 67, 72, 0.8); }
+    .modalContainer .modal_footer .modal-close {
+      background-color: transparent;
+      font-weight: 600;
+      color: white; }
+      .modalContainer .modal_footer .modal-close:hover {
+        color: rgba(54, 67, 72, 0.8); }
 
 .from-top {
   -webkit-transform: translateY(-600px);
   transform: translateY(-600px);
-  transition: all .4s ease;
-}
+  transition: all .4s ease; }
+
 .from-left {
   -webkit-transform: translateX(-600px);
   transform: translateX(-600px);
-  transition: all .4s ease;
-}
+  transition: all .4s ease; }
+
 .from-right {
   -webkit-transform: translateX(600px);
   transform: translateX(600px);
-  transition: all .4s ease;
-}
-.modalContainer.showModal .modal.from-left,.modalContainer.showModal .modal.from-right {
-  /*opacity: 1;*/
-  -webkit-transform: translateX(0);
-  transform: translateX(0)
-}
+  transition: all .4s ease; }
 
 .modalContainer.showModal {
   opacity: 1;
-  visibility: visible
-}
-.modalContainer.showModal .modal.from-top {
- /* -webkit-transform: translateX(-50%) scaleY(1);
-  -o-transform: translateX(-50%) scaleY(1);
-  -ms-transform: translateX(-50%) scaleY(1);
-  transform: translateX(-50%) scaleY(1);*/
-  -webkit-transform: translateY(0);
-  transform: translateY(0)
-}
+  visibility: visible; }
+  .modalContainer.showModal .modal.from-left {
+    -webkit-transform: translateX(0);
+    transform: translateX(0); }
+  .modalContainer.showModal .modal.from-right {
+    -webkit-transform: translateX(0);
+    transform: translateX(0); }
+  .modalContainer.showModal .modal.from-top {
+    -webkit-transform: translateY(0);
+    transform: translateY(0); }
 
-.modalContainer .modal_header {
-  border-bottom: 1px solid #ddd;
-  position: relative
-}
-
-.modalContainer .modal_header-title {
-  text-align: center
-}
-
-.modalContainer .modal_header .close {
-  background: transparent;
-  position: absolute;
-  right: 0;
-  top: 0
-}
-
-.modalContainer .modal_header .close img {
-  height: auto;
-  transition: all .2s ease;
-  width: 1rem
-}
-
-.modalContainer .modal_header .close:hover img {
-  -webkit-transform: scale(1.1);
-  transform: scale(1.1)
-}
-
-.modalContainer .modal_content {
-  border-bottom: 1px solid #ddd;
-  padding: 1rem 0
-}
-
-.modalContainer .modal_footer {
-  padding: 20px 0 0 0;
-  height:70px;
-}
-
-.modalContainer .modal_footer button {
-  border-radius: 8px;
-  float: right;
-  padding: .5rem
-}
-
-.modalContainer .modal_footer .submit {
-  background-color: #364348;
-  color: #fff;
-  margin-right: 1rem
-}
-
-.modalContainer .modal_footer .submit:hover {
-  background-color: rgba(54,67,72,.8)
-}
-
-.modalContainer .modal_footer .modal-close {
-  background-color: transparent;
-  font-weight: 600;
-  color:white;
-}
-
-.modalContainer .modal_footer .modal-close:hover {
-  color: rgba(54,67,72,.8)
-}
-/* end first modal */
-/* react-modal */
-/* stop getting distracted..
-.modalContent::-webkit-scrollbar{
-  width: 5px;
-}
-.modalContent::-webkit-scrollbar-track {
-  border-radius: 8px;
-  background-color: #e7e7e7;
-  border: 1px solid #cacaca;
-}
-.modalContent::-webkit-scrollbar-thumb {
-  border-radius: 8px;
-}*/
 .ReactModal__Body--open {
-  overflow: hidden;
-}
+  overflow: hidden; }
+
 .ReactModal__Overlay.slide-from-top {
-  /*opacity: 0;
-  transition: opacity 500ms ease-in-out;*/
   -webkit-transform: translateY(-600px);
   transform: translateY(-600px);
-  transition: all .4s ease;
-}
+  transition: all .4s ease; }
+
 .ReactModal__Overlay--after-open {
   position: fixed;
   inset: 0px;
-  background-color: rgba(255, 255, 255, 0.75);
-}
-.ReactModal__Overlay--after-open.slide-from-top{
-  /*opacity: 1;*/
-  -webkit-transform: translateY(0);
-  transform: translateY(0);
-}
+  background-color: rgba(255, 255, 255, 0.75); }
 
-.ReactModal__Overlay--before-close.slide-from-top{
+.ReactModal__Overlay--after-open.slide-from-top {
+  -webkit-transform: translateY(0);
+  transform: translateY(0); }
+
+.ReactModal__Overlay--before-close.slide-from-top {
   -webkit-transform: translateY(-600px);
-  transform: translateY(-600px);
-}
+  transform: translateY(-600px); }
 
 .ReactModal__Overlay.slide-from-left {
-  /*opacity: 0;
-  transition: opacity 500ms ease-in-out;*/
   -webkit-transform: translateX(-600px);
   transform: translateX(-600px);
-  transition: all .4s ease;
-}
+  transition: all .4s ease; }
 
-.ReactModal__Overlay--after-open.slide-from-left{
-  /*opacity: 1;*/
+.ReactModal__Overlay--after-open.slide-from-left {
   -webkit-transform: translateX(0);
-  transform: translateX(0)
-}
+  transform: translateX(0); }
 
-.ReactModal__Overlay--before-close.slide-from-left{
+.ReactModal__Overlay--before-close.slide-from-left {
   -webkit-transform: translateX(-600px);
-  transform: translateX(-600px);
-}
+  transform: translateX(-600px); }
+
 .ReactModal__Overlay.slide-from-bottom {
-  /*opacity: 0;
-  transition: opacity 500ms ease-in-out;*/
   -webkit-transform: translateY(600px);
   transform: translateY(600px);
-  transition: all .4s ease;
-}
+  transition: all .4s ease; }
 
-.ReactModal__Overlay--after-open.slide-from-bottom{
-  /*opacity: 1;*/
+.ReactModal__Overlay--after-open.slide-from-bottom {
   -webkit-transform: translateY(0);
-  transform: translateY(0)
-}
+  transform: translateY(0); }
 
-.ReactModal__Overlay--before-close.slide-from-bottom{
+.ReactModal__Overlay--before-close.slide-from-bottom {
   -webkit-transform: translateY(600px);
-  transform: translateY(600px);
-}
-.modalContent {
-  /* top: 50%;
-   left: 50%;
-   right: auto;
-   bottom: auto;
-   margin-right: -50%;
-   transform: translate(-50%, -50%);*/
+  transform: translateY(600px); }
+
+.modalContent, .modalContent-Help, .modalContent-Hints {
   margin: 20px auto 0 auto;
   padding: 10px 30px 50px 30px;
   border-radius: 5px 5px 0 0;
@@ -233,36 +151,38 @@
   height: calc(100vh - 20px);
   max-width: 500px;
   background: white;
-  display:flex;
-  flex-direction:column;
+  display: flex;
+  flex-direction: column; }
+.modalContent-Map {
+
 }
-.slide-from-top .modalContent, .slide-from-bottom .modalContent {
-  width:100%;
-}
+
+.slide-from-top .modalContent {
+  width: 100%; }
+
+.slide-from-bottom .modalContent {
+  width: 100%; }
+
 .modal-top-bar {
-  /*position: fixed;
-  top: 20px;
-  width: 100%;*/
   background: white;
   border-radius: 5px 5px 0 0;
-  padding: 10px 20px 5px 20px;
-  border-bottom: 1px solid rgb(220, 222, 224);
-  display:flex;
+  /*padding: 10px 20px 5px 20px;*/
+  border-bottom: 1px solid #dcdee0;
+  display: flex;
   justify-content: space-between;
   align-items: center;
-  height:50px;
- /*top: 5%;
-  left: 50%;
-  transform: translate(-50%, -50%);*/
+  height: 50px; }
+.modalContent-Map .modal-top-bar {
+  padding: 20px;
 }
+
 .modal-middle {
-  flex:1;
-  overflow:auto;
-  height: calc(100vh - 110px);
-}
+  flex: 1;
+  overflow: auto;
+  height: calc(100vh - 110px); }
+
 .modal-from-top-close {
- height: 40px;
-}
+  height: 40px; }
 
 .modal-bottom-bar {
   position: relative;
@@ -272,29 +192,27 @@
   border-radius: 5px 5px 0 0;
   padding: 10px 20px 25px 20px;
   z-index: 10;
-  border-top: 1px solid rgb(220, 222, 224);
-  display:flex;
+  border-top: 1px solid #dcdee0;
+  display: flex;
   gap: 20px;
   justify-content: center;
   align-items: center;
-  bottom:0;
-  left: 0;
-  /*transform: translate(-50%, -50%);*/
-}
+  bottom: 0;
+  left: 0; }
 
 .modal-header {
   flex-shrink: 1;
-  flex-grow:0;
-  flex-basis: auto;
-}
+  flex-grow: 0;
+  flex-basis: auto; }
+
 .close-button-modal {
   flex-shrink: 0;
-  flex-grow:0;
+  flex-grow: 0;
   flex-basis: 30px;
-  margin-bottom:10px;
+  margin-bottom: 10px;
   background-color: transparent;
   padding: 3px;
   font-size: 20px;
   width: 30px;
-  height: 30px;
-}
+  height: 30px; }
+

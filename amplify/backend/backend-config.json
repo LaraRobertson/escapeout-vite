@@ -45,6 +45,24 @@
       "service": "Cognito"
     }
   },
+  "geo": {
+    "GameMap": {
+      "accessType": "AuthorizedAndGuestUsers",
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "escapeoutvited09d67d2"
+        }
+      ],
+      "isDefault": true,
+      "mapStyle": "VectorEsriStreets",
+      "providerPlugin": "awscloudformation",
+      "service": "Map"
+    }
+  },
   "storage": {
     "images": {
       "dependsOn": [],
