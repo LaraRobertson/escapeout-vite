@@ -25,6 +25,7 @@ import GameIntro from "../components/home/GameIntro";
 import GameDetail from "../components/home/GameDetail";
 import Hero from "../components/home/Hero";
 import { ReactModal } from "../components/Modals";
+import Map from "../components/Map";
 import TopNav from '../components/home/TopNav';
 import CurrentlyPlaying from '../components/home/CurrentlyPlaying';
 import HowToPlay from '../components/home/HowToPlay';
@@ -33,14 +34,13 @@ import Footer from '../components/home/Footer';
 
 export function Home() {
     const client = generateClient();
-    /* route isn't working right 1/14/24 */
-    const {  authStatus, user, route, signOut } = useAuthenticator((context) => [
+
+    const {  authStatus, user, signOut } = useAuthenticator((context) => [
         context.authStatus,
         context.user,
-        context.route,
         context.signOut,
     ]);
-
+    console.log("authStatus (Home): " + authStatus);
     /* password for dev */
     const [password,setPassword] = useState("");
 
@@ -194,7 +194,7 @@ export function Home() {
             try {
                 const apiListGameStats = await client.graphql({
                     query:listGameStats,
-                    variables: {filter: filter}
+                    variables: {filter}
                     });
                 const gameStatsByID = apiListGameStats.data.listGameStats.items;
                 const gameIDUserPlayedArray = gameStatsByID.map(item => {
@@ -240,6 +240,7 @@ export function Home() {
                             {(modalContent.content == "Game Detail") && <GameDetail gameDetails={gameDetails} />}
                             {(modalContent.content == "Leaderboard") && <LeaderBoard gameDetails={gameDetails}/>}
                             {(modalContent.content == "My Stats") && <MyStats /> }
+                            {(modalContent.content == "Map") && <Map gameDetails={gameDetails} /> }
                         </ReactModal>
                         <Footer />
                     </View>

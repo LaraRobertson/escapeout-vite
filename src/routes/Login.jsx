@@ -39,9 +39,18 @@ export function Login() {
                         <Button className="topLink" onClick={() => navigate('/')}>Back to Home</Button>
                     </Flex>
                 </View>
-                <View className="main-content top-main">
-                    <Heading level={"4"} className="light authenticator" padding="30px" textAlign={"center"}>Create a Free Account <br />or Sign In</Heading>
-                    <Authenticator></Authenticator>
+                <View className="top-main">
+                    <View className={"authenticator-header-container"}>
+                        <Heading level={"4"} className="authenticator">Create a Free Account <br />or Sign In</Heading>
+                    </View>
+                    <Authenticator>
+                        {({ signOut, user }) => (
+                            <main>
+                                <h1>Hello {user.username}</h1>
+                                <button onClick={signOut}>Sign out</button>
+                            </main>
+                        )}
+                    </Authenticator>
                 </View>
         </View>
 

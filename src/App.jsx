@@ -1,14 +1,12 @@
 /* src/App.jsx */
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { RequireAuth } from './RequireAuthLogin';
-import { Authenticator } from "@aws-amplify/ui-react";
 
 /* routes */
-import { Login } from './pages/Login';
-import { Home } from './pages/Home';
-import { Admin } from './pages/Admin';
-import { Game } from './pages/Game';
-import { GameV3 } from './pages/GameV3';
+import { Login } from './routes/Login';
+import { Home } from './routes/Home';
+import { Admin } from './routes/Admin';
+import { Game } from './routes/Game';
+import { GameV3 } from './routes/GameV3';
 
 /* error message */
 import { Layout } from './components/Layout';
@@ -21,53 +19,44 @@ Amplify.configure(amplifyconfig);*/
 
 /* why signout, user? see https://docs.amplify.aws/react/build-a-backend/auth/set-up-auth/ */
 const App = () => {
+    console.log("window.location.pathname: " + window.location.pathname);
     function MyRoutes() {
         return (
             <BrowserRouter>
                 <Routes>
-                    <Route path="/" element={<Layout />}>
+                    <Route
+                        path="/"
+                        element={
+                        <Layout />
+                        }
+                    >
                         <Route index element={<Home />}/>
                         <Route
                             path="/game"
-                            element={
-                                <RequireAuth>
-                                    <Game />
-                                </RequireAuth>
-                            }
+                            element={<Game />}
                         />
                         <Route
                             path="/gameV3"
-                            element={
-                                <RequireAuth>
-                                    <GameV3 />
-                                </RequireAuth>
-                            }
+                            element={<GameV3 />}
                         />
                         <Route
                             path="/admin"
-                            element={
-                                <RequireAuth>
-                                    <Admin />
-                                </RequireAuth>
-                            }
+                            element={<Admin />}
                         />
                         <Route
                             path="/login"
-                            element={
-                                <Login />
-                            }
+                            element={<Login />}
                         />
                     </Route>
                 </Routes>
             </BrowserRouter>
-
         );
     }
 
     return (
-        <Authenticator.Provider>
+
             <MyRoutes  />
-        </Authenticator.Provider>
+
     );
 
 };

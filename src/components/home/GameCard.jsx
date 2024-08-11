@@ -5,15 +5,14 @@ import {MyAuthContext} from "../../MyContext";
 
 export default function GameCard({game, gameDetails, hidePlayedGames}) {
     let {
-        gameDescriptionH2,
-        gameDescriptionH3,
-        gameDescriptionP,
+        gameLogisticInfo,
+        gameSummary,
+        gameDescription,
         gameLevel,
-        gameLink,
         gameLocationCity,
         gameLocationPlace,
-        gameMap,
         gameName,
+        gameGoals,
         gamePlayZone,
         gameType,
         id,
@@ -27,6 +26,14 @@ export default function GameCard({game, gameDetails, hidePlayedGames}) {
         setModalContent({
             open: true,
             content: "Game Detail"
+        })
+    }
+
+    function handleMapDetail(gameDetailsVar) {
+        setGameDetails(gameDetailsVar);
+        setModalContent({
+            open: true,
+            content: "Map"
         })
     }
 
@@ -124,7 +131,7 @@ export default function GameCard({game, gameDetails, hidePlayedGames}) {
                         <View textAlign="center">
                             {/* can include free and free-test in gamesIDUser */}
                             {(gamesIDUser.includes(id) || gameType === "free" || gameType === "free-test") &&
-                                <div>
+                            <View textAlign="center">
                                     <Button
                                         className="button button-small button-center button-light-dark show"
                                         onClick={() => handlePlayGameList({
@@ -132,18 +139,16 @@ export default function GameCard({game, gameDetails, hidePlayedGames}) {
                                             gameName: gameName,
                                             gameID: id,
                                             gameLocationCity: gameLocationCity,
-                                            gameLink: gameLink,
-                                            gameDescriptionP: gameDescriptionP,
-                                            gameDescriptionH3: gameDescriptionH3,
-                                            gameDescriptionH2: gameDescriptionH2,
+                                            gameDescription: gameDescription,
+                                            gameSummary: gameSummary,
+                                            gameLogisticInfo: gameLogisticInfo,
                                             gamePlayZoneImage1: gamePlayZone.items[0].gameZoneImage,
-                                            gameMap: gameMap,
                                             waiverSigned: gameDetails.waiverSigned,
                                             numberOfTimes: gameDetails.numberOfTimes,
                                         })}>
                                         Play Game
                                     </Button>
-                                </div>
+                                </View>
                             }
                         </View>)}
                     <View ariaLabel={"leaderboard-" + id}>
@@ -159,27 +164,27 @@ export default function GameCard({game, gameDetails, hidePlayedGames}) {
                 <View className="game-card-full light-dark">
                     <View id={id}>
                         <Heading level={"6"} className="heading light-dark"
-                                 margin="0">{gameDescriptionH2}</Heading>
+                                 margin="0">{gameDescription}</Heading>
                         <Heading level={"7"} className="heading light-dark"
-                                 marginBottom=".4em">{gameDescriptionH3}</Heading>
-                        <View lineHeight="1">
+                                 marginBottom=".4em">{gameGoals}</Heading>
+                        <Flex justifyContent="center">
+                            <View textAlign="center">
                             <Button
                                 className="button button-small button-center button-light-dark show"
                                 onClick={() => handleGameDetail({
                                     gameName: gameName,
                                     gameID: id,
                                     gameLocationCity: gameLocationCity,
-                                    gameLink: gameLink,
-                                    gameDescriptionP: gameDescriptionP,
-                                    gameDescriptionH3: gameDescriptionH3,
-                                    gameDescriptionH2: gameDescriptionH2,
-                                    gamePlayZoneImage1: gamePlayZone.items[0].gameZoneImage,
-                                    gameMap: gameMap
+                                    gameDescription: gameDescription,
+                                    gameSummary: gameSummary,
+                                    gameLogisticInfo: gameLogisticInfo,
+                                    gameGoals: gameGoals,
+                                    gamePlayZoneImage1: gamePlayZone.items[0].gameZoneImage
                                 })}>
-                                More Game Detail
+                                Game Details
                             </Button>
-
-                        </View>
+                            </View>
+                        </Flex>
                         <span className="italics">Tap on Leaderboard to see average time.</span>
                     </View>
                 </View>

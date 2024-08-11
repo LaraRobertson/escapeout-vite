@@ -25,7 +25,6 @@ export default function TopNav({setModalContent, signOut}) {
                 </View>
             </Flex>
             <Flex justifyContent="center">
-                <View>
                     {authStatus !== "authenticated" ? (
                         <Button className="topLink" onClick={() => navigate("/login")}>Sign in to Play</Button>
                     ) : (
@@ -50,7 +49,7 @@ export default function TopNav({setModalContent, signOut}) {
                     {(authStatus === "authenticated") && (email === "lararobertson70@gmail.com") ? (
                         <Button className="topLink" onClick={() => navigate("/admin")}>Admin</Button>
                     ) : null}
-                </View>
+
             </Flex>
         </View>
     )

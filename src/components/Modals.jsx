@@ -89,6 +89,8 @@ export function ModalClue({modalClueContent,setModalClueContent,clueDetails,setC
 
 export function ReactModal({modalContent,children}) {
     console.log("ReactModal");
+    let mapClass="";
+    if (modalContent.content === "Map") mapClass="-Map";
     const { setModalContent } = useContext(MyAuthContext);
     Modal.setAppElement("#modal");
     function closeModal() {
@@ -100,7 +102,7 @@ export function ReactModal({modalContent,children}) {
                 closeTimeoutMS={200}
                 isOpen={modalContent.open}
                 onRequestClose={closeModal}
-                className={"modalContent"}
+                className={"modalContent" + mapClass}
                 contentLabel={"General"}
                 overlayClassName={"slide-from-top"}
                 parentSelector={() => document.querySelector("#modal")}
@@ -116,7 +118,7 @@ export function ReactModal({modalContent,children}) {
                 </View>
                 {children}
 
-                <View className="modal-from-top-close" paddingTop="10px" textAlign={"center"} width={"100%"}>
+                <View className="modal-from-top-close" textAlign={"center"} width={"100%"}>
                     <Button className="close light" onClick={closeModal}>close</Button>
                 </View>
             </Modal>,
@@ -127,6 +129,8 @@ export function ReactModal({modalContent,children}) {
 }
 export function ReactModalFromBottom({modalContent,children}) {
     console.log("ReactModalFromBottom");
+    let mapClass="";
+    if (modalContent.content === "Map") mapClass="-Map";
     const { setModalContent } = useContext(MyGameContext);
     Modal.setAppElement("#modal");
     function closeModal() {
@@ -138,7 +142,7 @@ export function ReactModalFromBottom({modalContent,children}) {
                     closeTimeoutMS={200}
                     isOpen={modalContent.open}
                     onRequestClose={closeModal}
-                    className={"modalContent-" + modalContent.content}
+                    className={"modalContent" + mapClass}
                     contentLabel={"General"}
                     overlayClassName={"slide-from-bottom"}
                     parentSelector={() => document.querySelector("#modal")}
@@ -154,7 +158,45 @@ export function ReactModalFromBottom({modalContent,children}) {
                     </View>
                     {children}
 
-                    <View className="modal-from-top-close" paddingTop="10px" textAlign={"center"} width={"100%"}>
+                    <View className="modal-from-top-close" textAlign={"center"} width={"100%"}>
+                        <Button className="close light" onClick={closeModal}>close</Button>
+                    </View>
+                </Modal>,
+                document.getElementById("modal")
+            )}
+        </>
+    )
+}
+export function ReactModalFromRight({children}) {
+    console.log("ReactModalFromRight");
+    const { modalContent, setModalContent } = useContext(MyAuthContext);
+    Modal.setAppElement("#modal");
+    function closeModal() {
+        setModalContent({open:false,content:""});
+    }
+    return (
+        <>
+            {createPortal(<Modal
+                    closeTimeoutMS={200}
+                    isOpen={modalContent.open}
+                    onRequestClose={closeModal}
+                    className={"modalContent adminModal"}
+                    contentLabel={"General"}
+                    overlayClassName={"slide-from-right"}
+                    parentSelector={() => document.querySelector("#modal")}
+                    preventScroll={
+                        false
+                        /* Boolean indicating if the modal should use the preventScroll flag when
+                           restoring focus to the element that had focus prior to its display. */}
+                >
+                    <View className={"modal-top-bar"}>
+                        <Heading level={4} marginBottom="10px" className={"modal-header"}>{modalContent.content}</Heading>
+                        <Button className="close-button-modal light"
+                                onClick={closeModal}>X</Button>
+                    </View>
+                    {children}
+
+                    <View className="modal-from-top-close" textAlign={"center"} width={"100%"}>
                         <Button className="close light" onClick={closeModal}>close</Button>
                     </View>
                 </Modal>,

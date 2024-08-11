@@ -1,0 +1,132 @@
+/* overrides / variables */
+:root, [data-amplify-theme] {
+    --amplify-components-button-small-font-size: .75rem;
+    --amplify-components-fieldcontrol-font-size: .75rem;
+    --amplify-components-button-small-padding-block-start: .15rem;
+    --amplify-components-button-small-padding-block-end:  .15rem;
+    --amplify-components-button-small-padding-inline-start: .35rem;
+    --amplify-components-button-small-padding-inline-end: .35rem;
+    --amplify-components-fieldcontrol-padding-block-start: .15rem;
+    --amplify-components-fieldcontrol-padding-block-end:  .15rem;
+    --amplify-components-fieldcontrol-padding-inline-start: .35rem;
+    --amplify-components-fieldcontrol-padding-inline-end: .35rem;
+    --amplify-internal-table-th-font-size: 16px;
+    --amplify-components-table-data-font-size: 14px;
+    --amplify-components-table-header-padding: 5px;
+    --amplify-components-table-data-padding: 5px;
+}
+.admin {
+    background-color:#fff;
+    color:#000;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: row;
+}
+
+.admin-nav-open {
+    background-color: rgb(247, 248, 249);
+    border-right: 1px solid rgb(232, 233, 234);
+    position: sticky;
+    top: 0px;
+    left: 0px;
+    height: 100vh;
+    z-index: 999;
+    flex: 0 0 256px;
+    max-width: 256px;
+    min-width: 256px;
+    width: 256px;
+    overflow-x: hidden;
+    transition: 0.5s;
+}
+.admin-nav-closed {
+    background-color: rgb(247, 248, 249);
+    border-right: 1px solid rgb(232, 233, 234);
+    position: sticky;
+    top: 0px;
+    left: 0px;
+    height: 100vh;
+    z-index: 999;
+    flex: 0 0 80px;
+    max-width: 80px;
+    min-width: 80px;
+    width: 80px;
+    transition: 0.5s;
+}
+.sider-trigger-open {
+    width:256px;
+    position: fixed;
+    bottom: 0;
+    z-index: 1;
+    height: 48px;
+    color: #fff;
+    line-height: 48px;
+    text-align: center;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-right: 1px solid rgb(232, 233, 234);
+}
+.sider-trigger-closed{
+    width:80px;
+    position: fixed;
+    bottom: 0;
+    z-index: 1;
+    height: 48px;
+    color: #fff;
+    line-height: 48px;
+    text-align: center;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-right: 1px solid rgb(232, 233, 234);
+}
+.no-border {
+    border:none;
+}
+.admin-content {
+    display: flex;
+    flex: auto;
+    flex-direction: column;
+    min-height: 0;
+    background: #F0F2F5;
+    padding:1rem;
+}
+.city-dropdown {
+    display:inline-flex;
+    margin: 0;
+    padding:0;
+
+    line-height: .75rem;
+    font-size: .75rem;
+}
+.image-upload-button
+{
+    background:blue;
+}
+input[type=file] {
+    padding:5px 15px;
+    background-color:#fff;
+    border:0 none;
+    cursor:pointer;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+input[type="file"] {
+    display: none;
+}
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    max-width:150px;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+.game-detail-row {
+    border: 1px solid lightgray;
+}
+.border {
+    border: 2px solid lightgray!important;
+}
+.border1 {
+    border: 1px solid lightgray!important;
+}

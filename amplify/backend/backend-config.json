@@ -63,11 +63,5 @@
       "service": "Map"
     }
   },
-  "storage": {
-    "images": {
-      "dependsOn": [],
-      "providerPlugin": "awscloudformation",
-      "service": "S3"
-    }
-  }
+  "storage": {}
 }
