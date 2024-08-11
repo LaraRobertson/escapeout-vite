@@ -3,9 +3,9 @@ import {
     Button,
     View,
     Image,
-    Flex
+    Flex, useAuthenticator
 } from '@aws-amplify/ui-react';
-import { useNavigate } from "react-router-dom";
+import {Navigate, useLocation, useNavigate} from "react-router-dom";
 import DOMPurify from "dompurify";
 import Modal from "react-modal";
 import {generateClient} from "aws-amplify/api";
@@ -28,9 +28,13 @@ import Winner from "../components/game/Winner";
 import Help from "../components/game/Help";
 import zoneIcon from "../assets/noun-zone-3097481-FFFFFF.svg";
 import {MyGameContext} from "../MyContext";
+import {createGameStats} from "../graphql/mutations";
 
 export function GameV3() {
     const client = generateClient();
+    const location = useLocation();
+    const { authStatus } = useAuthenticator((context) => [
+        context.authStatus])
     /* dark / light */
     const [isChecked, setIsChecked] = useState(true);
 
@@ -234,13 +238,30 @@ export function GameV3() {
                     input: data
                 }
             })
+            const gameStatsValues = {
+                waiverSigned: true, completed: true
+            }
+            const data2 = {
+                id: gameStatsID,
+                gameStates: JSON.stringify(gameStatsValues),
+            };
+            console.log("data for createGameStats: " + JSON.stringify(data));
+            try {
+                await client.graphql({
+                    query: mutations.updateGameStats,
+                    variables: {input: data2},
+                });
+
+            } catch (err) {
+                console.log("error updateGameStats..", err)
+            }
             removeLocalStorage();
 
             setTimeout(() => {
                 //goHomeQuit(navigate);
             }, 15000);
             console.log("winGameFunction");
-            console.log("gameTime = seconds: " + seconds);
+            //console.log("gameTime = seconds: " + seconds);
         } catch (err) {
             console.log('error updating gamescore:', err);
         }
@@ -293,156 +314,211 @@ export function GameV3() {
         const sanitizedHtmlContent = DOMPurify.sanitize(htmlContent);
         return (sanitizedHtmlContent)
     }
-
     return (
-        <MyGameContext.Provider value={{ isChecked, client, navigate, gameScoreID, setGamePuzzleGuess, setGamePuzzleAnswer, setGamePuzzleAnswerCorrect, setGamePuzzleSolved, gamePuzzleArray, setModalPuzzleContent, setClueDetails, setModalClueContent, setModalContent, setGameComplete }}>
-        <View position="relative">
-            <View className={isChecked? "game-container dark" : "game-container light"}>
-                <View className="top-bar top-bar-change">
-                    <Flex className="zone-holder zone-holder-change"
-                          direction="row"
-                          justifyContent="center"
-                          alignItems="center"
-                          alignContent="center"
-                          wrap="nowrap"
-                          gap="1rem">
-                            {playZone.map((zone,index) => (
-                                <View className={(zoneVisible==zone.id)? "zone-border zone-icon-container" : "zone-icon-container"} key={zone.id} ariaLabel={zone.id}  onClick={() => setZoneVisibleFunction(zone.id, zone.gameZoneName)}>
-                                    <Image height="40px" width="40px" src={zoneIcon} alt="zone icon" />
-                                    <View className={"zone-text"}>zone {index+1}</View>
+        <MyGameContext.Provider value={{
+            isChecked,
+            client,
+            navigate,
+            gameScoreID,
+            setGamePuzzleGuess,
+            setGamePuzzleAnswer,
+            setGamePuzzleAnswerCorrect,
+            setGamePuzzleSolved,
+            gamePuzzleArray,
+            setModalPuzzleContent,
+            setClueDetails,
+            setModalClueContent,
+            setModalContent,
+            setGameComplete
+        }}>
+            <View position="relative">
+                {(authStatus != 'authenticated') | (authStatus === "configuring") ? (
+                    <View>
+                        {authStatus === "configuring" ?
+                            (<View>Loading</View>):(
+                                <View>
+                                    <View paddingTop="30px" textAlign={"center"}>Game is not available</View>
+                                    <Flex justifyContent="center">
+                                        <Button className="topLink" onClick={() => navigate('/')}>Back to Home</Button>
+                                    </Flex>
+                                </View>
+                            )}
+                    </View>
+                ) : (
+                <>
+                <View className={isChecked ? "game-container dark" : "game-container light"}>
+                    <View className="top-bar top-bar-change">
+                        <Flex className="zone-holder zone-holder-change"
+                              direction="row"
+                              justifyContent="center"
+                              alignItems="center"
+                              alignContent="center"
+                              wrap="nowrap"
+                              gap="1rem">
+                            {playZone.map((zone, index) => (
+                                <View
+                                    className={(zoneVisible == zone.id) ? "zone-border zone-icon-container" : "zone-icon-container"}
+                                    key={zone.id} ariaLabel={zone.id}
+                                    onClick={() => setZoneVisibleFunction(zone.id, zone.gameZoneName)}>
+                                    <Image height="40px" width="40px" src={zoneIcon} alt="zone icon"/>
+                                    <View className={"zone-text"}>zone {index + 1}</View>
                                 </View>
                             ))}
-                    </Flex>
-                </View>
-                <View className="play-area play-area-change">
-                    <View className="image-mask image-mask-change"></View>
-                    {playZone.map((zone,index) => (
-                       <View aria-label={keyID(zone.id,"zone")} key={keyID(zone.id,"zone")} className={(zoneVisible==zone.id)? "image-holder image-holder-change show" : "hide"} backgroundImage={backgroundImage(zone.gameZoneImage)}>
-                       </View>
-                    ))}
-                    <View className={"game-container-top"}>
-                       {zoneName}
+                        </Flex>
                     </View>
-                   <View className={"clue-sidebar"}>
-                   {gameClues.map((clue,index) => (
-                       <GameClue clue={clue}
-                                 zoneVisible={zoneVisible}
-                                 index={index}
-                                 setModalClueContent={setModalClueContent}
-                                 setClueDetails={setClueDetails}
-                                 key={clue.id}/>
-                   ))}
-                   </View>
-                   <ModalClue
-                       modalClueContent={modalClueContent}
-                       setModalClueContent={setModalClueContent}
-                       clueDetails={clueDetails}
-                       setCluesFunction={setCluesFunction}>
-                           <View dangerouslySetInnerHTML={ {__html: DangerouslySetInnerHTMLSanitized(clueDetails.gameClueText)}} paddingTop="10px"></View>
-                           {(clueDetails.gameClueImage != "" && clueDetails.gameClueImage != null) && <Image src={clueDetails.gameClueImage} />}
-                   </ModalClue>
-                   <View className={"puzzle-sidebar"}>
-                       {gamePuzzleArray.map((puzzle,index) => (
-                           <GamePuzzle puzzle={puzzle}
-                                     zoneVisible={zoneVisible}
-                                     index={index}
-                                     setPuzzleDetails={setPuzzleDetails}
-                                     gamePuzzleSolved={gamePuzzleSolved}
-                                     key={puzzle.id}/>
-                       ))}
-                   </View>
-                   <ModalPuzzle
-                        modalPuzzleContent={modalPuzzleContent}
-                        setModalPuzzleContent={setModalPuzzleContent}>
-                        <ModalPuzzleContent
-                            puzzleDetails={puzzleDetails}
-                            gamePuzzleGuess={gamePuzzleGuess}
-                            gamePuzzleSolved={gamePuzzleSolved}
-                            gamePuzzleAnswer={gamePuzzleAnswer}
-                            gamePuzzleAnswerCorrect={gamePuzzleAnswerCorrect}
-                            updateGameScoreFunction={updateGameScoreFunction}
+                    <View className="play-area play-area-change">
+                        <View className="image-mask image-mask-change"></View>
+                        {playZone.map((zone, index) => (
+                            <View aria-label={keyID(zone.id, "zone")} key={keyID(zone.id, "zone")}
+                                  className={(zoneVisible == zone.id) ? "image-holder image-holder-change show" : "hide"}
+                                  backgroundImage={backgroundImage(zone.gameZoneImage)}>
+                            </View>
+                        ))}
+                        <View className={"game-container-top"}>
+                            {zoneName}
+                        </View>
+                        <View className={"clue-sidebar"}>
+                            {gameClues.map((clue, index) => (
+                                <GameClue clue={clue}
+                                          zoneVisible={zoneVisible}
+                                          index={index}
+                                          setModalClueContent={setModalClueContent}
+                                          setClueDetails={setClueDetails}
+                                          key={clue.id}/>
+                            ))}
+                        </View>
+                        <ModalClue
+                            modalClueContent={modalClueContent}
+                            setModalClueContent={setModalClueContent}
+                            clueDetails={clueDetails}
+                            setCluesFunction={setCluesFunction}>
+                            <View
+                                dangerouslySetInnerHTML={{__html: DangerouslySetInnerHTMLSanitized(clueDetails.gameClueText)}}
+                                paddingTop="10px"></View>
+                            {(clueDetails.gameClueImage != "" && clueDetails.gameClueImage != null) &&
+                            <Image src={clueDetails.gameClueImage}/>}
+                        </ModalClue>
+                        <View className={"puzzle-sidebar"}>
+                            {gamePuzzleArray.map((puzzle, index) => (
+                                <GamePuzzle puzzle={puzzle}
+                                            zoneVisible={zoneVisible}
+                                            index={index}
+                                            setPuzzleDetails={setPuzzleDetails}
+                                            gamePuzzleSolved={gamePuzzleSolved}
+                                            key={puzzle.id}/>
+                            ))}
+                        </View>
+                        <ModalPuzzle
+                            modalPuzzleContent={modalPuzzleContent}
+                            setModalPuzzleContent={setModalPuzzleContent}>
+                            <ModalPuzzleContent
+                                puzzleDetails={puzzleDetails}
+                                gamePuzzleGuess={gamePuzzleGuess}
+                                gamePuzzleSolved={gamePuzzleSolved}
+                                gamePuzzleAnswer={gamePuzzleAnswer}
+                                gamePuzzleAnswerCorrect={gamePuzzleAnswerCorrect}
+                                updateGameScoreFunction={updateGameScoreFunction}
                             />
-                    </ModalPuzzle>
-                   <View className="right-side"></View>
-                   <View className="game-container-bottom"></View>
-                </View>
-                {/* end play area */}
-                <View className={"notes-area"}>
-                    <View ariaLabel="Time" className="time time-change">
-                        <View className="small">hint time: {gameTimeHint} mins | time started: {realTimeStart ? format(realTimeStart, "MM/dd/yy h:mma") : null}</View>
+                        </ModalPuzzle>
+                        <View className="right-side"></View>
+                        <View className="game-container-bottom"></View>
                     </View>
-                     <NotesOpen clues={clues} setClues={setClues} gameNotes={gameNotes} setGameNotes={setGameNotes} setGameNotesFunction={setGameNotesFunction} isChecked={isChecked}/>
-                </View>
-            </View> {/* end game-container */}
+                    {/* end play area */}
+                    <View className={"notes-area"}>
+                        <View ariaLabel="Time" className="time time-change">
+                            <View className="small">hint time: {gameTimeHint} mins | time
+                                started: {realTimeStart ? format(realTimeStart, "MM/dd/yy h:mma") : null}</View>
+                        </View>
+                        <NotesOpen clues={clues} setClues={setClues} gameNotes={gameNotes}
+                                   setGameNotes={setGameNotes} setGameNotesFunction={setGameNotesFunction}
+                                   isChecked={isChecked}/>
+                    </View>
+                </View> {/* end game-container */}
 
-            <ReactModalFromBottom modalContent={modalContent} >
-                {(modalContent.content == "Help") && <Help />}
-                {(modalContent.content == "Hints") && <Hints gameHint={gameHint} setGameTimeHint={setGameTimeHint} gameHintVisible={gameHintVisible} setGameHintVisible={setGameHintVisible} DangerouslySetInnerHTMLSanitized={DangerouslySetInnerHTMLSanitized} />}
-                {(modalContent.content == "Map") && <Map />}
-            </ReactModalFromBottom>
-            <ReactModalWinner gameTimeTotal={gameTimeTotal} >
-                {(gameComplete) && <Winner game={game} gameTimeTotal={gameTimeTotal} gameTimeHint={gameTimeHint}/>}
-            </ReactModalWinner>
 
-            <View className={isAlertVisible ? "alert-container show" : "hide"}>
-                 <div className='alert-inner'>{alertText}</div>
-            </View>
-            <View className={isGoHomeQuitVisible ? "alert-container show" : "hide"}>
-                 <div className='alert-inner'>Do You Really Want To Quit?<br />
-                 <Button marginRight={"10px"} className="button button-small quit-button-alert " onClick={()=>{setIsGoHomeQuitVisible(false);goHomeQuit(navigate)}}>Yes, I Want Quit</Button>
-                 <Button marginRight={"10px"} className="button button-small quit-button-alert" onClick={()=>{setIsGoHomeQuitVisible(false)}}>No, I Want to Play</Button>
-                 </div>
-            </View>
-            <View className={"game-bottom-bar-container"}>
-                <View className={"game-bottom-bar"}>
-                <Button  className="quit-button dark"
-                         onClick={() => setModalContent({
-                             open: true,
-                             content: "Hints"
-                         })}>
-                Hints</Button>
-                <Button  className="quit-button dark"
-                         onClick={() => setModalContent({
-                             open: true,
-                             content: "Map"
-                         })}>
-                    Map</Button>
-                <Button  className="quit-button dark"
-                         onClick={() => setModalContent({
-                             open: true,
-                             content: "Help"
-                         })}>
-                    Help</Button>
-                <Button className={isChecked? "quit-button dark " : "quit-button light "} onClick={()=>{setIsGoHomeQuitVisible(true)}}>Quit</Button>
-                {/*<ToggleButton
-                    className={isChecked? "dark-light-toggle dark-toggle" : "dark-light-toggle light"}
-                    isPressed={isChecked}
-                    onChange={() => setIsChecked(!isChecked)}
-                >
-                    <Icon
-                        height={"30px"}
-                        width={"40px"}
-                        ariaLabel="Sun"
-                        viewBox={{ minX: 0,
-                            minY: 0,
-                            width: 64,
-                            height: 64 }}
-                        paths={[
-                            {
-                                d: 'M36.4 20.4a16 16 0 1 0 16 16 16 16 0 0 0-16-16zm0 28a12 12 0 0 1-10.3-5.8l2.5.3A13.7 13.7 0 0 0 42 25.8a12 12 0 0 1-5.6 22.6z',
-                                stroke: '#202020',
-                            },
-                            {
-                                d: 'M36.4 16.4a2 2 0 0 0 2-2v-8a2 2 0 1 0-4 0v8a2 2 0 0 0 2 2zm-20 20a2 2 0 0 0-2-2h-8a2 2 0 0 0 0 4h8a2 2 0 0 0 2-2zm3-14.1a2 2 0 0 0 2.8-2.8l-5.7-5.7a2 2 0 0 0-2.8 2.8zM59 13.8a2 2 0 0 0-2.8 0l-5.7 5.7a2 2 0 1 0 2.8 2.8l5.7-5.7a2 2 0 0 0 0-2.8zM19.4 50.5l-5.7 5.7a2 2 0 1 0 2.9 2.8l5.7-5.7a2 2 0 1 0-2.8-2.8z',
-                                stroke: '#202020',
-                            },
-                        ]}
-                    />
-                </ToggleButton>*/}
+                <ReactModalFromBottom modalContent={modalContent}>
+                    {(modalContent.content == "Help") && <Help/>}
+                    {(modalContent.content == "Hints") &&
+                    <Hints gameHint={gameHint} setGameTimeHint={setGameTimeHint} gameHintVisible={gameHintVisible}
+                           setGameHintVisible={setGameHintVisible}
+                           DangerouslySetInnerHTMLSanitized={DangerouslySetInnerHTMLSanitized}/>}
+                    {(modalContent.content == "Map") && <Map/>}
+                </ReactModalFromBottom>
+                <ReactModalWinner gameTimeTotal={gameTimeTotal}>
+                    {(gameComplete) &&
+                    <Winner game={game} gameTimeTotal={gameTimeTotal} gameTimeHint={gameTimeHint}/>}
+                </ReactModalWinner>
+
+                <View className={isAlertVisible ? "alert-container show" : "hide"}>
+                    <div className='alert-inner'>{alertText}</div>
                 </View>
+                <View className={isGoHomeQuitVisible ? "alert-container show" : "hide"}>
+                    <div className='alert-inner'>Do You Really Want To Quit?<br/>
+                        <Button marginRight={"10px"} className="button button-small quit-button-alert "
+                                onClick={() => {
+                                    setIsGoHomeQuitVisible(false);
+                                    goHomeQuit(navigate)
+                                }}>Yes, I Want Quit</Button>
+                        <Button marginRight={"10px"} className="button button-small quit-button-alert"
+                                onClick={() => {
+                                    setIsGoHomeQuitVisible(false)
+                                }}>No, I Want to Play</Button>
+                    </div>
+                </View>
+                <View className={"game-bottom-bar-container"}>
+                    <View className={"game-bottom-bar"}>
+                        <Button className="quit-button dark"
+                                onClick={() => setModalContent({
+                                    open: true,
+                                    content: "Hints"
+                                })}>
+                            Hints</Button>
+                        <Button className="quit-button dark"
+                                onClick={() => setModalContent({
+                                    open: true,
+                                    content: "Map"
+                                })}>
+                            Map</Button>
+                        <Button className="quit-button dark"
+                                onClick={() => setModalContent({
+                                    open: true,
+                                    content: "Help"
+                                })}>
+                            Help</Button>
+                        <Button className={isChecked ? "quit-button dark " : "quit-button light "} onClick={() => {
+                            setIsGoHomeQuitVisible(true)
+                        }}>Quit</Button>
+                        {/*<ToggleButton
+                className={isChecked? "dark-light-toggle dark-toggle" : "dark-light-toggle light"}
+                isPressed={isChecked}
+                onChange={() => setIsChecked(!isChecked)}
+            >
+                <Icon
+                    height={"30px"}
+                    width={"40px"}
+                    ariaLabel="Sun"
+                    viewBox={{ minX: 0,
+                        minY: 0,
+                        width: 64,
+                        height: 64 }}
+                    paths={[
+                        {
+                            d: 'M36.4 20.4a16 16 0 1 0 16 16 16 16 0 0 0-16-16zm0 28a12 12 0 0 1-10.3-5.8l2.5.3A13.7 13.7 0 0 0 42 25.8a12 12 0 0 1-5.6 22.6z',
+                            stroke: '#202020',
+                        },
+                        {
+                            d: 'M36.4 16.4a2 2 0 0 0 2-2v-8a2 2 0 1 0-4 0v8a2 2 0 0 0 2 2zm-20 20a2 2 0 0 0-2-2h-8a2 2 0 0 0 0 4h8a2 2 0 0 0 2-2zm3-14.1a2 2 0 0 0 2.8-2.8l-5.7-5.7a2 2 0 0 0-2.8 2.8zM59 13.8a2 2 0 0 0-2.8 0l-5.7 5.7a2 2 0 1 0 2.8 2.8l5.7-5.7a2 2 0 0 0 0-2.8zM19.4 50.5l-5.7 5.7a2 2 0 1 0 2.9 2.8l5.7-5.7a2 2 0 1 0-2.8-2.8z',
+                            stroke: '#202020',
+                        },
+                    ]}
+                />
+            </ToggleButton>*/}
+                    </View>
+                </View>
+                <View className={"logo"}>EscapeOut.Games</View>
+                </>
+             )}
             </View>
-            <View className={"logo"}>EscapeOut.Games</View>
-        </View>
         </MyGameContext.Provider>
     )
 }

@@ -1,4 +1,4 @@
-import {Button, Heading, View,TextField,Image} from "@aws-amplify/ui-react";
+import {Button, Heading, View, TextField, Image, Accordion} from "@aws-amplify/ui-react";
 import React, {useContext, useState} from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -12,6 +12,7 @@ import {MyAuthContext} from "../../MyContext";
 import {generateClient} from "aws-amplify/api";
 import GameDetail from "./GameDetail";
 import Waiver from "./Waiver";
+import DOMPurify from "dompurify";
 
 export default function GameIntro(props) {
     let gameDetails=props.gameDetails;
@@ -151,22 +152,44 @@ export default function GameIntro(props) {
         }
     }
 
+    function DangerouslySetInnerHTMLSanitized(htmlContent) {
+        const sanitizedHtmlContent = DOMPurify.sanitize(htmlContent);
+        return (sanitizedHtmlContent)
+    }
+
     return (
             <>
-                <View className={"end-paragraph"}>
-                    <Heading onClick={() => (isGameDetailOpen ? setIsGameDetailOpen(false) : setIsGameDetailOpen(true))} level={6} marginTop={"10px"} textDecoration={"underline"}>
-                        {isGameDetailOpen ? "Hide" : "Show"}  Game Details</Heading>
-                </View>
-                {(isGameDetailOpen) && <GameDetail gameDetails={gameDetails} gameIntro={true}/>}
-                {(!isGameDetailOpen) &&
                 <>
+                    <View dangerouslySetInnerHTML={ {__html: DangerouslySetInnerHTMLSanitized(gameDetails.gameIntro)}}   padding={"0 10px"}></View>
                     <Heading level={5} marginBottom="10px" paddingTop="10px">Your score is your time.</Heading>
                     <View className={"end-paragraph"} >Time doesn't stop until you complete the game.</View>
                     <Heading level={5} marginTop={"10px"}>Start Playing when you are here:</Heading>
                     <View className={"end-paragraph"} textAlign={"center"}>
                         <Image alt={gameDetails.gameName} maxHeight="100px" src={gameDetails.gamePlayZoneImage1}/>
                     </View>
-                </>}
+                </>
+                <Accordion.Container allowMultiple>
+                    <Accordion.Item value="game-details">
+                        <Accordion.Trigger>
+                            <strong>Game Details</strong>
+                            <Accordion.Icon/>
+                        </Accordion.Trigger>
+                        <Accordion.Content>
+                            <GameDetail gameDetails={gameDetails} gameIntro={true}/>
+                        </Accordion.Content>
+                    </Accordion.Item>
+                    <Accordion.Item value="signed-waiver">
+                        <Accordion.Trigger>
+                            <strong>You Have Signed Waiver:</strong>
+                            <Accordion.Icon/>
+                        </Accordion.Trigger>
+                        <Accordion.Content>
+                            <Waiver gameDetails={gameDetails} gameIntro={true}/>
+                        </Accordion.Content>
+                    </Accordion.Item>
+                </Accordion.Container>
+
+
                 {(gameDetails.numberOfTimes !== 0) ? (
                     <View className="small italics end-paragraph" marginTop={"10px"} textAlign={"center"}> You have
                         played {gameDetails.numberOfTimes} time{(gameDetails.numberOfTimes !== 1)? "(s)": null} before - this game's score will not be on the leaderboard. </View>
@@ -185,16 +208,7 @@ export default function GameIntro(props) {
                 />
                 </View>
                 <View className={"red-alert"} textAlign={"center"}><strong>{numberOfPlayersError}</strong></View>
-                <View className={"end-paragraph"} marginTop="10px" textAlign={"center"} textDecoration={"underline"} fontWeight={"bold"}
-                      onClick={() => {
-                          (isWaiverOpen ? setIsWaiverOpen(false) : setIsWaiverOpen(true));
-                      }} >
-                    {isWaiverOpen ? "You Have Signed Waiver - Close Waiver" : "You Have Signed Waiver - View Waiver"}
-                </View>
-                {(isWaiverOpen) &&
-                <View className={"end-paragraph"}>
-                    <Waiver gameDetails={gameDetails} gameIntro={true}/>
-                </View>}
+
                 <View className={"modal-bottom-bar"}>
                         <Button margin="0 0 0 0" className="button small"
                                 onClick={() => {

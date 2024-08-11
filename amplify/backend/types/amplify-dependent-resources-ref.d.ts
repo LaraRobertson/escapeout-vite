@@ -28,7 +28,7 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "storage": {
-    "images": {
+    "S3EscapeOut": {
       "BucketName": "string",
       "Region": "string"
     }

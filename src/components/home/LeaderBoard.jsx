@@ -6,7 +6,7 @@ import {
     View,
 } from '@aws-amplify/ui-react';
 import {gameScoreByGameID} from "../../graphql/queries";
-import { format } from 'date-fns'
+import { format } from 'date-fns';
 import {generateClient} from "aws-amplify/api";
 
 export default function LeaderBoard(props) {

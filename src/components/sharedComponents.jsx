@@ -9,6 +9,21 @@ import {useNavigate} from "react-router-dom";
 import DOMPurify from "dompurify";
 import Close from "../assets/times-solid-svgrepo-com.svg";
 
+export const NotAvailable = (props) => {
+    return (
+        <View>
+            {props.authStatus === "configuring" ?
+                (<View>Loading</View>):(
+                    <View>
+                        <View textAlign={"center"}>Admin is not available</View>
+                        <Flex justifyContent="center">
+                            <Button className="topLink" onClick={() => navigate('/')}>Back to Home</Button>
+                        </Flex>
+                    </View>
+                )}
+        </View>
+    )
+}
 
 export const Modal2 = ({ show, close, title, setCluesFunction, modalClass, children }) => {
     return (

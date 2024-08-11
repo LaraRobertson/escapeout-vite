@@ -93,6 +93,8 @@
     -webkit-transform: translateY(0);
     transform: translateY(0); }
 
+
+/* react modal */
 .ReactModal__Body--open {
   overflow: hidden; }
 
@@ -100,6 +102,7 @@
   -webkit-transform: translateY(-600px);
   transform: translateY(-600px);
   transition: all .4s ease; }
+
 
 .ReactModal__Overlay--after-open {
   position: fixed;
@@ -118,12 +121,22 @@
   -webkit-transform: translateX(-600px);
   transform: translateX(-600px);
   transition: all .4s ease; }
+.ReactModal__Overlay.slide-from-right {
+  -webkit-transform: translateX(600px);
+  transform: translateX(600px);
+  transition: all .4s ease; }
 
 .ReactModal__Overlay--after-open.slide-from-left {
   -webkit-transform: translateX(0);
   transform: translateX(0); }
+.ReactModal__Overlay--after-open.slide-from-right {
+  -webkit-transform: translateX(0);
+  transform: translateX(0); }
 
 .ReactModal__Overlay--before-close.slide-from-left {
+  -webkit-transform: translateX(-600px);
+  transform: translateX(-600px); }
+.ReactModal__Overlay--before-close.slide-from-right {
   -webkit-transform: translateX(-600px);
   transform: translateX(-600px); }
 
@@ -140,21 +153,31 @@
   -webkit-transform: translateY(600px);
   transform: translateY(600px); }
 
-.modalContent, .modalContent-Help, .modalContent-Hints {
-  margin: 20px auto 0 auto;
+.modalContent {
+  margin: 0 auto;
   padding: 10px 30px 50px 30px;
   border-radius: 5px 5px 0 0;
+  box-shadow: -6px 0 16px 0 rgba(0, 0, 0, 0.08), -3px 0 6px -4px rgba(0, 0, 0, 0.12), -9px 0 28px 8px rgba(0, 0, 0, 0.05);
   width: 90%;
   transition: all 5s ease-in-out;
   overflow-y: auto;
   position: relative;
-  height: calc(100vh - 20px);
+  height: calc(100vh);
   max-width: 500px;
   background: white;
   display: flex;
   flex-direction: column; }
-.modalContent-Map {
 
+.modalContent.adminModal {
+  /*top: 0;
+  right: 0;
+  bottom: 0;
+  position: absolute;*/
+  box-shadow: -6px 0 16px 0 rgba(0, 0, 0, 0.08), -3px 0 6px -4px rgba(0, 0, 0, 0.12), -9px 0 28px 8px rgba(0, 0, 0, 0.05);
+  max-width:765px;
+  width:100%;
+  z-index: 1000;
+  transition: all 0.3s;
 }
 
 .slide-from-top .modalContent {
@@ -172,6 +195,7 @@
   justify-content: space-between;
   align-items: center;
   height: 50px; }
+
 .modalContent-Map .modal-top-bar {
   padding: 20px;
 }
@@ -179,8 +203,9 @@
 .modal-middle {
   flex: 1;
   overflow: auto;
-  height: calc(100vh - 110px); }
-
+  height: calc(100vh - 110px);
+  padding: 0 5px;
+}
 .modal-from-top-close {
   height: 40px; }
 

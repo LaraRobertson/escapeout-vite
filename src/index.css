@@ -72,8 +72,15 @@ button:focus-visible,
   background-color: var(--background-dark);
 }
 .authenticator {
-  width: var(--amplify-components-authenticator-container-width-max);
-  margin: 0 auto;
+  place-self: center;
+  padding-bottom: 10px;
+  text-align:center;
+  background-color: black;
+  color:white;
+
+}
+.authenticator-header-container {
+  display:grid;
 }
 .quit-button {
   background-color: transparent;
@@ -81,10 +88,9 @@ button:focus-visible,
   font-size: .8em;
 }
 
-@media (max-width:480px) {
+@media (min-width: 30rem) {
   .authenticator {
-    width: 333px;
-    margin: 0 auto;
+    width: var(--amplify-components-authenticator-container-width-max);
   }
 }
 .how-to-play-bullets li {
@@ -567,7 +573,11 @@ fieldset.comments legend {
   padding-top:20px;
   min-height:100vh;
 }
-
+.main-container-admin {
+  position: relative;
+  padding:20px 40px;
+  min-height:100vh;
+}
 .topNav {
   background: var(--black);
   position: fixed;
@@ -788,10 +798,6 @@ isChecked is for light/dark
   left: 0px;
   width: 100%;
   text-align: center;
-}
-.admin {
-  background-color:#fff;
-  color:#000;
 }
 
 .close-button {

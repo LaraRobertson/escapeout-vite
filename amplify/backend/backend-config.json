@@ -64,7 +64,7 @@
     }
   },
   "storage": {
-    "images": {
+    "S3EscapeOut": {
       "dependsOn": [],
       "providerPlugin": "awscloudformation",
       "service": "S3"

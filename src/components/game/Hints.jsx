@@ -54,6 +54,7 @@ export default function Hints(props) {
                     </View>
                 </Flex>
             ))}
+            <hr />
         </View>
     )
 }
