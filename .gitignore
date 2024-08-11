@@ -24,7 +24,7 @@ dist-ssr
 *.sw?
 
 #added 4/4/24
-*team-provider-info.json
+#team-provider-info.json
 #amplify-do-not-edit-begin
 amplify/\#current-cloud-backend
 amplify/.config/local-*
