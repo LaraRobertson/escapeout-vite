@@ -123,6 +123,86 @@ export const listGames = /* GraphQL */ `query ListGames(
       gameGoals
       gameIntro
       gameMap
+            gamePlayZone {
+          items {
+            id
+            disabled
+            gameID
+            gameZoneName
+            gameZoneImage
+            gameZoneIcon
+            latitude
+            longitude
+            order
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+       gameHint {
+          items {
+            id
+            disabled
+            gameID
+            gamePlayZoneID
+            gameHintName
+            gameHintDescription
+            order
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+      type
+       gameClue {
+          items {
+            id
+            gameClueName
+            gamePlayZoneID
+            gameClueIcon
+            gameClueImage
+            gameClueToolNeeded
+            gameClueText
+            gameCluePosition
+            order
+            createdAt
+            disabled
+            updatedAt
+          }
+          nextToken
+        }
+      gamePuzzle {
+        items {
+            id
+            gamePlayZoneID
+            puzzleName
+            puzzlePosition
+            puzzleImage
+            puzzleImageOpen
+            puzzleImageSolved
+            textField {
+              items {
+                id
+                name
+                label
+                answer
+                order
+                }
+              nextToken
+            }
+            puzzleClueRevealed
+            puzzleClueText
+            puzzleToolRevealed
+            puzzleToolNeeded
+            winGame
+            winGameImage
+            winGameMessage
+            order
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
       type
       createdAt
       updatedAt
@@ -688,6 +768,23 @@ export const gamesByCity = /* GraphQL */ `query GamesByCity(
       gameGoals
       gameIntro
       gameMap
+            gamePlayZone {
+          items {
+            id
+            disabled
+            gameID
+            gameZoneName
+            gameZoneIcon
+            gameZoneImage
+            gameZoneDescription
+            latitude
+            longitude
+            order
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
       type
       createdAt
       updatedAt
