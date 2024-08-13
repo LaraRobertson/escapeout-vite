@@ -1,4 +1,4 @@
-import {Button, Card, Flex, Heading, Text, View} from "@aws-amplify/ui-react";
+import {Button, Card, Flex, Heading, Text, View, Image} from "@aws-amplify/ui-react";
 import React, {useContext, useEffect, useState} from "react";
 import {checkWaiver} from "./checkWaiver";
 import {MyAuthContext} from "../../MyContext";
@@ -90,7 +90,7 @@ export default function GameCard({game, gameDetails, hidePlayedGames}) {
     });
     return (
         <Card style={divStyle(gamePlayZone.items[0].gameZoneImage)}
-              className={(gamesIDUserPlayed.includes(id) && hidePlayedGames) ? "hide" : "game-card"}
+              className={(gamesIDUserPlayed.includes(id) && hidePlayedGames) ? "hide" : "game-card test"}
               variation="elevated">
             <View className="inner-game-card">
                 <View className="game-card-full">

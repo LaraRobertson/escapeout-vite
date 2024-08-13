@@ -26,5 +26,11 @@ export type AmplifyDependentResourcesAttributes = {
       "Region": "string",
       "Style": "string"
     }
+  },
+  "storage": {
+    "EscapeOutBucket": {
+      "BucketName": "string",
+      "Region": "string"
+    }
   }
 }

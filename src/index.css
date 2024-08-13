@@ -573,11 +573,7 @@ fieldset.comments legend {
   padding-top:20px;
   min-height:100vh;
 }
-.main-container-admin {
-  position: relative;
-  padding:20px 40px;
-  min-height:100vh;
-}
+
 .topNav {
   background: var(--black);
   position: fixed;
@@ -626,6 +622,9 @@ fieldset.comments legend {
 }
 .show {
   display:block;
+}
+.show-inline {
+  display:inline-block;
 }
 .clue-on-puzzle {
   position:absolute;

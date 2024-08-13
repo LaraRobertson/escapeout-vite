@@ -16,11 +16,47 @@
     --amplify-components-table-data-padding: 5px;
 }
 .admin {
-    background-color:#fff;
-    color:#000;
-    min-height: 100vh;
+    display: flex;
+    flex: auto;
+    flex-direction: column;
+    min-height: 0;
+    background: #F0F2F5;
+}
+.main-container-admin {
+    height: 100vh;
+    margin: 0;
     display: flex;
     flex-direction: row;
+}
+.admin-content {
+    background: #F0F2F5;
+    padding:1rem;
+    z-index: 1000;
+}
+.admin-content {
+    flex: 1 0 0;
+}
+.admin-content {
+    overflow-y: scroll;
+}
+.header {
+    height: 64px;
+    background:white;
+}
+.sidenav {
+    background-color: rgb(247, 248, 249);
+    border-right: 1px solid rgb(232, 233, 234);
+    position: sticky;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    z-index: 999;
+    flex: 0 0 256px;
+    max-width: 256px;
+    min-width: 256px;
+    width: 256px;
+    overflow-x: hidden;
+    transition: 0.5s;
 }
 
 .admin-nav-open {
@@ -29,7 +65,7 @@
     position: sticky;
     top: 0px;
     left: 0px;
-    height: 100vh;
+    height: 100%;
     z-index: 999;
     flex: 0 0 256px;
     max-width: 256px;
@@ -44,13 +80,34 @@
     position: sticky;
     top: 0px;
     left: 0px;
-    height: 100vh;
+    height: 100%;
     z-index: 999;
-    flex: 0 0 80px;
-    max-width: 80px;
-    min-width: 80px;
-    width: 80px;
+    flex: 0 0 35px;
+    max-width: 35px;
+    min-width: 35px;
+    width: 35px;
     transition: 0.5s;
+}
+.admin-nav-link {
+    top: -12px;
+    position: relative;
+    height: 35px;
+    padding-top: 5px;
+    padding-right: 20px;
+}
+.admin-nav-icon {
+    height: 35px;
+    width: 35px;
+    padding-left:8px;
+}
+.admin-nav-link-container {
+    cursor:pointer;
+    font-weight:bold;
+}
+.admin-nav-icon-border {
+    /*border:1px solid lightgray;*/
+    background-color:lightgray;
+
 }
 .sider-trigger-open {
     width:256px;
@@ -67,7 +124,7 @@
     border-right: 1px solid rgb(232, 233, 234);
 }
 .sider-trigger-closed{
-    width:80px;
+    width:35px;
     position: fixed;
     bottom: 0;
     z-index: 1;
@@ -83,14 +140,7 @@
 .no-border {
     border:none;
 }
-.admin-content {
-    display: flex;
-    flex: auto;
-    flex-direction: column;
-    min-height: 0;
-    background: #F0F2F5;
-    padding:1rem;
-}
+
 .city-dropdown {
     display:inline-flex;
     margin: 0;
@@ -122,7 +172,13 @@ input[type="file"] {
     cursor: pointer;
 }
 .game-detail-row {
-    border: 1px solid lightgray;
+    /*border-bottom: 1px solid lightgray;*/
+    background-color:#F0F2F5;
+}
+.plus-minus {
+    border:none;
+    padding:0 9px;
+    margin:0;
 }
 .border {
     border: 2px solid lightgray!important;

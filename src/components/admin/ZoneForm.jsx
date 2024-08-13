@@ -151,7 +151,7 @@ export default function ZoneForm() {
                 } catch (error) {
                     console.log('Error : ', error);
                 }
-                setInputCreateZone('gameZoneImage', "https://escapeoutbucket183723-dev.s3.amazonaws.com/public/" + file.name)
+                setInputCreateZone('gameZoneImage', "https://escapeoutbucket2183723-dev.s3.amazonaws.com/public/" + file.name)
             }
         }
 
@@ -217,6 +217,15 @@ export default function ZoneForm() {
                     label="longitude"
                     variation="quiet"
                     value={formCreateZoneState.longitude}
+                    required
+                />
+                <TextField
+                    onChange={(event) => setInputCreateZone('gameZoneImage', event.target.value)}
+                    name="Zone Image"
+                    placeholder="Zone Image"
+                    label="Zone Image"
+                    variation="quiet"
+                    value={formCreateZoneState.gameZoneImage}
                     required
                 />
                 <label>Zone Image</label>

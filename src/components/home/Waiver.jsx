@@ -1,6 +1,6 @@
 // components/Waiver.jsx
 import React, {useContext} from "react"
-import {Button, View, Alert, Flex} from '@aws-amplify/ui-react';
+import {Button, View, Alert, Flex, Message} from '@aws-amplify/ui-react';
 import {MyAuthContext} from "../../MyContext";
 
 export default function Waiver(props) {
@@ -19,7 +19,7 @@ export default function Waiver(props) {
 
     return (
             <>
-                <Alert variation="info" hasIcon={false}><strong>I will respect all laws, rules, and property rights of the area.
+                <Alert variation="neutral" hasIcon={false} textAlign={"center"}><strong>I will respect all laws, rules, and property rights of the area.
                     I will try not to annoy those around me.</strong></Alert>
                 <View>
                     <View margin="10px 0">

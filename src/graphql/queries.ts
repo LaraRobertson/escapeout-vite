@@ -49,12 +49,12 @@ export const listUsers = /* GraphQL */ `query ListUsers(
 }
 ` as GeneratedQuery<APITypes.ListUsersQueryVariables, APITypes.ListUsersQuery>;
 export const getGame = /* GraphQL */ `query GetGame($id: ID!) {
-  getGame(id: $id) {
+getGame(id: $id) {
     id
     gameName
-    gameDescription
-    gameLogisticInfo
-    gameSummary
+  gameDescription
+  gameLogisticInfo
+  gameSummary
     gameLocationPlace
     gameLocationPlaceDetails
     gameLocationCity
@@ -69,30 +69,93 @@ export const getGame = /* GraphQL */ `query GetGame($id: ID!) {
     gameGoals
     gameIntro
     gameMap
-    gamePlayZone {
-      nextToken
-      __typename
-    }
-    gameHint {
-      nextToken
-      __typename
-    }
-    type
-    gameClue {
-      nextToken
-      __typename
-    }
-    gamePuzzle {
-      nextToken
-      __typename
-    }
+      gamePlayZone {
+          items {
+            id
+            disabled
+            gameID
+            gameZoneName
+            gameZoneIcon
+            gameZoneImage
+            gameZoneDescription
+            latitude
+            longitude
+            order
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+       gameHint {
+          items {
+            id
+            disabled
+            gameID
+            gamePlayZoneID
+            gameHintName
+            gameHintDescription
+            order
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+      type
+       gameClue {
+          items {
+            id
+            gameClueName
+            gamePlayZoneID
+            gameClueIcon
+            gameClueImage
+            gameClueToolNeeded
+            gameClueText
+            gameCluePosition
+            order
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+      gamePuzzle {
+        items {
+            id
+            gamePlayZoneID
+            puzzleName
+            puzzlePosition
+            puzzleImage
+            puzzleImageOpen
+            puzzleImageSolved
+            textField {
+              items {
+                id
+                name
+                label
+                answer
+                order
+                }
+              nextToken
+            }
+            puzzleClueRevealed
+            puzzleClueText
+            puzzleToolRevealed
+            puzzleToolNeeded
+            winGame
+            winGameImage
+            winGameMessage
+            order
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
     createdAt
-    updatedAt
     disabled
     user {
       nextToken
       __typename
     }
+    updatedAt
     __typename
   }
 }
@@ -123,7 +186,7 @@ export const listGames = /* GraphQL */ `query ListGames(
       gameGoals
       gameIntro
       gameMap
-            gamePlayZone {
+        gamePlayZone {
           items {
             id
             disabled
