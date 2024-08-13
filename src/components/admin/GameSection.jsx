@@ -401,7 +401,9 @@ export default function GameSection(props) {
                     <TableRow key={game.id}>
                         {(gameVisible === "") &&
                         <>
-                        <TableCell>{game.gameName}</TableCell>
+                        <TableCell><Button gap="0.1rem" size="small"  className="plus-minus"  onClick={() => setGameVisibleFunction(game.id, index)}>+</Button>
+                            {game.gameName}
+                        </TableCell>
                         <TableCell>{game.gameType}</TableCell>
                         <TableCell>{game.gameLocationPlace}</TableCell>
                         <TableCell>{game.gameLocationCity}</TableCell>
@@ -420,11 +422,10 @@ export default function GameSection(props) {
                                 "gameID": game.id,
                                 "gameName": game.gameName
                             })}>copy</Button>
-                            <Button gap="0.1rem" size="small"
-                                        onClick={() => setGameVisibleFunction(game.id, index)}>open</Button>
-                            <Button gap="0.1rem" size="small" color="red" onClick={() => deleteGame({"gameID": game.id})}>
+
+                            {/*<Button gap="0.1rem" size="small" color="red" onClick={() => deleteGame({"gameID": game.id})}>
                                 x
-                            </Button>
+                            </Button>*/}
 
                         </TableCell>
                         </>}
@@ -432,11 +433,14 @@ export default function GameSection(props) {
                     {(gameVisible == game.id) &&
                         <TableCell colSpan={7} className={"border1"}>
                             <Flex  direction="row"
-                                   justifyContent="center"
+                                   justifyContent="flex-start"
                                    marginBottom={"30px"}
                                    gap={".1rem"}
                                    className={"game-detail-row"}>
-                                <Heading level={5} color="black" marginRight={"1rem"}>Game Detail: {game.gameName}:  </Heading>
+                                <Button gap="0.1rem" size="small" className="plus-minus" onClick={() => setGameVisible("")}>-</Button>
+                                <Heading level={5} color="black" marginRight={"1rem"}>
+
+                                    {game.gameName}:  </Heading>
                                 <Button gap="0.1rem" size="small"
                                         onClick={() => showGameStats({
                                             "gameID": game.id,
@@ -448,10 +452,10 @@ export default function GameSection(props) {
                                     "gameID": game.id,
                                     "gameName": game.gameName
                                 })}>copy</Button>
-                                <Button gap="0.1rem" size="small" onClick={() => setGameVisible("")}>close</Button>
-                                <Button gap="0.1rem" size="small" color="red" onClick={() => deleteGame({"gameID": game.id})}>
+
+                                {/* <Button gap="0.1rem" size="small" color="red" onClick={() => deleteGame({"gameID": game.id})}>
                                     x
-                                </Button>
+                                </Button>*/}
 
                             </Flex>
                             <Table

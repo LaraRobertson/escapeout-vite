@@ -20,6 +20,9 @@
       },
       "geo": {
         "GameMap": {}
+      },
+      "storage": {
+        "EscapeOutBucket": {}
       }
     }
   },

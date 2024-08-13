@@ -265,32 +265,29 @@ export function Admin() {
     }
     return (
         <MyAuthContext.Provider value={{ authStatus, email, setModalContent, modalContent }}>
-        <View className="main-container-admin" backgroundColor="white">
-            {(authStatus != 'authenticated') | (authStatus === "configuring") ? (
-                <NotAvailable authStatus={authStatus} />
-            ) : (
-                <>
-                <HeadingComponent userName={email}/>
-                {email === "lararobertson70@gmail.com" ? (
-                <View className="admin">
+                {(authStatus != 'authenticated') | (authStatus === "configuring") ? (
+                    <NotAvailable authStatus={authStatus} />
+                ) : (
+                <View className="main-container-admin">
                     <AdminNav displaySection={displaySection} setDisplaySection={setDisplaySection}/>
-                    <View className={"admin-content"}>
-                        {(displaySection.homeSection) && <HomeSection />}
-                        {(displaySection.userSection) && <UserSection />}
-                        {(displaySection.gameSection) && <GameSection />}
-                        <ReactModalFromRight>
-                            {(modalContent.content == "Game Form") && <GameForm />}
-                            {(modalContent.content == "Zone Form") && <ZoneForm />}
-                            {(modalContent.content == "Puzzle Form") && <PuzzleForm />}
-                            {(modalContent.content == "TextField Form") && <TextFieldForm />}
-                            {(modalContent.content == "Clue Form") && <ClueForm />}
-                            {(modalContent.content == "Hint Form") && <HintForm />}
-                        </ReactModalFromRight>
+                    <View className="admin">
+                        <HeadingComponent userName={email}/>
+                        <View className={"admin-content"}>
+                            {(displaySection.homeSection) && <HomeSection />}
+                            {(displaySection.userSection) && <UserSection />}
+                            {(displaySection.gameSection) && <GameSection />}
+                            <ReactModalFromRight>
+                                {(modalContent.content == "Game Form") && <GameForm />}
+                                {(modalContent.content == "Zone Form") && <ZoneForm />}
+                                {(modalContent.content == "Puzzle Form") && <PuzzleForm />}
+                                {(modalContent.content == "TextField Form") && <TextFieldForm />}
+                                {(modalContent.content == "Clue Form") && <ClueForm />}
+                                {(modalContent.content == "Hint Form") && <HintForm />}
+                            </ReactModalFromRight>
+                        </View>
                     </View>
-                </View> ) : (<div>not lararobertson70@gmail.com</div>)}
-                </>
-                )}
-        </View>
+                </View>
+                    )}
         </MyAuthContext.Provider>
     )
 

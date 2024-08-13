@@ -63,5 +63,11 @@
       "service": "Map"
     }
   },
-  "storage": {}
+  "storage": {
+    "EscapeOutBucket": {
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "S3"
+    }
+  }
 }
