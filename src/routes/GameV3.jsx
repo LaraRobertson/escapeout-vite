@@ -223,6 +223,7 @@ export function GameV3() {
         localStorage.setItem("realTimeEnd",endDate);
         let minutes = (endDate.getTime() - startDate.getTime()) / 60000;
         let GameTimeTotal = Number(minutes + gameTimeHint).toFixed(2);
+        console.log("GameTimeTotal: " + GameTimeTotal);
         setGameTimeTotal(GameTimeTotal);
 
         try {

@@ -69,7 +69,7 @@ export const getGame = /* GraphQL */ `query GetGame($id: ID!) {
     gameGoals
     gameIntro
     gameMap
-gamePlayZone {
+      gamePlayZone {
           items {
             id
             disabled

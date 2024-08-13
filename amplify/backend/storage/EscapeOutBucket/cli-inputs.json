@@ -1,0 +1,17 @@
+{
+  "resourceName": "EscapeOutBucket",
+  "policyUUID": "6396ac57",
+  "bucketName": "escapeoutbucket2",
+  "storageAccess": "authAndGuest",
+  "guestAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ],
+  "groupAccess": {}
+}
