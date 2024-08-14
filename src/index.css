@@ -228,14 +228,39 @@ button:focus-visible,
 .alert {
   padding: .8em;
 }
+.game-details-content {
+  padding: 10px 0;
+}
 .game-details-content h5 {
   padding: 10px 0;
 }
 .end-paragraph {
-  padding-bottom: 10px;
-  border-bottom: 1px solid rgb(220, 222, 224);
+  padding: 5px 0;
+  /*border-bottom: 1px solid rgb(220, 222, 224);*/
+  text-align:center;
 }
-
+.game-details-content .end-paragraph {
+  text-align:left;
+}
+.map-text {
+  font-size: .7rem;
+  text-align:center;
+  position:relative;
+  top:-1rem;
+}
+.add-clue {
+  margin-left:10px;
+}
+.delete-notes {
+  max-height: 15px;
+  color:red;
+}
+.clue-row {
+  margin-bottom:5px;
+}
+.notes .amplify-textarea {
+  color:white;
+}
 .button {
   background-color: var(--blue-color);
   color: var(--color-light);
@@ -597,7 +622,7 @@ fieldset.comments legend {
   border: none;
   border-bottom: 1px solid rgb(220, 222, 224);
   border-top: 1px solid rgb(220, 222, 224);
-  padding:20px 0;
+  padding:5px 0;
 }
 
 .custom-card-class {
@@ -742,7 +767,7 @@ isChecked is for light/dark
   border-top: solid 1px var(--blue-color);
   border-left: solid 1px var(--blue-color);
 }
-.flex-table.header .flex-row {
+.flex-table.header-table .flex-row {
   background: var(--blue-color);
   color: var(--color-light);
   border-color: var(--blue-color);
@@ -814,7 +839,7 @@ isChecked is for light/dark
 }
 .close {
   background-color: transparent;
-
+  font-size: 1rem;
 }
 .help {
  /* padding: 0px 5px;

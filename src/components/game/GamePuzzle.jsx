@@ -12,6 +12,7 @@ import safeDepositBoxOpen from "../../assets/noun-safe-deposit-box-open-5414386.
 import safeDepositBoxClosed from "../../assets/noun-safe-deposit-box-closed-6008306.svg";
 import padlockClosed from "../../assets/noun-padlock-closed-2186012.svg";
 import padlockOpen from "../../assets/noun-padlock-open-2185952.svg";
+//import {setGamePuzzleGuessFunction} from "../GamePuzzleGuessFunction";
 
 export function ModalPuzzleContent(props) {
     const { setGamePuzzleGuess, isChecked, setGamePuzzleAnswer, setGamePuzzleAnswerCorrect, setGamePuzzleSolved, gamePuzzleArray, setModalPuzzleContent, setGameComplete } = useContext(MyGameContext);
@@ -21,7 +22,6 @@ export function ModalPuzzleContent(props) {
     let gamePuzzleSolved=props.gamePuzzleSolved;
     let gamePuzzleAnswer=props.gamePuzzleAnswer;
     let gamePuzzleAnswerCorrect=props.gamePuzzleAnswerCorrect;
-
 
     function setGamePuzzleGuessFunction(textFieldID, guess, answer, puzzleID, winGame) {
         console.log("setPuzzleGuessFunction - puzzleID: " + puzzleID);
@@ -33,8 +33,14 @@ export function ModalPuzzleContent(props) {
             if (gamePuzzleGuessTest != "{}" &&  gamePuzzleGuessTest != "" &&  gamePuzzleGuessTest != null) {
                 localStorage.setItem("gamePuzzleGuess", gamePuzzleGuessTest);
             }
+            let newAnswerObject = {...gamePuzzleAnswer,  [textFieldID]: answer};
+            let gamePuzzleAnswerTest = JSON.stringify(newAnswerObject);
+            if (gamePuzzleAnswerTest != "{}" &&  gamePuzzleAnswerTest != "" &&  gamePuzzleAnswerTest != null) {
+                localStorage.setItem("gamePuzzleAnswer", gamePuzzleGuessTest);
+            }
             setGamePuzzleGuess({...gamePuzzleGuess, [textFieldID]: guess})
             setGamePuzzleAnswer({...gamePuzzleAnswer, [textFieldID]: answer})
+
             const valArray = [];
             /* loop through answer object - know it is an object if { in answer */
                     if (answer.includes("{")) {
@@ -53,6 +59,11 @@ export function ModalPuzzleContent(props) {
                     console.log("valArray: " + valArray);
                     if (valArray.includes(true)) {
                         setGamePuzzleAnswerCorrect({...gamePuzzleAnswerCorrect, [textFieldID]: true});
+                        let newAnswerObject = {...gamePuzzleAnswerCorrect,  [textFieldID]: true};
+                        let gamePuzzleAnswerTest = JSON.stringify(newAnswerObject);
+                        if (gamePuzzleAnswerTest != "{}" &&  gamePuzzleAnswerTest != "" &&  gamePuzzleAnswerTest != null) {
+                            localStorage.setItem("gamePuzzleAnswerCorrect", gamePuzzleAnswerTest);
+                        }
                         /* loop through puzzle array if answer is correct */
                         console.log("gamePuzzleArray.length: " + gamePuzzleArray.length);
                         for (let i = 0; i < gamePuzzleArray.length; i++) {
@@ -130,9 +141,6 @@ export function ModalPuzzleContent(props) {
                             }
                         }
 
-
-
-
                     } else {
                         console.log("answer is not correct");
                         setGamePuzzleAnswerCorrect({...gamePuzzleAnswerCorrect, [textFieldID]: false});
@@ -140,7 +148,6 @@ export function ModalPuzzleContent(props) {
 
         }
     }
-
 
     return(
         <View paddingTop="10px">
@@ -183,13 +190,15 @@ export function ModalPuzzleContent(props) {
                             className={isChecked? "puzzleTextField light-label" : 'puzzleTextField dark-label '}
                             label={field.label}
                             value={gamePuzzleGuess[field.id]}
-                            onChange={(event) => setGamePuzzleGuessFunction(field.id, event.target.value, field.answer, puzzleDetails.puzzleID, puzzleDetails.winGame)}
+                            onChange={(event) => setGamePuzzleGuessFunction(
+                                field.id, event.target.value, field.answer, puzzleDetails.puzzleID, puzzleDetails.winGame)}
                         />) : (
                             <TextField
                                 className={isChecked? "puzzleTextField light-label" : 'puzzleTextField dark-label '}
                                 label={field.label}
                                 value=""
-                                onChange={(event) => setGamePuzzleGuessFunction(field.id, event.target.value, field.answer, puzzleDetails.puzzleID, puzzleDetails.winGame)}
+                                onChange={(event) => setGamePuzzleGuessFunction(
+                                    field.id, event.target.value, field.answer, puzzleDetails.puzzleID, puzzleDetails.winGame)}
                             />)
                     }
                     { (gamePuzzleAnswerCorrect[field.id]  && gamePuzzleAnswer[field.id] != null && gamePuzzleGuess[field.id] != null) ? (
@@ -221,7 +230,7 @@ export function ModalPuzzleContent(props) {
 }
 
 export function GamePuzzle(props) {
-    const { setClueDetails, setModalClueContent, setModalPuzzleContent, setModalContent } = useContext(MyGameContext);
+    const { setModalPuzzleContent } = useContext(MyGameContext);
     let zoneVisible=props.zoneVisible;
     let puzzle=props.puzzle;
     let gamePuzzleSolved=props.gamePuzzleSolved;

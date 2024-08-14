@@ -5,6 +5,7 @@ import * as mutations from "../../graphql/mutations";
 import {MyAuthContext} from "../../MyContext";
 import {generateClient} from "aws-amplify/api";
 import {createGamePuzzle} from "../../graphql/mutations";
+import {uploadData} from "aws-amplify/storage";
 
 export default function ClueForm() {
     const client = generateClient();
@@ -14,6 +15,7 @@ export default function ClueForm() {
     let clueID = modalContent.id;
     let zoneID = modalContent.gamePlayZoneID;
     let gameID = modalContent.gameID;
+    let gameDesigner = modalContent.gameDesigner;
 
     const initialStateCreateClue = {
         gameID: gameID,
@@ -21,6 +23,7 @@ export default function ClueForm() {
         gameClueName: '',
         gameClueImage: '',
         gameClueText: '',
+        gameClueIcon: '',
         order: 1,
         disabled: false
     };
@@ -97,13 +100,63 @@ export default function ClueForm() {
         }
 
     }
+    async function handleGameClueImageChange(e) {
+        console.log("uploaded file: " + e.target.files[0].name);
+        if (e?.target?.files) {
+            const file = e.target.files[0];
+            // Get the file size in bytes
+            var fileSize = file.size;
 
+            // Convert the file size to a human-readable format
+            var sizeInKB = Math.round(fileSize / 1024);
+            var sizeInMB = Math.round(fileSize / (1024 * 1024));
+
+            // Display the file size in the console
+            console.log('File Size: ' + fileSize + ' bytes');
+            console.log('File Size: ' + sizeInKB + ' KB');
+            console.log('File Size: ' + sizeInMB + ' MB');
+            if (sizeInKB > 100) {
+                alert("file is too big - it is " + sizeInKB + 'KB. Must be less than 100KB');
+
+            } else {
+                console.log("gameDesigner: " + gameDesigner);
+                let gameDesignerCleaned = removeFunction(gameDesigner);
+                console.log("gameDesigner (cleaned): " + gameDesignerCleaned);
+                try {
+                    const result = await uploadData({
+                        path: "public/" + gameDesignerCleaned + "/clues/" + file.name,
+                        // Alternatively, path: ({identityId}) => `protected/${identityId}/album/2024/1.jpg`
+                        data: file,
+                        options: {
+                            onProgress: ({transferredBytes, totalBytes}) => {
+                                if (totalBytes) {
+                                    console.log(
+                                        `Upload progress ${
+                                            Math.round((transferredBytes / totalBytes) * 100)
+                                        } %`
+                                    );
+                                }
+                            }
+                        }
+                    }).result;
+                    console.log('Path from Response: ', result.path);
+                } catch (error) {
+                    console.log('Error : ', error);
+                }
+                setInputCreateClue('gameClueImage', "https://escapeoutbucket2183723-dev.s3.amazonaws.com/public/" + gameDesignerCleaned + "/clues/" + file.name)
+            }
+        }
+
+    }
+    function removeFunction(inputString) {
+        return inputString.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+    }
     return (
         <View id="gameClueForm" className="show" as="form" margin=".5rem 0">
             <View><strong>Game Clue Form</strong></View>
             <View className={"small"}>Game ID: {formCreateClueState.gameID}</View>
             <View className={"small"}>Zone ID: {formCreateClueState.gamePlayZoneID}</View>
-            <Flex direction="column" justifyContent="center" gap="1rem">
+            <Flex direction="column" justifyContent="center" gap="1rem" className={"game-form"}>
                 <SwitchField
                     label="disabled"
                     isChecked={formCreateClueState.disabled}
@@ -139,6 +192,15 @@ export default function ClueForm() {
                     required
                 />
                 <TextField
+                    onChange={(event) => setInputCreateClue('gameClueIcon', event.target.value)}
+                    name="gameClueIcon"
+                    placeholder="Game Clue Icon"
+                    label="Game Clue Icon"
+                    variation="quiet"
+                    value={formCreateClueState.gameClueIcon}
+                    required
+                />
+                <TextField
                     onChange={(event) => setInputCreateClue('gameClueImage', event.target.value)}
                     name="gameClueImage"
                     placeholder="Game Clue Image"
@@ -147,9 +209,17 @@ export default function ClueForm() {
                     value={formCreateClueState.gameClueImage}
                     required
                 />
+                <label>Game Clue Image</label>
+                <Flex direction="row" justifyContent="flex-start">
+                    <img width="50px" src={formCreateClueState.gameClueImage} />
+                    {formCreateClueState.gameClueImage}</Flex>
+                <label htmlFor="file-upload" className="custom-file-upload">
+                    Upload File
+                </label>
+                <input id="file-upload" type="file" accept="image/*" onChange={handleGameClueImageChange} />
             </Flex>
-            <Flex direction="row" justifyContent="center" marginTop="20px">
-                <Flex direction="row" justifyContent="center" marginTop="20px">
+            <Flex direction="row" justifyContent="center" marginTop="20px" className={"game-form"}>
+                <Flex direction="row" justifyContent="center" marginTop="20px" className={"game-form"}>
                     {(action == "add") &&
                     <Button id="createClue" className="show" onClick={addClue}
                             variation="primary">

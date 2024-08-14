@@ -39,10 +39,7 @@
 .admin-content {
     overflow-y: scroll;
 }
-.header {
-    height: 64px;
-    background:white;
-}
+
 .sidenav {
     background-color: rgb(247, 248, 249);
     border-right: 1px solid rgb(232, 233, 234);
@@ -51,10 +48,10 @@
     left: 0px;
     height: 100%;
     z-index: 999;
-    flex: 0 0 256px;
-    max-width: 256px;
-    min-width: 256px;
-    width: 256px;
+    flex: 0 0 200px;
+    max-width: 200px;
+    min-width: 200px;
+    width: 200px;
     overflow-x: hidden;
     transition: 0.5s;
 }
@@ -67,10 +64,10 @@
     left: 0px;
     height: 100%;
     z-index: 999;
-    flex: 0 0 256px;
-    max-width: 256px;
-    min-width: 256px;
-    width: 256px;
+    flex: 0 0 200px;
+    max-width: 200px;
+    min-width: 200px;
+    width: 200px;
     overflow-x: hidden;
     transition: 0.5s;
 }
@@ -98,20 +95,45 @@
 .admin-nav-icon {
     height: 35px;
     width: 35px;
-    padding-left:8px;
 }
 .admin-nav-link-container {
     cursor:pointer;
     font-weight:bold;
+    width:100%;
 }
 .admin-nav-icon-border {
-    /*border:1px solid lightgray;*/
+    border:1px solid gray;
     background-color:lightgray;
-
+    height:45px
 }
+.admin-nav-header {
+    font-size:30px;
+    font-weight: bold;
+    text-align: center;
+    padding-top:15px;
+}
+.admin-nav-closed .admin-nav-header {
+    display:none;
+}
+.admin-content-header {
+    font-size:20px;
+    font-weight: bold;
+    padding: 20px;
+}
+.header {
+    height: 64px;
+    background:white;
+}
+.admin-content-header-nav {
+    display:none;
+}
+#adminNavBar {
+    display:block;
+}
+
 .sider-trigger-open {
-    width:256px;
-    position: fixed;
+    width:200px;
+    position: absolute;
     bottom: 0;
     z-index: 1;
     height: 48px;
@@ -125,7 +147,7 @@
 }
 .sider-trigger-closed{
     width:35px;
-    position: fixed;
+    position: absolute;
     bottom: 0;
     z-index: 1;
     height: 48px;
@@ -185,4 +207,46 @@ input[type="file"] {
 }
 .border1 {
     border: 1px solid lightgray!important;
+}
+@media all and (max-width: 786px) {
+    #adminNavBar {
+        display:none;
+    }
+    .header {
+        background:white;
+        text-align:left;
+        height:auto;
+        padding-left:10px;
+    }
+    .admin-content-header {
+        font-size:15px;
+        padding:20px 0 10px 10px;
+    }
+    .admin-content-header-nav {
+        display:flex;
+        height:45px;
+        padding:0 0 0 10px;
+    }
+    .admin-nav-link-container {
+        width:auto;
+        padding:0;
+    }
+    .admin-nav-icon-border {
+        height:35px;
+    }
+    .amplify-heading--5  {
+        font-size:14px;
+    }
+    .amplify-table__th{
+        font-size:12px;
+    }
+    .amplify-table__row, .amplify-table__td {
+        font-size:10px;
+    }
+    .game-form {
+     width: calc(100vw - 60px);
+    }
+    .modalContent.adminModal {
+        width: calc(100vw - 60px);
+    }
 }

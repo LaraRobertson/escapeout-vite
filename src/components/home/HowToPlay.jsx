@@ -5,30 +5,27 @@ export default function HowToPlay() {
     console.log("How to Play");
     return (
         <View className={"modal-middle"}>
-            <Accordion.Container allowMultiple>
+            <Accordion.Container allowMultiple defaultValue={['start-game']}>
                 <Accordion.Item value="start-game">
                     <Accordion.Trigger>
-                        <strong>Start Game</strong>
+                        <strong>Overview of Game</strong>
                         <Accordion.Icon/>
                     </Accordion.Trigger>
                     <Accordion.Content>
                         <View>
-                            <ul className={"how-to-play-bullets"}>
-                                <li>Sign in or create a FREE account with your smartphone:<br/>
+                            <View marginBottom={"5px"}><strong>-> Create a FREE account and Sign in to Play</strong>
                                     <View className="small italics">Currently you can sign in with
                                         email/password. It's probably best to set an easy password,
                                         there will be no sensitive data to steal here or you can use
-                                        your google account to sign in. We will not do anything with your email.
-                                    </View>
-                                </li>
-                                <li>Select game</li>
-                                <li>Go to Location</li>
-                                <li>Hit Play, agree to waiver, and select a team name to use as your
-                                    team name.
-                                </li>
-                                <li>Start game and solve the puzzles.</li>
-                                <li>The BACK BUTTON is not needed - please do not use.</li>
-                            </ul>
+                                        your google account to sign in. Your email will not be used for anything other than managing your account here.
+                                    </View></View>
+                            <View marginBottom={"5px"}><strong>-> Review available games on the list and go to the
+                                Game Location before playing.</strong></View>
+                            <View marginBottom={"5px"}><strong>-> Hit Play, agree to Waiver, and select a Team Name to use as your
+                                team name.</strong></View>
+                            <View marginBottom={"5px"}><strong>-> Start game and solve the puzzles.</strong></View>
+                            <View marginBottom={"5px"}><strong>-> The BACK BUTTON is not needed (please do not use back button).</strong></View>
+
                         </View>
                     </Accordion.Content>
                 </Accordion.Item>
@@ -105,19 +102,20 @@ export default function HowToPlay() {
                                 <li>For individual play, sign in and select a team name that
                                     reflects your individuality.
                                 </li>
-                                <li>For group play, one person signs in and selects the team name
-                                    and hits play - the official timed game starts.
-                                    The other players can use the same sign in and select the same
+                                <li>For group play, one person signs in and selects the Team Name
+                                    and hits play which causes the official timed game to start.
+                                    The other players on the Team can use the same sign in and select the same
                                     game (and it doesn't matter what team name you select - probably
                                     best to choose the same one) because
-                                    the only official score is the first time a single sign in (by
-                                    email) plays a game.
+                                    the only official score is the first time a single sign plays a game (see Leader Board).
                                 </li>
-                                <li>That 2nd or 3rd attempt with with same credentials can play a
-                                    game multiple times but it does not go on the leaderboard.
-                                </li>
+                                <li>If doing Group Play with a Team others can use their own phone and select the same sign in as the first person
+                                    for the same game so that they can see all the clues and puzzles. Seeing all the same information and solving
+                                    as quick as you can helps your Team complete the game faster - just let the person with the official sign in know your answers!
+                               </li>
                                 <li>If a group wants to do team play it is best to choose an email
-                                    that can be easily verified and an easy password
+                                    that can be easily verified and an easy password that can be entered easily. There is no sensitive information on this account.
+                                    Please contact us at info@escapeout.games if you have questions.
                                 </li>
 
                             </ul>
@@ -132,10 +130,26 @@ export default function HowToPlay() {
                     <Accordion.Content>
                         <View>
                             <ul className={"how-to-play-bullets"}>
-                                <li>Play zones indicate the area that the clue references.</li>
-                                <li>Most clues can be solved within a few hundred feet of the play
-                                    zone image.
+                                <li>Play Zones (Zones) indicates the area where the answer to the clue is located.</li>
+                                <li>Most clues can be solved within a few hundred feet of the Play
+                                    Zone.
                                 </li>
+                            </ul>
+                        </View>
+                    </Accordion.Content>
+                </Accordion.Item>
+                <Accordion.Item value="play-zones">
+                    <Accordion.Trigger>
+                        <strong>Leader Board</strong>
+                        <Accordion.Icon/>
+                    </Accordion.Trigger>
+                    <Accordion.Content>
+                        <View>
+                            <ul className={"how-to-play-bullets"}>
+                                <li>The Leader Board tracks the top times for each game.</li>
+                                <li>A time can only be eligible for the
+                                Leader Board if the person playing the game has never played that game before (or has never even started that game before).</li>
+
                             </ul>
                         </View>
                     </Accordion.Content>

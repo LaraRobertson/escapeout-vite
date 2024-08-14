@@ -1,4 +1,4 @@
-// components/MyStats.jsx
+// components/GameStats.jsx
 import React, {useContext, useEffect, useState} from 'react';
 import {
     Button,
@@ -8,20 +8,17 @@ import {
 import {generateClient} from "aws-amplify/api";
 import {gamesByCity, gameScoreByGameID, gameStatsByGameID,gameStatsByUserEmail,gameStatsSortedByGameName} from "../../graphql/queries";
 import { format } from 'date-fns'
-import {MyAuthContext} from "../../MyContext";
 
-export default function MyStats(props) {
+
+export default function GameStats(props) {
     const client = generateClient();
-    const { email } = useContext(MyAuthContext);
-    const [myStats, setMyStats] = useState([]);
-    const [myStatsEmail, setMyStatsEmail] = useState(email);
+    let modalContent = props.modalContent;
+    const [gameStats, setGameStats] = useState([]);
 
     async function myStatsFunction() {
-       // const email = localStorage.getItem("email");
-        console.log("gameStats: " + props.gameID);
         let filter = {
             gameID: {
-                eq: props.gameID
+                eq: modalContent.id
             }
         };
         const apiData = await client.graphql({
@@ -36,11 +33,11 @@ export default function MyStats(props) {
                  console.log(`${key1}: ${myStatsFromAPI[key][key1]}`);
              }
         }
-        setMyStats(myStatsFromAPI);
+        setGameStats(myStatsFromAPI);
     }
 
     useEffect(() => {
-        console.log("***useEffect***:  myStatsFunction(): " + myStatsEmail);
+        console.log("***useEffect***:  myStatsFunction(): (gameStats)");
         //myStatsFunction();
         myStatsFunction();
     }, []);
@@ -50,7 +47,7 @@ export default function MyStats(props) {
         console.log("gameScoreArray: " + JSON.stringify(props.gameScoreArray));
         return (
             <div className="table-container" role="table" aria-label="game score">
-                <div className="flex-table header" role="rowgroup">
+                <div className="flex-table header-table" role="rowgroup">
                     <div className="flex-row " role="columnheader">Team Name</div>
                     <div className="flex-row " role="columnheader">Team Score</div>
                     <div className="flex-row" role="columnheader">Total Time</div>
@@ -82,12 +79,12 @@ export default function MyStats(props) {
 
     return (
         <>
-            <Heading level={5} className="header">{myStatsEmail}</Heading>
+            <Heading level={5} className="header">{modalContent.action}</Heading>
             <View>
-                {myStats.map((userStat, index) => (
+                {gameStats.map((gameStat, index) => (
                     <View key={index}>
-                        <div>Game: {userStat.gameName} | {userStat.gameLocationCity}</div>
-                        <GameScoreView gameScoreArray = {userStat.gameScore.items} gameName={userStat.gameName}/>
+                        <div>Game: {gameStat.gameName} | {gameStat.gameLocationCity}</div>
+                        <GameScoreView gameScoreArray = {gameStat.gameScore.items} gameName={gameStat.gameName}/>
                     </View>
                 ))}
             </View>

@@ -25,6 +25,7 @@ export default function ZoneForm() {
     let action = modalContent.action;
     let zoneID = modalContent.id;
     let gameID = modalContent.gameID;
+    let gameDesigner = modalContent.gameDesigner;
 
     const initialStateCreateZone = {
         gameID: gameID,
@@ -130,9 +131,12 @@ export default function ZoneForm() {
                 alert("file is too big - it is " + sizeInKB + 'KB. Must be less than 100KB');
 
             } else {
+                console.log("gameDesigner: " + gameDesigner);
+                let gameDesignerCleaned = removeFunction(gameDesigner);
+                console.log("gameDesigner (cleaned): " + gameDesignerCleaned);
                 try {
                     const result = await uploadData({
-                        path: "public/" + file.name,
+                        path: "public/" + gameDesignerCleaned + "/zones/" + file.name,
                         // Alternatively, path: ({identityId}) => `protected/${identityId}/album/2024/1.jpg`
                         data: file,
                         options: {
@@ -151,21 +155,20 @@ export default function ZoneForm() {
                 } catch (error) {
                     console.log('Error : ', error);
                 }
-                setInputCreateZone('gameZoneImage', "https://escapeoutbucket2183723-dev.s3.amazonaws.com/public/" + file.name)
+
+                setInputCreateZone('gameZoneImage', "https://escapeoutbucket2183723-dev.s3.amazonaws.com/public/" + gameDesignerCleaned + "/zones/" + file.name)
             }
         }
-
     }
-    const GetPath = (props) => {
-        return (
-            <View></View>)
+    function removeFunction(inputString) {
+        return inputString.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
     }
 
     return (
         <View id="gamePlayZoneForm" className="show" as="form" margin=".5rem 0">
             <View><strong>Game Play Zone Form</strong></View>
             <View className={"small"}>Game ID: {formCreateZoneState.gameID}</View>
-            <Flex direction="column" justifyContent="center" gap="1rem">
+            <Flex direction="column" justifyContent="center" gap="1rem" className={"game-form"}>
                 <SwitchField
                     label="disabled"
                     isChecked={formCreateZoneState.disabled}
@@ -237,7 +240,7 @@ export default function ZoneForm() {
                 </label>
                 <input id="file-upload" type="file" accept="image/*" onChange={handleGameZoneImageChange} />
             </Flex>
-            <Flex direction="row" justifyContent="center" marginTop="20px">
+            <Flex direction="row" justifyContent="center" marginTop="20px" className={"game-form"}>
                 {(action == "add") &&
                 <Button id="createZone" onClick={addZone}
                         variation="primary">

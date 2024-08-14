@@ -2,8 +2,10 @@ import {Button, Card, Flex, Heading, Text, View, Image} from "@aws-amplify/ui-re
 import React, {useContext, useEffect, useState} from "react";
 import {checkWaiver} from "./checkWaiver";
 import {MyAuthContext} from "../../MyContext";
+import {useNavigate} from "react-router-dom";
 
 export default function GameCard({game, gameDetails, hidePlayedGames}) {
+    const navigate = useNavigate();
     let {
         gameLogisticInfo,
         gameSummary,
@@ -145,6 +147,8 @@ export default function GameCard({game, gameDetails, hidePlayedGames}) {
                                             gamePlayZoneImage1: gamePlayZone.items[0].gameZoneImage,
                                             waiverSigned: gameDetails.waiverSigned,
                                             numberOfTimes: gameDetails.numberOfTimes,
+                                            latitude1: gamePlayZone.items[0].latitude,
+                                            longitude1: gamePlayZone.items[0].longitude,
                                         })}>
                                         Play Game
                                     </Button>
@@ -179,7 +183,9 @@ export default function GameCard({game, gameDetails, hidePlayedGames}) {
                                     gameSummary: gameSummary,
                                     gameLogisticInfo: gameLogisticInfo,
                                     gameGoals: gameGoals,
-                                    gamePlayZoneImage1: gamePlayZone.items[0].gameZoneImage
+                                    gamePlayZoneImage1: gamePlayZone.items[0].gameZoneImage,
+                                    latitude1: gamePlayZone.items[0].latitude,
+                                    longitude1: gamePlayZone.items[0].longitude,
                                 })}>
                                 Game Details
                             </Button>

@@ -100,7 +100,7 @@ export default function HintForm() {
             <View><strong>Game Hint Form</strong></View>
             <View className={"small"}>Game ID: {formCreateHintState.gameID}</View>
             <View className={"small"}>Zone ID: {formCreateHintState.gamePlayZoneID}</View>
-            <Flex direction="column" justifyContent="center" gap="1rem">
+            <Flex direction="column" justifyContent="center" gap="1rem" className={"game-form"}>
                 <SwitchField
                     label="disabled"
                     isChecked={formCreateHintState.disabled}
@@ -130,7 +130,7 @@ export default function HintForm() {
                     required
                 />
             </Flex>
-            <Flex direction="column" justifyContent="center" gap="1rem">
+            <Flex direction="column" justifyContent="center" gap="1rem" className={"game-form"}>
 
                 <TextField
                     onChange={(event) => setInputCreateHint('gameHintDescription', event.target.value)}

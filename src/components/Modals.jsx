@@ -11,6 +11,43 @@ for ModalClue and ModalPuzzle:
 https://dev.to/codebucks/how-to-create-an-efficient-modal-component-in-react-using-hooks-and-portals-360p
 */
 
+export function ModalWaiver({modalContentGI,setModalContentGI,children}) {
+    const { isChecked } = useContext(MyGameContext);
+    function close() {
+        setModalContentGI({show:false,content:""});
+    }
+    return (
+        <>
+            {createPortal(
+                <div
+                    className={`modalContainer ${modalContentGI.show ? "showModal" : ""} `}
+                    onClick={() => close()}
+                >
+                    <div className="modal dark from-right" onClick={(e) => e.stopPropagation()}>
+                        <header className="modal_header">
+                            <h2 className="modal_header-clueDetails">{modalContentGI.content}</h2>
+                            <button className="close" onClick={() => close()}>
+                                <img src={Close} alt="close" />
+                            </button>
+                        </header>
+                        <main className="modal_content">
+                            <View className={isChecked? "dark" : "light"}>
+                                {children}
+                            </View>
+                        </main>
+                        <footer className="modal_footer">
+                            <button className="modal-close" onClick={() => close()}>
+                                Close
+                            </button>
+                        </footer>
+                    </div>
+                </div>,
+                document.getElementById("modal")
+            )}
+        </>
+    )
+}
+
 export function ModalPuzzle({modalPuzzleContent,setModalPuzzleContent,children}) {
         const { isChecked } = useContext(MyGameContext);
         function close() {
@@ -73,8 +110,9 @@ export function ModalClue({modalClueContent,setModalClueContent,clueDetails,setC
                         </View>
                     </main>
                     <footer className="modal_footer">
-                        <button className="submit" onClick={()=>setCluesFunction("<strong>CLUE</strong> ==> " +
-                            clueDetails.gameClueText + " <br />")}>add clue to notes</button>
+                        <button className="submit" className={"add-clue"} onClick={()=>
+                        {setCluesFunction(clueDetails.gameClueName,clueDetails.gameClueText,clueDetails.gameClueID,clueDetails.gameClueImage);close();
+                        }}>add clue to notes</button>
                         <button className="modal-close" onClick={() => close()}>
                             Close
                         </button>
@@ -124,6 +162,45 @@ export function ReactModal({modalContent,children}) {
             </Modal>,
             document.getElementById("modal")
         )}
+        </>
+    )
+}
+export function ReactModalFromBottomGI({modalContentGI, setModalContentGI, children}) {
+    console.log("ReactModalFromBottomGI: " + modalContentGI.open);
+    let mapClass="";
+    if (modalContentGI.content === "Map") mapClass="-Map";
+    Modal.setAppElement("#modal");
+    function closeModal() {
+        setModalContentGI({open:false,content:""});
+    }
+    return (
+        <>
+            {createPortal(<Modal
+                    closeTimeoutMS={200}
+                    isOpen={modalContentGI.open}
+                    onRequestClose={closeModal}
+                    className={"modalContent" + mapClass}
+                    contentLabel={"General"}
+                    overlayClassName={"slide-from-bottom"}
+                    parentSelector={() => document.querySelector("#modal")}
+                    preventScroll={
+                        false
+                        /* Boolean indicating if the modal should use the preventScroll flag when
+                           restoring focus to the element that had focus prior to its display. */}
+                >
+                    <View className={"modal-top-bar"}>
+                        <Heading level={4} marginBottom="10px" className={"modal-header"}>{modalContentGI.content}</Heading>
+                        <Button className="close-button-modal light"
+                                onClick={closeModal}>X</Button>
+                    </View>
+                    {children}
+
+                    <View className="modal-from-top-close" textAlign={"center"} width={"100%"}>
+                        <Button className="close light" onClick={closeModal}>close</Button>
+                    </View>
+                </Modal>,
+                document.getElementById("modal")
+            )}
         </>
     )
 }

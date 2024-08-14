@@ -99,7 +99,7 @@ export default function TextFieldForm() {
         <View id="gameTextFieldForm" className="show" as="form" margin=".5rem 0">
             <View><strong>TextField Form</strong></View>
             <View className={"small"}>Puzzle ID: {formCreateTextFieldState.puzzleID}</View>
-            <Flex direction="column" justifyContent="center" gap="1rem">
+            <Flex direction="column" justifyContent="center" gap="1rem" className={"game-form"}>
                 <SwitchField
                     label="disabled"
                     isChecked={formCreateTextFieldState.disabled}
@@ -155,8 +155,8 @@ export default function TextFieldForm() {
                 />
 
             </Flex>
-            <Flex direction="row" justifyContent="center" marginTop="20px">
-                <Flex direction="row" justifyContent="center" marginTop="20px">
+            <Flex direction="row" justifyContent="center" marginTop="20px" className={"game-form"}>
+                <Flex direction="row" justifyContent="center" marginTop="20px" className={"game-form"}>
                     {(action == "add") &&
                     <Button id="createPuzzle" className="show" onClick={addTextField}
                             variation="primary">

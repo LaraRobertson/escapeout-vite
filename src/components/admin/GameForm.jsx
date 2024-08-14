@@ -109,9 +109,9 @@ export default function GameForm() {
     }
     return (
         <View id="gameForm" className="show" as="form" margin=".5rem 0">
-            <Flex direction="column" justifyContent="center" gap="1rem">
+            <Flex direction="column" justifyContent="center" gap="1rem" className={"game-form"}>
                 <SwitchField
-                    label="disabled"
+                    label={formCreateGameState.disabled? "disabled true/live false" : "disabled false/live true"}
                     isChecked={formCreateGameState.disabled}
                     onChange={(e) => {
                         console.log("e.target.checked: " + e.target.checked)
@@ -256,7 +256,7 @@ export default function GameForm() {
                     value={formCreateGameState.gameDesigner}
                 />
             </Flex>
-            <Flex direction="row" justifyContent="center" marginTop="20px">
+            <Flex direction="row" justifyContent="center" marginTop="20px" className={"game-form"}>
                 {(action == "add") &&
                 <Button id="createGame" className="show" onClick={addGame}
                         variation="primary">

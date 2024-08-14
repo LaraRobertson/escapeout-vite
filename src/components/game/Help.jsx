@@ -1,4 +1,4 @@
-import {Accordion, Button, Flex, Link, View} from "@aws-amplify/ui-react";
+import {Accordion, Image, View} from "@aws-amplify/ui-react";
 import React from "react";
 export default function Help() {
     console.log("How to Play");
@@ -13,7 +13,8 @@ export default function Help() {
                     <Accordion.Content>
                         <View>
                             <View paddingBottom="10px">
-                                <strong>How to Play:</strong> Click around to open clues and to solve puzzles. Click on puzzles to solve. Clues shown in each zone are near Image Shown and location on Map (within 100 feet or so)
+                                Tap around to open clues which will enable you to solve puzzles. Tap on puzzles to open and then solve. Clues shown in each Zone are near the Zone image on the screen and near the
+                                marker on the Map for that Zone (within 100 feet or so).
 
                             </View>
                         </View>
@@ -27,8 +28,13 @@ export default function Help() {
                     <Accordion.Content>
                         <View>
                             <View paddingBottom="10px">
-                                <strong>Hints:</strong> Clicking on an Individual Hint adds <span
-                                className="italics"> 5 Minutes!</span> Clicking on HINTS button just shows you what hints are available - it does NOT cost time
+                               Choosing an Individual Hint adds <span
+                                className="italics"> 5 Minutes!</span> Choosing the "Hints" button shows you what hints are available.</View>
+                            <View paddingBottom="10px">
+                                For Example, choosing this button while playing game (see yellow circled button below), is okay and it does not cost any time:<br />
+                                <Image src={"https://escapeoutbucket2183723-dev.s3.amazonaws.com/public/hint-button.png"} alt={"hint button"}/><br />
+                                Choosing one these buttons (which appear after you choose the first button) costs 5 minutes and you get a hint:<br />
+                                <Image src={"https://escapeoutbucket2183723-dev.s3.amazonaws.com/public/hint-modal.png"} alt={"hint modal"}/>
                             </View>
                         </View>
                     </Accordion.Content>

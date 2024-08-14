@@ -39,6 +39,7 @@ import PuzzleForm from "../components/admin/PuzzleForm";
 import TextFieldForm from "../components/admin/TextFieldForm";
 import ClueForm from "../components/admin/ClueForm";
 import HintForm from "../components/admin/HintForm";
+import GameStats from "../components/admin/GameStats";
 
 
 export function Admin() {
@@ -98,7 +99,6 @@ export function Admin() {
 
     /* ADMIN */
 
-
     async function deleteGameHintTimeFunction(gameHintTimeID) {
         const data = {
             id: gameHintTimeID
@@ -107,33 +107,6 @@ export function Admin() {
             query: deleteGameHintTime,
             variables: { input: data },
         });
-    }
-
-    async function showUpdateGame(props) {
-        console.log("props.gameID: " + props.gameID);
-        setGameID(props.gameID);
-        /* first load up FormCreateGameState */
-        try {
-            const apiData = await client.graphql({
-                query: getGame,
-                variables: {id: props.gameID}
-            });
-            const gamesFromAPI = apiData.data.getGame;
-            setFormCreateGameState(gamesFromAPI);
-            console.log("gamesFromAPI - update game")
-            setGameFormVisible(true);
-            /*for (const key in gamesFromAPI) {
-                console.log(`${key}: ${gamesFromAPI[key]}`);
-            }*/
-            let element =  document.getElementById("updateGame");
-            element.classList.remove('hide');
-            element.classList.add('show');
-            let element2 =  document.getElementById("createGame");
-            element2.classList.remove('show');
-            element2.classList.add('hide');
-        } catch (err) {
-            console.log('error fetching getGame', err);
-        }
     }
 
     function setGameVisibleFunction(gameID,index) {
@@ -271,13 +244,14 @@ export function Admin() {
                 <View className="main-container-admin">
                     <AdminNav displaySection={displaySection} setDisplaySection={setDisplaySection}/>
                     <View className="admin">
-                        <HeadingComponent userName={email}/>
+                        <HeadingComponent userName={email} displaySection={displaySection} setDisplaySection={setDisplaySection}/>
                         <View className={"admin-content"}>
                             {(displaySection.homeSection) && <HomeSection />}
                             {(displaySection.userSection) && <UserSection />}
                             {(displaySection.gameSection) && <GameSection />}
                             <ReactModalFromRight>
                                 {(modalContent.content == "Game Form") && <GameForm />}
+                                {(modalContent.content == "Stats") && <GameStats modalContent={modalContent} />}
                                 {(modalContent.content == "Zone Form") && <ZoneForm />}
                                 {(modalContent.content == "Puzzle Form") && <PuzzleForm />}
                                 {(modalContent.content == "TextField Form") && <TextFieldForm />}

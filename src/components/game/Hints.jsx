@@ -27,18 +27,21 @@ export default function Hints(props) {
             }
         }
         setGameTimeHint(hintTime);
+        localStorage.setItem("gameTimeHint", hintTime);
         if (key) {
             setGameHintVisible({...newObject, [key]: value})
         }
     }
     return (
         <View>
+            <View paddingBottom="10px" paddingTop={"10px"}>
+                Clicking on a Hint Below adds <span
+                className="italics"> 5 Minutes!</span></View>
             <View paddingBottom="10px">
-                <strong>Hints:</strong> Clicking on a Hint Below adds <span
-                className="italics"> 5 Minutes!</span> Use Hints if you really need them.
+                Use Hints if you really need them.
             </View>
             {/* HINTS */}
-            <hr />
+
             {gameHint.map((hint,index) => (
                 <Flex wrap="wrap" key={hint.id} ariaLabel={hint.id}>
                     <View>
@@ -54,6 +57,7 @@ export default function Hints(props) {
                     </View>
                 </Flex>
             ))}
+            <br />
             <hr />
         </View>
     )

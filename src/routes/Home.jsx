@@ -209,7 +209,7 @@ export function Home() {
 
     }
 
-    if ((password != ("go" || "Go")) && authStatus != "authenticated" && window.location.hostname === 'dev.play.escapeout.games') {
+    {/*if ((password != ("go" || "Go")) && authStatus != "authenticated" && window.location.hostname === 'dev.play.escapeout.games') {
         return (
             <View className="main-container">
                 <View className="main-content top-main" marginBottom="1em">
@@ -222,7 +222,7 @@ export function Home() {
                 </View>
             </View>
         )
-    } else {
+    } else {*/
         return (
             <MyAuthContext.Provider value={{ authStatus, email, gamesIDUserPlayed, gamesIDUser, setGameDetails, setModalContent }}>
                 <View className="main-container">

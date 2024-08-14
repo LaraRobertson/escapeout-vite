@@ -13,12 +13,16 @@ import {generateClient} from "aws-amplify/api";
 import GameDetail from "./GameDetail";
 import Waiver from "./Waiver";
 import DOMPurify from "dompurify";
+import {ModalWaiver, ReactModalFromBottomGI} from "../Modals";
+import {Map} from "../game/Map";
 
 export default function GameIntro(props) {
     let gameDetails=props.gameDetails;
     const client = generateClient();
     const navigate = useNavigate();
     const { authStatus, email, gamesIDUserPlayed, gamesIDUser, setModalContent, setGameDetails  } = useContext(MyAuthContext);
+    /* Modal Content */
+    const [modalContentGI, setModalContentGI] = useState({show:false, content:""});
     const [ isGameDetailOpen, setIsGameDetailOpen ] = useState(false);
     const [ isWaiverOpen, setIsWaiverOpen ] = useState(false);
     console.log('gameDetails.gameName: ' + gameDetails.gameName);
@@ -139,6 +143,14 @@ export default function GameIntro(props) {
         }
     }
 
+    function handleViewWaiver() {
+        console.log("handleViewWaiver");
+        setModalContentGI({
+            show: true,
+            content: "Waiver"
+        })
+    }
+
     function setTeamNameFunction(teamNameValue) {
         console.log("setTeamNameFunction: " + teamNameValue);
         /* check for obscenities */
@@ -160,15 +172,30 @@ export default function GameIntro(props) {
     return (
             <>
                 <>
-                    <View dangerouslySetInnerHTML={ {__html: DangerouslySetInnerHTMLSanitized(gameDetails.gameIntro)}}   padding={"0 10px"}></View>
-                    <Heading level={5} marginBottom="10px" paddingTop="10px">Your score is your time.</Heading>
-                    <View className={"end-paragraph"} >Time doesn't stop until you complete the game.</View>
-                    <Heading level={5} marginTop={"10px"}>Start Playing when you are here:</Heading>
-                    <View className={"end-paragraph"} textAlign={"center"}>
-                        <Image alt={gameDetails.gameName} maxHeight="100px" src={gameDetails.gamePlayZoneImage1}/>
+                    <View className={"end-paragraph"} textAlign={"center"}><Heading level={5} textAlign={"center"} marginBottom="10px" paddingTop="10px">{gameDetails.gameName}</Heading>
                     </View>
+
+                    <View dangerouslySetInnerHTML={ {__html: DangerouslySetInnerHTMLSanitized(gameDetails.gameIntro)}}  padding={"0 10px"}></View>
+                    <Heading level={6} textAlign={"center"} marginBottom="10px" paddingTop="10px">Your score is based on your time to complete game.</Heading>
+                    <View className={"end-paragraph"} >Using a hint adds 5 minutes.</View>
+                    <View className={"small end-paragraph"}><strong>You Have Signed Waiver</strong><br />
+                        <Button onClick={() => handleViewWaiver()} variation={"link"}>view waiver</Button>
+                    </View>
+                    <Heading level={6} textAlign={"center"} marginTop={"10px"} marginBottom={"5px"}>Start Playing when you are here:</Heading>
+                    <View className={"end-paragraph"} textAlign={"center"}>
+                        <Image alt={gameDetails.gameName} maxHeight="100px" src={gameDetails.gamePlayZoneImage1}/><br />
+                        <Button className="quit-button dark"
+                                onClick={() => setModalContentGI({
+                                    open: true,
+                                    content: "Map"
+                                })}>
+                            Map</Button>
+                    </View>
+                    <ReactModalFromBottomGI modalContentGI={modalContentGI} setModalContentGI={setModalContentGI}>
+                        {(modalContentGI.content == "Map") && <Map gameDetails={gameDetails}/>}
+                    </ReactModalFromBottomGI>
                 </>
-                <Accordion.Container allowMultiple>
+                {/*<Accordion.Container allowMultiple>
                     <Accordion.Item value="game-details">
                         <Accordion.Trigger>
                             <strong>Game Details</strong>
@@ -187,7 +214,7 @@ export default function GameIntro(props) {
                             <Waiver gameDetails={gameDetails} gameIntro={true}/>
                         </Accordion.Content>
                     </Accordion.Item>
-                </Accordion.Container>
+                </Accordion.Container>*/}
 
 
                 {(gameDetails.numberOfTimes !== 0) ? (
@@ -207,14 +234,21 @@ export default function GameIntro(props) {
                     onChange={(e) => setTeamNameFunction(e.target.value)}
                 />
                 </View>
+
                 <View className={"red-alert"} textAlign={"center"}><strong>{numberOfPlayersError}</strong></View>
 
                 <View className={"modal-bottom-bar"}>
-                        <Button margin="0 0 0 0" className="button small"
+                        <Button margin="0 0 0 0" className="button"
                                 onClick={() => {
                                     handlePlayGameIntro(gameDetails);
                                 }}>PLAY - time starts</Button>
                 </View>
+
+                <ModalWaiver
+                    modalContentGI={modalContentGI}
+                    setModalContentGI={setModalContentGI}>
+                    {(modalContentGI.content == "Waiver") && <Waiver gameIntro={true}/>}
+                </ModalWaiver>
 
          </>
         )

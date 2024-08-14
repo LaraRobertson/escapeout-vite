@@ -25,37 +25,70 @@ export default function GameClue(props) {
 
 
     const IconClueDisplay = (props) => {
-        switch (true) {
-            case (props.index == 0):
-                return (
-                    <Image height="70px" width="70px" src={diary} alt="diary" />
-                );
-            case (props.index == 1):
-                return (
-                    <Image height="70px" width="70px" src={tornPaper} alt="torn paper" />
-                );
-            case (props.index % 5 == 0):
-                return (
-                    <Image height="70px" width="70px" src={messageInABottle} alt="message in a bottle" />
-                );
-            case (props.index % 4 == 0):
-                return (
-                    <Image height="70px" width="70px" src={clueIcon} alt="clue icon" />
-                );
-            case (props.index % 3 == 0):
-                return (
-                    <Image height="70px" width="70px" src={clueNoteIcon} alt="clue Note icon" />
-                );
-            case (props.index % 2 == 0):
-                return (
-                    <Image height="70px" width="70px" src={envelope} alt="envelope" />
-                );
-            default:
-                return (
-                    <Image height="70px" width="70px" src={tornPaper} alt="torn paper" />
-                );
+        console.log("props.gameClueIcon: " + props.gameClueIcon);
+        if (props.gameClueIcon != "") {
+            switch (true) {
+                case (props.gameClueIcon == "diary"):
+                    return (
+                        <Image height="70px" width="70px" src={diary} alt="diary"/>
+                    );
+                case (props.gameClueIcon == "tornPaper"):
+                    return (
+                        <Image height="70px" width="70px" src={tornPaper} alt="torn paper"/>
+                    );
+                case (props.gameClueIcon == "messageInABottle"):
+                    return (
+                        <Image height="70px" width="70px" src={messageInABottle} alt="message in a bottle"/>
+                    );
+                case (props.gameClueIcon == "clueIcon"):
+                    return (
+                        <Image height="70px" width="70px" src={clueIcon} alt="clue icon"/>
+                    );
+                case (props.gameClueIcon == "clueNoteIcon"):
+                    return (
+                        <Image height="70px" width="70px" src={clueNoteIcon} alt="clue Note icon"/>
+                    );
+                case (props.gameClueIcon == "envelope"):
+                    return (
+                        <Image height="70px" width="70px" src={envelope} alt="envelope"/>
+                    );
+                default:
+                    return (
+                        <Image height="70px" width="70px" src={tornPaper} alt="torn paper"/>
+                    );
+            }
+        } else {
+            switch (true) {
+                case (props.index == 0):
+                    return (
+                        <Image height="70px" width="70px" src={diary} alt="diary"/>
+                    );
+                case (props.index == 1):
+                    return (
+                        <Image height="70px" width="70px" src={tornPaper} alt="torn paper"/>
+                    );
+                case (props.index % 5 == 0):
+                    return (
+                        <Image height="70px" width="70px" src={messageInABottle} alt="message in a bottle"/>
+                    );
+                case (props.index % 4 == 0):
+                    return (
+                        <Image height="70px" width="70px" src={clueIcon} alt="clue icon"/>
+                    );
+                case (props.index % 3 == 0):
+                    return (
+                        <Image height="70px" width="70px" src={clueNoteIcon} alt="clue Note icon"/>
+                    );
+                case (props.index % 2 == 0):
+                    return (
+                        <Image height="70px" width="70px" src={envelope} alt="envelope"/>
+                    );
+                default:
+                    return (
+                        <Image height="70px" width="70px" src={tornPaper} alt="torn paper"/>
+                    );
+            }
         }
-
     }
     if (zoneVisible==clue.gamePlayZoneID) {
         return (
@@ -64,10 +97,11 @@ export default function GameClue(props) {
                   onClick={() => handleClueDetail({
                       gameClueName: clue.gameClueName,
                       gameClueText: clue.gameClueText,
-                      gameClueImage: clue.gameClueImage
+                      gameClueImage: clue.gameClueImage,
+                      gameClueID: clue.id
                   })}
             >
-                <IconClueDisplay index={index} hide="true" />
+                <IconClueDisplay index={index} hide="true" gameClueIcon={clue.gameClueIcon}/>
             </View>
 
         )

@@ -16,6 +16,7 @@ export default function GameSection(props) {
     const [games, setGames] = useState([]);
     const [gameType, setGameType] = useState("all");
     const [gameVisible, setGameVisible] = useState("");
+    const [gameDesigner, setGameDesigner] = useState("");
     const [backupsVisible, setBackupsVisible] = useState(false);
     const [gamePlayZoneObject, setGamePlayZoneObject] = useState({});
     const [gamePlayZoneArray, setGamePlayZoneArray] = useState([]);
@@ -226,8 +227,9 @@ export default function GameSection(props) {
         fetchGames();
     }, [modalContent.updatedDB]);
 
-    function setGameVisibleFunction(gameID,index) {
+    function setGameVisibleFunction(gameID,index,gameDesigner) {
         setGameVisible(gameID);
+        setGameDesigner(gameDesigner);
         console.log("games[index].gamePlayzone.items: " + JSON.stringify(games[index].gamePlayZone.items));
         let newObject = {};
         for (let i=0; i<games[index].gamePlayZone.items.length; i++) {
@@ -236,6 +238,17 @@ export default function GameSection(props) {
             newObject = {...newObject,[key]:value};
         }
         setGamePlayZoneObject(newObject);
+    }
+    function handleStats(props) {
+        setModalContent({
+            open: true,
+            content: "Stats",
+            id: props.gameID,
+            gameID:"",
+            zoneID:"",
+            action: props.gameName,
+            updatedDB:false
+        })
     }
     function handleGameForm(props) {
         setModalContent({
@@ -256,6 +269,7 @@ export default function GameSection(props) {
             gameID:props.gameID,
             zoneID:"",
             action: props.action,
+            gameDesigner: gameDesigner,
             updatedDB:false
         })
     }
@@ -268,6 +282,7 @@ export default function GameSection(props) {
             gameID:props.gameID,
             gamePlayZoneID:props.zoneID,
             action: props.action,
+            gameDesigner: gameDesigner,
             updatedDB:false
         })
     }
@@ -292,6 +307,7 @@ export default function GameSection(props) {
             gameID:props.gameID,
             gamePlayZoneID:props.zoneID,
             action: props.action,
+            gameDesigner: gameDesigner,
             updatedDB:false
         })
     }
@@ -387,13 +403,16 @@ export default function GameSection(props) {
                 >
                     {(gameVisible === "") && <TableHead>
                     <TableRow>
+                        <TableCell as="th"></TableCell>
                         <TableCell as="th">Game Name</TableCell>
                         <TableCell as="th">Type</TableCell>
                         <TableCell as="th">Place</TableCell>
                         <TableCell as="th">City</TableCell>
                         <TableCell as="th">Level</TableCell>
-                        <TableCell as="th">Disabled</TableCell>
+                        <TableCell as="th">Designer</TableCell>
+                        <TableCell as="th">Live</TableCell>
                         <TableCell as="th">Actions</TableCell>
+
                     </TableRow>
                 </TableHead>}
                     <TableBody>
@@ -401,21 +420,18 @@ export default function GameSection(props) {
                     <TableRow key={game.id}>
                         {(gameVisible === "") &&
                         <>
-                        <TableCell><Button gap="0.1rem" size="small"  className="plus-minus"  onClick={() => setGameVisibleFunction(game.id, index)}>+</Button>
-                            {game.gameName}
+                        <TableCell><Button gap="0.1rem" size="large"  className="plus-minus"  onClick={() => setGameVisibleFunction(game.id, index, game.gameDesigner)}>+</Button>
                         </TableCell>
+                        <TableCell>{game.gameName}</TableCell>
                         <TableCell>{game.gameType}</TableCell>
                         <TableCell>{game.gameLocationPlace}</TableCell>
                         <TableCell>{game.gameLocationCity}</TableCell>
                         <TableCell>{game.gameLevel}</TableCell>
-                        <TableCell>{game.disabled ? "true" : "false"}</TableCell>
+                        <TableCell>{game.gameDesigner}</TableCell>
+                            <TableCell>{game.disabled ? "no" : "yes"}</TableCell>
                         <TableCell>
 
-                            <Button gap="0.1rem" size="small"
-                                    onClick={() => showGameStats({
-                                        "gameID": game.id,
-                                        "gameName": game.gameName
-                                    })}>stats</Button>
+                            <Button gap="0.1rem" size="small" onClick={() => handleStats({"gameID": game.id, "gameName": game.gameName})}>stats</Button>
                             <Button gap="0.1rem" size="small"
                                     onClick={() => handleGameForm({"gameID": game.id, "action": "edit"})}>edit</Button>
                             <Button gap="0.1rem" size="small" onClick={() => copyGame({
@@ -428,10 +444,11 @@ export default function GameSection(props) {
                             </Button>*/}
 
                         </TableCell>
+
                         </>}
 
                     {(gameVisible == game.id) &&
-                        <TableCell colSpan={7} className={"border1"}>
+                        <TableCell colSpan={9} className={"border1"}>
                             <Flex  direction="row"
                                    justifyContent="flex-start"
                                    marginBottom={"30px"}
@@ -441,11 +458,7 @@ export default function GameSection(props) {
                                 <Heading level={5} color="black" marginRight={"1rem"}>
 
                                     {game.gameName}:  </Heading>
-                                <Button gap="0.1rem" size="small"
-                                        onClick={() => showGameStats({
-                                            "gameID": game.id,
-                                            "gameName": game.gameName
-                                        })}>stats</Button>
+                                <Button gap="0.1rem" size="small" onClick={() => handleStats({"gameID": game.id, "gameName": game.gameName})}>stats</Button>
                                 <Button gap="0.1rem" size="small"
                                         onClick={() => handleGameForm({"gameID": game.id, "action": "edit"})}>edit</Button>
                                 <Button gap="0.1rem" size="small" onClick={() => copyGame({
@@ -470,7 +483,7 @@ export default function GameSection(props) {
                                         <TableCell as="th">Place</TableCell>
                                         <TableCell as="th">City</TableCell>
                                         <TableCell as="th">Level</TableCell>
-                                        <TableCell as="th">Disabled</TableCell>
+                                        <TableCell as="th">Live</TableCell>
                                         <TableCell as="th">Designer</TableCell>
                                     </TableRow>
                                 </TableHead>
@@ -481,7 +494,7 @@ export default function GameSection(props) {
                                 <TableCell>{game.gameLocationPlace}</TableCell>
                                 <TableCell>{game.gameLocationCity}</TableCell>
                                 <TableCell>{game.gameLevel}</TableCell>
-                                <TableCell>{game.disabled ? "true" : "false"}</TableCell>
+                                <TableCell>{game.disabled ? "No" : "Yes"}</TableCell>
                                 <TableCell>{game.gameDesigner}  </TableCell>
                             </TableRow>
                             <TableRow>
@@ -665,7 +678,8 @@ export default function GameSection(props) {
                                         <TableRow>
                                             <TableCell as="th">Name</TableCell>
                                             <TableCell as="th">Zone</TableCell>
-                                            <TableCell as="th">text</TableCell>
+                                            <TableCell as="th">Text</TableCell>
+                                            <TableCell as="th">Icon</TableCell>
                                             <TableCell as="th">Image</TableCell>
                                             <TableCell as="th">Disabled</TableCell>
                                             <TableCell as="th">Actions</TableCell>
@@ -678,6 +692,7 @@ export default function GameSection(props) {
                                         <TableCell>{clue.gameClueName}</TableCell>
                                         <TableCell>{gamePlayZoneObject[("id-" + clue.gamePlayZoneID)]}</TableCell>
                                         <TableCell>{clue.gameClueText} </TableCell>
+                                        <TableCell>{clue.gameClueIcon} </TableCell>
                                         <TableCell><Image width={"50px"} src={clue.gameClueImage}/></TableCell>
                                         <TableCell>{clue.disabled ? "true" : "false"}</TableCell>
                                         <TableCell>

@@ -23,7 +23,7 @@ import * as mutations from "../graphql/mutations";
 import GameClue from "../components/game/GameClue";
 import {GamePuzzle, ModalPuzzleContent} from "../components/game/GamePuzzle";
 import Hints from "../components/game/Hints";
-import Map from "../components/game/Map";
+import {MapGame} from "../components/game/Map";
 import Winner from "../components/game/Winner";
 import Help from "../components/game/Help";
 import zoneIcon from "../assets/noun-zone-3097481-FFFFFF.svg";
@@ -45,6 +45,7 @@ export function GameV3() {
     const [zoneVisible, setZoneVisible] = useState("");
     const [zoneName, setZoneName] = useState("");
     const [clues, setClues] = useState("");
+    const [cluesArray, setCluesArray] = useState([]);
     const [gameClues, setGameClues] = useState([]);
     const [gamePuzzleArray, setGamePuzzleArray] = useState([]);
 
@@ -98,12 +99,19 @@ export function GameV3() {
                 setGameHintVisible(JSON.parse(localStorage.getItem("gameHintVisible")));
             }
             if (localStorage.getItem("gamePuzzleSolved")!=null) {
-                /* check for all puzzles solved, need to do wingame? */
                 setGamePuzzleSolved(JSON.parse(localStorage.getItem("gamePuzzleSolved")));
             }
             if (localStorage.getItem("gamePuzzleGuess")!=null) {
-                /* check for all puzzles solved, need to do wingame? */
                 setGamePuzzleGuess(JSON.parse(localStorage.getItem("gamePuzzleGuess")));
+            }
+            if (localStorage.getItem("gamePuzzleAnswer")!=null) {
+                setGamePuzzleAnswer(JSON.parse(localStorage.getItem("gamePuzzleAnswer")));
+            }
+            if (localStorage.getItem("gamePuzzleAnswerCorrect")!=null) {
+                setGamePuzzleAnswerCorrect(JSON.parse(localStorage.getItem("gamePuzzleAnswerCorrect")));
+            }
+            if (localStorage.getItem("cluesArray")!=null) {
+                setCluesArray(JSON.parse(localStorage.getItem("cluesArray")));
             }
 
             /* end check */
@@ -268,15 +276,40 @@ export function GameV3() {
         }
     }
 
-    function setCluesFunction(clue) {
+    function setCluesFunction(gameClueName,gameClueText,gameClueID,gameClueImage) {
         setAlertText("clue added to notes");
         setIsAlertVisible(true);
-        console.log("clue: " + clue);
+        console.log("setCluesFunction");
         setTimeout(() => {
             setIsAlertVisible(false);
         }, 3000);
-        setClues(clues + clue);
-        localStorage.setItem("clues",clues + clue);
+        let clueTemp = "<strong>" + gameClueName + " </strong> ==> " +
+            gameClueText + " <br />";
+
+        let cluesArrayObject = {
+            gameClueName: gameClueName,
+            gameClueText: gameClueText,
+            gameClueID: gameClueID,
+            gameClueImage: gameClueImage,
+        };
+        let cluesArrayTemp = cluesArray;
+        cluesArrayTemp.push(cluesArrayObject);
+        console.log("json cluesArrayTemp Z2: " + JSON.stringify(cluesArrayTemp))
+        setCluesArray(cluesArrayTemp);
+        setClues(clues + clueTemp);
+        localStorage.setItem("clues",clues + clueTemp);
+        localStorage.setItem("cluesArray",JSON.stringify(cluesArrayTemp));
+    }
+    function setCluesArrayRemoveFunction(index) {
+        console.log("setCluesArrayFunction");
+        const cluesArrayTemp = cluesArray;
+        console.log("json cluesArrayTemp 1: " + JSON.stringify(cluesArrayTemp))
+        //const index = cluesArrayTemp.indexOf(clueObject);
+        const x = cluesArrayTemp.splice(index,1);
+        console.log("json cluesArrayTemp 2: " + JSON.stringify(cluesArrayTemp))
+        localStorage.setItem("cluesArray",JSON.stringify(cluesArrayTemp));
+        cluesArray.splice(index, 1); // 1 means remove one item only
+        setCluesArray([...cluesArray]);
     }
 
     function setAlertTextFunction(alertText) {
@@ -393,11 +426,13 @@ export function GameV3() {
                             setModalClueContent={setModalClueContent}
                             clueDetails={clueDetails}
                             setCluesFunction={setCluesFunction}>
+                            <>
+                            <View>{clueDetails.gameClueName}</View>
                             <View
                                 dangerouslySetInnerHTML={{__html: DangerouslySetInnerHTMLSanitized(clueDetails.gameClueText)}}
                                 paddingTop="10px"></View>
                             {(clueDetails.gameClueImage != "" && clueDetails.gameClueImage != null) &&
-                            <Image src={clueDetails.gameClueImage}/>}
+                            <Image src={clueDetails.gameClueImage}/>}</>
                         </ModalClue>
                         <View className={"puzzle-sidebar"}>
                             {gamePuzzleArray.map((puzzle, index) => (
@@ -406,6 +441,9 @@ export function GameV3() {
                                             index={index}
                                             setPuzzleDetails={setPuzzleDetails}
                                             gamePuzzleSolved={gamePuzzleSolved}
+                                            gamePuzzleGuess={gamePuzzleGuess}
+                                            gamePuzzleAnswer={gamePuzzleAnswer}
+                                            gamePuzzleAnswerCorrect={gamePuzzleAnswerCorrect}
                                             key={puzzle.id}/>
                             ))}
                         </View>
@@ -422,7 +460,8 @@ export function GameV3() {
                             />
                         </ModalPuzzle>
                         <View className="right-side"></View>
-                        <View className="game-container-bottom"></View>
+                        <View className="game-container-bottom">
+                        </View>
                     </View>
                     {/* end play area */}
                     <View className={"notes-area"}>
@@ -430,9 +469,11 @@ export function GameV3() {
                             <View className="small">hint time: {gameTimeHint} mins | time
                                 started: {realTimeStart ? format(realTimeStart, "MM/dd/yy h:mma") : null}</View>
                         </View>
-                        <NotesOpen clues={clues} setClues={setClues} gameNotes={gameNotes}
+                        <NotesOpen clues={clues} setClues={setClues} cluesArray={cluesArray} setCluesArray={setCluesArray} gameNotes={gameNotes}
                                    setGameNotes={setGameNotes} setGameNotesFunction={setGameNotesFunction}
+                                   setCluesArrayRemoveFunction={setCluesArrayRemoveFunction}
                                    isChecked={isChecked}/>
+
                     </View>
                 </View> {/* end game-container */}
 
@@ -443,7 +484,7 @@ export function GameV3() {
                     <Hints gameHint={gameHint} setGameTimeHint={setGameTimeHint} gameHintVisible={gameHintVisible}
                            setGameHintVisible={setGameHintVisible}
                            DangerouslySetInnerHTMLSanitized={DangerouslySetInnerHTMLSanitized}/>}
-                    {(modalContent.content == "Map") && <Map/>}
+                    {(modalContent.content == "Map") && <MapGame playZone={playZone}/>}
                 </ReactModalFromBottom>
                 <ReactModalWinner gameTimeTotal={gameTimeTotal}>
                     {(gameComplete) &&

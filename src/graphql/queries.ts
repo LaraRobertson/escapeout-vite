@@ -1074,10 +1074,28 @@ export const gameStatsSortedByGameName = /* GraphQL */ `query GameStatsSortedByG
       gameLocationCity
       gameName
       gameStates
+       gameScore {
+          items {
+            id
+            gameStatsID
+            gameID
+            numberOfPlayers
+            teamName
+            teamLocation
+            gameComments
+            gameTotalTime
+            completed
+            firstTime
+            gameHintTime
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
       type
       createdAt
-      updatedAt
       disabled
+      updatedAt
       __typename
     }
     nextToken
