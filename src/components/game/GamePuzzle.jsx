@@ -230,12 +230,13 @@ export function ModalPuzzleContent(props) {
 }
 
 export function GamePuzzle(props) {
-    const { setModalPuzzleContent } = useContext(MyGameContext);
+    const { setModalPuzzleContent, setModalClueContent } = useContext(MyGameContext);
     let zoneVisible=props.zoneVisible;
     let puzzle=props.puzzle;
     let gamePuzzleSolved=props.gamePuzzleSolved;
     let index=props.index;
     let setPuzzleDetails=props.setPuzzleDetails;
+    let setClueDetails=props.setClueDetails;
 
     const IconPuzzleDisplay = (props) => {
         switch (true) {

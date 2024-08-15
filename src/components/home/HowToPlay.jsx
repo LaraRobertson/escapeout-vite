@@ -13,18 +13,17 @@ export default function HowToPlay() {
                     </Accordion.Trigger>
                     <Accordion.Content>
                         <View>
-                            <View marginBottom={"5px"}><strong>-> Create a FREE account and Sign in to Play</strong>
+                            <View marginBottom={"5px"}><strong>Create a FREE account and Sign in to Play</strong>
                                     <View className="small italics">Currently you can sign in with
-                                        email/password. It's probably best to set an easy password,
-                                        there will be no sensitive data to steal here or you can use
-                                        your google account to sign in. Your email will not be used for anything other than managing your account here.
+                                        email/password or google account. If you want to play with others it is best to set an easy password.
+                                        This allows others to sign in to the same account if you want to play the game at the same time as a Team.
+                                        We will not use your email for anything except to manage your account which will only have game-related information.
                                     </View></View>
-                            <View marginBottom={"5px"}><strong>-> Review available games on the list and go to the
-                                Game Location before playing.</strong></View>
-                            <View marginBottom={"5px"}><strong>-> Hit Play, agree to Waiver, and select a Team Name to use as your
-                                team name.</strong></View>
-                            <View marginBottom={"5px"}><strong>-> Start game and solve the puzzles.</strong></View>
-                            <View marginBottom={"5px"}><strong>-> The BACK BUTTON is not needed (please do not use back button).</strong></View>
+                            <View marginBottom={"5px"}><strong>Review available games</strong> on the list and go to the
+                                Game Location before playing.</View>
+                            <View marginBottom={"5px"}><strong>Choose Play Game</strong> and agree to Waiver, then select a Team Name.</View>
+                            <View marginBottom={"5px"}><strong>Start Game</strong> and solve the puzzles.</View>
+                            <View marginBottom={"5px"}><strong>The Back Button</strong> is not needed (please do not use back button).</View>
 
                         </View>
                     </Accordion.Content>

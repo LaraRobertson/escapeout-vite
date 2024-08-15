@@ -425,6 +425,16 @@ export const listGameStats = /* GraphQL */ `query ListGameStats(
       gameLocationCity
       gameName
       gameStates
+       gameScore {
+          items {
+            id
+            firstTime
+            completed
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
       type
       createdAt
       updatedAt

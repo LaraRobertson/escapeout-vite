@@ -207,7 +207,9 @@
   padding: 0 5px;
 }
 .modal-from-top-close {
-  height: 40px; }
+  height: 40px;
+  padding-top:10px;
+}
 
 .modal-bottom-bar {
   position: relative;

@@ -444,6 +444,7 @@ export function GameV3() {
                                             gamePuzzleGuess={gamePuzzleGuess}
                                             gamePuzzleAnswer={gamePuzzleAnswer}
                                             gamePuzzleAnswerCorrect={gamePuzzleAnswerCorrect}
+                                            setClueDetails={setClueDetails}
                                             key={puzzle.id}/>
                             ))}
                         </View>
