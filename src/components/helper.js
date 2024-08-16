@@ -107,10 +107,11 @@ export function removeLocalStorage() {
     localStorage.removeItem("realTimeStart");
     localStorage.removeItem("realTimeEnd");
     localStorage.removeItem("gameNotes");
+    localStorage.removeItem("gameTimeHint");
     localStorage.removeItem("clues");
-    localStorage.removeItem("gameDescriptionP");
-    localStorage.removeItem("gameDescriptionH2");
-    localStorage.removeItem("gameDescriptionH3");
+    localStorage.removeItem("cluesArray");
     localStorage.removeItem("gamePuzzleSolved");
     localStorage.removeItem("gamePuzzleGuess");
+    localStorage.removeItem("gamePuzzleAnswer");
+    localStorage.removeItem("gamePuzzleAnswerCorrect");
 }

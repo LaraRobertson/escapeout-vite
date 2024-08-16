@@ -111,7 +111,7 @@ export default function GameList(props) {
 
         <Flex className="flex-games">
             {loading && (<View>loading</View>)}
-            {((gameListByCity.length === 0) && !loading) && <View>Games Coming Soon!</View>}
+            {((gameListByCity.length === 0) && !loading) && <View>Choose a City!</View>}
 
             {gameListByCity.map((game) => (
                <GameCard

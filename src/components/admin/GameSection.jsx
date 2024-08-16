@@ -431,13 +431,14 @@ export default function GameSection(props) {
                             <TableCell>{game.disabled ? "no" : "yes"}</TableCell>
                         <TableCell>
 
-                            <Button gap="0.1rem" size="small" onClick={() => handleStats({"gameID": game.id, "gameName": game.gameName})}>stats</Button>
-                            <Button gap="0.1rem" size="small"
+                            <Button gap="0.1rem" marginRight="10px" size="small"
                                     onClick={() => handleGameForm({"gameID": game.id, "action": "edit"})}>edit</Button>
                             <Button gap="0.1rem" size="small" onClick={() => copyGame({
                                 "gameID": game.id,
                                 "gameName": game.gameName
                             })}>copy</Button>
+                            <Button gap="0.1rem" size="small" onClick={() => handleStats({"gameID": game.id, "gameName": game.gameName})}>stats</Button>
+
 
                             {/*<Button gap="0.1rem" size="small" color="red" onClick={() => deleteGame({"gameID": game.id})}>
                                 x
@@ -458,13 +459,13 @@ export default function GameSection(props) {
                                 <Heading level={5} color="black" marginRight={"1rem"}>
 
                                     {game.gameName}:  </Heading>
-                                <Button gap="0.1rem" size="small" onClick={() => handleStats({"gameID": game.id, "gameName": game.gameName})}>stats</Button>
-                                <Button gap="0.1rem" size="small"
+                                <Button gap="0.1rem" marginRight="10px" size="small"
                                         onClick={() => handleGameForm({"gameID": game.id, "action": "edit"})}>edit</Button>
                                 <Button gap="0.1rem" size="small" onClick={() => copyGame({
                                     "gameID": game.id,
                                     "gameName": game.gameName
                                 })}>copy</Button>
+                                <Button gap="0.1rem" size="small" onClick={() => handleStats({"gameID": game.id, "gameName": game.gameName})}>stats</Button>
 
                                 {/* <Button gap="0.1rem" size="small" color="red" onClick={() => deleteGame({"gameID": game.id})}>
                                     x

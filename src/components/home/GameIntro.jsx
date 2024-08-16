@@ -113,12 +113,12 @@ export default function GameIntro(props) {
                     content: ""
                 })
                 /* new ui */
-                if (gameDetails.gameName === "Disc Golf Hunt and Think") {
-                    console.log("go to game: " + gameDetails.gameName + "page: /gameV3");
-                    navigate("/gameV3");
+                if (gameDetails.gameName === "xxx") {
+                    console.log("go to game: " + gameDetails.gameName + "page: /game");
+                    navigate("/gameV");
                 } else {
-                    console.log(`go to game: ${gameDetails.gameName}page: /game`);
-                    navigate("/game");
+                    console.log(`go to game: ${gameDetails.gameName}page: /gameV3`);
+                    navigate("/gameV3");
                 }
             } catch (err) {
                 console.log("error createGameScore..", err)

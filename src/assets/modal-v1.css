@@ -174,7 +174,7 @@
   bottom: 0;
   position: absolute;*/
   box-shadow: -6px 0 16px 0 rgba(0, 0, 0, 0.08), -3px 0 6px -4px rgba(0, 0, 0, 0.12), -9px 0 28px 8px rgba(0, 0, 0, 0.05);
-  max-width:765px;
+  max-width:1365px;
   width:100%;
   z-index: 1000;
   transition: all 0.3s;
