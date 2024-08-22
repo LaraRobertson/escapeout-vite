@@ -8,6 +8,7 @@ import {
 } from "../../graphql/queries";
 import {generateClient} from "aws-amplify/api";
 import {MyAuthContext} from "../../MyContext";
+import copyGame from "./copyGame";
 
 export default function GameSection(props) {
     const client = generateClient();
