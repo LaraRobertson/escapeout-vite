@@ -20,8 +20,8 @@ export const getUser = /* GraphQL */ `query GetUser($id: ID!) {
       __typename
     }
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -39,8 +39,8 @@ export const listUsers = /* GraphQL */ `query ListUsers(
       location
       email
       createdAt
-      disabled
       updatedAt
+      disabled
       __typename
     }
     nextToken
@@ -49,12 +49,12 @@ export const listUsers = /* GraphQL */ `query ListUsers(
 }
 ` as GeneratedQuery<APITypes.ListUsersQueryVariables, APITypes.ListUsersQuery>;
 export const getGame = /* GraphQL */ `query GetGame($id: ID!) {
-  getGame(id: $id) {
+getGame(id: $id) {
     id
     gameName
-    gameDescriptionH2
-    gameDescriptionH3
-    gameDescriptionP
+  gameDescription
+  gameLogisticInfo
+  gameSummary
     gameLocationPlace
     gameLocationPlaceDetails
     gameLocationCity
@@ -69,7 +69,7 @@ export const getGame = /* GraphQL */ `query GetGame($id: ID!) {
     gameGoals
     gameIntro
     gameMap
-gamePlayZone {
+      gamePlayZone {
           items {
             id
             disabled
@@ -78,6 +78,8 @@ gamePlayZone {
             gameZoneIcon
             gameZoneImage
             gameZoneDescription
+            latitude
+            longitude
             order
             createdAt
             updatedAt
@@ -106,6 +108,7 @@ gamePlayZone {
             gamePlayZoneID
             gameClueIcon
             gameClueImage
+            gameClueToolNeeded
             gameClueText
             gameCluePosition
             order
@@ -121,6 +124,7 @@ gamePlayZone {
             puzzleName
             puzzlePosition
             puzzleImage
+            puzzleImageOpen
             puzzleImageSolved
             textField {
               items {
@@ -165,9 +169,9 @@ export const listGames = /* GraphQL */ `query ListGames(
     items {
       id
       gameName
-      gameDescriptionH2
-      gameDescriptionH3
-      gameDescriptionP
+      gameDescription
+      gameLogisticInfo
+      gameSummary
       gameLocationPlace
       gameLocationPlaceDetails
       gameLocationCity
@@ -182,12 +186,16 @@ export const listGames = /* GraphQL */ `query ListGames(
       gameGoals
       gameIntro
       gameMap
-gamePlayZone {
+        gamePlayZone {
           items {
             id
             disabled
             gameID
             gameZoneName
+            gameZoneImage
+            gameZoneIcon
+            latitude
+            longitude
             order
             createdAt
             updatedAt
@@ -216,6 +224,7 @@ gamePlayZone {
             gamePlayZoneID
             gameClueIcon
             gameClueImage
+            gameClueToolNeeded
             gameClueText
             gameCluePosition
             order
@@ -232,6 +241,7 @@ gamePlayZone {
             puzzleName
             puzzlePosition
             puzzleImage
+            puzzleImageOpen
             puzzleImageSolved
             textField {
               items {
@@ -256,9 +266,10 @@ gamePlayZone {
           }
           nextToken
         }
+      type
       createdAt
-      disabled
       updatedAt
+      disabled
       __typename
     }
     nextToken
@@ -274,6 +285,7 @@ export const getGamePuzzle = /* GraphQL */ `query GetGamePuzzle($id: ID!) {
     puzzleName
     puzzlePosition
     puzzleImage
+    puzzleImageOpen
     puzzleImageSolved
     textField {
       nextToken
@@ -288,8 +300,8 @@ export const getGamePuzzle = /* GraphQL */ `query GetGamePuzzle($id: ID!) {
     winGameMessage
     order
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -310,6 +322,7 @@ export const listGamePuzzles = /* GraphQL */ `query ListGamePuzzles(
       puzzleName
       puzzlePosition
       puzzleImage
+      puzzleImageOpen
       puzzleImageSolved
       puzzleClueRevealed
       puzzleClueText
@@ -320,8 +333,8 @@ export const listGamePuzzles = /* GraphQL */ `query ListGamePuzzles(
       winGameMessage
       order
       createdAt
-      disabled
       updatedAt
+      disabled
       __typename
     }
     nextToken
@@ -341,8 +354,8 @@ export const getTextField = /* GraphQL */ `query GetTextField($id: ID!) {
     answer
     order
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -364,8 +377,8 @@ export const listTextFields = /* GraphQL */ `query ListTextFields(
       answer
       order
       createdAt
-      disabled
       updatedAt
+      disabled
       __typename
     }
     nextToken
@@ -390,8 +403,8 @@ export const getGameStats = /* GraphQL */ `query GetGameStats($id: ID!) {
     }
     type
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -412,10 +425,20 @@ export const listGameStats = /* GraphQL */ `query ListGameStats(
       gameLocationCity
       gameName
       gameStates
+       gameScore {
+          items {
+            id
+            firstTime
+            completed
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
       type
       createdAt
-      disabled
       updatedAt
+      disabled
       __typename
     }
     nextToken
@@ -440,8 +463,8 @@ export const getGameScore = /* GraphQL */ `query GetGameScore($id: ID!) {
     firstTime
     gameHintTime
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -468,8 +491,8 @@ export const listGameScores = /* GraphQL */ `query ListGameScores(
       firstTime
       gameHintTime
       createdAt
-      disabled
       updatedAt
+      disabled
       __typename
     }
     nextToken
@@ -489,8 +512,8 @@ export const getGameHint = /* GraphQL */ `query GetGameHint($id: ID!) {
     gameHintDescription
     order
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -512,8 +535,8 @@ export const listGameHints = /* GraphQL */ `query ListGameHints(
       gameHintDescription
       order
       createdAt
-      disabled
       updatedAt
+      disabled
       __typename
     }
     nextToken
@@ -537,8 +560,8 @@ export const getGameClue = /* GraphQL */ `query GetGameClue($id: ID!) {
     gameClueToolNeeded
     order
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -564,8 +587,8 @@ export const listGameClues = /* GraphQL */ `query ListGameClues(
       gameClueToolNeeded
       order
       createdAt
-      disabled
       updatedAt
+      disabled
       __typename
     }
     nextToken
@@ -583,11 +606,13 @@ export const getGamePlayZone = /* GraphQL */ `query GetGamePlayZone($id: ID!) {
     gameZoneName
     gameZoneImage
     gameZoneDescription
+    longitude
+    latitude
     gameZoneIcon
     order
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -607,11 +632,13 @@ export const listGamePlayZones = /* GraphQL */ `query ListGamePlayZones(
       gameZoneName
       gameZoneImage
       gameZoneDescription
+      longitude
+      latitude
       gameZoneIcon
       order
       createdAt
-      disabled
       updatedAt
+      disabled
       __typename
     }
     nextToken
@@ -634,16 +661,16 @@ export const getUserGamePlay = /* GraphQL */ `query GetUserGamePlay($id: ID!) {
       location
       email
       createdAt
-      disabled
       updatedAt
+      disabled
       __typename
     }
     game {
       id
       gameName
-      gameDescriptionH2
-      gameDescriptionH3
-      gameDescriptionP
+      gameDescription
+      gameLogisticInfo
+      gameSummary
       gameLocationPlace
       gameLocationPlaceDetails
       gameLocationCity
@@ -660,8 +687,8 @@ export const getUserGamePlay = /* GraphQL */ `query GetUserGamePlay($id: ID!) {
       gameMap
       type
       createdAt
-      disabled
       updatedAt
+      disabled
       __typename
     }
     createdAt
@@ -716,8 +743,8 @@ export const usersByEmail = /* GraphQL */ `query UsersByEmail(
       location
       email
       createdAt
-      disabled
       updatedAt
+      disabled
       __typename
     }
     nextToken
@@ -747,9 +774,9 @@ export const gamesByGameNameAndType = /* GraphQL */ `query GamesByGameNameAndTyp
     items {
       id
       gameName
-      gameDescriptionH2
-      gameDescriptionH3
-      gameDescriptionP
+      gameDescription
+      gameLogisticInfo
+      gameSummary
       gameLocationPlace
       gameLocationPlaceDetails
       gameLocationCity
@@ -766,8 +793,8 @@ export const gamesByGameNameAndType = /* GraphQL */ `query GamesByGameNameAndTyp
       gameMap
       type
       createdAt
-      disabled
       updatedAt
+      disabled
       __typename
     }
     nextToken
@@ -797,9 +824,9 @@ export const gamesByCity = /* GraphQL */ `query GamesByCity(
     items {
       id
       gameName
-      gameDescriptionH2
-      gameDescriptionH3
-      gameDescriptionP
+      gameDescription
+      gameLogisticInfo
+      gameSummary
       gameLocationPlace
       gameLocationPlaceDetails
       gameLocationCity
@@ -814,7 +841,7 @@ export const gamesByCity = /* GraphQL */ `query GamesByCity(
       gameGoals
       gameIntro
       gameMap
-      gamePlayZone {
+            gamePlayZone {
           items {
             id
             disabled
@@ -823,6 +850,8 @@ export const gamesByCity = /* GraphQL */ `query GamesByCity(
             gameZoneIcon
             gameZoneImage
             gameZoneDescription
+            latitude
+            longitude
             order
             createdAt
             updatedAt
@@ -831,8 +860,8 @@ export const gamesByCity = /* GraphQL */ `query GamesByCity(
         }
       type
       createdAt
-      disabled
       updatedAt
+      disabled
       __typename
     }
     nextToken
@@ -866,6 +895,7 @@ export const gamePuzzleByGameID = /* GraphQL */ `query GamePuzzleByGameID(
       puzzleName
       puzzlePosition
       puzzleImage
+      puzzleImageOpen
       puzzleImageSolved
       puzzleClueRevealed
       puzzleClueText
@@ -876,8 +906,8 @@ export const gamePuzzleByGameID = /* GraphQL */ `query GamePuzzleByGameID(
       winGameMessage
       order
       createdAt
-      disabled
       updatedAt
+      disabled
       __typename
     }
     nextToken
@@ -912,8 +942,8 @@ export const textFieldByPuzzleID = /* GraphQL */ `query TextFieldByPuzzleID(
       answer
       order
       createdAt
-      disabled
       updatedAt
+      disabled
       __typename
     }
     nextToken
@@ -947,8 +977,8 @@ export const gameStatsByGameID = /* GraphQL */ `query GameStatsByGameID(
       gameStates
       type
       createdAt
-      disabled
       updatedAt
+      disabled
       __typename
     }
     nextToken
@@ -982,8 +1012,8 @@ export const gameStatsByUserEmail = /* GraphQL */ `query GameStatsByUserEmail(
       gameStates
       type
       createdAt
-      disabled
       updatedAt
+      disabled
       __typename
     }
     nextToken
@@ -1019,8 +1049,8 @@ export const gameStatsByGameName = /* GraphQL */ `query GameStatsByGameName(
       gameStates
       type
       createdAt
-      disabled
       updatedAt
+      disabled
       __typename
     }
     nextToken
@@ -1115,8 +1145,8 @@ export const gameScoreByGameStatsID = /* GraphQL */ `query GameScoreByGameStatsI
       firstTime
       gameHintTime
       createdAt
-      disabled
       updatedAt
+      disabled
       __typename
     }
     nextToken
@@ -1156,8 +1186,8 @@ export const gameScoreByGameID = /* GraphQL */ `query GameScoreByGameID(
       firstTime
       gameHintTime
       createdAt
-      disabled
       updatedAt
+      disabled
       __typename
     }
     nextToken
@@ -1192,8 +1222,8 @@ export const gameHintByGameID = /* GraphQL */ `query GameHintByGameID(
       gameHintDescription
       order
       createdAt
-      disabled
       updatedAt
+      disabled
       __typename
     }
     nextToken
@@ -1232,8 +1262,8 @@ export const gameClueByGameID = /* GraphQL */ `query GameClueByGameID(
       gameClueToolNeeded
       order
       createdAt
-      disabled
       updatedAt
+      disabled
       __typename
     }
     nextToken
@@ -1266,11 +1296,13 @@ export const gamePlayZoneByGameID = /* GraphQL */ `query GamePlayZoneByGameID(
       gameZoneName
       gameZoneImage
       gameZoneDescription
+      longitude
+      latitude
       gameZoneIcon
       order
       createdAt
-      disabled
       updatedAt
+      disabled
       __typename
     }
     nextToken

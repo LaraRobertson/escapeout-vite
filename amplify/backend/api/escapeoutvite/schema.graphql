@@ -10,15 +10,16 @@ type User @model @auth(rules: [ { allow: public } ] ) {
   email: String! @index
   game: [Game] @manyToMany(relationName: "UserGamePlay")
   createdAt: String!
+  updatedAt: String!
   disabled: Boolean
 }
 
 type Game @model @auth(rules: [ { allow: public } ] ) {
   id: ID!
   gameName: String! @index(name:"SortByType", sortKeyFields:["type"])
-  gameDescriptionH2: String
-  gameDescriptionH3: String
-  gameDescriptionP: String
+  gameDescription: String
+  gameLogisticInfo: String
+  gameSummary: String
   gameLocationPlace: String
   gameLocationPlaceDetails: String
   gameLocationCity: String!
@@ -39,6 +40,7 @@ type Game @model @auth(rules: [ { allow: public } ] ) {
   gameClue: [GameClue] @hasMany(indexName: "byGameID", fields: ["id"])
   gamePuzzle: [GamePuzzle] @hasMany(indexName: "byGameID", fields: ["id"])
   createdAt: String!
+  updatedAt: String!
   disabled: Boolean
   user:[User] @manyToMany(relationName: "UserGamePlay")
  }
@@ -50,6 +52,7 @@ type GamePuzzle @model @auth(rules: [ { allow: public } ] ) {
   puzzleName: String
   puzzlePosition: String
   puzzleImage: String
+  puzzleImageOpen: String
   puzzleImageSolved: String
   textField: [TextField] @hasMany(indexName: "byPuzzleID", fields: ["id"])
   puzzleClueRevealed: String
@@ -61,6 +64,7 @@ type GamePuzzle @model @auth(rules: [ { allow: public } ] ) {
   winGameMessage: String
   order: Int!
   createdAt: String!
+  updatedAt: String!
   disabled: Boolean
  }
 
@@ -72,6 +76,7 @@ type TextField @model @auth(rules: [ { allow: public } ] ) {
   answer: String
   order: Int!
   createdAt: String!
+  updatedAt: String!
   disabled: Boolean
  }
 
@@ -85,6 +90,7 @@ type TextField @model @auth(rules: [ { allow: public } ] ) {
    gameScore: [GameScore] @hasMany(indexName: "byGameStats", fields: ["id"])
    type: String! @index(name: "sortedByGameName", queryField: "gameStatsSortedByGameName", sortKeyFields: ["gameName"])
    createdAt: String!
+   updatedAt: String!
    disabled: Boolean
  }
 
@@ -101,6 +107,7 @@ type GameScore @model @auth(rules: [ { allow: public } ] ) {
   firstTime: Boolean
   gameHintTime: Float!
   createdAt: String!
+  updatedAt: String!
   disabled: Boolean
  }
 
@@ -112,6 +119,7 @@ type GameHint @model @auth(rules: [ { allow: public } ] ) {
   gameHintDescription: String
   order: Int!
   createdAt: String!
+  updatedAt: String!
   disabled: Boolean
  }
 
@@ -127,6 +135,7 @@ type GameClue @model @auth(rules: [ { allow: public } ] ) {
   gameClueToolNeeded: String
   order: Int!
   createdAt: String!
+  updatedAt: String!
   disabled: Boolean
  }
 
@@ -136,8 +145,11 @@ type GamePlayZone @model @auth(rules: [ { allow: public } ] ) {
   gameZoneName: String
   gameZoneImage: String
   gameZoneDescription: String
+  longitude: String
+  latitude: String
   gameZoneIcon: String
   order: Int!
   createdAt: String!
+  updatedAt: String!
   disabled: Boolean
  }

@@ -1,17 +1,31 @@
 import {Button, Image, SelectField, TextAreaField, TextField, View, Flex, Heading} from "@aws-amplify/ui-react";
-import React from "react";
+import React, {useState} from "react";
 import {
     toggleNotes,
-    setCommentsFunction, goHome
+    setCommentsFunction,
+    goHome
 } from "./helper";
-
 import {useNavigate} from "react-router-dom";
 import DOMPurify from "dompurify";
+import Close from "../assets/times-solid-svgrepo-com.svg";
+import zoneIcon from "../assets/noun-zone-3097481-FFFFFF.svg";
 
-export const ToolObject = {
-    key: 'https://escapeoutbucket213334-staging.s3.amazonaws.com/public/object-tools/key.png',
-    discs: 'https://escapeoutbucket213334-staging.s3.amazonaws.com/public/object-tools/discs.png'
-};
+export const NotAvailable = (props) => {
+    return (
+        <View>
+            {props.authStatus === "configuring" ?
+                (<View>Loading</View>):(
+                    <View>
+                        <View textAlign={"center"}>Admin is not available</View>
+                        <Flex justifyContent="center">
+                            <Button className="topLink" onClick={() => navigate('/')}>Back to Home</Button>
+                        </Flex>
+                    </View>
+                )}
+        </View>
+    )
+}
+
 
 export const TimeBlock = (props) => {
     console.log("props.realTimeStart: " + props.realTimeStart);
@@ -50,28 +64,41 @@ function DangerouslySetInnerHTMLSanitized(htmlContent) {
 }
 
 export const NotesOpen = (props) => {
+    let cluesArray=props.cluesArray;
+    let setCluesArrayRemoveFunction=props.setCluesArrayRemoveFunction;
     return (
-        <View className="notes show-gradual">
-            <View className={props.isChecked? "all-screen dark" : "all-screen light"} height={"auto"}>
-              <strong>Notes</strong>
-            <View className={(props.clues != '' && props.clues != undefined)?"small show":"hide"}>
-                <strong>clues</strong>:
-                <View dangerouslySetInnerHTML={ {__html: DangerouslySetInnerHTMLSanitized(props.clues)}}  color={"black"}  padding={"0 10px"}>
-                </View>
-                <View textAlign="center"><Button className={props.isChecked? "link-button small dark" : "link-button small light"} onClick={() => props.setClues('')}>clear clues</Button></View>
-            </View>
-            <TextAreaField
-                label="Notes"
-                labelHidden
-                value={props.gameNotes}
-                rows="5"
-                onChange={(e) =>  props.setGameNotesFunction(e.currentTarget.value,props.setGameNotes)}
-                descriptiveText="Take some Notes - close when done, they will still be here"
-            />
+        <View className="notes notes-change show-gradual">
+            <View className={props.isChecked? "dark" : "light"} height={"auto"}>
+                <View className="notes notes-change show-gradual">
+                    <View className={"small show"} height={"auto"}>
+                        <strong>Clues</strong>
+                        {cluesArray.map((clue,index) => (
+                            <Flex key={clue.gameClueID+"-"+index} className={"clue-row"}>
+                                <View className={"italics"}>{clue.gameClueName}:</View>
+                                <View  dangerouslySetInnerHTML={ {__html: DangerouslySetInnerHTMLSanitized(clue.gameClueText)}}   padding={"0 10px"}>
 
-                <View width="100%" textAlign='center' paddingTop="10px">
-                    <Button  className={props.isChecked? "close small dark" : "close small light"} onClick={() => props.setAreNotesVisible(false)}>close notes</Button>
+                                </View>
+                                <Image src={clue.gameClueImage}/>
+                                <Button className={"link-button small delete-notes" } onClick={() => setCluesArrayRemoveFunction(index)}>x</Button>
+                            </Flex>
+                        ))}
+                    </View>
                 </View>
+
+                <View className={(props.clues != '' && props.clues != undefined)?"small show":"hide"}>
+                    <View textAlign="center"><Button className={props.isChecked? "link-button small dark" : "link-button small light"}
+                                                     onClick={() => props.setCluesArray([])}>clear all clues</Button></View>
+                </View>
+                <TextAreaField
+                    label="Notes"
+                    labelHidden
+                    value={props.gameNotes}
+                    rows="5"
+                    onChange={(e) =>  props.setGameNotesFunction(e.currentTarget.value,props.setGameNotes)}
+                    descriptiveText="Take some Notes - close when done, they will still be here"
+                />
+
+
             </View>
         </View>
     )

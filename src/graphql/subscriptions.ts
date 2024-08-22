@@ -20,8 +20,8 @@ export const onCreateUser = /* GraphQL */ `subscription OnCreateUser($filter: Mo
       __typename
     }
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -41,8 +41,8 @@ export const onUpdateUser = /* GraphQL */ `subscription OnUpdateUser($filter: Mo
       __typename
     }
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -62,8 +62,8 @@ export const onDeleteUser = /* GraphQL */ `subscription OnDeleteUser($filter: Mo
       __typename
     }
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -75,9 +75,9 @@ export const onCreateGame = /* GraphQL */ `subscription OnCreateGame($filter: Mo
   onCreateGame(filter: $filter) {
     id
     gameName
-    gameDescriptionH2
-    gameDescriptionH3
-    gameDescriptionP
+    gameDescription
+    gameLogisticInfo
+    gameSummary
     gameLocationPlace
     gameLocationPlaceDetails
     gameLocationCity
@@ -110,12 +110,12 @@ export const onCreateGame = /* GraphQL */ `subscription OnCreateGame($filter: Mo
       __typename
     }
     createdAt
+    updatedAt
     disabled
     user {
       nextToken
       __typename
     }
-    updatedAt
     __typename
   }
 }
@@ -127,9 +127,9 @@ export const onUpdateGame = /* GraphQL */ `subscription OnUpdateGame($filter: Mo
   onUpdateGame(filter: $filter) {
     id
     gameName
-    gameDescriptionH2
-    gameDescriptionH3
-    gameDescriptionP
+    gameDescription
+    gameLogisticInfo
+    gameSummary
     gameLocationPlace
     gameLocationPlaceDetails
     gameLocationCity
@@ -162,12 +162,12 @@ export const onUpdateGame = /* GraphQL */ `subscription OnUpdateGame($filter: Mo
       __typename
     }
     createdAt
+    updatedAt
     disabled
     user {
       nextToken
       __typename
     }
-    updatedAt
     __typename
   }
 }
@@ -179,9 +179,9 @@ export const onDeleteGame = /* GraphQL */ `subscription OnDeleteGame($filter: Mo
   onDeleteGame(filter: $filter) {
     id
     gameName
-    gameDescriptionH2
-    gameDescriptionH3
-    gameDescriptionP
+    gameDescription
+    gameLogisticInfo
+    gameSummary
     gameLocationPlace
     gameLocationPlaceDetails
     gameLocationCity
@@ -214,12 +214,12 @@ export const onDeleteGame = /* GraphQL */ `subscription OnDeleteGame($filter: Mo
       __typename
     }
     createdAt
+    updatedAt
     disabled
     user {
       nextToken
       __typename
     }
-    updatedAt
     __typename
   }
 }
@@ -237,6 +237,7 @@ export const onCreateGamePuzzle = /* GraphQL */ `subscription OnCreateGamePuzzle
     puzzleName
     puzzlePosition
     puzzleImage
+    puzzleImageOpen
     puzzleImageSolved
     textField {
       nextToken
@@ -251,8 +252,8 @@ export const onCreateGamePuzzle = /* GraphQL */ `subscription OnCreateGamePuzzle
     winGameMessage
     order
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -270,6 +271,7 @@ export const onUpdateGamePuzzle = /* GraphQL */ `subscription OnUpdateGamePuzzle
     puzzleName
     puzzlePosition
     puzzleImage
+    puzzleImageOpen
     puzzleImageSolved
     textField {
       nextToken
@@ -284,8 +286,8 @@ export const onUpdateGamePuzzle = /* GraphQL */ `subscription OnUpdateGamePuzzle
     winGameMessage
     order
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -303,6 +305,7 @@ export const onDeleteGamePuzzle = /* GraphQL */ `subscription OnDeleteGamePuzzle
     puzzleName
     puzzlePosition
     puzzleImage
+    puzzleImageOpen
     puzzleImageSolved
     textField {
       nextToken
@@ -317,8 +320,8 @@ export const onDeleteGamePuzzle = /* GraphQL */ `subscription OnDeleteGamePuzzle
     winGameMessage
     order
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -335,8 +338,8 @@ export const onCreateTextField = /* GraphQL */ `subscription OnCreateTextField($
     answer
     order
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -353,8 +356,8 @@ export const onUpdateTextField = /* GraphQL */ `subscription OnUpdateTextField($
     answer
     order
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -371,8 +374,8 @@ export const onDeleteTextField = /* GraphQL */ `subscription OnDeleteTextField($
     answer
     order
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -394,8 +397,8 @@ export const onCreateGameStats = /* GraphQL */ `subscription OnCreateGameStats($
     }
     type
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -417,8 +420,8 @@ export const onUpdateGameStats = /* GraphQL */ `subscription OnUpdateGameStats($
     }
     type
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -440,8 +443,8 @@ export const onDeleteGameStats = /* GraphQL */ `subscription OnDeleteGameStats($
     }
     type
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -463,8 +466,8 @@ export const onCreateGameScore = /* GraphQL */ `subscription OnCreateGameScore($
     firstTime
     gameHintTime
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -486,8 +489,8 @@ export const onUpdateGameScore = /* GraphQL */ `subscription OnUpdateGameScore($
     firstTime
     gameHintTime
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -509,8 +512,8 @@ export const onDeleteGameScore = /* GraphQL */ `subscription OnDeleteGameScore($
     firstTime
     gameHintTime
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -527,8 +530,8 @@ export const onCreateGameHint = /* GraphQL */ `subscription OnCreateGameHint($fi
     gameHintDescription
     order
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -545,8 +548,8 @@ export const onUpdateGameHint = /* GraphQL */ `subscription OnUpdateGameHint($fi
     gameHintDescription
     order
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -563,8 +566,8 @@ export const onDeleteGameHint = /* GraphQL */ `subscription OnDeleteGameHint($fi
     gameHintDescription
     order
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -585,8 +588,8 @@ export const onCreateGameClue = /* GraphQL */ `subscription OnCreateGameClue($fi
     gameClueToolNeeded
     order
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -607,8 +610,8 @@ export const onUpdateGameClue = /* GraphQL */ `subscription OnUpdateGameClue($fi
     gameClueToolNeeded
     order
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -629,8 +632,8 @@ export const onDeleteGameClue = /* GraphQL */ `subscription OnDeleteGameClue($fi
     gameClueToolNeeded
     order
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -647,11 +650,13 @@ export const onCreateGamePlayZone = /* GraphQL */ `subscription OnCreateGamePlay
     gameZoneName
     gameZoneImage
     gameZoneDescription
+    longitude
+    latitude
     gameZoneIcon
     order
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -668,11 +673,13 @@ export const onUpdateGamePlayZone = /* GraphQL */ `subscription OnUpdateGamePlay
     gameZoneName
     gameZoneImage
     gameZoneDescription
+    longitude
+    latitude
     gameZoneIcon
     order
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -689,11 +696,13 @@ export const onDeleteGamePlayZone = /* GraphQL */ `subscription OnDeleteGamePlay
     gameZoneName
     gameZoneImage
     gameZoneDescription
+    longitude
+    latitude
     gameZoneIcon
     order
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -715,16 +724,16 @@ export const onCreateUserGamePlay = /* GraphQL */ `subscription OnCreateUserGame
       location
       email
       createdAt
-      disabled
       updatedAt
+      disabled
       __typename
     }
     game {
       id
       gameName
-      gameDescriptionH2
-      gameDescriptionH3
-      gameDescriptionP
+      gameDescription
+      gameLogisticInfo
+      gameSummary
       gameLocationPlace
       gameLocationPlaceDetails
       gameLocationCity
@@ -741,8 +750,8 @@ export const onCreateUserGamePlay = /* GraphQL */ `subscription OnCreateUserGame
       gameMap
       type
       createdAt
-      disabled
       updatedAt
+      disabled
       __typename
     }
     createdAt
@@ -768,16 +777,16 @@ export const onUpdateUserGamePlay = /* GraphQL */ `subscription OnUpdateUserGame
       location
       email
       createdAt
-      disabled
       updatedAt
+      disabled
       __typename
     }
     game {
       id
       gameName
-      gameDescriptionH2
-      gameDescriptionH3
-      gameDescriptionP
+      gameDescription
+      gameLogisticInfo
+      gameSummary
       gameLocationPlace
       gameLocationPlaceDetails
       gameLocationCity
@@ -794,8 +803,8 @@ export const onUpdateUserGamePlay = /* GraphQL */ `subscription OnUpdateUserGame
       gameMap
       type
       createdAt
-      disabled
       updatedAt
+      disabled
       __typename
     }
     createdAt
@@ -821,16 +830,16 @@ export const onDeleteUserGamePlay = /* GraphQL */ `subscription OnDeleteUserGame
       location
       email
       createdAt
-      disabled
       updatedAt
+      disabled
       __typename
     }
     game {
       id
       gameName
-      gameDescriptionH2
-      gameDescriptionH3
-      gameDescriptionP
+      gameDescription
+      gameLogisticInfo
+      gameSummary
       gameLocationPlace
       gameLocationPlaceDetails
       gameLocationCity
@@ -847,8 +856,8 @@ export const onDeleteUserGamePlay = /* GraphQL */ `subscription OnDeleteUserGame
       gameMap
       type
       createdAt
-      disabled
       updatedAt
+      disabled
       __typename
     }
     createdAt

@@ -23,8 +23,8 @@ export const createUser = /* GraphQL */ `mutation CreateUser(
       __typename
     }
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -47,8 +47,8 @@ export const updateUser = /* GraphQL */ `mutation UpdateUser(
       __typename
     }
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -71,8 +71,8 @@ export const deleteUser = /* GraphQL */ `mutation DeleteUser(
       __typename
     }
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -87,9 +87,9 @@ export const createGame = /* GraphQL */ `mutation CreateGame(
   createGame(input: $input, condition: $condition) {
     id
     gameName
-    gameDescriptionH2
-    gameDescriptionH3
-    gameDescriptionP
+    gameDescription
+    gameLogisticInfo
+    gameSummary
     gameLocationPlace
     gameLocationPlaceDetails
     gameLocationCity
@@ -122,12 +122,12 @@ export const createGame = /* GraphQL */ `mutation CreateGame(
       __typename
     }
     createdAt
+    updatedAt
     disabled
     user {
       nextToken
       __typename
     }
-    updatedAt
     __typename
   }
 }
@@ -142,9 +142,9 @@ export const updateGame = /* GraphQL */ `mutation UpdateGame(
   updateGame(input: $input, condition: $condition) {
     id
     gameName
-    gameDescriptionH2
-    gameDescriptionH3
-    gameDescriptionP
+    gameDescription
+    gameLogisticInfo
+    gameSummary
     gameLocationPlace
     gameLocationPlaceDetails
     gameLocationCity
@@ -177,12 +177,12 @@ export const updateGame = /* GraphQL */ `mutation UpdateGame(
       __typename
     }
     createdAt
+    updatedAt
     disabled
     user {
       nextToken
       __typename
     }
-    updatedAt
     __typename
   }
 }
@@ -197,9 +197,9 @@ export const deleteGame = /* GraphQL */ `mutation DeleteGame(
   deleteGame(input: $input, condition: $condition) {
     id
     gameName
-    gameDescriptionH2
-    gameDescriptionH3
-    gameDescriptionP
+    gameDescription
+    gameLogisticInfo
+    gameSummary
     gameLocationPlace
     gameLocationPlaceDetails
     gameLocationCity
@@ -232,12 +232,12 @@ export const deleteGame = /* GraphQL */ `mutation DeleteGame(
       __typename
     }
     createdAt
+    updatedAt
     disabled
     user {
       nextToken
       __typename
     }
-    updatedAt
     __typename
   }
 }
@@ -256,6 +256,7 @@ export const createGamePuzzle = /* GraphQL */ `mutation CreateGamePuzzle(
     puzzleName
     puzzlePosition
     puzzleImage
+    puzzleImageOpen
     puzzleImageSolved
     textField {
       nextToken
@@ -270,8 +271,8 @@ export const createGamePuzzle = /* GraphQL */ `mutation CreateGamePuzzle(
     winGameMessage
     order
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -290,6 +291,7 @@ export const updateGamePuzzle = /* GraphQL */ `mutation UpdateGamePuzzle(
     puzzleName
     puzzlePosition
     puzzleImage
+    puzzleImageOpen
     puzzleImageSolved
     textField {
       nextToken
@@ -304,8 +306,8 @@ export const updateGamePuzzle = /* GraphQL */ `mutation UpdateGamePuzzle(
     winGameMessage
     order
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -324,6 +326,7 @@ export const deleteGamePuzzle = /* GraphQL */ `mutation DeleteGamePuzzle(
     puzzleName
     puzzlePosition
     puzzleImage
+    puzzleImageOpen
     puzzleImageSolved
     textField {
       nextToken
@@ -338,8 +341,8 @@ export const deleteGamePuzzle = /* GraphQL */ `mutation DeleteGamePuzzle(
     winGameMessage
     order
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -359,8 +362,8 @@ export const createTextField = /* GraphQL */ `mutation CreateTextField(
     answer
     order
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -380,8 +383,8 @@ export const updateTextField = /* GraphQL */ `mutation UpdateTextField(
     answer
     order
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -401,8 +404,8 @@ export const deleteTextField = /* GraphQL */ `mutation DeleteTextField(
     answer
     order
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -427,8 +430,8 @@ export const createGameStats = /* GraphQL */ `mutation CreateGameStats(
     }
     type
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -453,8 +456,8 @@ export const updateGameStats = /* GraphQL */ `mutation UpdateGameStats(
     }
     type
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -479,8 +482,8 @@ export const deleteGameStats = /* GraphQL */ `mutation DeleteGameStats(
     }
     type
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -505,8 +508,8 @@ export const createGameScore = /* GraphQL */ `mutation CreateGameScore(
     firstTime
     gameHintTime
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -531,8 +534,8 @@ export const updateGameScore = /* GraphQL */ `mutation UpdateGameScore(
     firstTime
     gameHintTime
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -557,8 +560,8 @@ export const deleteGameScore = /* GraphQL */ `mutation DeleteGameScore(
     firstTime
     gameHintTime
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -578,8 +581,8 @@ export const createGameHint = /* GraphQL */ `mutation CreateGameHint(
     gameHintDescription
     order
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -599,8 +602,8 @@ export const updateGameHint = /* GraphQL */ `mutation UpdateGameHint(
     gameHintDescription
     order
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -620,8 +623,8 @@ export const deleteGameHint = /* GraphQL */ `mutation DeleteGameHint(
     gameHintDescription
     order
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -645,8 +648,8 @@ export const createGameClue = /* GraphQL */ `mutation CreateGameClue(
     gameClueToolNeeded
     order
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -670,8 +673,8 @@ export const updateGameClue = /* GraphQL */ `mutation UpdateGameClue(
     gameClueToolNeeded
     order
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -695,8 +698,8 @@ export const deleteGameClue = /* GraphQL */ `mutation DeleteGameClue(
     gameClueToolNeeded
     order
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -714,11 +717,13 @@ export const createGamePlayZone = /* GraphQL */ `mutation CreateGamePlayZone(
     gameZoneName
     gameZoneImage
     gameZoneDescription
+    longitude
+    latitude
     gameZoneIcon
     order
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -736,11 +741,13 @@ export const updateGamePlayZone = /* GraphQL */ `mutation UpdateGamePlayZone(
     gameZoneName
     gameZoneImage
     gameZoneDescription
+    longitude
+    latitude
     gameZoneIcon
     order
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -758,11 +765,13 @@ export const deleteGamePlayZone = /* GraphQL */ `mutation DeleteGamePlayZone(
     gameZoneName
     gameZoneImage
     gameZoneDescription
+    longitude
+    latitude
     gameZoneIcon
     order
     createdAt
-    disabled
     updatedAt
+    disabled
     __typename
   }
 }
@@ -785,16 +794,16 @@ export const createUserGamePlay = /* GraphQL */ `mutation CreateUserGamePlay(
       location
       email
       createdAt
-      disabled
       updatedAt
+      disabled
       __typename
     }
     game {
       id
       gameName
-      gameDescriptionH2
-      gameDescriptionH3
-      gameDescriptionP
+      gameDescription
+      gameLogisticInfo
+      gameSummary
       gameLocationPlace
       gameLocationPlaceDetails
       gameLocationCity
@@ -811,8 +820,8 @@ export const createUserGamePlay = /* GraphQL */ `mutation CreateUserGamePlay(
       gameMap
       type
       createdAt
-      disabled
       updatedAt
+      disabled
       __typename
     }
     createdAt
@@ -839,16 +848,16 @@ export const updateUserGamePlay = /* GraphQL */ `mutation UpdateUserGamePlay(
       location
       email
       createdAt
-      disabled
       updatedAt
+      disabled
       __typename
     }
     game {
       id
       gameName
-      gameDescriptionH2
-      gameDescriptionH3
-      gameDescriptionP
+      gameDescription
+      gameLogisticInfo
+      gameSummary
       gameLocationPlace
       gameLocationPlaceDetails
       gameLocationCity
@@ -865,8 +874,8 @@ export const updateUserGamePlay = /* GraphQL */ `mutation UpdateUserGamePlay(
       gameMap
       type
       createdAt
-      disabled
       updatedAt
+      disabled
       __typename
     }
     createdAt
@@ -893,16 +902,16 @@ export const deleteUserGamePlay = /* GraphQL */ `mutation DeleteUserGamePlay(
       location
       email
       createdAt
-      disabled
       updatedAt
+      disabled
       __typename
     }
     game {
       id
       gameName
-      gameDescriptionH2
-      gameDescriptionH3
-      gameDescriptionP
+      gameDescription
+      gameLogisticInfo
+      gameSummary
       gameLocationPlace
       gameLocationPlaceDetails
       gameLocationCity
@@ -919,8 +928,8 @@ export const deleteUserGamePlay = /* GraphQL */ `mutation DeleteUserGamePlay(
       gameMap
       type
       createdAt
-      disabled
       updatedAt
+      disabled
       __typename
     }
     createdAt

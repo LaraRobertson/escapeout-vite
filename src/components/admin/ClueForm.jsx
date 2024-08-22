@@ -1,0 +1,236 @@
+import {Button, Flex, Input, SwitchField, TextAreaField, TextField, View} from "@aws-amplify/ui-react";
+import React, {useContext, useEffect, useState} from "react";
+import {getGame, getGameClue, getGamePlayZone, getGamePuzzle} from "../../graphql/queries";
+import * as mutations from "../../graphql/mutations";
+import {MyAuthContext} from "../../MyContext";
+import {generateClient} from "aws-amplify/api";
+import {createGamePuzzle} from "../../graphql/mutations";
+import {uploadData} from "aws-amplify/storage";
+
+export default function ClueForm() {
+    const client = generateClient();
+    const { setModalContent, modalContent } = useContext(MyAuthContext);
+    console.log("zoneID (puzzle form): " + modalContent.zoneID);
+    let action = modalContent.action;
+    let clueID = modalContent.id;
+    let zoneID = modalContent.gamePlayZoneID;
+    let gameID = modalContent.gameID;
+    let gameDesigner = modalContent.gameDesigner;
+
+    const initialStateCreateClue = {
+        gameID: gameID,
+        gamePlayZoneID: zoneID,
+        gameClueName: '',
+        gameClueImage: '',
+        gameClueText: '',
+        gameClueIcon: '',
+        order: 1,
+        disabled: false
+    };
+    const [formCreateClueState, setFormCreateClueState] = useState(initialStateCreateClue);
+    function setInputCreateClue(key, value) {
+        setFormCreateClueState({ ...formCreateClueState, [key]: value });
+    }
+    useEffect(() => {
+        if (action === "edit") {
+            populateClueForm();
+        }
+    },[]);
+    async function populateClueForm() {
+        try {
+            const apiData = await client.graphql({
+                query: getGameClue,
+                variables: {id: clueID}
+            });
+            const cluesFromAPI = apiData.data.getGameClue;
+            setFormCreateClueState(cluesFromAPI);
+        } catch (err) {
+            console.log('error fetching getGameClue', err);
+        }
+    }
+    async function addClue() {
+        try {
+            if (!formCreateClueState.gameID || !formCreateClueState.gameClueName) return;
+            const gameClue = { ...formCreateClueState };
+            console.log("addClue - gameClue: " + gameClue);
+            setFormCreateClueState(initialStateCreateClue);
+            await client.graphql({
+                query: mutations.createGameClue,
+                variables: {
+                    input: gameClue
+                }
+            });
+            setModalContent({
+                open: false,
+                content: "",
+                id: "",
+                action: "",
+                updatedDB:true
+            })
+        } catch (err) {
+            console.log('error creating clue:', err);
+        }
+    }
+    async function updateClue() {
+        try {
+            if (!formCreateClueState.gameID|| !formCreateClueState.gamePlayZoneID) return;
+            const gameClue = { ...formCreateClueState };
+            console.log("formCreateClueState - update gameClue")
+            for (const key in gameClue) {
+                console.log(`${key}: ${gameClue[key]}`);
+            }
+            setFormCreateClueState(initialStateCreateClue);
+            delete gameClue.updatedAt;
+            delete gameClue.__typename;
+            await client.graphql({
+                query: mutations.updateGameClue,
+                variables: {
+                    input: gameClue
+                }
+            });
+            setModalContent({
+                open: false,
+                content: "",
+                id: "",
+                action: "",
+                updatedDB:true
+            })
+        } catch (err) {
+            console.log('error updating GameClue:', err);
+        }
+
+    }
+    async function handleGameClueImageChange(e) {
+        console.log("uploaded file: " + e.target.files[0].name);
+        if (e?.target?.files) {
+            const file = e.target.files[0];
+            // Get the file size in bytes
+            var fileSize = file.size;
+
+            // Convert the file size to a human-readable format
+            var sizeInKB = Math.round(fileSize / 1024);
+            var sizeInMB = Math.round(fileSize / (1024 * 1024));
+
+            // Display the file size in the console
+            console.log('File Size: ' + fileSize + ' bytes');
+            console.log('File Size: ' + sizeInKB + ' KB');
+            console.log('File Size: ' + sizeInMB + ' MB');
+            if (sizeInKB > 100) {
+                alert("file is too big - it is " + sizeInKB + 'KB. Must be less than 100KB');
+
+            } else {
+                console.log("gameDesigner: " + gameDesigner);
+                let gameDesignerCleaned = removeFunction(gameDesigner);
+                console.log("gameDesigner (cleaned): " + gameDesignerCleaned);
+                try {
+                    const result = await uploadData({
+                        path: "public/" + gameDesignerCleaned + "/clues/" + file.name,
+                        // Alternatively, path: ({identityId}) => `protected/${identityId}/album/2024/1.jpg`
+                        data: file,
+                        options: {
+                            onProgress: ({transferredBytes, totalBytes}) => {
+                                if (totalBytes) {
+                                    console.log(
+                                        `Upload progress ${
+                                            Math.round((transferredBytes / totalBytes) * 100)
+                                        } %`
+                                    );
+                                }
+                            }
+                        }
+                    }).result;
+                    console.log('Path from Response: ', result.path);
+                } catch (error) {
+                    console.log('Error : ', error);
+                }
+                setInputCreateClue('gameClueImage', "https://escapeoutbucket2183723-dev.s3.amazonaws.com/public/" + gameDesignerCleaned + "/clues/" + file.name)
+            }
+        }
+
+    }
+    function removeFunction(inputString) {
+        return inputString.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+    }
+    return (
+        <View id="gameClueForm" className="show" as="form" margin=".5rem 0">
+            <View><strong>Game Clue Form</strong></View>
+            <View className={"small"}>Game ID: {formCreateClueState.gameID}</View>
+            <View className={"small"}>Zone ID: {formCreateClueState.gamePlayZoneID}</View>
+            <Flex direction="column" justifyContent="center" gap="1rem" className={"game-form"}>
+                <SwitchField
+                    label="disabled"
+                    isChecked={formCreateClueState.disabled}
+                    onChange={(e) => {
+                        console.log("e.target.checked: " + e.target.checked)
+                        setInputCreateClue('disabled', e.target.checked);
+                    }}
+                />
+                <Input
+                    name="order"
+                    type="number"
+                    size="small"
+                    width="50px"
+                    onChange={(event) => setInputCreateClue('order', event.target.value)}
+                    value={formCreateClueState.order}
+                />
+                <TextField
+                    onChange={(event) => setInputCreateClue('gameClueName', event.target.value)}
+                    name="gameClueName"
+                    placeholder="Game Clue Name"
+                    label="Game Clue Name"
+                    variation="quiet"
+                    value={formCreateClueState.gameClueName}
+                    required
+                />
+                <TextField
+                    onChange={(event) => setInputCreateClue('gameClueText', event.target.value)}
+                    name="gameClueText"
+                    placeholder="Game Clue Text"
+                    label="Game Clue Text"
+                    variation="quiet"
+                    value={formCreateClueState.gameClueText}
+                    required
+                />
+                <TextField
+                    onChange={(event) => setInputCreateClue('gameClueIcon', event.target.value)}
+                    name="gameClueIcon"
+                    placeholder="Game Clue Icon"
+                    label="Game Clue Icon"
+                    variation="quiet"
+                    value={formCreateClueState.gameClueIcon}
+                    required
+                />
+                <TextField
+                    onChange={(event) => setInputCreateClue('gameClueImage', event.target.value)}
+                    name="gameClueImage"
+                    placeholder="Game Clue Image"
+                    label="Game Clue Image"
+                    variation="quiet"
+                    value={formCreateClueState.gameClueImage}
+                    required
+                />
+                <label>Game Clue Image</label>
+                <Flex direction="row" justifyContent="flex-start">
+                    <img width="50px" src={formCreateClueState.gameClueImage} />
+                    {formCreateClueState.gameClueImage}</Flex>
+                <label htmlFor="file-upload" className="custom-file-upload">
+                    Upload File
+                </label>
+                <input id="file-upload" type="file" accept="image/*" onChange={handleGameClueImageChange} />
+            </Flex>
+            <Flex direction="row" justifyContent="center" marginTop="20px" className={"game-form"}>
+                <Flex direction="row" justifyContent="center" marginTop="20px" className={"game-form"}>
+                    {(action == "add") &&
+                    <Button id="createClue" className="show" onClick={addClue}
+                            variation="primary">
+                        Create Clue
+                    </Button>}
+                    {(action == "edit") &&
+                    <Button id="updateClue" className="show" onClick={updateClue}
+                            variation="primary">
+                        Update Clue
+                    </Button>}
+                </Flex>
+            </Flex>
+        </View>)
+}

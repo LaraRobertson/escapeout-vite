@@ -5,6 +5,10 @@ import {generateClient} from "aws-amplify/api";
 
 const client = generateClient();
 
+export function keyID(src,name) {
+    return (name + "_" + src)
+}
+
 export function setGameNotesFunction(gameNotes,setGameNotes) {
     console.log("gameNotes: " + gameNotes);
     setGameNotes(gameNotes);
@@ -35,7 +39,9 @@ export function setCommentsFunction(notes,setGameComments) {
 
 export async function goHomeQuit(navigate) {
     removeLocalStorage();
+    localStorage.removeItem("gameScoreID");
     /* remove gameStat and gameScore - why?? lnr 3/23/24 */
+    /* do not set numberOfTimes in local storage and not sure why doing this because it never fires */
     if (localStorage.getItem("numberOfTimes") == 0) {
         const gameStatDetails = {
             id: localStorage.getItem("gameStatsID"),
@@ -101,10 +107,11 @@ export function removeLocalStorage() {
     localStorage.removeItem("realTimeStart");
     localStorage.removeItem("realTimeEnd");
     localStorage.removeItem("gameNotes");
+    localStorage.removeItem("gameTimeHint");
     localStorage.removeItem("clues");
-    localStorage.removeItem("gameDescriptionP");
-    localStorage.removeItem("gameDescriptionH2");
-    localStorage.removeItem("gameDescriptionH3");
+    localStorage.removeItem("cluesArray");
     localStorage.removeItem("gamePuzzleSolved");
-    localStorage.removeItem("backpackObject");
+    localStorage.removeItem("gamePuzzleGuess");
+    localStorage.removeItem("gamePuzzleAnswer");
+    localStorage.removeItem("gamePuzzleAnswerCorrect");
 }

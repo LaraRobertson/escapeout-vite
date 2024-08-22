@@ -1,0 +1,252 @@
+/* overrides / variables */
+:root, [data-amplify-theme] {
+    --amplify-components-button-small-font-size: .75rem;
+    --amplify-components-fieldcontrol-font-size: .75rem;
+    --amplify-components-button-small-padding-block-start: .15rem;
+    --amplify-components-button-small-padding-block-end:  .15rem;
+    --amplify-components-button-small-padding-inline-start: .35rem;
+    --amplify-components-button-small-padding-inline-end: .35rem;
+    --amplify-components-fieldcontrol-padding-block-start: .15rem;
+    --amplify-components-fieldcontrol-padding-block-end:  .15rem;
+    --amplify-components-fieldcontrol-padding-inline-start: .35rem;
+    --amplify-components-fieldcontrol-padding-inline-end: .35rem;
+    --amplify-internal-table-th-font-size: 16px;
+    --amplify-components-table-data-font-size: 14px;
+    --amplify-components-table-header-padding: 5px;
+    --amplify-components-table-data-padding: 5px;
+}
+.admin {
+    display: flex;
+    flex: auto;
+    flex-direction: column;
+    min-height: 0;
+    background: #F0F2F5;
+}
+.main-container-admin {
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+}
+.admin-content {
+    background: #F0F2F5;
+    padding:1rem;
+    z-index: 1000;
+}
+.admin-content {
+    flex: 1 0 0;
+}
+.admin-content {
+    overflow-y: scroll;
+}
+
+.sidenav {
+    background-color: rgb(247, 248, 249);
+    border-right: 1px solid rgb(232, 233, 234);
+    position: sticky;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    z-index: 999;
+    flex: 0 0 200px;
+    max-width: 200px;
+    min-width: 200px;
+    width: 200px;
+    overflow-x: hidden;
+    transition: 0.5s;
+}
+
+.admin-nav-open {
+    background-color: rgb(247, 248, 249);
+    border-right: 1px solid rgb(232, 233, 234);
+    position: sticky;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    z-index: 999;
+    flex: 0 0 200px;
+    max-width: 200px;
+    min-width: 200px;
+    width: 200px;
+    overflow-x: hidden;
+    transition: 0.5s;
+}
+.admin-nav-closed {
+    background-color: rgb(247, 248, 249);
+    border-right: 1px solid rgb(232, 233, 234);
+    position: sticky;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    z-index: 999;
+    flex: 0 0 35px;
+    max-width: 35px;
+    min-width: 35px;
+    width: 35px;
+    transition: 0.5s;
+}
+.admin-nav-link {
+    top: -12px;
+    position: relative;
+    height: 35px;
+    padding-top: 5px;
+    padding-right: 20px;
+}
+.admin-nav-icon {
+    height: 35px;
+    width: 35px;
+}
+.admin-nav-link-container {
+    cursor:pointer;
+    font-weight:bold;
+    width:100%;
+}
+.admin-nav-icon-border {
+    border:1px solid gray;
+    background-color:lightgray;
+    height:45px
+}
+.admin-nav-header {
+    font-size:30px;
+    font-weight: bold;
+    text-align: center;
+    padding-top:15px;
+}
+.admin-nav-closed .admin-nav-header {
+    display:none;
+}
+.admin-content-header {
+    font-size:20px;
+    font-weight: bold;
+    padding: 20px;
+}
+.header {
+    height: 64px;
+    background:white;
+}
+.admin-content-header-nav {
+    display:none;
+}
+#adminNavBar {
+    display:block;
+}
+
+.sider-trigger-open {
+    width:200px;
+    position: absolute;
+    bottom: 0;
+    z-index: 1;
+    height: 48px;
+    color: #fff;
+    line-height: 48px;
+    text-align: center;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-right: 1px solid rgb(232, 233, 234);
+}
+.sider-trigger-closed{
+    width:35px;
+    position: absolute;
+    bottom: 0;
+    z-index: 1;
+    height: 48px;
+    color: #fff;
+    line-height: 48px;
+    text-align: center;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-right: 1px solid rgb(232, 233, 234);
+}
+.no-border {
+    border:none;
+}
+
+.city-dropdown {
+    display:inline-flex;
+    margin: 0;
+    padding:0;
+
+    line-height: .75rem;
+    font-size: .75rem;
+}
+.image-upload-button
+{
+    background:blue;
+}
+input[type=file] {
+    padding:5px 15px;
+    background-color:#fff;
+    border:0 none;
+    cursor:pointer;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+input[type="file"] {
+    display: none;
+}
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    max-width:150px;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+.game-detail-row {
+    /*border-bottom: 1px solid lightgray;*/
+    background-color:#F0F2F5;
+}
+.plus-minus {
+    border:none;
+    padding:0 9px;
+    margin:0;
+}
+.border {
+    border: 2px solid lightgray!important;
+}
+.border1 {
+    border: 1px solid lightgray!important;
+}
+@media all and (max-width: 786px) {
+    #adminNavBar {
+        display:none;
+    }
+    .header {
+        background:white;
+        text-align:left;
+        height:auto;
+        padding-left:10px;
+    }
+    .admin-content-header {
+        font-size:15px;
+        padding:20px 0 10px 10px;
+    }
+    .admin-content-header-nav {
+        display:flex;
+        height:45px;
+        padding:0 0 0 10px;
+    }
+    .admin-nav-link-container {
+        width:auto;
+        padding:0;
+    }
+    .admin-nav-icon-border {
+        height:35px;
+    }
+    .amplify-heading--5  {
+        font-size:18px;
+    }
+    .amplify-table__th{
+        font-size:12px;
+    }
+    .amplify-table__row, .amplify-table__td {
+        font-size:10px;
+    }
+    .game-form {
+     width: calc(100vw - 60px);
+    }
+    .modalContent.adminModal {
+        width: calc(100vw - 60px);
+    }
+}
