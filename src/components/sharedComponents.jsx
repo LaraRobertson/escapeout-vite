@@ -26,65 +26,6 @@ export const NotAvailable = (props) => {
     )
 }
 
-export const Modal2 = ({ show, close, title, setCluesFunction, modalClass, children }) => {
-    return (
-        <>
-             <div
-                        className={`modalContainer ${show ? "showModal" : ""} `}
-                        onClick={() => close()}
-                    >
-                        <div className={`modal dark ${modalClass}`} onClick={(e) => e.stopPropagation()}>
-                            <header className="modal_header">
-                                <h2 className="modal_header-clueDetails"> Clue </h2>
-                                <button className="close" onClick={() => close()}>
-                                    <img src={Close} alt="close" />
-                                </button>
-                            </header>
-                            <main className="modal_content"> {children} </main>
-                            <footer className="modal_footer">
-                                <button className="modal-close" onClick={() => close()}>
-                                    Close
-                                </button>
-                                <button className="submit" onClick={()=>setCluesFunction("<strong>" + title.gameClueName + " </strong> ==> " +
-                                    title.gameClueText + " <br />")}>add clue to notes!</button>
-
-                            </footer>
-                        </div>
-                    </div>
-        </>
-    );
-};
-export const Modal3 = ({ show, modalClass, setModalPuzzleContent, children }) => {
-    function close() {
-        setModalPuzzleContent({show:false,content:""});
-    }
-    return (
-        <>
-            <div
-                className={`modalContainer ${show ? "showModal" : ""} `}
-                onClick={() => close()}
-            >
-                <div className={`modal dark ${modalClass}`} onClick={(e) => e.stopPropagation()}>
-                    <header className="modal_header">
-                        <h2 className="modal_header-clueDetails">Puzzle</h2>
-                        <button className="close" onClick={() => close()}>
-                            <img src={Close} alt="close" />
-                        </button>
-                    </header>
-                    <main className="modal_content"> {children} </main>
-                    <footer className="modal_footer">
-                        <button className="modal-close" onClick={() => close()}>
-                            Close
-                        </button>
-
-
-                    </footer>
-                </div>
-            </div>
-        </>
-    );
-};
-
 
 export const TimeBlock = (props) => {
     console.log("props.realTimeStart: " + props.realTimeStart);

@@ -16,7 +16,7 @@ import {
     removeLocalStorage,
     keyID
 } from "../components/helper";
-import {NotesOpen, Modal2, Modal3} from "../components/sharedComponents";
+import {NotesOpen} from "../components/sharedComponents";
 import { ReactModalFromBottom,ReactModalWinner, ModalClue, ModalPuzzle } from "../components/Modals";
 import {gameScoreByGameStatsID, getGame} from "../graphql/queries";
 import * as mutations from "../graphql/mutations";
@@ -28,7 +28,6 @@ import Winner from "../components/game/Winner";
 import Help from "../components/game/Help";
 import zoneIcon from "../assets/noun-zone-3097481-FFFFFF.svg";
 import {MyGameContext} from "../MyContext";
-import {createGameStats} from "../graphql/mutations";
 
 export function GameV3() {
     const client = generateClient();

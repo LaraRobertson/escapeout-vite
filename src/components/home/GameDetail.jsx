@@ -1,6 +1,6 @@
 import {Accordion, Button, Heading, Image, View} from "@aws-amplify/ui-react";
 import React, {useState} from "react";
-import {ReactModalFromBottomGI} from "../Modals";
+import {ReactModalFromBottomMap} from "../Modals";
 import Waiver from "./Waiver";
 import Help from "../game/Help";
 import Hints from "../game/Hints";
@@ -9,10 +9,10 @@ import {Map} from "../game/Map";
 export default function GameDetail(props) {
     let gameDetails=props.gameDetails;
     let gameIntro = props.gameIntro;
-    const [modalContentGI, setModalContentGI] = useState({show:false, content:""});
+    const [modalContentMap, setModalContentMap] = useState({open:false, content:""});
     return (
         <View className={"game-details-content"}>
-            <Heading level={5}>Goals</Heading>
+            <Heading level={5}>Goal:</Heading>
             <View className={"end-paragraph"}>{gameDetails.gameGoals}</View>
             <Heading level={5}>Summary</Heading>
             <View className={"end-paragraph"}>{gameDetails.gameSummary}</View>
@@ -20,17 +20,17 @@ export default function GameDetail(props) {
             <View className={"end-paragraph"}>
                 <Image maxHeight="150px" src={gameDetails.gamePlayZoneImage1}/><br />
                 <Button className="quit-button dark"
-                        onClick={() => setModalContentGI({
+                        onClick={() => setModalContentMap({
                             open: true,
                             content: "Map"
                         })}>
                     Map</Button>
             </View>
-            <ReactModalFromBottomGI modalContentGI={modalContentGI} setModalContentGI={setModalContentGI}>
-                {(modalContentGI.content == "Map") && <Map gameDetails={gameDetails}/>}
-            </ReactModalFromBottomGI>
-            <Accordion.Container allowMultiple defaultValue={['logisitcs']}>
-                <Accordion.Item value="logisitcs">
+            <ReactModalFromBottomMap modalContentMap={modalContentMap} setModalContentMap={setModalContentMap}>
+                {(modalContentMap.content == "Map") && <Map gameDetails={gameDetails}/>}
+            </ReactModalFromBottomMap>
+            <Accordion.Container allowMultiple defaultValue={['logistics']}>
+                <Accordion.Item value="logistics">
                     <Accordion.Trigger>
                         <strong>Logistics</strong>
                         <Accordion.Icon/>

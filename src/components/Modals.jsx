@@ -10,6 +10,43 @@ import Close from "../assets/times-solid-svgrepo-com.svg";
 for ModalClue and ModalPuzzle:
 https://dev.to/codebucks/how-to-create-an-efficient-modal-component-in-react-using-hooks-and-portals-360p
 */
+export function ModalGameIntro({modalContentGI,setModalContentGI, handlePlayGameIntro, children}) {
+    const { isChecked } = useContext(MyGameContext);
+    function close() {
+        setModalContentGI({show:false,content:""});
+    }
+    return (
+        <>
+            {createPortal(
+                <div
+                    className={`modalContainer ${modalContentGI.show ? "showModal" : ""} `}
+                    onClick={() => close()}
+                >
+                    <div className="modal dark from-right" onClick={(e) => e.stopPropagation()}>
+                        <header className="modal_header">
+                            <h2 className="modal_header-clueDetails">Are You Ready?</h2>
+                            <button className="close" onClick={() => close()}>
+                                <img src={Close} alt="close" />
+                            </button>
+                        </header>
+                        <main className="modal_content">
+                            <View className={"dark"}>
+                                {children}
+                            </View>
+                        </main>
+                        <footer className="modal_footer">
+                            <Button margin="0 0 0 0" className="button"
+                                    onClick={() => {
+                                        handlePlayGameIntro();
+                                    }}>PLAY - Time Starts</Button>
+                        </footer>
+                    </div>
+                </div>,
+                document.getElementById("modal")
+            )}
+        </>
+    )
+}
 
 export function ModalWaiver({modalContentGI,setModalContentGI,children}) {
     const { isChecked } = useContext(MyGameContext);
@@ -31,7 +68,7 @@ export function ModalWaiver({modalContentGI,setModalContentGI,children}) {
                             </button>
                         </header>
                         <main className="modal_content">
-                            <View className={isChecked? "dark" : "light"}>
+                            <View className={"dark"}>
                                 {children}
                             </View>
                         </main>
@@ -105,7 +142,7 @@ export function ModalClue({modalClueContent,setModalClueContent,clueDetails,setC
                         </button>
                     </header>
                     <main className="modal_content">
-                        <View className={isChecked? "dark" : "light"}>
+                        <View className={"dark"}>
                             {children}
                         </View>
                     </main>
@@ -165,19 +202,19 @@ export function ReactModal({modalContent,children}) {
         </>
     )
 }
-export function ReactModalFromBottomGI({modalContentGI, setModalContentGI, children}) {
-    console.log("ReactModalFromBottomGI: " + modalContentGI.open);
+export function ReactModalFromBottomMap({modalContentMap, setModalContentMap, children}) {
+    console.log("ReactModalFromBottomGI: " + modalContentMap.open);
     let mapClass="";
-    if (modalContentGI.content === "Map") mapClass="-Map";
+    if (modalContentMap.content === "Map") mapClass="-Map";
     Modal.setAppElement("#modal");
     function closeModal() {
-        setModalContentGI({open:false,content:""});
+        setModalContentMap({open:false,content:""});
     }
     return (
         <>
             {createPortal(<Modal
                     closeTimeoutMS={200}
-                    isOpen={modalContentGI.open}
+                    isOpen={modalContentMap.open}
                     onRequestClose={closeModal}
                     className={"modalContent" + mapClass}
                     contentLabel={"General"}
@@ -189,7 +226,7 @@ export function ReactModalFromBottomGI({modalContentGI, setModalContentGI, child
                            restoring focus to the element that had focus prior to its display. */}
                 >
                     <View className={"modal-top-bar"}>
-                        <Heading level={4} marginBottom="10px" className={"modal-header"}>{modalContentGI.content}</Heading>
+                        <Heading level={4} marginBottom="10px" className={"modal-header"}>{modalContentMap.content}</Heading>
                         <Button className="close-button-modal light"
                                 onClick={closeModal}>X</Button>
                     </View>

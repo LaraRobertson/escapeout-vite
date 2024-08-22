@@ -216,7 +216,7 @@ export function CommentSection() {
         <Button className="button small" onClick={() => updateGameScoreCommentsFunction(true)}>Submit Comment</Button>
     </Flex>
             <View className="modal-from-top-close" paddingTop="10px" textAlign={"center"} width={"100%"}>
-                <Button className="close light" onClick={() => updateGameScoreCommentsFunction(true)}>close</Button>
+                <Button className="close dark" onClick={() => updateGameScoreCommentsFunction(true)}>close</Button>
             </View>
         </>
     )

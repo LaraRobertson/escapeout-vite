@@ -13,7 +13,7 @@ import {generateClient} from "aws-amplify/api";
 import GameDetail from "./GameDetail";
 import Waiver from "./Waiver";
 import DOMPurify from "dompurify";
-import {ModalWaiver, ReactModalFromBottomGI} from "../Modals";
+import {ModalGameIntro, ModalWaiver, ReactModalFromBottomMap} from "../Modals";
 import {Map} from "../game/Map";
 
 export default function GameIntro(props) {
@@ -23,6 +23,8 @@ export default function GameIntro(props) {
     const { authStatus, email, gamesIDUserPlayed, gamesIDUser, setModalContent, setGameDetails  } = useContext(MyAuthContext);
     /* Modal Content */
     const [modalContentGI, setModalContentGI] = useState({show:false, content:""});
+    const [modalContentWaiver, setModalContentWaiver] = useState({show:false, content:""});
+    const [modalContentMap, setModalContentMap] = useState({open:false, content:""});
     const [ isGameDetailOpen, setIsGameDetailOpen ] = useState(false);
     const [ isWaiverOpen, setIsWaiverOpen ] = useState(false);
     console.log('gameDetails.gameName: ' + gameDetails.gameName);
@@ -145,10 +147,34 @@ export default function GameIntro(props) {
 
     function handleViewWaiver() {
         console.log("handleViewWaiver");
-        setModalContentGI({
+        setModalContentWaiver({
             show: true,
             content: "Waiver"
         })
+    }
+    function handleViewGameIntro() {
+        console.log("handleViewGameIntro");
+        if ((teamName !== "" && gameDetails.waiverSigned === gameDetails.gameID)) {
+            setModalContentGI({
+                show: true,
+                content: "Game Intro"
+            })
+        } else {
+            console.log("show teamName error message: HandlePlayGameIntro");
+            /* don't need this? setTeamName("");*/
+            /* check if waiver signed - do in modal*/
+            if (gameDetails.waiverSigned === gameDetails.gameID) {
+                console.log("waiver signed (handlePlayGameIntro)");
+                setNumberOfPlayersError("Please provide a Team Name");
+            } else {
+                /* go to waiver */
+                /* open up waiver modal */
+                setModalContent({
+                    open: true,
+                    content: "Waiver"
+                })
+            }
+        }
     }
 
     function setTeamNameFunction(teamNameValue) {
@@ -175,7 +201,6 @@ export default function GameIntro(props) {
                     <View className={"end-paragraph"} textAlign={"center"}><Heading level={5} textAlign={"center"} marginBottom="10px" paddingTop="10px">{gameDetails.gameName}</Heading>
                     </View>
 
-                    <View dangerouslySetInnerHTML={ {__html: DangerouslySetInnerHTMLSanitized(gameDetails.gameIntro)}}  padding={"0 10px"}></View>
                     <Heading level={6} textAlign={"center"} marginBottom="10px" paddingTop="10px">Your score is based on your time to complete game.</Heading>
                     <View className={"end-paragraph"} >Using a hint adds 5 minutes.</View>
                     <View className={"small end-paragraph"}><strong>You Have Signed Waiver</strong><br />
@@ -185,15 +210,13 @@ export default function GameIntro(props) {
                     <View className={"end-paragraph"} textAlign={"center"}>
                         <Image alt={gameDetails.gameName} maxHeight="100px" src={gameDetails.gamePlayZoneImage1}/><br />
                         <Button className="quit-button dark"
-                                onClick={() => setModalContentGI({
+                                onClick={() => setModalContentMap({
                                     open: true,
                                     content: "Map"
                                 })}>
                             Map</Button>
                     </View>
-                    <ReactModalFromBottomGI modalContentGI={modalContentGI} setModalContentGI={setModalContentGI}>
-                        {(modalContentGI.content == "Map") && <Map gameDetails={gameDetails}/>}
-                    </ReactModalFromBottomGI>
+
                 </>
                 {/*<Accordion.Container allowMultiple>
                     <Accordion.Item value="game-details">
@@ -238,17 +261,27 @@ export default function GameIntro(props) {
                 <View className={"red-alert"} textAlign={"center"}><strong>{numberOfPlayersError}</strong></View>
 
                 <View className={"modal-bottom-bar"}>
-                        <Button margin="0 0 0 0" className="button"
-                                onClick={() => {
-                                    handlePlayGameIntro(gameDetails);
-                                }}>PLAY - time starts</Button>
+
+                    <Button margin="0 0 0 0" className="button" onClick={() => handleViewGameIntro()} variation={"link"}>Next</Button>
+
                 </View>
 
                 <ModalWaiver
-                    modalContentGI={modalContentGI}
-                    setModalContentGI={setModalContentGI}>
-                    {(modalContentGI.content == "Waiver") && <Waiver gameIntro={true}/>}
+                    modalContentGI={modalContentWaiver}
+                    setModalContentGI={setModalContentWaiver}>
+                    {(modalContentWaiver.content == "Waiver") && <Waiver gameIntro={true}/>}
                 </ModalWaiver>
+                <ModalGameIntro
+                    modalContentGI={modalContentGI}
+                    setModalContentGI={setModalContentGI}
+                    handlePlayGameIntro = {handlePlayGameIntro}>
+                    {(modalContentGI.content == "Game Intro") &&
+                    <View dangerouslySetInnerHTML={ {__html: DangerouslySetInnerHTMLSanitized(gameDetails.gameIntro)}}  padding={"0 10px"}></View>
+                    }
+                </ModalGameIntro>
+                <ReactModalFromBottomMap modalContentMap={modalContentMap} setModalContentMap={setModalContentMap}>
+                    {(modalContentMap.content == "Map") && <Map gameDetails={gameDetails}/>}
+                </ReactModalFromBottomMap>
 
          </>
         )

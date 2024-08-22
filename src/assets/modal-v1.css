@@ -47,7 +47,7 @@
     padding: 1rem 0; }
   .modalContainer .modal_footer {
     padding: 20px 0 0 0;
-    height: 70px; }
+    height: 80px; }
     .modalContainer .modal_footer button {
       border-radius: 8px;
       float: right;
@@ -207,7 +207,7 @@
   padding: 0 5px;
 }
 .modal-from-top-close {
-  height: 40px;
+  height: 80px;
   padding-top:10px;
 }
 
