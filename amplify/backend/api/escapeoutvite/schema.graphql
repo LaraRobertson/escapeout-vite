@@ -1,0 +1,155 @@
+# This "input" configures a global authorization rule to enable public access to
+# all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
+input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
+
+type User @model @auth(rules: [ { allow: public } ] ) {
+  id: ID!
+  userName: String
+  description: String
+  location: String
+  email: String! @index
+  game: [Game] @manyToMany(relationName: "UserGamePlay")
+  createdAt: String!
+  updatedAt: String!
+  disabled: Boolean
+}
+
+type Game @model @auth(rules: [ { allow: public } ] ) {
+  id: ID!
+  gameName: String! @index(name:"SortByType", sortKeyFields:["type"])
+  gameDescription: String
+  gameLogisticInfo: String
+  gameSummary: String
+  gameLocationPlace: String
+  gameLocationPlaceDetails: String
+  gameLocationCity: String!
+  gameDesigner: String
+  gameLevel: String
+  walkingDistance: String
+  playZones: String
+  gameImage: String
+  gameType: String
+  gameWinMessage: String
+  gameWinImage: String
+  gameGoals: String
+  gameIntro: String
+  gameMap: String
+  gamePlayZone: [GamePlayZone] @hasMany(indexName: "byGameID", fields: ["id"])
+  gameHint: [GameHint] @hasMany(indexName: "byGameID", fields: ["id"])
+  type: String! @index(name: "gamesByCity", queryField: "gamesByCity", sortKeyFields: ["gameLocationCity"])
+  gameClue: [GameClue] @hasMany(indexName: "byGameID", fields: ["id"])
+  gamePuzzle: [GamePuzzle] @hasMany(indexName: "byGameID", fields: ["id"])
+  createdAt: String!
+  updatedAt: String!
+  disabled: Boolean
+  user:[User] @manyToMany(relationName: "UserGamePlay")
+ }
+
+type GamePuzzle @model @auth(rules: [ { allow: public } ] ) {
+  id: ID!
+  gameID: ID! @index(name: "byGameID", queryField: "gamePuzzleByGameID", sortKeyFields: ["order"])
+  gamePlayZoneID: String
+  puzzleName: String
+  puzzlePosition: String
+  puzzleImage: String
+  puzzleImageOpen: String
+  puzzleImageSolved: String
+  textField: [TextField] @hasMany(indexName: "byPuzzleID", fields: ["id"])
+  puzzleClueRevealed: String
+  puzzleClueText: String
+  puzzleToolRevealed: String
+  puzzleToolNeeded: String
+  winGame: Boolean
+  winGameImage: String
+  winGameMessage: String
+  order: Int!
+  createdAt: String!
+  updatedAt: String!
+  disabled: Boolean
+ }
+
+type TextField @model @auth(rules: [ { allow: public } ] ) {
+  id: ID!
+  puzzleID: ID! @index(name: "byPuzzleID", queryField: "textFieldByPuzzleID", sortKeyFields: ["order"])
+  name: String
+  label: String
+  answer: String
+  order: Int!
+  createdAt: String!
+  updatedAt: String!
+  disabled: Boolean
+ }
+
+ type GameStats @model @auth(rules: [ { allow: public } ] ) {
+   id: ID!
+   gameID: String! @index
+   userEmail: String! @index
+   gameLocationCity: String
+   gameName: String! @index(name: "byGameName", queryField: "gameStatsByGameName", sortKeyFields: ["createdAt"])
+   gameStates: String
+   gameScore: [GameScore] @hasMany(indexName: "byGameStats", fields: ["id"])
+   type: String! @index(name: "sortedByGameName", queryField: "gameStatsSortedByGameName", sortKeyFields: ["gameName"])
+   createdAt: String!
+   updatedAt: String!
+   disabled: Boolean
+ }
+
+type GameScore @model @auth(rules: [ { allow: public } ] ) {
+  id: ID!
+  gameStatsID: ID! @index(name: "byGameStats", queryField: "gameScoreByGameStatsID", sortKeyFields: ["createdAt"])
+  gameID: ID! @index(name: "byGameID", queryField: "gameScoreByGameID", sortKeyFields: ["gameTotalTime"])
+  numberOfPlayers: String
+  teamName: String
+  teamLocation: String
+  gameComments: String
+  gameTotalTime: Float!
+  completed: Boolean
+  firstTime: Boolean
+  gameHintTime: Float!
+  createdAt: String!
+  updatedAt: String!
+  disabled: Boolean
+ }
+
+type GameHint @model @auth(rules: [ { allow: public } ] ) {
+  id: ID!
+  gameID: ID! @index(name: "byGameID", queryField: "gameHintByGameID", sortKeyFields: ["order"])
+  gamePlayZoneID: String
+  gameHintName: String
+  gameHintDescription: String
+  order: Int!
+  createdAt: String!
+  updatedAt: String!
+  disabled: Boolean
+ }
+
+type GameClue @model @auth(rules: [ { allow: public } ] ) {
+  id: ID!
+  gameID: ID! @index(name: "byGameID", queryField: "gameClueByGameID", sortKeyFields: ["order"])
+  gamePlayZoneID: String
+  gameClueName: String
+  gameClueIcon: String
+  gameClueImage: String
+  gameClueText: String
+  gameCluePosition: String
+  gameClueToolNeeded: String
+  order: Int!
+  createdAt: String!
+  updatedAt: String!
+  disabled: Boolean
+ }
+
+type GamePlayZone @model @auth(rules: [ { allow: public } ] ) {
+  id: ID!
+  gameID: ID! @index(name: "byGameID", queryField: "gamePlayZoneByGameID", sortKeyFields: ["order"])
+  gameZoneName: String
+  gameZoneImage: String
+  gameZoneDescription: String
+  longitude: String
+  latitude: String
+  gameZoneIcon: String
+  order: Int!
+  createdAt: String!
+  updatedAt: String!
+  disabled: Boolean
+ }
