@@ -12,11 +12,6 @@ export default async function copyGame(props) {
             variables: {id: props.gameID}
         });
         const gamesFromAPI = apiData.data.getGame;
-        /* const fs = require('fs');
-         fs.writeFileSync(
-             'data.json',
-             JSON.stringify(objJson)
-         )*/
         const file = new Blob([apiData], { type: 'application/json' });
         saveAs(file, fileName2);
         /*delete gamesFromAPI.updatedAt;
