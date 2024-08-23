@@ -7,16 +7,18 @@ import {generateClient} from "aws-amplify/api";
 import {createGamePuzzle} from "../../graphql/mutations";
 import {uploadData} from "aws-amplify/storage";
 
-export default function PuzzleForm() {
+export default function PuzzleForm(props) {
     const client = generateClient();
     const { setModalContent, modalContent } = useContext(MyAuthContext);
     console.log("zoneID (puzzle form): " + modalContent.zoneID);
+    let formCreateGameStateBackup = props.formCreateGameStateBackup;
+    let puzzle = modalContent.puzzle;
     let action = modalContent.action;
     let puzzleID = modalContent.id;
     let zoneID = modalContent.gamePlayZoneID;
     let gameID = modalContent.gameID;
     let gameDesigner = modalContent.gameDesigner;
-
+    const [puzzleBackup, setPuzzleBackup] = useState(false);
     const initialStateCreatePuzzle = {
         gameID: gameID,
         gamePlayZoneID: zoneID,
@@ -34,6 +36,15 @@ export default function PuzzleForm() {
     useEffect(() => {
         if (action === "edit") {
             populatePuzzleForm();
+        } else if (action === "addPuzzle") {
+            setFormCreatePuzzleState(puzzle);
+            console.log("zone: " + JSON.stringify(puzzle));
+            let key = "gameID";
+            let value = gameID;
+            let key2 = "gamePlayZoneID";
+            let value2 = zoneID;
+            setFormCreatePuzzleState({...puzzle,[key]:value,[key2]:value2});
+            console.log("puzzle2: " + JSON.stringify(formCreatePuzzleState));
         }
     },[]);
     async function populatePuzzleForm() {
@@ -46,6 +57,34 @@ export default function PuzzleForm() {
             setFormCreatePuzzleState(puzzlesFromAPI);
         } catch (err) {
             console.log('error fetching getGamePuzzle', err);
+        }
+    }
+    async function addPuzzleFromFile() {
+        try {
+            if (!formCreatePuzzleState.puzzleName ) return;
+            const puzzle = { ...formCreatePuzzleState };
+            console.log("addPuzzle: " + puzzle);
+            /* setGames([...games, game]);*/
+            setFormCreatePuzzleState(initialStateCreatePuzzle);
+            delete puzzle.id;
+            delete puzzle.textField;
+            delete puzzle.updatedAt;
+            delete puzzle.__typename;
+            await client.graphql({
+                query: mutations.createGamePuzzle,
+                variables: {
+                    input: puzzle
+                }
+            });
+            setModalContent({
+                open: false,
+                content: "",
+                id: "",
+                action: "",
+                updatedDB:true
+            })
+        } catch (err) {
+            console.log('error creating puzzles:', err);
         }
     }
     async function addPuzzle() {
@@ -75,19 +114,16 @@ export default function PuzzleForm() {
     async function updatePuzzle() {
         try {
             if (!formCreatePuzzleState.gameID|| !formCreatePuzzleState.gamePlayZoneID) return;
-            const gamePuzzle = { ...formCreatePuzzleState };
+            const puzzle = { ...formCreatePuzzleState };
             console.log("formCreatePuzzleState - update gamePuzzle")
-            for (const key in gamePuzzle) {
-                console.log(`${key}: ${gamePuzzle[key]}`);
-            }
             setFormCreatePuzzleState(initialStateCreatePuzzle);
-            delete gamePuzzle.textField;
-            delete gamePuzzle.updatedAt;
-            delete gamePuzzle.__typename;
+            delete puzzle.textField;
+            delete puzzle.updatedAt;
+            delete puzzle.__typename;
             await client.graphql({
                 query: mutations.updateGamePuzzle,
                 variables: {
-                    input: gamePuzzle
+                    input: puzzle
                 }
             });
             setModalContent({
@@ -224,6 +260,11 @@ export default function PuzzleForm() {
                     <Button id="createPuzzle" className="show" onClick={addPuzzle}
                             variation="primary">
                         Create Puzzle
+                    </Button>}
+                    {(action == "addPuzzle") &&
+                    <Button id="createPuzzle" className="show" onClick={addPuzzleFromFile}
+                            variation="primary">
+                        Create Puzzle From File
                     </Button>}
                     {(action == "edit") &&
                     <Button id="updatePuzzle" className="show" onClick={updatePuzzle}

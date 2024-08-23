@@ -186,6 +186,9 @@ input[type=file] {
 input[type="file"] {
     display: none;
 }
+.game-form input[type="file"] {
+    display: block;
+}
 .custom-file-upload {
     border: 1px solid #ccc;
     display: inline-block;

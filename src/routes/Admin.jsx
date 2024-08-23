@@ -41,7 +41,6 @@ import ClueForm from "../components/admin/ClueForm";
 import HintForm from "../components/admin/HintForm";
 import GameStats from "../components/admin/GameStats";
 
-
 export function Admin() {
     const initialStateDisplaySection = {
         gameSection: true,
@@ -52,10 +51,11 @@ export function Admin() {
     const [displaySection, setDisplaySection] = useState(initialStateDisplaySection);
     const [email, setEmail] = useState();
     const [modalContent, setModalContent] = useState({open:false, content:"",id:"",action:"", gameID:"",zoneID:"",updatedDB:false});
-
+    const [formCreateGameStateBackup, setFormCreateGameStateBackup] = useState({"gameName":"New"});
     const [userID, setUserID] = useState('');
     const [gameID, setGameID] = useState();
     const [gameName, setGameName] = useState();
+    const [backupIDArray, setBackupIDArray] = useState([]);
     const client = generateClient();
     const {  authStatus, user, route } = useAuthenticator((context) => [
         context.authStatus,
@@ -204,40 +204,9 @@ export function Admin() {
         )
     }
 
-    async function copyGame(props) {
-        console.log("gameName: " + props.gameName);
-        const fileName1 = props.gameName + ".txt";
-        const fileName2 = props.gameName + "-All.json";
-        try {
-            const apiData = await client.graphql({
-                query: getGame,
-                variables: {id: props.gameID}
-            });
-            const gamesFromAPI = apiData.data.getGame;
-           /* const fs = require('fs');
-            fs.writeFileSync(
-                'data.json',
-                JSON.stringify(objJson)
-            )*/
-            const file = new Blob([apiData], { type: 'application/json' });
-            saveAs(file, fileName2);
-            /*delete gamesFromAPI.updatedAt;
-            delete gamesFromAPI.user;
-            delete gamesFromAPI.__typename;
-            delete gamesFromAPI.gameHint;
-            delete gamesFromAPI.gamePlayZone;
-            delete gamesFromAPI.gameClue;
-            delete gamesFromAPI.gamePuzzle;*/
-            delete gamesFromAPI.id;
-            const file2 = new Blob([JSON.stringify(gamesFromAPI)], { type: 'text/plain;charset=utf-8' });
-            saveAs(file2, fileName1);
-        } catch (err) {
-            console.log('error fetching getGame', err);
-        }
 
-    }
     return (
-        <MyAuthContext.Provider value={{ authStatus, email, setModalContent, modalContent }}>
+        <MyAuthContext.Provider value={{ authStatus, email, setModalContent, modalContent, setBackupIDArray, backupIDArray }}>
                 {(authStatus != 'authenticated') | (authStatus === "configuring") ? (
                     <NotAvailable authStatus={authStatus} />
                 ) : (
@@ -248,12 +217,12 @@ export function Admin() {
                         <View className={"admin-content"}>
                             {(displaySection.homeSection) && <HomeSection />}
                             {(displaySection.userSection) && <UserSection />}
-                            {(displaySection.gameSection) && <GameSection />}
+                            {(displaySection.gameSection) && <GameSection  setFormCreateGameStateBackup={setFormCreateGameStateBackup} formCreateGameStateBackup={formCreateGameStateBackup}/>}
                             <ReactModalFromRight>
-                                {(modalContent.content == "Game Form") && <GameForm />}
+                                {(modalContent.content == "Game Form") && <GameForm  setFormCreateGameStateBackup={setFormCreateGameStateBackup} />}
                                 {(modalContent.content == "Stats") && <GameStats modalContent={modalContent} />}
-                                {(modalContent.content == "Zone Form") && <ZoneForm />}
-                                {(modalContent.content == "Puzzle Form") && <PuzzleForm />}
+                                {(modalContent.content == "Zone Form") && <ZoneForm formCreateGameStateBakcup={formCreateGameStateBackup}/>}
+                                {(modalContent.content == "Puzzle Form") && <PuzzleForm formCreateGameStateBackup={formCreateGameStateBackup}/>}
                                 {(modalContent.content == "TextField Form") && <TextFieldForm />}
                                 {(modalContent.content == "Clue Form") && <ClueForm />}
                                 {(modalContent.content == "Hint Form") && <HintForm />}

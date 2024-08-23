@@ -8,8 +8,9 @@ import {createGamePuzzle} from "../../graphql/mutations";
 
 export default function HintForm() {
     const client = generateClient();
-    const { setModalContent, modalContent } = useContext(MyAuthContext);
+    const { setModalContent, modalContent, setBackupIDArray, backupIDArray  } = useContext(MyAuthContext);
     console.log("zoneID (puzzle form): " + modalContent.zoneID);
+    let hint = modalContent.hint;
     let action = modalContent.action;
     let hintID = modalContent.id;
     let zoneID = modalContent.gamePlayZoneID;
@@ -30,6 +31,15 @@ export default function HintForm() {
     useEffect(() => {
         if (action === "edit") {
             populateHintForm();
+        } else if (action === "addHint") {
+            setFormCreateHintState(hint);
+            console.log("hint: " + JSON.stringify(hint));
+            let key = "gameID";
+            let value = gameID;
+            let key2 = "gamePlayZoneID";
+            let value2 = zoneID;
+            setFormCreateHintState({...hint,[key]:value,[key2]:value2});
+            console.log("hint2: " + JSON.stringify(formCreateHintState));
         }
     },[]);
     async function populateHintForm() {
@@ -41,7 +51,36 @@ export default function HintForm() {
             const hintsFromAPI = apiData.data.getGameHint;
             setFormCreateHintState(hintsFromAPI);
         } catch (err) {
-            console.log('error fetching getGameClue', err);
+            console.log('error fetching getGameHint', err);
+        }
+    }
+    async function addHintFromFile() {
+        try {
+            if (!formCreateHintState.gameID || !formCreateHintState.gameHintName) return;
+            const gameHint = { ...formCreateHintState };
+            console.log("addHint - gameHint: " + gameHint);
+            /* add backup id to an array and check if backup in an array... */
+            setBackupIDArray( [...backupIDArray,gameHint.id]);
+            // setGames([...games, game]);
+            setFormCreateHintState(initialStateCreateHint);
+            delete gameHint.updatedAt;
+            delete gameHint.__typename;
+            delete gameHint.id;
+            await client.graphql({
+                query: mutations.createGameHint,
+                variables: {
+                    input: gameHint
+                }
+            });
+            setModalContent({
+                open: false,
+                content: "",
+                id: "",
+                action: "",
+                updatedDB:true
+            })
+        } catch (err) {
+            console.log('error creating clue:', err);
         }
     }
     async function addHint() {
@@ -148,6 +187,11 @@ export default function HintForm() {
                     <Button id="createHint" className="show" onClick={addHint}
                             variation="primary">
                         Create Hint
+                    </Button>}
+                    {(action == "addHint") &&
+                    <Button id="createHint" className="show" onClick={addHintFromFile}
+                            variation="primary">
+                        Create Hint From File
                     </Button>}
                     {(action == "edit") &&
                     <Button id="updateHint" className="show" onClick={updateHint}

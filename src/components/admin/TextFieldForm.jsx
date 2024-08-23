@@ -11,8 +11,7 @@ export default function TextFieldForm() {
     console.log("zoneID (puzzle form): " + modalContent.zoneID);
     let action = modalContent.action;
     let puzzleID = modalContent.puzzleID;
-    let zoneID = modalContent.gamePlayZoneID;
-    let gameID = modalContent.gameID;
+    let textField = modalContent.textField;
     let textFieldID = modalContent.id;
 
     const initialStateCreateTextField = {
@@ -30,6 +29,13 @@ export default function TextFieldForm() {
     useEffect(() => {
         if (action === "edit") {
             populateTextFieldForm();
+        } else if (action === "addTextField") {
+            setFormCreateTextFieldState(textField);
+            console.log("zone: " + JSON.stringify(textField));
+            let key = "puzzleID";
+            let value = puzzleID;
+            setFormCreateTextFieldState({...textField,[key]:value});
+            console.log("zone2: " + JSON.stringify(formCreateTextFieldState));
         }
     },[]);
     async function populateTextFieldForm() {
@@ -42,6 +48,31 @@ export default function TextFieldForm() {
             setFormCreateTextFieldState(textFieldFromAPI);
         } catch (err) {
             console.log('error fetching getTextField', err);
+        }
+    }
+    async function addTextFieldFromFile() {
+        try {
+            if (!formCreateTextFieldState.puzzleID || !formCreateTextFieldState.name) return;
+            const gameTextField = { ...formCreateTextFieldState };
+            setFormCreateTextFieldState(initialStateCreateTextField);
+            delete gameTextField.updatedAt;
+            delete gameTextField.__typename;
+            delete gameTextField.id;
+            await client.graphql({
+                query: mutations.createTextField,
+                variables: {
+                    input: gameTextField
+                }
+            });
+            setModalContent({
+                open: false,
+                content: "",
+                id: "",
+                action: "",
+                updatedDB:true
+            })
+        } catch (err) {
+            console.log('error creating textfields:', err);
         }
     }
     async function addTextField() {
@@ -161,6 +192,11 @@ export default function TextFieldForm() {
                     <Button id="createPuzzle" className="show" onClick={addTextField}
                             variation="primary">
                         Create TextField
+                    </Button>}
+                    {(action == "addTextField") &&
+                    <Button id="createPuzzle" className="show" onClick={addTextFieldFromFile}
+                            variation="primary">
+                        Create TextField From File
                     </Button>}
                     {(action == "edit") &&
                     <Button id="updatePuzzle" className="show" onClick={updateTextField}

@@ -16,13 +16,15 @@
   transition: all .2s ease;
   visibility: hidden;
   width: 100vw;
-  height: 100vh; }
+  height: 95vh; }
   .modalContainer .modal {
     width: 90vw;
-    margin: 50px auto;
+    margin: 20px auto;
     border-radius: 20px;
     box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.2);
     height: auto;
+    max-height: 95vh;
+    overflow-y: scroll;
     padding: 10px;
     max-width: 450px; }
   .modalContainer .modal_header {
@@ -44,7 +46,13 @@
     text-align: center; }
   .modalContainer .modal_content {
     border-bottom: 1px solid #ddd;
-    padding: 1rem 0; }
+    padding: 1rem 0;
+  }
+@media all and (max-width: 400px) {
+  .modalContainer .modal_content {
+    font-size: .9rem;
+  }
+}
   .modalContainer .modal_footer {
     padding: 20px 0 0 0;
     height: 80px; }

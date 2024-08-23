@@ -9,8 +9,9 @@ import {uploadData} from "aws-amplify/storage";
 
 export default function ClueForm() {
     const client = generateClient();
-    const { setModalContent, modalContent } = useContext(MyAuthContext);
-    console.log("zoneID (puzzle form): " + modalContent.zoneID);
+    const { setModalContent, modalContent, setBackupIDArray, backupIDArray  } = useContext(MyAuthContext);
+    console.log("zoneID (clue form): " + modalContent.gamePlayZoneID);
+    let clue = modalContent.clue;
     let action = modalContent.action;
     let clueID = modalContent.id;
     let zoneID = modalContent.gamePlayZoneID;
@@ -34,6 +35,15 @@ export default function ClueForm() {
     useEffect(() => {
         if (action === "edit") {
             populateClueForm();
+        } else if (action === "addClue") {
+            setFormCreateClueState(clue);
+            console.log("clue: " + JSON.stringify(clue));
+            let key = "gameID";
+            let value = gameID;
+            let key2 = "gamePlayZoneID";
+            let value2 = zoneID;
+            setFormCreateClueState({...clue,[key]:value,[key2]:value2});
+            console.log("clue2: " + JSON.stringify(formCreateClueState));
         }
     },[]);
     async function populateClueForm() {
@@ -46,6 +56,34 @@ export default function ClueForm() {
             setFormCreateClueState(cluesFromAPI);
         } catch (err) {
             console.log('error fetching getGameClue', err);
+        }
+    }
+    async function addClueFromFile() {
+        try {
+            if (!formCreateClueState.gameID || !formCreateClueState.gameClueName) return;
+            const gameClue = { ...formCreateClueState };
+            console.log("addClue - gameClue: " + gameClue);
+            /* add backup clue id to an array and check if backup in an array... */
+            setBackupIDArray( [...backupIDArray,gameClue.id]);
+            setFormCreateClueState(initialStateCreateClue);
+            delete gameClue.updatedAt;
+            delete gameClue.id;
+            delete gameClue.__typename;
+            await client.graphql({
+                query: mutations.createGameClue,
+                variables: {
+                    input: gameClue
+                }
+            });
+            setModalContent({
+                open: false,
+                content: "",
+                id: "",
+                action: "",
+                updatedDB:true
+            })
+        } catch (err) {
+            console.log('error creating clue:', err);
         }
     }
     async function addClue() {
@@ -224,6 +262,11 @@ export default function ClueForm() {
                     <Button id="createClue" className="show" onClick={addClue}
                             variation="primary">
                         Create Clue
+                    </Button>}
+                    {(action == "addClue") &&
+                    <Button id="createClue" className="show" onClick={addClueFromFile}
+                            variation="primary">
+                        Create Clue from File
                     </Button>}
                     {(action == "edit") &&
                     <Button id="updateClue" className="show" onClick={updateClue}

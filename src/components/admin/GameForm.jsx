@@ -4,12 +4,16 @@ import {getGame} from "../../graphql/queries";
 import * as mutations from "../../graphql/mutations";
 import {MyAuthContext} from "../../MyContext";
 import {generateClient} from "aws-amplify/api";
+import {uploadData} from "aws-amplify/storage";
+import * as backups from "../../backups/backups";
 
-export default function GameForm() {
+export default function GameForm(props) {
     const client = generateClient();
     const { setModalContent, modalContent } = useContext(MyAuthContext);
     let action = modalContent.action;
     let gameID = modalContent.id;
+    let formCreateGameStateBackup = props.formCreateGameStateBackup;
+    let setFormCreateGameStateBackup = props.setFormCreateGameStateBackup;
     const initialStateCreateGame = {
         gameName: '',
         gameType: '',
@@ -70,6 +74,37 @@ export default function GameForm() {
             console.log('error creating games:', err);
         }
     }
+    async function addGameFromFile() {
+        try {
+            if (!formCreateGameState.gameName ) return;
+            const game = { ...formCreateGameState };
+            console.log("addGame: " + game);
+            /* setGames([...games, game]);*/
+            setFormCreateGameState(initialStateCreateGame);
+            delete game.updatedAt;
+            delete game.user;
+            delete game.__typename;
+            delete game.gameHint;
+            delete game.gamePlayZone;
+            delete game.gameClue;
+            delete game.gamePuzzle;
+            await client.graphql({
+                query: mutations.createGame,
+                variables: {
+                    input: game
+                }
+            });
+            setModalContent({
+                open: false,
+                content: "",
+                id: "",
+                action: "",
+                updatedDB:true
+            })
+        } catch (err) {
+            console.log('error creating games:', err);
+        }
+    }
     async function updateGame() {
         console.log("updateGame: " + formCreateGameState.gameName)
         try {
@@ -107,9 +142,41 @@ export default function GameForm() {
     function setInputCreateGame(key, value) {
         setFormCreateGameState({ ...formCreateGameState, [key]: value });
     }
+    const [files, setFiles] = useState("");
+    async function handleUploadBackup(e) {
+        console.log("uploaded file: " + e.target.files[0].name);
+        if (e?.target?.files) {
+            const file = e.target.files[0];
+            // Get the file size in bytes
+            var fileSize = file.size;
+
+            // Convert the file size to a human-readable format
+            var sizeInKB = Math.round(fileSize / 1024);
+            var sizeInMB = Math.round(fileSize / (1024 * 1024));
+
+            // Display the file size in the console
+            console.log('File Size: ' + fileSize + ' bytes');
+            console.log('File Size: ' + sizeInKB + ' KB');
+            console.log('File Size: ' + sizeInMB + ' MB');
+            const fileReader = new FileReader();
+            fileReader.readAsText(e.target.files[0], "UTF-8");
+            fileReader.onload = e => {
+                console.log("e.target.result", e.target.result);
+                setFormCreateGameStateBackup(JSON.parse(e.target.result));
+                setFormCreateGameState(JSON.parse(e.target.result));
+                localStorage.setItem("backup",e.target.result);
+            };
+        }
+    }
     return (
         <View id="gameForm" className="show" as="form" margin=".5rem 0">
             <Flex direction="column" justifyContent="center" gap="1rem" className={"game-form"}>
+                {(action == "addFromFile") && <View>
+                <label htmlFor="file-upload-txt" className="custom-file-upload">
+                    Upload File
+                </label>
+                <input id="file-upload-txt" type="file" accept=".txt" onChange={handleUploadBackup} />
+                </View>}
                 <SwitchField
                     label={formCreateGameState.disabled? "disabled true/live false" : "disabled false/live true"}
                     isChecked={formCreateGameState.disabled}
@@ -261,6 +328,11 @@ export default function GameForm() {
                 <Button id="createGame" className="show" onClick={addGame}
                         variation="primary">
                     Create Game
+                </Button>}
+                {(action == "addFromFile") &&
+                <Button id="createGame" className="show" onClick={addGameFromFile}
+                        variation="primary">
+                    Add Game From File
                 </Button>}
                 {(action == "edit") &&
                 <Button id="updateGame" className="show" onClick={updateGame}

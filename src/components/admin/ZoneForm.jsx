@@ -25,6 +25,7 @@ export default function ZoneForm() {
     let action = modalContent.action;
     let zoneID = modalContent.id;
     let gameID = modalContent.gameID;
+    let zone = modalContent.zone;
     let gameDesigner = modalContent.gameDesigner;
 
     const initialStateCreateZone = {
@@ -44,6 +45,13 @@ export default function ZoneForm() {
     useEffect(() => {
         if (action === "edit") {
             populateZoneForm();
+        } else if (action === "addZone") {
+            setFormCreateZoneState(zone);
+            console.log("zone: " + JSON.stringify(zone));
+            let key = "gameID";
+            let value = gameID;
+            setFormCreateZoneState({...zone,[key]:value});
+            console.log("zone2: " + JSON.stringify(formCreateZoneState));
         }
     },[]);
     async function populateZoneForm() {
@@ -53,9 +61,36 @@ export default function ZoneForm() {
                 variables: {id: zoneID}
             });
             const zonesFromAPI = apiData.data.getGamePlayZone;
-            setFormCreateZoneState(zonesFromAPI)
+            setFormCreateZoneState(zonesFromAPI);
         } catch (err) {
             console.log('error fetching getGamePlayZone', err);
+        }
+    }
+    async function addZoneFromFile() {
+        try {
+            if (!formCreateZoneState.gameZoneName ) return;
+            const zone = { ...formCreateZoneState };
+            console.log("addZone: " + zone);
+            /* setGames([...games, game]);*/
+            setFormCreateZoneState(initialStateCreateZone);
+            delete zone.updatedAt;
+            delete zone.__typename;
+            delete zone.id;
+            await client.graphql({
+                query: mutations.createGamePlayZone,
+                variables: {
+                    input: zone
+                }
+            });
+            setModalContent({
+                open: false,
+                content: "",
+                id: "",
+                action: "",
+                updatedDB:true
+            })
+        } catch (err) {
+            console.log('error creating gamePlayZone:', err);
         }
     }
     async function addZone() {
@@ -245,6 +280,11 @@ export default function ZoneForm() {
                 <Button id="createZone" onClick={addZone}
                         variation="primary">
                     Create Zone
+                </Button>}
+                {(action == "addZone") &&
+                <Button id="createZone" onClick={addZoneFromFile}
+                        variation="primary">
+                    Create Zone from File
                 </Button>}
                 {(action == "edit") &&
                 <Button id="updateZone" onClick={updateZone}

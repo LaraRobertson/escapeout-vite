@@ -12,24 +12,11 @@
       "AmplifyAppId": "di3048wmen2tr"
     },
     "categories": {
-      "api": {
-        "escapeoutvite": {}
-      },
       "auth": {
         "escapeoutvited09d67d2": {}
-      },
-      "geo": {
-        "GameMap": {}
       },
       "storage": {
         "EscapeOutBucket": {}
-      }
-    }
-  },
-  "play": {
-    "categories": {
-      "auth": {
-        "escapeoutvited09d67d2": {}
       }
     }
   }
