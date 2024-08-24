@@ -335,7 +335,7 @@ button:focus-visible,
   height: 300px;
   color: black;
 }
-.clue-sidebar {
+.clue-sidebar, .puzzle-sidebar {
   height: 300px;
   display: flex;
   flex-direction: column-reverse;
@@ -348,7 +348,7 @@ button:focus-visible,
 }
 .puzzle-sidebar {
   position: absolute;
-  width: 30%;
+  width: 80px;
   right: 0;
   top: 0;
   background: linear-gradient(270deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
@@ -356,6 +356,11 @@ button:focus-visible,
   z-index: 2;
   height: 300px;
   color: black;
+}
+.puzzle-sidebar>* {
+  flex: 0 1 80px;
+  height:80px;
+  width:80px;
 }
 .dark-light-toggle {
   height:20px;
@@ -561,9 +566,7 @@ fieldset.comments legend {
   right: 10px;
 }
 .puzzle-item {
-  position:absolute;
-  bottom:0;
-  right:0;
+
 }
 
 .notes {

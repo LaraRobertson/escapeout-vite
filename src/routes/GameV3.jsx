@@ -434,6 +434,7 @@ export function GameV3() {
                             <Image src={clueDetails.gameClueImage}/>}</>
                         </ModalClue>
                         <View className={"puzzle-sidebar"}>
+
                             {gamePuzzleArray.map((puzzle, index) => (
                                 <GamePuzzle puzzle={puzzle}
                                             zoneVisible={zoneVisible}
@@ -446,10 +447,12 @@ export function GameV3() {
                                             setClueDetails={setClueDetails}
                                             key={puzzle.id}/>
                             ))}
+
                         </View>
                         <ModalPuzzle
                             modalPuzzleContent={modalPuzzleContent}
-                            setModalPuzzleContent={setModalPuzzleContent}>
+                            setModalPuzzleContent={setModalPuzzleContent}
+                            puzzleDetails={puzzleDetails}>
                             <ModalPuzzleContent
                                 puzzleDetails={puzzleDetails}
                                 gamePuzzleGuess={gamePuzzleGuess}

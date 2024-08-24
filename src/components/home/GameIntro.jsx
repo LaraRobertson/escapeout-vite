@@ -117,7 +117,7 @@ export default function GameIntro(props) {
                 /* new ui */
                 if (gameDetails.gameName === "xxx") {
                     console.log("go to game: " + gameDetails.gameName + "page: /game");
-                    navigate("/gameV");
+                    navigate("/game");
                 } else {
                     console.log(`go to game: ${gameDetails.gameName}page: /gameV3`);
                     navigate("/gameV3");

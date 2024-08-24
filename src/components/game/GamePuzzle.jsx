@@ -301,6 +301,7 @@ export function GamePuzzle(props) {
             puzzleID: puzzleDetails.puzzleID,
             winGame: puzzleDetails.winGame,
             textFields: puzzleDetails.textField,
+            puzzleName: puzzleDetails.puzzleName
         };
         setPuzzleDetails(statePuzzleDetails);
         setModalPuzzleContent({
@@ -316,46 +317,63 @@ export function GamePuzzle(props) {
             content: "clue"
         })
     }
-    return (
-        <View key = {puzzle.id} >
-            <View className={(zoneVisible==puzzle.gamePlayZoneID)? "puzzle-holder-bottom" : "hide"}>
-                <View>
-                    {/* if clue or wingame */}
-                    {gamePuzzleSolved[puzzle.id] ? (
-                        <View onClick={() => handlePuzzleClue({
-                            gameClueName: puzzle.puzzleName,
-                            gameClueText: puzzle.puzzleClueText,
-                            gameClueImage: ""
-                        })}
-                              className={gamePuzzleSolved[puzzle.id]? "show puzzle-item" : "hide"}
-                       >
-                            {(puzzle.winGame)? (
-                                <>
-                                <View  style={{position:"absolute", top:"10px", right:"30px", color:"red", fontSize:"1em"}}>Final Puzzle!</View>
-                                <IconPuzzleDisplayOpen index={index} /></>
-                            ):(
-                                <><View  style={{position:"absolute", top:"10px", right:"30px", color:"yellow", fontSize:"3.5em"}}>?</View>
-                                <IconPuzzleDisplayOpen index={index} /></>
-                            )}
-                        </View>
+    if (zoneVisible==puzzle.gamePlayZoneID) {
+        return (
+            <View key={puzzle.id}>
+                <View className={(zoneVisible == puzzle.gamePlayZoneID) ? "show" : "hide"}>
+                    <View>
+                        {/* if clue or wingame */}
+                        {gamePuzzleSolved[puzzle.id] ? (
+                            <View onClick={() => handlePuzzleClue({
+                                gameClueName: puzzle.puzzleName,
+                                gameClueText: puzzle.puzzleClueText,
+                                gameClueImage: ""
+                            })}
+                                  className={gamePuzzleSolved[puzzle.id] ? "show puzzle-item" : "hide"}
+                            >
+                                {(puzzle.winGame) ? (
+                                    <View style={{position: "relative"}}>
+                                        <View style={{
+                                            position: "absolute",
+                                            top: "10px",
+                                            right: "30px",
+                                            color: "red",
+                                            fontSize: "1em"
+                                        }}>Final Puzzle!</View>
+                                        <IconPuzzleDisplayOpen index={index}/></View>
+                                ) : (
 
-                    ):(
-                        <View onClick={() => handlePuzzleDetail({
-                            textField: puzzle.textField.items,
-                            puzzleID: puzzle.id
-                        })}
-                              className={gamePuzzleSolved[puzzle.id]? "hide" : "show puzzle-item"} >
-                            <IconPuzzleDisplay index={index}/>
-                        </View>
-                    )}
-                </View>
+                                    <View style={{position: "relative"}}>
+                                        <View style={{
+                                            position: "absolute",
+                                            top: "00px",
+                                            right: "30px",
+                                            color: "yellow",
+                                            fontSize: "3.5em"
+                                        }}>?</View>
+                                        <IconPuzzleDisplayOpen index={index}/></View>
+                                )}
+                            </View>
 
-                {/*<Image src={puzzle.puzzleObjectClue} onClick={()=>setGamePuzzleVisibleFunction(["puzzle" + (puzzle.id)], true)} className={gamePuzzleSolved[puzzle.id]? "show clue-on-puzzle" : "hide"} />
+                        ) : (
+                            <View onClick={() => handlePuzzleDetail({
+                                textField: puzzle.textField.items,
+                                puzzleID: puzzle.id,
+                                puzzleName: puzzle.puzzleName
+                            })}
+                                  className={gamePuzzleSolved[puzzle.id] ? "hide" : "show puzzle-item"}>
+                                <IconPuzzleDisplay index={index}/>
+                            </View>
+                        )}
+                    </View>
+
+                    {/*<Image src={puzzle.puzzleObjectClue} onClick={()=>setGamePuzzleVisibleFunction(["puzzle" + (puzzle.id)], true)} className={gamePuzzleSolved[puzzle.id]? "show clue-on-puzzle" : "hide"} />
                                         <Image className={(gamePuzzleSolved[puzzle.id] && puzzle.puzzleObjectClue != "")? "puzzle-object-tool show" : "hide"} src={puzzle.puzzleClueRevealed} onClick={()=>setGamePuzzleClueVisibleFunction(["puzzle" + (puzzle.id)], true)} />*/}
-                {/*(puzzle.winGame)? (
+                    {/*(puzzle.winGame)? (
                         <Image className={(gamePuzzleSolved[puzzle.id])? "puzzle-object-tool show" : "hide"} src={puzzle.puzzleToolRevealed} />
                     ):null*/}
+                </View>
             </View>
-        </View>
-    )
+        )
+    }
 }

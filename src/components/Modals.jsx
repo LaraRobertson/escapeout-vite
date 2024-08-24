@@ -85,7 +85,7 @@ export function ModalWaiver({modalContentGI,setModalContentGI,children}) {
     )
 }
 
-export function ModalPuzzle({modalPuzzleContent,setModalPuzzleContent,children}) {
+export function ModalPuzzle({modalPuzzleContent,setModalPuzzleContent,puzzleDetails,children}) {
         const { isChecked } = useContext(MyGameContext);
         function close() {
             setModalPuzzleContent({show:false,content:""});
@@ -99,7 +99,7 @@ export function ModalPuzzle({modalPuzzleContent,setModalPuzzleContent,children})
                     >
                         <div className="modal dark from-right" onClick={(e) => e.stopPropagation()}>
                             <header className="modal_header">
-                                <h2 className="modal_header-clueDetails">Puzzle</h2>
+                                <h2 className="modal_header-clueDetails">{puzzleDetails.puzzleName}</h2>
                                 <button className="close" onClick={() => close()}>
                                     <img src={Close} alt="close" />
                                 </button>
