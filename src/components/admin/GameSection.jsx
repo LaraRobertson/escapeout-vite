@@ -1,7 +1,6 @@
 import {Button, Flex, Heading, View, Image,
     Table, TableCell, TableBody, TableHead, TableRow, SelectField} from "@aws-amplify/ui-react";
 import React, {useContext, useEffect, useState} from "react";
-import * as backups from "../../backups/backups";
 import * as mutations from "../../graphql/mutations";
 import {
     listGames
@@ -298,7 +297,7 @@ export default function GameSection(props) {
     }
     function handlePuzzleForm(props) {
         console.log("zoneID (handle puzzle form): " + props.zoneID);
-        if (props.zoneID == "select zone" || props.zoneID == "" || props.zoneID == undefined) {
+        if (props.action === "addPuzzle" && (props.zoneID == "select zone" || props.zoneID == "" || props.zoneID == undefined)) {
             alert("Please select zone")
         } else {
             setModalContent({
@@ -315,7 +314,7 @@ export default function GameSection(props) {
         }
     }
     function handleTextFieldForm(props) {
-        if (props.puzzleID == "select puzzle" || props.puzzleID == "" || props.puzzleID == undefined) {
+        if (props.action === "addTextField" && (props.puzzleID == "select puzzle" || props.puzzleID == "" || props.puzzleID == undefined)) {
             alert("Please select puzzle")
         } else {
             setModalContent({
@@ -331,7 +330,7 @@ export default function GameSection(props) {
     }
     function handleClueForm(props) {
         console.log("zoneID (handle clue form): " + props.zoneID);
-        if (props.zoneID == "select zone" || props.zoneID == "" || props.zoneID == undefined) {
+        if (props.action === "addClue" && (props.zoneID == "select zone" || props.zoneID == "" || props.zoneID == undefined)) {
             alert("Please select zone")
         } else {
             console.log("zoneID (handle clue form): " + props.zoneID);
@@ -350,7 +349,7 @@ export default function GameSection(props) {
     }
     function handleHintForm(props) {
         console.log("zoneID (handle hint form): " + props.zoneID);
-        if (props.zoneID == "select zone" || props.zoneID == "" || props.zoneID == undefined) {
+        if (props.action === "addHint" && (props.zoneID == "select zone" || props.zoneID == "" || props.zoneID == undefined)) {
             alert("Please select zone")
         } else {
             setModalContent({
@@ -1102,37 +1101,7 @@ export default function GameSection(props) {
             <View className={backupsVisible ? "overlay" : "hide"}>
                 <View className="popup">
                     backups:
-                    <View>
-                        <Button
-                            onClick={() => divShowHide("backup10")}>{showHideLabel.backup1} testGame1</Button>
-                        <View id="backup10" className="hide">
-                            <pre>{JSON.stringify(backups.testGame1, null, 2)}</pre>
-                        </View>
-                    </View>
-                    <View>
-                        <Button
-                            onClick={() => divShowHide("backup1")}>{showHideLabel.backup1} Disc
-                            Golf Hunt And Think</Button>
-                        <View id="backup1" className="hide">
-                            <pre>{JSON.stringify(backups.discGolfHunt2, null, 2)}</pre>
-                        </View>
-                    </View>
-                    <View>
-                        <Button
-                            onClick={() => divShowHide("backup2")}>{showHideLabel.backup2} Disc
-                            Golf Hunt</Button>
-                        <View id="backup2" className="hide">
-                            <pre>{JSON.stringify(backups.discGolfHunt1, null, 2)}</pre>
-                        </View>
-                    </View>
-                    <View>
-                        <Button
-                            onClick={() => divShowHide("backup3")}>{showHideLabel.backup3} Secret
-                            Papers</Button>
-                        <View id="backup3" className="hide">
-                            <pre>{JSON.stringify(backups.secretPapers, null, 2)}</pre>
-                        </View>
-                    </View>
+
                     <Flex direction="row" justifyContent="center" marginTop="20px">
                         <Button className="show" onClick={() => setBackupsVisible(false)}
                                 variation="primary">

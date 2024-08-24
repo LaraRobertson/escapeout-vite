@@ -16,15 +16,10 @@ import { format } from 'date-fns'
 import * as mutations from '../graphql/mutations';
 
 import {Navigate, useLocation, useNavigate} from 'react-router-dom';
-
 import {generateClient} from "aws-amplify/api";
 import { fetchUserAttributes } from 'aws-amplify/auth';
 import {deleteGameHint} from "../graphql/mutations";
 import { saveAs } from 'file-saver';
-/* backups - manual */
-import * as backups from "../backups/backups";
-import data from '../backups/data.json';
-import data2 from '../backups/SecretPapersAll.json';
 import {HeadingComponent, AdminNav} from "../components/admin/pageElements";
 import "../assets/admin.css";
 import {NotAvailable} from "../components/sharedComponents";

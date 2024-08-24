@@ -213,10 +213,10 @@ export function CommentSection() {
         />
     </Flex>
     <Flex marginTop={"20px"} justifyContent="center" gap="1rem">
-        <Button className="button small" onClick={() => updateGameScoreCommentsFunction(true)}>Submit Comment</Button>
+        <Button className="button" onClick={() => updateGameScoreCommentsFunction(true)}>Submit Comment</Button>
     </Flex>
             <View className="modal-from-top-close" paddingTop="10px" textAlign={"center"} width={"100%"}>
-                <Button className="close dark" onClick={() => updateGameScoreCommentsFunction(true)}>close</Button>
+                <Button className="close small dark" onClick={() => updateGameScoreCommentsFunction(true)}>close</Button>
             </View>
         </>
     )

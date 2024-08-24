@@ -4,8 +4,6 @@ import {getGame} from "../../graphql/queries";
 import * as mutations from "../../graphql/mutations";
 import {MyAuthContext} from "../../MyContext";
 import {generateClient} from "aws-amplify/api";
-import {uploadData} from "aws-amplify/storage";
-import * as backups from "../../backups/backups";
 
 export default function GameForm(props) {
     const client = generateClient();
