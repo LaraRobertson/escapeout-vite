@@ -25,6 +25,10 @@ dist-ssr
 
 #added 4/4/24team-provider-info.json
 
+# amplify
+.amplify
+amplify_outputs*
+amplifyconfiguration*
 #amplify-do-not-edit-begin
 amplify/\#current-cloud-backend
 amplify/.config/local-*
