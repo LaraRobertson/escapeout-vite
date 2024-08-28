@@ -236,7 +236,7 @@ button:focus-visible,
   padding: 10px 0;
 }
 .end-paragraph {
-  padding: 4px 0;
+  padding:0;
   /*border-bottom: 1px solid rgb(220, 222, 224);*/
   text-align:center;
 }
@@ -735,7 +735,7 @@ isChecked is for light/dark
 }
 .small {
   font-size:.7em !important;
-  line-height:.7em;
+  line-height:1em;
 }
 
 .light {
