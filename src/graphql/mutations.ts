@@ -91,6 +91,8 @@ export const createGame = /* GraphQL */ `mutation CreateGame(
     gameLogisticInfo
     gameSummary
     gameLocationPlace
+    latitude
+    longitude
     gameLocationPlaceDetails
     gameLocationCity
     gameDesigner
@@ -121,6 +123,7 @@ export const createGame = /* GraphQL */ `mutation CreateGame(
       nextToken
       __typename
     }
+    order
     createdAt
     updatedAt
     disabled
@@ -146,6 +149,8 @@ export const updateGame = /* GraphQL */ `mutation UpdateGame(
     gameLogisticInfo
     gameSummary
     gameLocationPlace
+    latitude
+    longitude
     gameLocationPlaceDetails
     gameLocationCity
     gameDesigner
@@ -176,6 +181,7 @@ export const updateGame = /* GraphQL */ `mutation UpdateGame(
       nextToken
       __typename
     }
+    order
     createdAt
     updatedAt
     disabled
@@ -201,6 +207,8 @@ export const deleteGame = /* GraphQL */ `mutation DeleteGame(
     gameLogisticInfo
     gameSummary
     gameLocationPlace
+    latitude
+    longitude
     gameLocationPlaceDetails
     gameLocationCity
     gameDesigner
@@ -231,6 +239,7 @@ export const deleteGame = /* GraphQL */ `mutation DeleteGame(
       nextToken
       __typename
     }
+    order
     createdAt
     updatedAt
     disabled
@@ -805,6 +814,8 @@ export const createUserGamePlay = /* GraphQL */ `mutation CreateUserGamePlay(
       gameLogisticInfo
       gameSummary
       gameLocationPlace
+      latitude
+      longitude
       gameLocationPlaceDetails
       gameLocationCity
       gameDesigner
@@ -819,6 +830,7 @@ export const createUserGamePlay = /* GraphQL */ `mutation CreateUserGamePlay(
       gameIntro
       gameMap
       type
+      order
       createdAt
       updatedAt
       disabled
@@ -859,6 +871,8 @@ export const updateUserGamePlay = /* GraphQL */ `mutation UpdateUserGamePlay(
       gameLogisticInfo
       gameSummary
       gameLocationPlace
+      latitude
+      longitude
       gameLocationPlaceDetails
       gameLocationCity
       gameDesigner
@@ -873,6 +887,7 @@ export const updateUserGamePlay = /* GraphQL */ `mutation UpdateUserGamePlay(
       gameIntro
       gameMap
       type
+      order
       createdAt
       updatedAt
       disabled
@@ -913,6 +928,8 @@ export const deleteUserGamePlay = /* GraphQL */ `mutation DeleteUserGamePlay(
       gameLogisticInfo
       gameSummary
       gameLocationPlace
+      latitude
+      longitude
       gameLocationPlaceDetails
       gameLocationCity
       gameDesigner
@@ -927,6 +944,7 @@ export const deleteUserGamePlay = /* GraphQL */ `mutation DeleteUserGamePlay(
       gameIntro
       gameMap
       type
+      order
       createdAt
       updatedAt
       disabled

@@ -17,26 +17,30 @@ export default function MyStats(props) {
     const [myStatsEmail, setMyStatsEmail] = useState(email);
 
     async function myStatsFunction() {
-       // const email = localStorage.getItem("email");
-        console.log("gameStats: " + props.gameID);
+        const email = localStorage.getItem("email");
+        //console.log("gameStats: " + props.gameID);
         let filter = {
-            gameID: {
-                eq: props.gameID
+            userEmail: {
+                eq: email
             }
         };
-        const apiData = await client.graphql({
-            query: gameStatsSortedByGameName,
-            variables: {filter: filter, sortDirection: "DESC", type: "gameStats"}
-        });
-        const myStatsFromAPI = apiData.data.gameStatsSortedByGameName.items;
-        console.log("myStatsFromAPI: " + myStatsFromAPI);
-        for (const key in myStatsFromAPI) {
-            console.log(`${key}: ${ myStatsFromAPI[key]}`);
-             for (const key1 in myStatsFromAPI[key]) {
-                 console.log(`${key1}: ${myStatsFromAPI[key][key1]}`);
-             }
+        try {
+            const apiData = await client.graphql({
+                query: gameStatsSortedByGameName,
+                variables: {filter: filter, sortDirection: "DESC", type: "gameStats"}
+            });
+            const myStatsFromAPI = apiData.data.gameStatsSortedByGameName.items;
+            console.log("myStatsFromAPI: " + myStatsFromAPI);
+            for (const key in myStatsFromAPI) {
+                console.log(`${key}: ${ myStatsFromAPI[key]}`);
+                 for (const key1 in myStatsFromAPI[key]) {
+                     console.log(`${key1}: ${myStatsFromAPI[key][key1]}`);
+                 }
+            }
+            setMyStats(myStatsFromAPI);
+        } catch (err) {
+            console.log("error fetching gameStatsSortedByGameName", err);
         }
-        setMyStats(myStatsFromAPI);
     }
 
     useEffect(() => {

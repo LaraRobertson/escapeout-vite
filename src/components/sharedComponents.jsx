@@ -11,6 +11,7 @@ import Close from "../assets/times-solid-svgrepo-com.svg";
 import zoneIcon from "../assets/noun-zone-3097481-FFFFFF.svg";
 
 export const NotAvailable = (props) => {
+    const navigate = useNavigate();
     return (
         <View>
             {props.authStatus === "configuring" ?
@@ -70,8 +71,8 @@ export const NotesOpen = (props) => {
         <View className="notes notes-change show-gradual">
             <View className={props.isChecked? "dark" : "light"} height={"auto"}>
                 <View className="notes notes-change show-gradual">
-                    <View className={"small show"} height={"auto"}>
-                        <strong>Clues</strong>
+                    <View height={"auto"}>
+                        <strong>Clues/Notes</strong>
                         {cluesArray.map((clue,index) => (
                             <Flex key={clue.gameClueID+"-"+index} className={"clue-row"}>
                                 <View className={"italics"}>{clue.gameClueName}:</View>
@@ -89,16 +90,16 @@ export const NotesOpen = (props) => {
                     <View textAlign="center"><Button className={props.isChecked? "link-button small dark" : "link-button small light"}
                                                      onClick={() => props.setCluesArray([])}>clear all clues</Button></View>
                 </View>
-                <TextAreaField
-                    label="Notes"
-                    labelHidden
-                    value={props.gameNotes}
-                    rows="5"
-                    onChange={(e) =>  props.setGameNotesFunction(e.currentTarget.value,props.setGameNotes)}
-                    descriptiveText="Take some Notes - close when done, they will still be here"
-                />
-
-
+                <View className={"textArea-Container"}>
+                    <TextAreaField
+                        label="Notes"
+                        labelHidden
+                        value={props.gameNotes}
+                        rows="5"
+                        onChange={(e) =>  props.setGameNotesFunction(e.currentTarget.value,props.setGameNotes)}
+                        descriptiveText="Take some Notes - close when done, they will still be here"
+                    />
+                </View>
             </View>
         </View>
     )

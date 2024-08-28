@@ -79,6 +79,8 @@ export const onCreateGame = /* GraphQL */ `subscription OnCreateGame($filter: Mo
     gameLogisticInfo
     gameSummary
     gameLocationPlace
+    latitude
+    longitude
     gameLocationPlaceDetails
     gameLocationCity
     gameDesigner
@@ -109,6 +111,7 @@ export const onCreateGame = /* GraphQL */ `subscription OnCreateGame($filter: Mo
       nextToken
       __typename
     }
+    order
     createdAt
     updatedAt
     disabled
@@ -131,6 +134,8 @@ export const onUpdateGame = /* GraphQL */ `subscription OnUpdateGame($filter: Mo
     gameLogisticInfo
     gameSummary
     gameLocationPlace
+    latitude
+    longitude
     gameLocationPlaceDetails
     gameLocationCity
     gameDesigner
@@ -161,6 +166,7 @@ export const onUpdateGame = /* GraphQL */ `subscription OnUpdateGame($filter: Mo
       nextToken
       __typename
     }
+    order
     createdAt
     updatedAt
     disabled
@@ -183,6 +189,8 @@ export const onDeleteGame = /* GraphQL */ `subscription OnDeleteGame($filter: Mo
     gameLogisticInfo
     gameSummary
     gameLocationPlace
+    latitude
+    longitude
     gameLocationPlaceDetails
     gameLocationCity
     gameDesigner
@@ -213,6 +221,7 @@ export const onDeleteGame = /* GraphQL */ `subscription OnDeleteGame($filter: Mo
       nextToken
       __typename
     }
+    order
     createdAt
     updatedAt
     disabled
@@ -735,6 +744,8 @@ export const onCreateUserGamePlay = /* GraphQL */ `subscription OnCreateUserGame
       gameLogisticInfo
       gameSummary
       gameLocationPlace
+      latitude
+      longitude
       gameLocationPlaceDetails
       gameLocationCity
       gameDesigner
@@ -749,6 +760,7 @@ export const onCreateUserGamePlay = /* GraphQL */ `subscription OnCreateUserGame
       gameIntro
       gameMap
       type
+      order
       createdAt
       updatedAt
       disabled
@@ -788,6 +800,8 @@ export const onUpdateUserGamePlay = /* GraphQL */ `subscription OnUpdateUserGame
       gameLogisticInfo
       gameSummary
       gameLocationPlace
+      latitude
+      longitude
       gameLocationPlaceDetails
       gameLocationCity
       gameDesigner
@@ -802,6 +816,7 @@ export const onUpdateUserGamePlay = /* GraphQL */ `subscription OnUpdateUserGame
       gameIntro
       gameMap
       type
+      order
       createdAt
       updatedAt
       disabled
@@ -841,6 +856,8 @@ export const onDeleteUserGamePlay = /* GraphQL */ `subscription OnDeleteUserGame
       gameLogisticInfo
       gameSummary
       gameLocationPlace
+      latitude
+      longitude
       gameLocationPlaceDetails
       gameLocationCity
       gameDesigner
@@ -855,6 +872,7 @@ export const onDeleteUserGamePlay = /* GraphQL */ `subscription OnDeleteUserGame
       gameIntro
       gameMap
       type
+      order
       createdAt
       updatedAt
       disabled

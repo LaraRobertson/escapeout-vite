@@ -48,6 +48,44 @@ export function ModalGameIntro({modalContentGI,setModalContentGI, handlePlayGame
     )
 }
 
+export function ModalExampleGame({modalContentEG,setModalContentEG, children}) {
+    const { isChecked } = useContext(MyGameContext);
+    function close() {
+        setModalContentEG({show:false,content:""});
+    }
+    return (
+        <>
+            {createPortal(
+                <div
+                    className={`modalContainer ${modalContentEG.show ? "showModal" : ""} `}
+                    onClick={() => close()}
+                >
+                    <div className="modal dark from-right" onClick={(e) => e.stopPropagation()}>
+                        <header className="modal_header">
+                            <h3 className="modal_header-clueDetails">Example Game Layout</h3>
+                            <button className="close" onClick={() => close()}>
+                                <img src={Close} alt="close" />
+                            </button>
+                        </header>
+                        <main className="modal_content">
+                            <View className={"dark"}>
+                                {children}
+                            </View>
+                        </main>
+                        <footer className="modal_footer">
+                            <Button margin="0 0 0 0" className="button"
+                                    onClick={() => {
+                                        close();
+                                    }}>Next</Button>
+                        </footer>
+                    </div>
+                </div>,
+                document.getElementById("modal")
+            )}
+        </>
+    )
+}
+
 export function ModalWaiver({modalContentGI,setModalContentGI,children}) {
     const { isChecked } = useContext(MyGameContext);
     function close() {
@@ -165,7 +203,7 @@ export function ModalClue({modalClueContent,setModalClueContent,clueDetails,setC
 export function ReactModal({modalContent,children}) {
     console.log("ReactModal");
     let mapClass="";
-    if (modalContent.content === "Map") mapClass="-Map";
+    if (modalContent.content === "Map" || modalContent.content === "MapPlaceView") mapClass="-Map";
     const { setModalContent } = useContext(MyAuthContext);
     Modal.setAppElement("#modal");
     function closeModal() {

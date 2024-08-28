@@ -459,6 +459,8 @@ export function GameV3() {
                                 gamePuzzleSolved={gamePuzzleSolved}
                                 gamePuzzleAnswer={gamePuzzleAnswer}
                                 gamePuzzleAnswerCorrect={gamePuzzleAnswerCorrect}
+                                setClueDetails={setClueDetails}
+                                setModalClueContent={setModalClueContent}
                                 updateGameScoreFunction={updateGameScoreFunction}
                             />
                         </ModalPuzzle>

@@ -1,5 +1,5 @@
 import {Button, Heading, View, TextField, Image, Accordion} from "@aws-amplify/ui-react";
-import React, {useContext, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
 import {
     RegExpMatcher,
@@ -12,8 +12,9 @@ import {MyAuthContext} from "../../MyContext";
 import {generateClient} from "aws-amplify/api";
 import GameDetail from "./GameDetail";
 import Waiver from "./Waiver";
+import ExampleGame from "./ExampleGame";
 import DOMPurify from "dompurify";
-import {ModalGameIntro, ModalWaiver, ReactModalFromBottomMap} from "../Modals";
+import {ModalGameIntro, ModalWaiver, ReactModalFromBottomMap, ModalExampleGame} from "../Modals";
 import {Map} from "../game/Map";
 
 export default function GameIntro(props) {
@@ -24,6 +25,7 @@ export default function GameIntro(props) {
     /* Modal Content */
     const [modalContentGI, setModalContentGI] = useState({show:false, content:""});
     const [modalContentWaiver, setModalContentWaiver] = useState({show:false, content:""});
+    const [modalContentEG, setModalContentEG] = useState({show:false, content:""});
     const [modalContentMap, setModalContentMap] = useState({open:false, content:""});
     const [ isGameDetailOpen, setIsGameDetailOpen ] = useState(false);
     const [ isWaiverOpen, setIsWaiverOpen ] = useState(false);
@@ -145,11 +147,22 @@ export default function GameIntro(props) {
         }
     }
 
+    useEffect(() => {
+        console.log("***useEffect***:  fetchGames():");
+        handleExampleGame();
+    }, []);
     function handleViewWaiver() {
         console.log("handleViewWaiver");
         setModalContentWaiver({
             show: true,
             content: "Waiver"
+        })
+    }
+    function handleExampleGame() {
+        console.log("handleExampleGame");
+        setModalContentEG({
+            show: true,
+            content: "Example Game"
         })
     }
     function handleViewGameIntro() {
@@ -201,10 +214,13 @@ export default function GameIntro(props) {
                     <View className={"end-paragraph"} textAlign={"center"}><Heading level={5} textAlign={"center"} marginBottom="10px" paddingTop="10px">{gameDetails.gameName}</Heading>
                     </View>
 
-                    <Heading level={6} textAlign={"center"} marginBottom="10px" paddingTop="10px">Your score is based on your time to complete game.</Heading>
-                    <View className={"end-paragraph"} >Using a hint adds 5 minutes.</View>
-                    <View className={"small end-paragraph"}><strong>You Have Signed Waiver</strong><br />
+                    <Heading level={6} textAlign={"center"} marginBottom="0">Your score is based on your time to complete game. You must complete ALL the puzzles in ALL the zones to win.</Heading>
+                    <View className={"small end-paragraph"} >Using a hint adds 5 minutes.</View>
+                    <View className={"small end-paragraph"}><strong>You Have Signed Waiver</strong>:
                         <Button onClick={() => handleViewWaiver()} variation={"link"}>view waiver</Button>
+                    </View>
+                    <View className={"small end-paragraph"}><strong>Example Game</strong>:
+                        <Button onClick={() => handleExampleGame()} variation={"link"}>view Example</Button>
                     </View>
                     <Heading level={6} textAlign={"center"} marginTop={"10px"} marginBottom={"5px"}>Start Playing when you are here:</Heading>
                     <View className={"end-paragraph"} textAlign={"center"}>
@@ -214,7 +230,7 @@ export default function GameIntro(props) {
                                     open: true,
                                     content: "Map"
                                 })}>
-                            Map</Button>
+                            Map of First Zone</Button>
                     </View>
 
                 </>
@@ -251,7 +267,7 @@ export default function GameIntro(props) {
                     margin="10px auto"
                     maxWidth="300px"
                     placeholder=""
-                    label="Your Team Name for this game?"
+                    label="Your Public Team Name for this game?"
                     required
                     value={teamName}
                     onChange={(e) => setTeamNameFunction(e.target.value)}
@@ -271,6 +287,11 @@ export default function GameIntro(props) {
                     setModalContentGI={setModalContentWaiver}>
                     {(modalContentWaiver.content == "Waiver") && <Waiver gameIntro={true}/>}
                 </ModalWaiver>
+                <ModalExampleGame
+                    modalContentEG={modalContentEG}
+                    setModalContentEG={setModalContentEG}>
+                    {(modalContentEG.content == "Example Game") && <ExampleGame gameIntro={true}/>}
+                </ModalExampleGame>
                 <ModalGameIntro
                     modalContentGI={modalContentGI}
                     setModalContentGI={setModalContentGI}

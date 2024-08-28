@@ -89,11 +89,11 @@ export default function GameCard({game, gameDetails, hidePlayedGames}) {
     }
 
     const divStyle = (src) => ({
-        background:  "url(" + src + ") 0 0 / contain no-repeat"
+        backgroundImage:  "url(" + src + ")"
     });
     return (
         <Card style={divStyle(gamePlayZone.items[0].gameZoneImage)}
-              className={(gamesIDUserPlayed.includes(id) && hidePlayedGames) ? "hide" : "game-card test"}
+              className={(gamesIDUserPlayed.includes(id) && hidePlayedGames) ? "hide" : "game-card"}
               variation="elevated">
             <View className="inner-game-card">
                 <View className="game-card-full">
@@ -126,7 +126,7 @@ export default function GameCard({game, gameDetails, hidePlayedGames}) {
                     {authStatus !== "authenticated" ? (
                         <View textAlign="center">
                             <Button
-                                className="button button-center button-small show button-light-dark"
+                                className="button button-center show button-light-dark"
                                 onClick={() => navigate("/login")}>
                                 Sign in to Play Game
                             </Button>
@@ -136,7 +136,7 @@ export default function GameCard({game, gameDetails, hidePlayedGames}) {
                             {(gamesIDUser.includes(id) || gameType === "free" || gameType === "free-test") &&
                             <View textAlign="center">
                                     <Button
-                                        className="button button-small button-center button-light-dark show"
+                                        className="button button-center button-light-dark show"
                                         onClick={() => handlePlayGameList({
                                             email: email,
                                             gameName: gameName,
@@ -157,26 +157,25 @@ export default function GameCard({game, gameDetails, hidePlayedGames}) {
                                 </View>
                             }
                         </View>)}
-                    <View ariaLabel={"leaderboard-" + id}>
-                        <Button className="button button-small button-center show"
-                                     onClick={() => handleLeaderboard({
-                                         gameName: gameName,
-                                         gameID: id
-                                     })}>
-                            Leaderboard
-                        </Button>
-                    </View>
+
                 </Flex>
                 <View className="game-card-full light-dark">
                     <View id={id}>
-                        <Heading level={"6"} className="heading light-dark"
-                                 margin="0">{gameDescription}</Heading>
-                        <Heading level={"7"} className="heading light-dark"
-                                 marginBottom=".4em">{gameGoals}</Heading>
+                        <Heading level={"7"} className="light-dark"
+                                 marginTop="0em"><strong>Goal: </strong> {gameGoals}</Heading>
+                        <Heading level={"7"} className="light-dark"
+                                 marginBottom=".4em"><strong>Description</strong> {gameDescription}</Heading>
                         <Flex justifyContent="center">
-                            <View textAlign="center">
+                            <Button className="button button-small show"
+                                    onClick={() => handleLeaderboard({
+                                        gameName: gameName,
+                                        gameID: id
+                                    })}>
+                                Leaderboard
+                            </Button>
+
                             <Button
-                                className="button button-small button-center button-light-dark show"
+                                className="button button-small show"
                                 onClick={() => handleGameDetail({
                                     gameName: gameName,
                                     gameID: id,
@@ -191,7 +190,6 @@ export default function GameCard({game, gameDetails, hidePlayedGames}) {
                                 })}>
                                 Game Details
                             </Button>
-                            </View>
                         </Flex>
                         <span className="italics">Tap on Leaderboard to see average time.</span>
                     </View>

@@ -49,13 +49,15 @@ export const listUsers = /* GraphQL */ `query ListUsers(
 }
 ` as GeneratedQuery<APITypes.ListUsersQueryVariables, APITypes.ListUsersQuery>;
 export const getGame = /* GraphQL */ `query GetGame($id: ID!) {
-getGame(id: $id) {
+  getGame(id: $id) {
     id
     gameName
-  gameDescription
-  gameLogisticInfo
-  gameSummary
+    gameDescription
+    gameLogisticInfo
+    gameSummary
     gameLocationPlace
+    latitude
+    longitude
     gameLocationPlaceDetails
     gameLocationCity
     gameDesigner
@@ -69,93 +71,31 @@ getGame(id: $id) {
     gameGoals
     gameIntro
     gameMap
-      gamePlayZone {
-          items {
-            id
-            disabled
-            gameID
-            gameZoneName
-            gameZoneIcon
-            gameZoneImage
-            gameZoneDescription
-            latitude
-            longitude
-            order
-            createdAt
-            updatedAt
-          }
-          nextToken
-        }
-       gameHint {
-          items {
-            id
-            disabled
-            gameID
-            gamePlayZoneID
-            gameHintName
-            gameHintDescription
-            order
-            createdAt
-            updatedAt
-          }
-          nextToken
-        }
-      type
-       gameClue {
-          items {
-            id
-            gameClueName
-            gamePlayZoneID
-            gameClueIcon
-            gameClueImage
-            gameClueToolNeeded
-            gameClueText
-            gameCluePosition
-            order
-            createdAt
-            updatedAt
-          }
-          nextToken
-        }
-      gamePuzzle {
-        items {
-            id
-            gamePlayZoneID
-            puzzleName
-            puzzlePosition
-            puzzleImage
-            puzzleImageOpen
-            puzzleImageSolved
-            textField {
-              items {
-                id
-                name
-                label
-                answer
-                order
-                }
-              nextToken
-            }
-            puzzleClueRevealed
-            puzzleClueText
-            puzzleToolRevealed
-            puzzleToolNeeded
-            winGame
-            winGameImage
-            winGameMessage
-            order
-            createdAt
-            updatedAt
-          }
-          nextToken
-        }
+    gamePlayZone {
+      nextToken
+      __typename
+    }
+    gameHint {
+      nextToken
+      __typename
+    }
+    type
+    gameClue {
+      nextToken
+      __typename
+    }
+    gamePuzzle {
+      nextToken
+      __typename
+    }
+    order
     createdAt
+    updatedAt
     disabled
     user {
       nextToken
       __typename
     }
-    updatedAt
     __typename
   }
 }
@@ -188,86 +128,6 @@ export const listGames = /* GraphQL */ `query ListGames(
       gameGoals
       gameIntro
       gameMap
-        gamePlayZone {
-          items {
-            id
-            disabled
-            gameID
-            gameZoneName
-            gameZoneImage
-            gameZoneIcon
-            latitude
-            longitude
-            order
-            createdAt
-            updatedAt
-          }
-          nextToken
-        }
-       gameHint {
-          items {
-            id
-            disabled
-            gameID
-            gamePlayZoneID
-            gameHintName
-            gameHintDescription
-            order
-            createdAt
-            updatedAt
-          }
-          nextToken
-        }
-      type
-       gameClue {
-          items {
-            id
-            gameClueName
-            gamePlayZoneID
-            gameClueIcon
-            gameClueImage
-            gameClueToolNeeded
-            gameClueText
-            gameCluePosition
-            order
-            createdAt
-            disabled
-            updatedAt
-          }
-          nextToken
-        }
-      gamePuzzle {
-        items {
-            id
-            gamePlayZoneID
-            puzzleName
-            puzzlePosition
-            puzzleImage
-            puzzleImageOpen
-            puzzleImageSolved
-            textField {
-              items {
-                id
-                name
-                label
-                answer
-                order
-                }
-              nextToken
-            }
-            puzzleClueRevealed
-            puzzleClueText
-            puzzleToolRevealed
-            puzzleToolNeeded
-            winGame
-            winGameImage
-            winGameMessage
-            order
-            createdAt
-            updatedAt
-          }
-          nextToken
-        }
       type
       order
       createdAt
@@ -428,16 +288,6 @@ export const listGameStats = /* GraphQL */ `query ListGameStats(
       gameLocationCity
       gameName
       gameStates
-       gameScore {
-          items {
-            id
-            firstTime
-            completed
-            createdAt
-            updatedAt
-          }
-          nextToken
-        }
       type
       createdAt
       updatedAt
@@ -675,6 +525,8 @@ export const getUserGamePlay = /* GraphQL */ `query GetUserGamePlay($id: ID!) {
       gameLogisticInfo
       gameSummary
       gameLocationPlace
+      latitude
+      longitude
       gameLocationPlaceDetails
       gameLocationCity
       gameDesigner
@@ -689,6 +541,7 @@ export const getUserGamePlay = /* GraphQL */ `query GetUserGamePlay($id: ID!) {
       gameIntro
       gameMap
       type
+      order
       createdAt
       updatedAt
       disabled
@@ -781,6 +634,8 @@ export const gamesByGameNameAndType = /* GraphQL */ `query GamesByGameNameAndTyp
       gameLogisticInfo
       gameSummary
       gameLocationPlace
+      latitude
+      longitude
       gameLocationPlaceDetails
       gameLocationCity
       gameDesigner
@@ -795,6 +650,7 @@ export const gamesByGameNameAndType = /* GraphQL */ `query GamesByGameNameAndTyp
       gameIntro
       gameMap
       type
+      order
       createdAt
       updatedAt
       disabled
@@ -808,7 +664,6 @@ export const gamesByGameNameAndType = /* GraphQL */ `query GamesByGameNameAndTyp
   APITypes.GamesByGameNameAndTypeQueryVariables,
   APITypes.GamesByGameNameAndTypeQuery
 >;
-
 export const gameByGameOrder = /* GraphQL */ `query GameByGameOrder(
   $gameLocationCity: String!
   $order: ModelIntKeyConditionInput
@@ -847,23 +702,6 @@ export const gameByGameOrder = /* GraphQL */ `query GameByGameOrder(
       gameGoals
       gameIntro
       gameMap
-      gamePlayZone {
-          items {
-            id
-            disabled
-            gameID
-            gameZoneName
-            gameZoneIcon
-            gameZoneImage
-            gameZoneDescription
-            latitude
-            longitude
-            order
-            createdAt
-            updatedAt
-          }
-          nextToken
-        }
       type
       order
       createdAt
@@ -876,10 +714,9 @@ export const gameByGameOrder = /* GraphQL */ `query GameByGameOrder(
   }
 }
 ` as GeneratedQuery<
-    APITypes.GameByGameOrderQueryVariables,
-    APITypes.GameByGameOrderQuery
-    >;
-
+  APITypes.GameByGameOrderQueryVariables,
+  APITypes.GameByGameOrderQuery
+>;
 export const gamesByCity = /* GraphQL */ `query GamesByCity(
   $type: String!
   $gameLocationCity: ModelStringKeyConditionInput
@@ -903,6 +740,8 @@ export const gamesByCity = /* GraphQL */ `query GamesByCity(
       gameLogisticInfo
       gameSummary
       gameLocationPlace
+      latitude
+      longitude
       gameLocationPlaceDetails
       gameLocationCity
       gameDesigner
@@ -916,24 +755,8 @@ export const gamesByCity = /* GraphQL */ `query GamesByCity(
       gameGoals
       gameIntro
       gameMap
-            gamePlayZone {
-          items {
-            id
-            disabled
-            gameID
-            gameZoneName
-            gameZoneIcon
-            gameZoneImage
-            gameZoneDescription
-            latitude
-            longitude
-            order
-            createdAt
-            updatedAt
-          }
-          nextToken
-        }
       type
+      order
       createdAt
       updatedAt
       disabled
@@ -1159,28 +982,10 @@ export const gameStatsSortedByGameName = /* GraphQL */ `query GameStatsSortedByG
       gameLocationCity
       gameName
       gameStates
-       gameScore {
-          items {
-            id
-            gameStatsID
-            gameID
-            numberOfPlayers
-            teamName
-            teamLocation
-            gameComments
-            gameTotalTime
-            completed
-            firstTime
-            gameHintTime
-            createdAt
-            updatedAt
-          }
-          nextToken
-        }
       type
       createdAt
-      disabled
       updatedAt
+      disabled
       __typename
     }
     nextToken

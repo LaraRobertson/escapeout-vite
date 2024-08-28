@@ -16,7 +16,7 @@ export default function GameDetail(props) {
             <View className={"end-paragraph"}>{gameDetails.gameGoals}</View>
             <Heading level={5}>Summary</Heading>
             <View className={"end-paragraph"}>{gameDetails.gameSummary}</View>
-            <Heading level={5}>Game Starts Here at Zone 1:</Heading>
+            <Heading level={5}>This Game Starts Here at Zone 1:</Heading>
             <View className={"end-paragraph"}>
                 <Image maxHeight="150px" src={gameDetails.gamePlayZoneImage1}/><br />
                 <Button className="quit-button dark"
@@ -24,12 +24,25 @@ export default function GameDetail(props) {
                             open: true,
                             content: "Map"
                         })}>
-                    Map</Button>
+                    Map of First Zone</Button>
             </View>
             <ReactModalFromBottomMap modalContentMap={modalContentMap} setModalContentMap={setModalContentMap}>
                 {(modalContentMap.content == "Map") && <Map gameDetails={gameDetails}/>}
             </ReactModalFromBottomMap>
             <Accordion.Container allowMultiple defaultValue={['logistics']}>
+                <Accordion.Item value="layout">
+                    <Accordion.Trigger>
+                        <strong>Example Layout</strong>
+                        <Accordion.Icon/>
+                    </Accordion.Trigger>
+                    <Accordion.Content>
+                        <View>
+                            <View paddingBottom="10px">
+                              <Image src={"https://escapeoutbucket2183723-dev.s3.amazonaws.com/public/ExampleGameLayout.jpg"} alt={"Example Layout"}/>
+                            </View>
+                        </View>
+                    </Accordion.Content>
+                </Accordion.Item>
                 <Accordion.Item value="logistics">
                     <Accordion.Trigger>
                         <strong>Logistics</strong>
