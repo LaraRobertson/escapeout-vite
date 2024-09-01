@@ -74,7 +74,7 @@ export const NotesOpen = (props) => {
                     <View height={"auto"}>
                         <strong>Clues/Notes</strong>
                         {cluesArray.map((clue,index) => (
-                            <Flex key={clue.gameClueID+"-"+index} className={"clue-row"}>
+                            <Flex key={clue.gameClueID+"-"+index} className={"clue-row small"}>
                                 <View className={"italics"}>{clue.gameClueName}:</View>
                                 <View  dangerouslySetInnerHTML={ {__html: DangerouslySetInnerHTMLSanitized(clue.gameClueText)}}   padding={"0 10px"}>
 

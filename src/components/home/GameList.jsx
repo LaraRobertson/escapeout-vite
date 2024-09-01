@@ -171,11 +171,12 @@ export default function GameList(props) {
                         <View>&nbsp;- selected</View>) : null}
                 </Button> <Link className="close light small"
                 href="https://www.google.com/maps/d/u/0/edit?mid=1UVlpxJl5_xcVIv_7NnRDEX_aa3p_Czc&usp=sharing"
+                                https://www.google.com/maps/d/u/0/edit?mid=1UVlpxJl5_xcVIv_7NnRDEX_aa3p_Czc&usp=sharing
                 color="#ffffff"
                 isExternal={true}
             >
                 Map of Games
-            </Link>
+            </Link><br />
                 {/*<br />
                <Button className={"place-view"} onClick={()=>setPlaceView("list")}>Location List Below</Button>|
                 <Button className={"place-view"} onClick={()=>handleMapPlaceView()}>See Map View </Button><br />*/}

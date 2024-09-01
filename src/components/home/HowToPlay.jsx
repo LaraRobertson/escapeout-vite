@@ -1,4 +1,4 @@
-import {Accordion, Link, View} from "@aws-amplify/ui-react";
+import {Accordion, Image, Link, View} from "@aws-amplify/ui-react";
 import React from "react";
 
 export default function HowToPlay() {
@@ -13,17 +13,18 @@ export default function HowToPlay() {
                     </Accordion.Trigger>
                     <Accordion.Content>
                         <View>
-                            <View marginBottom={"5px"}><strong>Create a FREE account and Sign in to Play</strong>
-                                    <View className="small italics">Currently you can sign in with
-                                        email/password or google account. If you want to play with others it is best to set an easy password.
-                                        This allows others to sign in to the same account if you want to play the game at the same time as a Team.
+                            <View marginBottom={"5px"}><strong>Create a FREE account and Sign in to Play:</strong>
+                                    <View className="small">Currently you can sign in with
+                                        email/password or google account. If you want to play with others it is best to use your email and set an easy password.
+                                        Using an easy email/password combination makes it simpler for others to sign in to the same account if you want to play the game at the same time as a Team.
                                         We will not use your email for anything except to manage your account which will only have game-related information.
                                     </View></View>
-                            <View marginBottom={"5px"}><strong>Review available games</strong> on the list and go to the
-                                Game Location before playing.</View>
-                            <View marginBottom={"5px"}><strong>Choose Play Game</strong> and agree to Waiver, then select a Team Name.</View>
-                            <View marginBottom={"5px"}><strong>Start Game</strong> and solve the puzzles.</View>
-                            <View marginBottom={"5px"}><strong>The Back Button</strong> is not needed (please do not use back button).</View>
+                            <View marginBottom={"5px"}><strong>Review available games:</strong><br />
+                                <View className="small">Pick a location on the list to see what games are available and go to the
+                                    Game Location before playing.</View></View>
+                            <View marginBottom={"5px"}><strong>Choose Play Game:</strong><br /><View className="small">First, agree to Waiver. After viewing the Example Game Layout Window you need to select a Public Team Name hit Next an then you are ready to play!</View></View>
+                            <View marginBottom={"5px"}><strong>Play (Time Starts):</strong><br /><View className="small">Now it is time to review the clues and solve the puzzles. The fastest times go on the Leaderboard but you can also compete with your friends.</View></View>
+                            <View marginBottom={"5px"}><strong>The Back Button:</strong><br /><View className="small">is not needed (please do not use back button).</View></View>
 
                         </View>
                     </Accordion.Content>
@@ -89,6 +90,19 @@ export default function HowToPlay() {
                         </ul>
                     </Accordion.Content>
                 </Accordion.Item>
+                <Accordion.Item value="layout">
+                    <Accordion.Trigger>
+                        <strong>Example Game Layout</strong>
+                        <Accordion.Icon/>
+                    </Accordion.Trigger>
+                    <Accordion.Content>
+                        <View>
+                            <View paddingBottom="10px">
+                                <Image src={"https://escapeoutbucket2183723-dev.s3.amazonaws.com/public/ExampleGameLayout.jpg"} alt={"Example Layout"}/>
+                            </View>
+                        </View>
+                    </Accordion.Content>
+                </Accordion.Item>
                 <Accordion.Item value="group-play">
                     <Accordion.Trigger>
                         <strong>Group Play vs Individual Play</strong>
@@ -139,15 +153,15 @@ export default function HowToPlay() {
                 </Accordion.Item>
                 <Accordion.Item value="play-zones">
                     <Accordion.Trigger>
-                        <strong>Leader Board</strong>
+                        <strong>Leaderboard</strong>
                         <Accordion.Icon/>
                     </Accordion.Trigger>
                     <Accordion.Content>
                         <View>
                             <ul className={"how-to-play-bullets"}>
-                                <li>The Leader Board tracks the top times for each game.</li>
+                                <li>The Leaderboard tracks the top times for each game.</li>
                                 <li>A time can only be eligible for the
-                                Leader Board if the person playing the game has never played that game before (or has never even started that game before).</li>
+                                Leaderboard if the person playing the game has never played that game before (or has never even started that game before).</li>
 
                             </ul>
                         </View>
