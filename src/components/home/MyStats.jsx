@@ -55,7 +55,7 @@ export default function MyStats(props) {
         const yesterday = new Date(today);
         yesterday.setDate(yesterday.getDate() - 1);
         return (
-            <div className="table-container" role="table" aria-label="game score">
+            <div className="table-container" role="table" aria-label="game score" key={props.gameName}>
                 <div className="flex-table header" role="rowgroup">
                     <div className="flex-row " role="columnheader">Team Name</div>
                     <div className="flex-row " role="columnheader">Team Score</div>
