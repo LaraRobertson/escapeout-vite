@@ -35,6 +35,7 @@ import TextFieldForm from "../components/admin/TextFieldForm";
 import ClueForm from "../components/admin/ClueForm";
 import HintForm from "../components/admin/HintForm";
 import GameStats from "../components/admin/GameStats";
+import UserStats from "../components/admin/UserStats";
 
 export function Admin() {
     const initialStateDisplaySection = {
@@ -221,6 +222,7 @@ export function Admin() {
                                 {(modalContent.content == "TextField Form") && <TextFieldForm />}
                                 {(modalContent.content == "Clue Form") && <ClueForm />}
                                 {(modalContent.content == "Hint Form") && <HintForm />}
+                                {(modalContent.content == "User Stats") && <UserStats />}
                             </ReactModalFromRight>
                         </View>
                     </View>

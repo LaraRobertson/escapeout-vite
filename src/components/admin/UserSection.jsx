@@ -1,10 +1,12 @@
 import {Button, Flex, Heading, TextField, View} from "@aws-amplify/ui-react";
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {listUsers} from "../../graphql/queries";
 import * as mutations from "../../graphql/mutations";
 import {generateClient} from "aws-amplify/api";
+import {MyAuthContext} from "../../MyContext";
 
-export default function UserSection(props) {
+export default function UserSection() {
+    const { setModalContent  } = useContext(MyAuthContext);
     const [users, setUsers] = useState([]);
     const [statsTitle, setStatsTitle] = useState('');
     const [isUserStatVisible, setIsUserStatVisible] = useState(false);
@@ -14,23 +16,27 @@ export default function UserSection(props) {
     const client = generateClient();
     useEffect(() => {
         console.log("***useEffect***:  fetchUsers()");
+        setModalContent({
+            open: false,
+            content: "",
+            userEmail: ""
+        })
         fetchUsers();
     }, []);
-    function showUserStats(props) {
-        window.scrollTo(0, 0);
-        console.log("props.email: " + props.email);
-        setIsUserStatVisible(true);
-        setIsCoverScreenVisible(true);
-        setUserEmail(props.email);
-        userStatsFunction(props.email);
+
+    function handleUserStats(props) {
+        setModalContent({
+            open: true,
+            content: "User Stats",
+            id: props.gameID,
+            gameID:"",
+            zoneID:"",
+            action: props.gameName,
+            userEmail: props.email,
+            updatedDB:false
+        })
     }
 
-    function hideUserStats() {
-        setIsUserStatVisible(false);
-        setIsCoverScreenVisible(false);
-        console.log("IsUserStatVisible: " + isUserStatVisible);
-        UserStatsView({title:"User Stats"});
-    }
     async function deleteGameStatFunction(gameStatIDvar,userEmail) {
         console.log("gameStatIDvar: " + gameStatIDvar);
         const gameStatDetails = {
@@ -130,55 +136,13 @@ export default function UserSection(props) {
         const usersFromAPI = apiData.data.listUsers.items;
         setUsers(usersFromAPI);
     }
-    async function userStatsFunction(email) {
-        console.log("user stats");
-        let filter = {
-            userEmail: {
-                eq: userEmail
-            }
-        };
-        const apiData = await client.graphql({
-            query: gameStatsSortedByGameName,
-            variables: {filter: filter, sortDirection: "DESC", type: "gameStats"}
-        });
-        const userStatsFromAPI = apiData.data.gameStatsSortedByGameName.items;
-        setUserStats(userStatsFromAPI);
-        setStatsTitle("User Stats");
-        UserStatsView();
-    }
-    const UserStatsView = () => {
-        console.log("title: " + statsTitle);
-        let gameDetailClass = "all-screen hide-gradual";
-        if (isUserStatVisible) {
-            gameDetailClass = "all-screen show-gradual";
-        }
-        return (
-            <View className={gameDetailClass}>
-                <Button className="close-button" onClick={() => hideUserStats()}>X</Button>
-                <Button className="button" onClick={() => showGameStats({"gameID": "3e8eb9fb-6b78-4c90-9a45-657125e4ced3", "gameName": "Thief"})}>
-                    Game Stats - test - {statsGameName}</Button>
-                <View
-                    maxWidth="800px"
-                    margin="10px auto 10px auto"
-                >
-                    <Heading level={2}>{statsTitle}</Heading>
-                    <Heading level={5}>{userEmail}</Heading>
-                    {userStats.map((userStat, index) => (
-                        <View key={userStat.id}>
-                            <Button onClick={() => deleteGameStatFunction(userStat.id,userEmail)} className="button button-small delete">Delete Stat for: {userStat.gameName}</Button>
-                            <GameScoreView gameScoreArray = {userStat.gameScore.items} gameName={userStat.gameName} userEmail={userStat.userEmail}/>
-                        </View>
-                    ))}
-                </View>
-            </View>
-        )
-    }
+
     return (
         <>
             <View id="userSection" className="show section">
                 <Heading level={3} color="black">Users</Heading>
             </View>
-        <UserStatsView title={statsTitle}/>
+
         <View as="form" margin="3rem 0" onSubmit={createUserGamePlay}>
             <Flex direction="row" justifyContent="center">
                 <TextField
@@ -210,11 +174,9 @@ export default function UserSection(props) {
                         id</strong>: {user.id} | <strong>email</strong>: {user.email} | <strong>userName</strong>: {user.userName}
                     </div>
                     <div><Button marginRight="5px" className="button"
-                                 onClick={() => showUserStats({"email": user.email})}>User
-                        Stat</Button>
+                                 onClick={() => handleUserStats({"email": user.email})}>User Stat</Button>
                         <Button className="button"
-                                onClick={() => deleteUser({"userID": user.id})}>Delete
-                            User</Button>
+                                onClick={() => deleteUser({"userID": user.id})}>Delete User</Button>
 
                         <hr/>
                     </div>

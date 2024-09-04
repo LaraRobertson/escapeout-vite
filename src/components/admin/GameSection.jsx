@@ -236,6 +236,7 @@ export default function GameSection(props) {
         console.log("***useEffect***:  fetchGames() (gamesFilter)");
         fetchGames();
     }, [gamesFilter]);
+
     useEffect(() => {
         console.log("***useEffect***:  fetchGames() (updatedDB");
         setModalContent({

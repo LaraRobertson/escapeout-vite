@@ -467,6 +467,11 @@ button:focus-visible,
   width: 5%;
   color: green;
 }
+input[type='text'],
+input[type='number'],
+textarea {
+  font-size: 16px;
+}
 .light, .light-label label, .light-label input, .light-label textarea {
   color: var(--color-light);
 }
