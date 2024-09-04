@@ -86,7 +86,9 @@ export function AdminNav(props) {
                 {displaySection.gameSection ? (
                         <View className={"admin-nav-link-container admin-nav-icon-border"} onClick={() => setDisplaySection({...displaySection, gameSection: false})}>
                             <Image className="admin-nav-icon"  src={gameIcon} alt="game icon" />
-                            <View className={sidebarDisplay? "show-inline admin-nav-link " : "hide"}>Games</View></View>) :
+                            <View className={sidebarDisplay? "show-inline admin-nav-link " : "hide"}>Games</View>
+
+                        </View>) :
                     ( <View className={"admin-nav-link-container"}  onClick={() => setDisplaySection({...displaySection, gameSection: true})}>
                         <Image className="admin-nav-icon"  src={gameIcon} alt="game icon" />
                         <View className={sidebarDisplay? "show-inline admin-nav-link" : "hide"}>Games</View></View>)
@@ -103,7 +105,10 @@ export function AdminNav(props) {
                 <View className={"admin-nav-link-container"} onClick={() => navigate('/')}>
                     <Image className="admin-nav-icon"  src={homeIcon} alt="home icon" />
                 </View>
-
+                <Flex className={"admin-nav-link-container"}>
+                    <Image className="admin-nav-icon" marginLeft={"5px"}  height="20px" width="20px" src={rightArrow} alt="right arrow" />
+                    <View className={sidebarDisplay? "show-inline admin-nav-link small " : "hide"}>clue icons: diary, tornPaper, messageInABottle, clueIcon, clueNoteIcon, envelope</View>
+                </Flex>
                 <View className={sidebarDisplay? "sider-trigger-open" : "sider-trigger-closed"}>
                     <Button gap="0.1rem" size="small" className={"no-border"} onClick={closeSideBar}>
                         {sidebarDisplay? <Image height="20px" width="20px" src={leftArrow} alt="left arrow" /> :

@@ -261,7 +261,7 @@ export default function ZoneForm() {
                     onChange={(event) => setInputCreateZone('gameZoneImage', event.target.value)}
                     name="Zone Image"
                     placeholder="Zone Image"
-                    label="Zone Image"
+                    label="Zone Image (350px x 300px & <100kb)"
                     variation="quiet"
                     value={formCreateZoneState.gameZoneImage}
                     required

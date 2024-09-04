@@ -91,6 +91,8 @@ export const createGame = /* GraphQL */ `mutation CreateGame(
     gameLogisticInfo
     gameSummary
     gameLocationPlace
+    latitude
+    longitude
     gameLocationPlaceDetails
     gameLocationCity
     gameDesigner
@@ -121,6 +123,7 @@ export const createGame = /* GraphQL */ `mutation CreateGame(
       nextToken
       __typename
     }
+    order
     createdAt
     updatedAt
     disabled
@@ -146,6 +149,8 @@ export const updateGame = /* GraphQL */ `mutation UpdateGame(
     gameLogisticInfo
     gameSummary
     gameLocationPlace
+    latitude
+    longitude
     gameLocationPlaceDetails
     gameLocationCity
     gameDesigner
@@ -176,6 +181,7 @@ export const updateGame = /* GraphQL */ `mutation UpdateGame(
       nextToken
       __typename
     }
+    order
     createdAt
     updatedAt
     disabled
@@ -201,6 +207,8 @@ export const deleteGame = /* GraphQL */ `mutation DeleteGame(
     gameLogisticInfo
     gameSummary
     gameLocationPlace
+    latitude
+    longitude
     gameLocationPlaceDetails
     gameLocationCity
     gameDesigner
@@ -231,6 +239,7 @@ export const deleteGame = /* GraphQL */ `mutation DeleteGame(
       nextToken
       __typename
     }
+    order
     createdAt
     updatedAt
     disabled
@@ -779,6 +788,129 @@ export const deleteGamePlayZone = /* GraphQL */ `mutation DeleteGamePlayZone(
   APITypes.DeleteGamePlayZoneMutationVariables,
   APITypes.DeleteGamePlayZoneMutation
 >;
+export const createCity = /* GraphQL */ `mutation CreateCity(
+  $input: CreateCityInput!
+  $condition: ModelCityConditionInput
+) {
+  createCity(input: $input, condition: $condition) {
+    id
+    cityName
+    cityDescription
+    cityState
+    cityCountry
+    cityMap
+    order
+    createdAt
+    updatedAt
+    disabled
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateCityMutationVariables,
+  APITypes.CreateCityMutation
+>;
+export const updateCity = /* GraphQL */ `mutation UpdateCity(
+  $input: UpdateCityInput!
+  $condition: ModelCityConditionInput
+) {
+  updateCity(input: $input, condition: $condition) {
+    id
+    cityName
+    cityDescription
+    cityState
+    cityCountry
+    cityMap
+    order
+    createdAt
+    updatedAt
+    disabled
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateCityMutationVariables,
+  APITypes.UpdateCityMutation
+>;
+export const deleteCity = /* GraphQL */ `mutation DeleteCity(
+  $input: DeleteCityInput!
+  $condition: ModelCityConditionInput
+) {
+  deleteCity(input: $input, condition: $condition) {
+    id
+    cityName
+    cityDescription
+    cityState
+    cityCountry
+    cityMap
+    order
+    createdAt
+    updatedAt
+    disabled
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteCityMutationVariables,
+  APITypes.DeleteCityMutation
+>;
+export const createIcon = /* GraphQL */ `mutation CreateIcon(
+  $input: CreateIconInput!
+  $condition: ModelIconConditionInput
+) {
+  createIcon(input: $input, condition: $condition) {
+    id
+    iconName
+    iconText
+    order
+    createdAt
+    updatedAt
+    disabled
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateIconMutationVariables,
+  APITypes.CreateIconMutation
+>;
+export const updateIcon = /* GraphQL */ `mutation UpdateIcon(
+  $input: UpdateIconInput!
+  $condition: ModelIconConditionInput
+) {
+  updateIcon(input: $input, condition: $condition) {
+    id
+    iconName
+    iconText
+    order
+    createdAt
+    updatedAt
+    disabled
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateIconMutationVariables,
+  APITypes.UpdateIconMutation
+>;
+export const deleteIcon = /* GraphQL */ `mutation DeleteIcon(
+  $input: DeleteIconInput!
+  $condition: ModelIconConditionInput
+) {
+  deleteIcon(input: $input, condition: $condition) {
+    id
+    iconName
+    iconText
+    order
+    createdAt
+    updatedAt
+    disabled
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteIconMutationVariables,
+  APITypes.DeleteIconMutation
+>;
 export const createUserGamePlay = /* GraphQL */ `mutation CreateUserGamePlay(
   $input: CreateUserGamePlayInput!
   $condition: ModelUserGamePlayConditionInput
@@ -805,6 +937,8 @@ export const createUserGamePlay = /* GraphQL */ `mutation CreateUserGamePlay(
       gameLogisticInfo
       gameSummary
       gameLocationPlace
+      latitude
+      longitude
       gameLocationPlaceDetails
       gameLocationCity
       gameDesigner
@@ -819,6 +953,7 @@ export const createUserGamePlay = /* GraphQL */ `mutation CreateUserGamePlay(
       gameIntro
       gameMap
       type
+      order
       createdAt
       updatedAt
       disabled
@@ -859,6 +994,8 @@ export const updateUserGamePlay = /* GraphQL */ `mutation UpdateUserGamePlay(
       gameLogisticInfo
       gameSummary
       gameLocationPlace
+      latitude
+      longitude
       gameLocationPlaceDetails
       gameLocationCity
       gameDesigner
@@ -873,6 +1010,7 @@ export const updateUserGamePlay = /* GraphQL */ `mutation UpdateUserGamePlay(
       gameIntro
       gameMap
       type
+      order
       createdAt
       updatedAt
       disabled
@@ -913,6 +1051,8 @@ export const deleteUserGamePlay = /* GraphQL */ `mutation DeleteUserGamePlay(
       gameLogisticInfo
       gameSummary
       gameLocationPlace
+      latitude
+      longitude
       gameLocationPlaceDetails
       gameLocationCity
       gameDesigner
@@ -927,6 +1067,7 @@ export const deleteUserGamePlay = /* GraphQL */ `mutation DeleteUserGamePlay(
       gameIntro
       gameMap
       type
+      order
       createdAt
       updatedAt
       disabled

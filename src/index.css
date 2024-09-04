@@ -19,6 +19,7 @@
   --yellow-boarder: rgba(255, 255, 0, 0.5);
   --red-border: #8B0000FF;
   --zone-border: #8B0000FF;
+ --amplify-components-button-hover-background-color: transparent;
 }
 #root {
   position: relative;
@@ -235,7 +236,7 @@ button:focus-visible,
   padding: 10px 0;
 }
 .end-paragraph {
-  padding: 5px 0;
+  padding:0;
   /*border-bottom: 1px solid rgb(220, 222, 224);*/
   text-align:center;
 }
@@ -261,6 +262,9 @@ button:focus-visible,
 .notes .amplify-textarea {
   color:white;
 }
+.textArea-Container {
+  min-height:150px;
+}
 .button {
   background-color: var(--blue-color);
   color: var(--color-light);
@@ -268,6 +272,13 @@ button:focus-visible,
   border: 1px solid transparent;
   font-weight: 500;
   font-size:1rem;
+}
+.place-view {
+  border:none;
+  color:white;
+}
+.place-view:focus, .place-view:active {
+  background-color: black;
 }
 .quit-button-alert {
   background-color: transparent;
@@ -335,7 +346,7 @@ button:focus-visible,
   height: 300px;
   color: black;
 }
-.clue-sidebar {
+.clue-sidebar, .puzzle-sidebar {
   height: 300px;
   display: flex;
   flex-direction: column-reverse;
@@ -348,7 +359,7 @@ button:focus-visible,
 }
 .puzzle-sidebar {
   position: absolute;
-  width: 30%;
+  width: 80px;
   right: 0;
   top: 0;
   background: linear-gradient(270deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
@@ -356,6 +367,11 @@ button:focus-visible,
   z-index: 2;
   height: 300px;
   color: black;
+}
+.puzzle-sidebar>* {
+  flex: 0 1 80px;
+  height:80px;
+  width:80px;
 }
 .dark-light-toggle {
   height:20px;
@@ -451,12 +467,22 @@ button:focus-visible,
   width: 5%;
   color: green;
 }
+input[type='text'],
+input[type='number'],
+textarea {
+  font-size: 16px;
+}
 .light, .light-label label, .light-label input, .light-label textarea {
   color: var(--color-light);
 }
+.light:visited {
+  color: var(--color-light)!important;}
 .dark, .dark-label label, dark-label input, dark-label textarea  {
   color:var(--color-dark);
 }
+.dark:visited {
+  color:var(--color-dark)
+  !important;}
 .pressed {
   background-color: red !important;
 }
@@ -561,9 +587,7 @@ fieldset.comments legend {
   right: 10px;
 }
 .puzzle-item {
-  position:absolute;
-  bottom:0;
-  right:0;
+
 }
 
 .notes {
@@ -716,6 +740,7 @@ isChecked is for light/dark
 }
 .small {
   font-size:.7em !important;
+  line-height:1em;
 }
 
 .light {
@@ -863,6 +888,11 @@ isChecked is for light/dark
   border: 1px solid #BFD6E8;
   width:330px;
   padding:0!important;
+  background-repeat: no-repeat;
+}
+.city {
+  background-color: transparent;
+  border:none;
 }
 .column-50 {
   width:50%;
@@ -874,8 +904,8 @@ isChecked is for light/dark
 .game-card-header {
   color:#fff;
   font-weight: bold;
-  font-size: 1.3em;
-  margin-bottom:5px;
+  font-size: 1.2em;
+  margin-bottom:0px;
   line-height: .9em;
   margin-top: 3px;
 }
@@ -895,9 +925,10 @@ isChecked is for light/dark
 .inner-game-card1 {
   /*background-color: rgb(0, 0, 0, 0.7);*/
   border-top: 1px solid black;
-  background-color:  var(--background-dark);
+  /*background-color:  var(--background-dark);*/
+  background-color: white;
   padding:5px 12px ;
-  color:white;
+  color:black;
 }
 .flex-games {
   flex-wrap: wrap;

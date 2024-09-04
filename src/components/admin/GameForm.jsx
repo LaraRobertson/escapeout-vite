@@ -1,4 +1,4 @@
-import {Button, Flex, SwitchField, TextAreaField, TextField, View} from "@aws-amplify/ui-react";
+import {Button, Flex, Input, SwitchField, TextAreaField, TextField, View} from "@aws-amplify/ui-react";
 import React, {useContext, useEffect, useState} from "react";
 import {getGame} from "../../graphql/queries";
 import * as mutations from "../../graphql/mutations";
@@ -183,6 +183,16 @@ export default function GameForm(props) {
                         setInputCreateGame('disabled', e.target.checked);
                     }}
                 />
+                <View>Order</View>
+                <Input
+                    name="order"
+                    type="number"
+                    size="small"
+                    width="50px"
+                    placeholder="order"
+                    onChange={(event) =>  setInputCreateGame('order', event.target.value)}
+                    value={formCreateGameState.order}
+                />
                 <TextField
                     onChange={(event) => setInputCreateGame('gameName', event.target.value)}
                     name="gameName"
@@ -218,6 +228,24 @@ export default function GameForm(props) {
                     label="Game Location City"
                     variation="quiet"
                     value={formCreateGameState.gameLocationCity}
+                    required
+                />
+                <TextField
+                    onChange={(event) => setInputCreateGame('latitude', event.target.value)}
+                    name="latitude"
+                    placeholder="latitude"
+                    label="latitude"
+                    variation="quiet"
+                    value={formCreateGameState.latitude}
+                    required
+                />
+                <TextField
+                    onChange={(event) => setInputCreateGame('longitude', event.target.value)}
+                    name="longitude"
+                    placeholder="longitude"
+                    label="longitude"
+                    variation="quiet"
+                    value={formCreateGameState.longitude}
                     required
                 />
                 <TextField

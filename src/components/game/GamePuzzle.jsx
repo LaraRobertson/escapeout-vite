@@ -21,9 +21,11 @@ export function ModalPuzzleContent(props) {
     let gamePuzzleGuess=props.gamePuzzleGuess;
     let gamePuzzleSolved=props.gamePuzzleSolved;
     let gamePuzzleAnswer=props.gamePuzzleAnswer;
+    let setClueDetails=props.setClueDetails;
+    let setModalClueContent=props.setModalClueContent;
     let gamePuzzleAnswerCorrect=props.gamePuzzleAnswerCorrect;
 
-    function setGamePuzzleGuessFunction(textFieldID, guess, answer, puzzleID, winGame) {
+    function setGamePuzzleGuessFunction(textFieldID, guess, answer, puzzleID, setClueDetails, setModalClueContent, puzzleName, puzzleClueText, winGame) {
         console.log("setPuzzleGuessFunction - puzzleID: " + puzzleID);
         console.log("setPuzzleGuessFunction - textFieldID: " + textFieldID);
         console.log("setPuzzleGuessFunction - answer: " + answer);
@@ -126,6 +128,18 @@ export function ModalPuzzleContent(props) {
                                             setModalMessage('');
                                         }, 3000);
 
+                                    } else {
+                                        /* open clue for puzzle? */
+                                        console.log("handlePuzzleClue: ");
+                                        let puzzleClue = {
+                                            gameClueName: puzzleName,
+                                            gameClueText: puzzleClueText,
+                                        }
+                                        setClueDetails(puzzleClue);
+                                        setModalClueContent({
+                                            show: true,
+                                            content: "clue"
+                                        })
                                     }
 
                                 } else {
@@ -191,14 +205,14 @@ export function ModalPuzzleContent(props) {
                             label={field.label}
                             value={gamePuzzleGuess[field.id]}
                             onChange={(event) => setGamePuzzleGuessFunction(
-                                field.id, event.target.value, field.answer, puzzleDetails.puzzleID, puzzleDetails.winGame)}
+                                field.id, event.target.value, field.answer, puzzleDetails.puzzleID, setClueDetails, setModalClueContent, puzzleDetails.puzzleName, puzzleDetails.puzzleClueText, puzzleDetails.winGame)}
                         />) : (
                             <TextField
                                 className={isChecked? "puzzleTextField light-label" : 'puzzleTextField dark-label '}
                                 label={field.label}
                                 value=""
                                 onChange={(event) => setGamePuzzleGuessFunction(
-                                    field.id, event.target.value, field.answer, puzzleDetails.puzzleID, puzzleDetails.winGame)}
+                                    field.id, event.target.value, field.answer, puzzleDetails.puzzleID, setClueDetails, setModalClueContent, puzzleDetails.puzzleName, puzzleDetails.puzzleClueText, puzzleDetails.winGame)}
                             />)
                     }
                     { (gamePuzzleAnswerCorrect[field.id]  && gamePuzzleAnswer[field.id] != null && gamePuzzleGuess[field.id] != null) ? (
@@ -301,6 +315,8 @@ export function GamePuzzle(props) {
             puzzleID: puzzleDetails.puzzleID,
             winGame: puzzleDetails.winGame,
             textFields: puzzleDetails.textField,
+            puzzleName: puzzleDetails.puzzleName,
+            puzzleClueText: puzzleDetails.puzzleClueText
         };
         setPuzzleDetails(statePuzzleDetails);
         setModalPuzzleContent({
@@ -316,46 +332,64 @@ export function GamePuzzle(props) {
             content: "clue"
         })
     }
-    return (
-        <View key = {puzzle.id} >
-            <View className={(zoneVisible==puzzle.gamePlayZoneID)? "puzzle-holder-bottom" : "hide"}>
-                <View>
-                    {/* if clue or wingame */}
-                    {gamePuzzleSolved[puzzle.id] ? (
-                        <View onClick={() => handlePuzzleClue({
-                            gameClueName: puzzle.puzzleName,
-                            gameClueText: puzzle.puzzleClueText,
-                            gameClueImage: ""
-                        })}
-                              className={gamePuzzleSolved[puzzle.id]? "show puzzle-item" : "hide"}
-                       >
-                            {(puzzle.winGame)? (
-                                <>
-                                <View  style={{position:"absolute", top:"10px", right:"30px", color:"red", fontSize:"1em"}}>Final Puzzle!</View>
-                                <IconPuzzleDisplayOpen index={index} /></>
-                            ):(
-                                <><View  style={{position:"absolute", top:"10px", right:"30px", color:"yellow", fontSize:"3.5em"}}>?</View>
-                                <IconPuzzleDisplayOpen index={index} /></>
-                            )}
-                        </View>
+    if (zoneVisible==puzzle.gamePlayZoneID) {
+        return (
+            <View key={puzzle.id}>
+                <View className={(zoneVisible == puzzle.gamePlayZoneID) ? "show" : "hide"}>
+                    <View>
+                        {/* if clue or wingame */}
+                        {gamePuzzleSolved[puzzle.id] ? (
+                            <View onClick={() => handlePuzzleClue({
+                                gameClueName: puzzle.puzzleName,
+                                gameClueText: puzzle.puzzleClueText,
+                                gameClueImage: ""
+                            })}
+                                  className={gamePuzzleSolved[puzzle.id] ? "show puzzle-item" : "hide"}
+                            >
+                                {(puzzle.winGame) ? (
+                                    <View style={{position: "relative"}}>
+                                        <View style={{
+                                            position: "absolute",
+                                            top: "10px",
+                                            right: "30px",
+                                            color: "red",
+                                            fontSize: "1em"
+                                        }}>Final Puzzle!</View>
+                                        <IconPuzzleDisplayOpen index={index}/></View>
+                                ) : (
 
-                    ):(
-                        <View onClick={() => handlePuzzleDetail({
-                            textField: puzzle.textField.items,
-                            puzzleID: puzzle.id
-                        })}
-                              className={gamePuzzleSolved[puzzle.id]? "hide" : "show puzzle-item"} >
-                            <IconPuzzleDisplay index={index}/>
-                        </View>
-                    )}
-                </View>
+                                    <View style={{position: "relative"}}>
+                                        <View style={{
+                                            position: "absolute",
+                                            top: "00px",
+                                            right: "30px",
+                                            color: "yellow",
+                                            fontSize: "3.5em"
+                                        }}>?</View>
+                                        <IconPuzzleDisplayOpen index={index}/></View>
+                                )}
+                            </View>
 
-                {/*<Image src={puzzle.puzzleObjectClue} onClick={()=>setGamePuzzleVisibleFunction(["puzzle" + (puzzle.id)], true)} className={gamePuzzleSolved[puzzle.id]? "show clue-on-puzzle" : "hide"} />
+                        ) : (
+                            <View onClick={() => handlePuzzleDetail({
+                                textField: puzzle.textField.items,
+                                puzzleID: puzzle.id,
+                                puzzleName: puzzle.puzzleName,
+                                puzzleClueText: puzzle.puzzleClueText
+                            })}
+                                  className={gamePuzzleSolved[puzzle.id] ? "hide" : "show puzzle-item"}>
+                                <IconPuzzleDisplay index={index}/>
+                            </View>
+                        )}
+                    </View>
+
+                    {/*<Image src={puzzle.puzzleObjectClue} onClick={()=>setGamePuzzleVisibleFunction(["puzzle" + (puzzle.id)], true)} className={gamePuzzleSolved[puzzle.id]? "show clue-on-puzzle" : "hide"} />
                                         <Image className={(gamePuzzleSolved[puzzle.id] && puzzle.puzzleObjectClue != "")? "puzzle-object-tool show" : "hide"} src={puzzle.puzzleClueRevealed} onClick={()=>setGamePuzzleClueVisibleFunction(["puzzle" + (puzzle.id)], true)} />*/}
-                {/*(puzzle.winGame)? (
+                    {/*(puzzle.winGame)? (
                         <Image className={(gamePuzzleSolved[puzzle.id])? "puzzle-object-tool show" : "hide"} src={puzzle.puzzleToolRevealed} />
                     ):null*/}
+                </View>
             </View>
-        </View>
-    )
+        )
+    }
 }

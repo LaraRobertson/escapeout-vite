@@ -49,13 +49,15 @@ export const listUsers = /* GraphQL */ `query ListUsers(
 }
 ` as GeneratedQuery<APITypes.ListUsersQueryVariables, APITypes.ListUsersQuery>;
 export const getGame = /* GraphQL */ `query GetGame($id: ID!) {
-getGame(id: $id) {
+  getGame(id: $id) {
     id
     gameName
-  gameDescription
-  gameLogisticInfo
-  gameSummary
+    gameDescription
+    gameLogisticInfo
+    gameSummary
     gameLocationPlace
+    latitude
+    longitude
     gameLocationPlaceDetails
     gameLocationCity
     gameDesigner
@@ -173,6 +175,8 @@ export const listGames = /* GraphQL */ `query ListGames(
       gameLogisticInfo
       gameSummary
       gameLocationPlace
+      latitude
+      longitude
       gameLocationPlaceDetails
       gameLocationCity
       gameDesigner
@@ -267,6 +271,7 @@ export const listGames = /* GraphQL */ `query ListGames(
           nextToken
         }
       type
+      order
       createdAt
       updatedAt
       disabled
@@ -649,6 +654,83 @@ export const listGamePlayZones = /* GraphQL */ `query ListGamePlayZones(
   APITypes.ListGamePlayZonesQueryVariables,
   APITypes.ListGamePlayZonesQuery
 >;
+export const getCity = /* GraphQL */ `query GetCity($id: ID!) {
+  getCity(id: $id) {
+    id
+    cityName
+    cityDescription
+    cityState
+    cityCountry
+    cityMap
+    order
+    createdAt
+    updatedAt
+    disabled
+    __typename
+  }
+}
+` as GeneratedQuery<APITypes.GetCityQueryVariables, APITypes.GetCityQuery>;
+export const listCities = /* GraphQL */ `query ListCities(
+  $filter: ModelCityFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listCities(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      cityName
+      cityDescription
+      cityState
+      cityCountry
+      cityMap
+      order
+      createdAt
+      updatedAt
+      disabled
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListCitiesQueryVariables,
+  APITypes.ListCitiesQuery
+>;
+export const getIcon = /* GraphQL */ `query GetIcon($id: ID!) {
+  getIcon(id: $id) {
+    id
+    iconName
+    iconText
+    order
+    createdAt
+    updatedAt
+    disabled
+    __typename
+  }
+}
+` as GeneratedQuery<APITypes.GetIconQueryVariables, APITypes.GetIconQuery>;
+export const listIcons = /* GraphQL */ `query ListIcons(
+  $filter: ModelIconFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listIcons(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      iconName
+      iconText
+      order
+      createdAt
+      updatedAt
+      disabled
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<APITypes.ListIconsQueryVariables, APITypes.ListIconsQuery>;
 export const getUserGamePlay = /* GraphQL */ `query GetUserGamePlay($id: ID!) {
   getUserGamePlay(id: $id) {
     id
@@ -672,6 +754,8 @@ export const getUserGamePlay = /* GraphQL */ `query GetUserGamePlay($id: ID!) {
       gameLogisticInfo
       gameSummary
       gameLocationPlace
+      latitude
+      longitude
       gameLocationPlaceDetails
       gameLocationCity
       gameDesigner
@@ -686,6 +770,7 @@ export const getUserGamePlay = /* GraphQL */ `query GetUserGamePlay($id: ID!) {
       gameIntro
       gameMap
       type
+      order
       createdAt
       updatedAt
       disabled
@@ -778,6 +863,8 @@ export const gamesByGameNameAndType = /* GraphQL */ `query GamesByGameNameAndTyp
       gameLogisticInfo
       gameSummary
       gameLocationPlace
+      latitude
+      longitude
       gameLocationPlaceDetails
       gameLocationCity
       gameDesigner
@@ -792,6 +879,7 @@ export const gamesByGameNameAndType = /* GraphQL */ `query GamesByGameNameAndTyp
       gameIntro
       gameMap
       type
+      order
       createdAt
       updatedAt
       disabled
@@ -804,6 +892,76 @@ export const gamesByGameNameAndType = /* GraphQL */ `query GamesByGameNameAndTyp
 ` as GeneratedQuery<
   APITypes.GamesByGameNameAndTypeQueryVariables,
   APITypes.GamesByGameNameAndTypeQuery
+>;
+export const gameByGameOrder = /* GraphQL */ `query GameByGameOrder(
+  $gameLocationCity: String!
+  $order: ModelIntKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelGameFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  gameByGameOrder(
+    gameLocationCity: $gameLocationCity
+    order: $order
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      gameName
+      gameDescription
+      gameLogisticInfo
+      gameSummary
+      gameLocationPlace
+      latitude
+      longitude
+      gameLocationPlaceDetails
+      gameLocationCity
+      gameDesigner
+      gameLevel
+      walkingDistance
+      playZones
+      gameImage
+      gameType
+      gameWinMessage
+      gameWinImage
+      gameGoals
+      gameIntro
+      gameMap
+      gamePlayZone {
+          items {
+            id
+            disabled
+            gameID
+            gameZoneName
+            gameZoneIcon
+            gameZoneImage
+            gameZoneDescription
+            latitude
+            longitude
+            order
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+      type
+      order
+      createdAt
+      updatedAt
+      disabled
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GameByGameOrderQueryVariables,
+  APITypes.GameByGameOrderQuery
 >;
 export const gamesByCity = /* GraphQL */ `query GamesByCity(
   $type: String!
@@ -828,6 +986,8 @@ export const gamesByCity = /* GraphQL */ `query GamesByCity(
       gameLogisticInfo
       gameSummary
       gameLocationPlace
+      latitude
+      longitude
       gameLocationPlaceDetails
       gameLocationCity
       gameDesigner
@@ -859,6 +1019,7 @@ export const gamesByCity = /* GraphQL */ `query GamesByCity(
           nextToken
         }
       type
+      order
       createdAt
       updatedAt
       disabled

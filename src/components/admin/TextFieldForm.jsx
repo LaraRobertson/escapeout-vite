@@ -179,7 +179,7 @@ export default function TextFieldForm() {
                     name="Answer"
                     onChange={(event) => setInputCreateTextField('answer', event.target.value)}
                     placeholder="Answer"
-                    label="Answer"
+                    label='Answer &#123;"answer1":"baseball","answer2":"softball"&#125;'
                     variation="quiet"
                     value={formCreateTextFieldState.answer}
                     required

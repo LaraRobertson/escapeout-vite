@@ -434,6 +434,7 @@ export function GameV3() {
                             <Image src={clueDetails.gameClueImage}/>}</>
                         </ModalClue>
                         <View className={"puzzle-sidebar"}>
+
                             {gamePuzzleArray.map((puzzle, index) => (
                                 <GamePuzzle puzzle={puzzle}
                                             zoneVisible={zoneVisible}
@@ -446,16 +447,20 @@ export function GameV3() {
                                             setClueDetails={setClueDetails}
                                             key={puzzle.id}/>
                             ))}
+
                         </View>
                         <ModalPuzzle
                             modalPuzzleContent={modalPuzzleContent}
-                            setModalPuzzleContent={setModalPuzzleContent}>
+                            setModalPuzzleContent={setModalPuzzleContent}
+                            puzzleDetails={puzzleDetails}>
                             <ModalPuzzleContent
                                 puzzleDetails={puzzleDetails}
                                 gamePuzzleGuess={gamePuzzleGuess}
                                 gamePuzzleSolved={gamePuzzleSolved}
                                 gamePuzzleAnswer={gamePuzzleAnswer}
                                 gamePuzzleAnswerCorrect={gamePuzzleAnswerCorrect}
+                                setClueDetails={setClueDetails}
+                                setModalClueContent={setModalClueContent}
                                 updateGameScoreFunction={updateGameScoreFunction}
                             />
                         </ModalPuzzle>
@@ -479,8 +484,8 @@ export function GameV3() {
 
 
                 <ReactModalFromBottom modalContent={modalContent}>
-                    {(modalContent.content == "Help") && <Help/>}
-                    {(modalContent.content == "Hints") &&
+                    {/*(modalContent.content == "Help") && <Help/>*/}
+                    {(modalContent.content == "Help") &&
                     <Hints gameHint={gameHint} setGameTimeHint={setGameTimeHint} gameHintVisible={gameHintVisible}
                            setGameHintVisible={setGameHintVisible}
                            DangerouslySetInnerHTMLSanitized={DangerouslySetInnerHTMLSanitized}/>}
@@ -512,15 +517,9 @@ export function GameV3() {
                         <Button className="quit-button dark"
                                 onClick={() => setModalContent({
                                     open: true,
-                                    content: "Hints"
-                                })}>
-                            Hints</Button>
-                        <Button className="quit-button dark"
-                                onClick={() => setModalContent({
-                                    open: true,
                                     content: "Map"
                                 })}>
-                            Map</Button>
+                            Zone Map</Button>
                         <Button className="quit-button dark"
                                 onClick={() => setModalContent({
                                     open: true,

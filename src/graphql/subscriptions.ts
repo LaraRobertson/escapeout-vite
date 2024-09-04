@@ -79,6 +79,8 @@ export const onCreateGame = /* GraphQL */ `subscription OnCreateGame($filter: Mo
     gameLogisticInfo
     gameSummary
     gameLocationPlace
+    latitude
+    longitude
     gameLocationPlaceDetails
     gameLocationCity
     gameDesigner
@@ -109,6 +111,7 @@ export const onCreateGame = /* GraphQL */ `subscription OnCreateGame($filter: Mo
       nextToken
       __typename
     }
+    order
     createdAt
     updatedAt
     disabled
@@ -131,6 +134,8 @@ export const onUpdateGame = /* GraphQL */ `subscription OnUpdateGame($filter: Mo
     gameLogisticInfo
     gameSummary
     gameLocationPlace
+    latitude
+    longitude
     gameLocationPlaceDetails
     gameLocationCity
     gameDesigner
@@ -161,6 +166,7 @@ export const onUpdateGame = /* GraphQL */ `subscription OnUpdateGame($filter: Mo
       nextToken
       __typename
     }
+    order
     createdAt
     updatedAt
     disabled
@@ -183,6 +189,8 @@ export const onDeleteGame = /* GraphQL */ `subscription OnDeleteGame($filter: Mo
     gameLogisticInfo
     gameSummary
     gameLocationPlace
+    latitude
+    longitude
     gameLocationPlaceDetails
     gameLocationCity
     gameDesigner
@@ -213,6 +221,7 @@ export const onDeleteGame = /* GraphQL */ `subscription OnDeleteGame($filter: Mo
       nextToken
       __typename
     }
+    order
     createdAt
     updatedAt
     disabled
@@ -710,6 +719,111 @@ export const onDeleteGamePlayZone = /* GraphQL */ `subscription OnDeleteGamePlay
   APITypes.OnDeleteGamePlayZoneSubscriptionVariables,
   APITypes.OnDeleteGamePlayZoneSubscription
 >;
+export const onCreateCity = /* GraphQL */ `subscription OnCreateCity($filter: ModelSubscriptionCityFilterInput) {
+  onCreateCity(filter: $filter) {
+    id
+    cityName
+    cityDescription
+    cityState
+    cityCountry
+    cityMap
+    order
+    createdAt
+    updatedAt
+    disabled
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateCitySubscriptionVariables,
+  APITypes.OnCreateCitySubscription
+>;
+export const onUpdateCity = /* GraphQL */ `subscription OnUpdateCity($filter: ModelSubscriptionCityFilterInput) {
+  onUpdateCity(filter: $filter) {
+    id
+    cityName
+    cityDescription
+    cityState
+    cityCountry
+    cityMap
+    order
+    createdAt
+    updatedAt
+    disabled
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateCitySubscriptionVariables,
+  APITypes.OnUpdateCitySubscription
+>;
+export const onDeleteCity = /* GraphQL */ `subscription OnDeleteCity($filter: ModelSubscriptionCityFilterInput) {
+  onDeleteCity(filter: $filter) {
+    id
+    cityName
+    cityDescription
+    cityState
+    cityCountry
+    cityMap
+    order
+    createdAt
+    updatedAt
+    disabled
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteCitySubscriptionVariables,
+  APITypes.OnDeleteCitySubscription
+>;
+export const onCreateIcon = /* GraphQL */ `subscription OnCreateIcon($filter: ModelSubscriptionIconFilterInput) {
+  onCreateIcon(filter: $filter) {
+    id
+    iconName
+    iconText
+    order
+    createdAt
+    updatedAt
+    disabled
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateIconSubscriptionVariables,
+  APITypes.OnCreateIconSubscription
+>;
+export const onUpdateIcon = /* GraphQL */ `subscription OnUpdateIcon($filter: ModelSubscriptionIconFilterInput) {
+  onUpdateIcon(filter: $filter) {
+    id
+    iconName
+    iconText
+    order
+    createdAt
+    updatedAt
+    disabled
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateIconSubscriptionVariables,
+  APITypes.OnUpdateIconSubscription
+>;
+export const onDeleteIcon = /* GraphQL */ `subscription OnDeleteIcon($filter: ModelSubscriptionIconFilterInput) {
+  onDeleteIcon(filter: $filter) {
+    id
+    iconName
+    iconText
+    order
+    createdAt
+    updatedAt
+    disabled
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteIconSubscriptionVariables,
+  APITypes.OnDeleteIconSubscription
+>;
 export const onCreateUserGamePlay = /* GraphQL */ `subscription OnCreateUserGamePlay(
   $filter: ModelSubscriptionUserGamePlayFilterInput
 ) {
@@ -735,6 +849,8 @@ export const onCreateUserGamePlay = /* GraphQL */ `subscription OnCreateUserGame
       gameLogisticInfo
       gameSummary
       gameLocationPlace
+      latitude
+      longitude
       gameLocationPlaceDetails
       gameLocationCity
       gameDesigner
@@ -749,6 +865,7 @@ export const onCreateUserGamePlay = /* GraphQL */ `subscription OnCreateUserGame
       gameIntro
       gameMap
       type
+      order
       createdAt
       updatedAt
       disabled
@@ -788,6 +905,8 @@ export const onUpdateUserGamePlay = /* GraphQL */ `subscription OnUpdateUserGame
       gameLogisticInfo
       gameSummary
       gameLocationPlace
+      latitude
+      longitude
       gameLocationPlaceDetails
       gameLocationCity
       gameDesigner
@@ -802,6 +921,7 @@ export const onUpdateUserGamePlay = /* GraphQL */ `subscription OnUpdateUserGame
       gameIntro
       gameMap
       type
+      order
       createdAt
       updatedAt
       disabled
@@ -841,6 +961,8 @@ export const onDeleteUserGamePlay = /* GraphQL */ `subscription OnDeleteUserGame
       gameLogisticInfo
       gameSummary
       gameLocationPlace
+      latitude
+      longitude
       gameLocationPlaceDetails
       gameLocationCity
       gameDesigner
@@ -855,6 +977,7 @@ export const onDeleteUserGamePlay = /* GraphQL */ `subscription OnDeleteUserGame
       gameIntro
       gameMap
       type
+      order
       createdAt
       updatedAt
       disabled

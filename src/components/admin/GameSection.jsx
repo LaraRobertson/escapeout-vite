@@ -236,6 +236,7 @@ export default function GameSection(props) {
         console.log("***useEffect***:  fetchGames() (gamesFilter)");
         fetchGames();
     }, [gamesFilter]);
+
     useEffect(() => {
         console.log("***useEffect***:  fetchGames() (updatedDB");
         setModalContent({
@@ -516,7 +517,7 @@ export default function GameSection(props) {
                             <Button gap="0.1rem" size="small" onClick={() => handleStats({"gameID": game.id, "gameName": game.gameName})}>stats</Button>
 
 
-                            {/*<Button gap="0.1rem" size="small" color="red" onClick={() => deleteGame({"gameID": game.id})}>
+                            {/*DELETE? <Button gap="0.1rem" size="small" color="red" onClick={() => deleteGame({"gameID": game.id})}>
                                 x
                             </Button>*/}
 
@@ -543,7 +544,7 @@ export default function GameSection(props) {
                                 })}>copy</Button>
                                 <Button gap="0.1rem" size="small" onClick={() => handleStats({"gameID": game.id, "gameName": game.gameName})}>stats</Button>
 
-                                {/* <Button gap="0.1rem" size="small" color="red" onClick={() => deleteGame({"gameID": game.id})}>
+                                {/*DELETE <Button gap="0.1rem" size="small" color="red" onClick={() => deleteGame({"gameID": game.id})}>
                                     x
                                 </Button>*/}
 
@@ -576,11 +577,16 @@ export default function GameSection(props) {
                             </TableRow>
                             <TableRow>
                                 <TableCell colSpan={2}><strong>Description</strong>:<br /> {game.gameDescriptionH2} </TableCell>
+                                <TableCell colSpan={3}><strong>Summary</strong>:<br /> {game.gameDescriptionP} </TableCell>
+                                <TableCell colSpan={2}><strong>Logistic Information</strong>: <br /> {game.gameDescriptionH2}  </TableCell>
+                            </TableRow>
+                            <TableRow>
                                 <TableCell><strong>Goals</strong>:<br /> {game.gameGoals} </TableCell>
-                                <TableCell><strong>Summary</strong>:<br /> {game.gameDescriptionP} </TableCell>
+                                <TableCell><strong>Order</strong>:<br /> {game.order} </TableCell>
+                                <TableCell><strong>Latitude</strong>:<br /> {game.latitude} </TableCell>
+                                <TableCell><strong>Longitude</strong>:<br /> {game.longitude} </TableCell>
                                 <TableCell><strong>Walking Distance</strong>: <br />{game.walkingDistance} </TableCell>
-                                <TableCell><strong>Logistic Information</strong>: <br /> {game.gameDescriptionH2}  </TableCell>
-                                <TableCell><strong>Win Message: </strong>: <br />{game.gameWinMessage} </TableCell>
+                                <TableCell colSpan={2}><strong>Win Message</strong>: <br />{game.gameWinMessage} </TableCell>
                             </TableRow>
                             <TableRow>
                                 <TableCell colSpan={7}>

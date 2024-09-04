@@ -26,6 +26,7 @@ import GameDetail from "../components/home/GameDetail";
 import Hero from "../components/home/Hero";
 import { ReactModal } from "../components/Modals";
 import Map from "../components/Map";
+import MapPlaceView from "../components/MapPlaceView";
 import TopNav from '../components/home/TopNav';
 import CurrentlyPlaying from '../components/home/CurrentlyPlaying';
 import HowToPlay from '../components/home/HowToPlay';
@@ -57,6 +58,8 @@ export function Home() {
     const [userDB, setUserDB] = useState({});
     const [gamesIDUser, setGamesIDUser] = useState([]);
     const [gamesIDUserPlayed, setGamesIDUserPlayed] = useState([]);
+
+    const [gameLocationPlace, setGameLocationPlace] = useState("");
 
     /*const emailRef = useRef<HTMLInputElement>();
     const nameRef = useRef<HTMLInputElement>();*/
@@ -224,7 +227,7 @@ export function Home() {
         )
     } else {*/
         return (
-            <MyAuthContext.Provider value={{ authStatus, email, gamesIDUserPlayed, gamesIDUser, setGameDetails, setModalContent }}>
+            <MyAuthContext.Provider value={{ authStatus, email, gamesIDUserPlayed, gamesIDUser, setGameDetails, setModalContent, setGameLocationPlace, gameLocationPlace }}>
                 <View className="main-container">
                     <TopNav setModalContent={setModalContent} signOut={signOut} />
                     <View className="main-content top-main" marginBottom="1em">
@@ -241,6 +244,7 @@ export function Home() {
                             {(modalContent.content == "Leaderboard") && <LeaderBoard gameDetails={gameDetails}/>}
                             {(modalContent.content == "My Stats") && <MyStats /> }
                             {(modalContent.content == "Map") && <Map gameDetails={gameDetails} /> }
+                            {(modalContent.content == "MapPlaceView") && <MapPlaceView /> }
                         </ReactModal>
                         <Footer />
                     </View>
