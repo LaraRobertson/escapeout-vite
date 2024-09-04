@@ -788,6 +788,129 @@ export const deleteGamePlayZone = /* GraphQL */ `mutation DeleteGamePlayZone(
   APITypes.DeleteGamePlayZoneMutationVariables,
   APITypes.DeleteGamePlayZoneMutation
 >;
+export const createCity = /* GraphQL */ `mutation CreateCity(
+  $input: CreateCityInput!
+  $condition: ModelCityConditionInput
+) {
+  createCity(input: $input, condition: $condition) {
+    id
+    cityName
+    cityDescription
+    cityState
+    cityCountry
+    cityMap
+    order
+    createdAt
+    updatedAt
+    disabled
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateCityMutationVariables,
+  APITypes.CreateCityMutation
+>;
+export const updateCity = /* GraphQL */ `mutation UpdateCity(
+  $input: UpdateCityInput!
+  $condition: ModelCityConditionInput
+) {
+  updateCity(input: $input, condition: $condition) {
+    id
+    cityName
+    cityDescription
+    cityState
+    cityCountry
+    cityMap
+    order
+    createdAt
+    updatedAt
+    disabled
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateCityMutationVariables,
+  APITypes.UpdateCityMutation
+>;
+export const deleteCity = /* GraphQL */ `mutation DeleteCity(
+  $input: DeleteCityInput!
+  $condition: ModelCityConditionInput
+) {
+  deleteCity(input: $input, condition: $condition) {
+    id
+    cityName
+    cityDescription
+    cityState
+    cityCountry
+    cityMap
+    order
+    createdAt
+    updatedAt
+    disabled
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteCityMutationVariables,
+  APITypes.DeleteCityMutation
+>;
+export const createIcon = /* GraphQL */ `mutation CreateIcon(
+  $input: CreateIconInput!
+  $condition: ModelIconConditionInput
+) {
+  createIcon(input: $input, condition: $condition) {
+    id
+    iconName
+    iconText
+    order
+    createdAt
+    updatedAt
+    disabled
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateIconMutationVariables,
+  APITypes.CreateIconMutation
+>;
+export const updateIcon = /* GraphQL */ `mutation UpdateIcon(
+  $input: UpdateIconInput!
+  $condition: ModelIconConditionInput
+) {
+  updateIcon(input: $input, condition: $condition) {
+    id
+    iconName
+    iconText
+    order
+    createdAt
+    updatedAt
+    disabled
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateIconMutationVariables,
+  APITypes.UpdateIconMutation
+>;
+export const deleteIcon = /* GraphQL */ `mutation DeleteIcon(
+  $input: DeleteIconInput!
+  $condition: ModelIconConditionInput
+) {
+  deleteIcon(input: $input, condition: $condition) {
+    id
+    iconName
+    iconText
+    order
+    createdAt
+    updatedAt
+    disabled
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteIconMutationVariables,
+  APITypes.DeleteIconMutation
+>;
 export const createUserGamePlay = /* GraphQL */ `mutation CreateUserGamePlay(
   $input: CreateUserGamePlayInput!
   $condition: ModelUserGamePlayConditionInput

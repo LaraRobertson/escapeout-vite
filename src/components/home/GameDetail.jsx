@@ -95,12 +95,10 @@ export default function GameDetail(props) {
                     <Accordion.Content>
                         <View>
                             <View paddingBottom="10px">
+                                See Available hints in <strong>"Help"</strong> window.
                                 Choosing an Individual Hint adds <span
-                                className="italics"> 5 Minutes!</span> Choosing the "Hints" button shows you what hints are available.</View>
+                                className="italics"> 5 Minutes!</span></View>
                             <View paddingBottom="10px">
-                                For Example, choosing this button while playing game (see yellow circled button below), is okay and it does not cost any time:<br />
-                                <Image src={"https://escapeoutbucket2183723-dev.s3.amazonaws.com/public/hint-button.png"} alt={"hint button"}/><br />
-                                Choosing one these buttons (which appear after you choose the first button) costs 5 minutes and you get a hint:<br />
                                 <Image src={"https://escapeoutbucket2183723-dev.s3.amazonaws.com/public/hint-modal.png"} alt={"hint modal"}/>
                             </View>
                         </View>

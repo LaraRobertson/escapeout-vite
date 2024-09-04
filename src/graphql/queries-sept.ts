@@ -71,31 +71,93 @@ export const getGame = /* GraphQL */ `query GetGame($id: ID!) {
     gameGoals
     gameIntro
     gameMap
-    gamePlayZone {
-      nextToken
-      __typename
-    }
-    gameHint {
-      nextToken
-      __typename
-    }
-    type
-    gameClue {
-      nextToken
-      __typename
-    }
-    gamePuzzle {
-      nextToken
-      __typename
-    }
-    order
+      gamePlayZone {
+          items {
+            id
+            disabled
+            gameID
+            gameZoneName
+            gameZoneIcon
+            gameZoneImage
+            gameZoneDescription
+            latitude
+            longitude
+            order
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+       gameHint {
+          items {
+            id
+            disabled
+            gameID
+            gamePlayZoneID
+            gameHintName
+            gameHintDescription
+            order
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+      type
+       gameClue {
+          items {
+            id
+            gameClueName
+            gamePlayZoneID
+            gameClueIcon
+            gameClueImage
+            gameClueToolNeeded
+            gameClueText
+            gameCluePosition
+            order
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+      gamePuzzle {
+        items {
+            id
+            gamePlayZoneID
+            puzzleName
+            puzzlePosition
+            puzzleImage
+            puzzleImageOpen
+            puzzleImageSolved
+            textField {
+              items {
+                id
+                name
+                label
+                answer
+                order
+                }
+              nextToken
+            }
+            puzzleClueRevealed
+            puzzleClueText
+            puzzleToolRevealed
+            puzzleToolNeeded
+            winGame
+            winGameImage
+            winGameMessage
+            order
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
     createdAt
-    updatedAt
     disabled
     user {
       nextToken
       __typename
     }
+    updatedAt
     __typename
   }
 }
@@ -128,6 +190,86 @@ export const listGames = /* GraphQL */ `query ListGames(
       gameGoals
       gameIntro
       gameMap
+        gamePlayZone {
+          items {
+            id
+            disabled
+            gameID
+            gameZoneName
+            gameZoneImage
+            gameZoneIcon
+            latitude
+            longitude
+            order
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+       gameHint {
+          items {
+            id
+            disabled
+            gameID
+            gamePlayZoneID
+            gameHintName
+            gameHintDescription
+            order
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+      type
+       gameClue {
+          items {
+            id
+            gameClueName
+            gamePlayZoneID
+            gameClueIcon
+            gameClueImage
+            gameClueToolNeeded
+            gameClueText
+            gameCluePosition
+            order
+            createdAt
+            disabled
+            updatedAt
+          }
+          nextToken
+        }
+      gamePuzzle {
+        items {
+            id
+            gamePlayZoneID
+            puzzleName
+            puzzlePosition
+            puzzleImage
+            puzzleImageOpen
+            puzzleImageSolved
+            textField {
+              items {
+                id
+                name
+                label
+                answer
+                order
+                }
+              nextToken
+            }
+            puzzleClueRevealed
+            puzzleClueText
+            puzzleToolRevealed
+            puzzleToolNeeded
+            winGame
+            winGameImage
+            winGameMessage
+            order
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
       type
       order
       createdAt
@@ -288,6 +430,16 @@ export const listGameStats = /* GraphQL */ `query ListGameStats(
       gameLocationCity
       gameName
       gameStates
+       gameScore {
+          items {
+            id
+            firstTime
+            completed
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
       type
       createdAt
       updatedAt
@@ -502,6 +654,83 @@ export const listGamePlayZones = /* GraphQL */ `query ListGamePlayZones(
   APITypes.ListGamePlayZonesQueryVariables,
   APITypes.ListGamePlayZonesQuery
 >;
+export const getCity = /* GraphQL */ `query GetCity($id: ID!) {
+  getCity(id: $id) {
+    id
+    cityName
+    cityDescription
+    cityState
+    cityCountry
+    cityMap
+    order
+    createdAt
+    updatedAt
+    disabled
+    __typename
+  }
+}
+` as GeneratedQuery<APITypes.GetCityQueryVariables, APITypes.GetCityQuery>;
+export const listCities = /* GraphQL */ `query ListCities(
+  $filter: ModelCityFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listCities(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      cityName
+      cityDescription
+      cityState
+      cityCountry
+      cityMap
+      order
+      createdAt
+      updatedAt
+      disabled
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListCitiesQueryVariables,
+  APITypes.ListCitiesQuery
+>;
+export const getIcon = /* GraphQL */ `query GetIcon($id: ID!) {
+  getIcon(id: $id) {
+    id
+    iconName
+    iconText
+    order
+    createdAt
+    updatedAt
+    disabled
+    __typename
+  }
+}
+` as GeneratedQuery<APITypes.GetIconQueryVariables, APITypes.GetIconQuery>;
+export const listIcons = /* GraphQL */ `query ListIcons(
+  $filter: ModelIconFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listIcons(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      iconName
+      iconText
+      order
+      createdAt
+      updatedAt
+      disabled
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<APITypes.ListIconsQueryVariables, APITypes.ListIconsQuery>;
 export const getUserGamePlay = /* GraphQL */ `query GetUserGamePlay($id: ID!) {
   getUserGamePlay(id: $id) {
     id
@@ -702,6 +931,23 @@ export const gameByGameOrder = /* GraphQL */ `query GameByGameOrder(
       gameGoals
       gameIntro
       gameMap
+      gamePlayZone {
+          items {
+            id
+            disabled
+            gameID
+            gameZoneName
+            gameZoneIcon
+            gameZoneImage
+            gameZoneDescription
+            latitude
+            longitude
+            order
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
       type
       order
       createdAt
@@ -755,6 +1001,23 @@ export const gamesByCity = /* GraphQL */ `query GamesByCity(
       gameGoals
       gameIntro
       gameMap
+            gamePlayZone {
+          items {
+            id
+            disabled
+            gameID
+            gameZoneName
+            gameZoneIcon
+            gameZoneImage
+            gameZoneDescription
+            latitude
+            longitude
+            order
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
       type
       order
       createdAt
@@ -982,10 +1245,28 @@ export const gameStatsSortedByGameName = /* GraphQL */ `query GameStatsSortedByG
       gameLocationCity
       gameName
       gameStates
+       gameScore {
+          items {
+            id
+            gameStatsID
+            gameID
+            numberOfPlayers
+            teamName
+            teamLocation
+            gameComments
+            gameTotalTime
+            completed
+            firstTime
+            gameHintTime
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
       type
       createdAt
-      updatedAt
       disabled
+      updatedAt
       __typename
     }
     nextToken

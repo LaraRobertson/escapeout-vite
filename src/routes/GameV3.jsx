@@ -484,8 +484,8 @@ export function GameV3() {
 
 
                 <ReactModalFromBottom modalContent={modalContent}>
-                    {(modalContent.content == "Help") && <Help/>}
-                    {(modalContent.content == "Hints") &&
+                    {/*(modalContent.content == "Help") && <Help/>*/}
+                    {(modalContent.content == "Help") &&
                     <Hints gameHint={gameHint} setGameTimeHint={setGameTimeHint} gameHintVisible={gameHintVisible}
                            setGameHintVisible={setGameHintVisible}
                            DangerouslySetInnerHTMLSanitized={DangerouslySetInnerHTMLSanitized}/>}
@@ -517,15 +517,9 @@ export function GameV3() {
                         <Button className="quit-button dark"
                                 onClick={() => setModalContent({
                                     open: true,
-                                    content: "Hints"
-                                })}>
-                            Hints</Button>
-                        <Button className="quit-button dark"
-                                onClick={() => setModalContent({
-                                    open: true,
                                     content: "Map"
                                 })}>
-                            Map</Button>
+                            Zone Map</Button>
                         <Button className="quit-button dark"
                                 onClick={() => setModalContent({
                                     open: true,

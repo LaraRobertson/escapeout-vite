@@ -37,22 +37,6 @@ export default function MyStats(props) {
                 variables: {filter: filter, sortDirection: "DESC", type: "gameStats"}
             });
             const myStatsFromAPI = apiData.data.gameStatsSortedByGameName.items;
-            console.log("myStatsFromAPI: " + myStatsFromAPI);
-           /* for (const key in myStatsFromAPI) {
-                console.log(`${key}: ${ myStatsFromAPI[key]}`);
-                 for (const key1 in myStatsFromAPI[key]) {
-                     console.log(`${key1}: ${myStatsFromAPI[key][key1]}`);
-                 }
-            }*/
-            /* need to filter gameScore by date */
-            /*if (!showAllTimeButton) {
-            let myStatsFromAPIToday = gameListByCity.filter(game => game.gameLocationPlace === gameLocationPlaceTemp)
-                .sort((a, b) => {
-                    return a.gameLevel - b.gameLevel;
-                });
-            } else {
-                setMyStats(myStatsFromAPI);
-            }*/
             setMyStats(myStatsFromAPI);
         } catch (err) {
             console.log("error fetching gameStatsSortedByGameName", err);
@@ -67,7 +51,6 @@ export default function MyStats(props) {
 
 
     const GameScoreView = (props) => {
-        console.log("gameScoreArray: " + JSON.stringify(props.gameScoreArray));
         const today = new Date();
         const yesterday = new Date(today);
         yesterday.setDate(yesterday.getDate() - 1);
@@ -109,10 +92,12 @@ export default function MyStats(props) {
         <>
             <Heading level={5} >{myStatsEmail}</Heading>
             <Flex>
-            <Button className={showAllTimeButton ? "hide" : "button"} onClick={() =>  myStatsFunction()}>
-                tap to see today</Button>&nbsp;
-            <Button className={showAllTimeButton ? "button" : "hide"} onClick={() =>  myStatsFunction("2021-04-01")}>
-                tap to see all time</Button></Flex>
+                {(!showAllTimeButton) &&
+                <Button className={"button"} onClick={() =>  myStatsFunction()}>
+                    tap to see today</Button>}
+                {(showAllTimeButton) && <Button className={"button"} onClick={() =>  myStatsFunction("2021-04-01")}>
+                    tap to see today</Button>}
+            </Flex>
             <Heading level={3} className={showAllTimeButton ? "heading light" : "hide"} >Completed Today</Heading>
             <Heading level={3} className={showAllTimeButton ? "hide" : "heading light"} >All Time</Heading>
 

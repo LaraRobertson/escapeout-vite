@@ -215,7 +215,6 @@ export default function GameIntro(props) {
                     </View>
 
                     <Heading level={6} textAlign={"center"} marginBottom="0">Your score is based on your time to complete game. You must complete ALL the puzzles in ALL the zones to win.</Heading>
-                    <View className={"small end-paragraph"} >Using a hint adds 5 minutes.</View>
                     <View className={"small end-paragraph"}><strong>You Have Signed Waiver</strong>:
                         <Button onClick={() => handleViewWaiver()} variation={"link"}>view waiver</Button>
                     </View>
