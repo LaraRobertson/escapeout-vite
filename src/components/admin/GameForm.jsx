@@ -1,13 +1,20 @@
-import {Button, Flex, Input, SwitchField, TextAreaField, TextField, View} from "@aws-amplify/ui-react";
+import {Button, Flex, Input, SelectField, SwitchField, TextAreaField, TextField, View} from "@aws-amplify/ui-react";
 import React, {useContext, useEffect, useState} from "react";
-import {getGame} from "../../graphql/queries";
+import {getGame, listCities} from "../../graphql/queries";
 import * as mutations from "../../graphql/mutations";
 import {MyAuthContext} from "../../MyContext";
 import {generateClient} from "aws-amplify/api";
+import diary from "../../assets/noun-diary-6966311.svg";
+import messageInABottle from "../../assets/noun-message-in-a-bottle-5712014.svg";
+import clueIcon from "../../assets/noun-clue-4353248.svg";
+import clueNoteIcon from "../../assets/noun-note-question-1648398.svg";
+import envelope from "../../assets/noun-message-6963433.svg";
+import tornPaper from "../../assets/noun-torn-paper-3017230.svg";
 
 export default function GameForm(props) {
     const client = generateClient();
     const { setModalContent, modalContent } = useContext(MyAuthContext);
+    const [cities, setCities] = useState([]);
     let action = modalContent.action;
     let gameID = modalContent.id;
     let formCreateGameStateBackup = props.formCreateGameStateBackup;
@@ -34,6 +41,7 @@ export default function GameForm(props) {
         if (action === "edit") {
             populateGameForm();
         }
+        fetchCities();
     },[]);
     async function populateGameForm() {
         console.log("gameID : " + gameID );
@@ -166,6 +174,18 @@ export default function GameForm(props) {
             };
         }
     }
+    async function fetchCities() {
+        try {
+            const apiData = await client.graphql({
+                query: listCities,
+                variables: {filter: {}}
+            });
+            const citiesFromAPI = apiData.data.listCities.items;
+            setCities(citiesFromAPI);
+        } catch (err) {
+            console.log('error fetching cities', err);
+        }
+    }
     return (
         <View id="gameForm" className="show" as="form" margin=".5rem 0">
             <Flex direction="column" justifyContent="center" gap="1rem" className={"game-form"}>
@@ -175,8 +195,11 @@ export default function GameForm(props) {
                 </label>
                 <input id="file-upload-txt" type="file" accept=".txt" onChange={handleUploadBackup} />
                 </View>}
+                {(action == "edit") && <View>
+                    game id: {gameID}
+                </View>}
                 <SwitchField
-                    label={formCreateGameState.disabled? "disabled true/live false" : "disabled false/live true"}
+                    label={formCreateGameState.disabled? "disabled" : "live"}
                     isChecked={formCreateGameState.disabled}
                     onChange={(e) => {
                         console.log("e.target.checked: " + e.target.checked)
@@ -220,16 +243,16 @@ export default function GameForm(props) {
                     value={formCreateGameState.gameLocationPlace}
                     required
                 />
-
-                <TextField
-                    name="GameLocationCity"
-                    onChange={(event) => setInputCreateGame('gameLocationCity', event.target.value)}
-                    placeholder="City"
+                <SelectField
+                    className={"city-dropdown"}
                     label="Game Location City"
-                    variation="quiet"
+                    placeholder="choose a city"
                     value={formCreateGameState.gameLocationCity}
-                    required
-                />
+                    onChange={(event) => setInputCreateGame('gameLocationCity', event.target.value)}>
+                    {cities.map((city, index) => (
+                        <option key={city.id} value={city.cityName}>{city.cityName}</option>
+                    ))}
+                </SelectField>
                 <TextField
                     onChange={(event) => setInputCreateGame('latitude', event.target.value)}
                     name="latitude"

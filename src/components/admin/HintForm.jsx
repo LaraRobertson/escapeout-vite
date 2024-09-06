@@ -31,7 +31,7 @@ export default function HintForm() {
     useEffect(() => {
         if (action === "edit") {
             populateHintForm();
-        } else if (action === "addHint") {
+        } else if (action === "addBackupHint") {
             setFormCreateHintState(hint);
             console.log("hint: " + JSON.stringify(hint));
             let key = "gameID";
@@ -60,7 +60,7 @@ export default function HintForm() {
             const gameHint = { ...formCreateHintState };
             console.log("addHint - gameHint: " + gameHint);
             /* add backup id to an array and check if backup in an array... */
-            setBackupIDArray( [...backupIDArray,gameHint.id]);
+            // did a different way - setBackupIDArray( [...backupIDArray,gameHint.id]);
             // setGames([...games, game]);
             setFormCreateHintState(initialStateCreateHint);
             delete gameHint.updatedAt;
@@ -188,7 +188,7 @@ export default function HintForm() {
                             variation="primary">
                         Create Hint
                     </Button>}
-                    {(action == "addHint") &&
+                    {(action == "addBackupHint") &&
                     <Button id="createHint" className="show" onClick={addHintFromFile}
                             variation="primary">
                         Create Hint From File

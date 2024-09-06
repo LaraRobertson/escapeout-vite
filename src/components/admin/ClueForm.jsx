@@ -1,4 +1,14 @@
-import {Button, Flex, Input, SwitchField, TextAreaField, TextField, View} from "@aws-amplify/ui-react";
+import {
+    Button,
+    Flex,
+    Image,
+    Input,
+    SelectField,
+    SwitchField,
+    TextAreaField,
+    TextField,
+    View
+} from "@aws-amplify/ui-react";
 import React, {useContext, useEffect, useState} from "react";
 import {getGame, getGameClue, getGamePlayZone, getGamePuzzle} from "../../graphql/queries";
 import * as mutations from "../../graphql/mutations";
@@ -6,6 +16,13 @@ import {MyAuthContext} from "../../MyContext";
 import {generateClient} from "aws-amplify/api";
 import {createGamePuzzle} from "../../graphql/mutations";
 import {uploadData} from "aws-amplify/storage";
+import {IconClueDisplay} from "../sharedComponents";
+import clueIcon from "../../assets/noun-clue-4353248.svg";
+import diary from "../../assets/noun-diary-6966311.svg";
+import tornPaper from "../../assets/noun-torn-paper-3017230.svg";
+import messageInABottle from "../../assets/noun-message-in-a-bottle-5712014.svg";
+import clueNoteIcon from "../../assets/noun-note-question-1648398.svg";
+import envelope from "../../assets/noun-message-6963433.svg";
 
 export default function ClueForm() {
     const client = generateClient();
@@ -35,7 +52,7 @@ export default function ClueForm() {
     useEffect(() => {
         if (action === "edit") {
             populateClueForm();
-        } else if (action === "addClue") {
+        } else if (action === "addBackupClue") {
             setFormCreateClueState(clue);
             console.log("clue: " + JSON.stringify(clue));
             let key = "gameID";
@@ -64,7 +81,7 @@ export default function ClueForm() {
             const gameClue = { ...formCreateClueState };
             console.log("addClue - gameClue: " + gameClue);
             /* add backup clue id to an array and check if backup in an array... */
-            setBackupIDArray( [...backupIDArray,gameClue.id]);
+            // - did a different way: setBackupIDArray( [...backupIDArray,gameClue.id]);
             setFormCreateClueState(initialStateCreateClue);
             delete gameClue.updatedAt;
             delete gameClue.id;
@@ -229,15 +246,20 @@ export default function ClueForm() {
                     value={formCreateClueState.gameClueText}
                     required
                 />
-                <TextField
-                    onChange={(event) => setInputCreateClue('gameClueIcon', event.target.value)}
-                    name="gameClueIcon"
-                    placeholder="Game Clue Icon"
+                <SelectField
+                    className={"city-dropdown"}
                     label="Game Clue Icon"
-                    variation="quiet"
+                    placeholder="choose an icon"
                     value={formCreateClueState.gameClueIcon}
-                    required
-                />
+                    onChange={(event) => setInputCreateClue('gameClueIcon', event.target.value)}>
+                        <option key={"1"} value={"clueIcon"}>clueIcon</option>
+                        <option key={"2"} value={"tornPaper"}>tornPaper</option>
+                    <option key={"3"} value={"envelope"}>envelope</option>
+                    <option key={"4"} value={"messageInABottle"}>messageInABottle</option>
+                    <option key={"5"} value={"clueNoteIcon"}>clueNoteIcon</option>
+                    <option key={"6"} value={"diary"}>diary</option>
+                </SelectField>
+                <IconClueDisplay hide="true" gameClueIcon={formCreateClueState.gameClueIcon}/>
                 <TextField
                     onChange={(event) => setInputCreateClue('gameClueImage', event.target.value)}
                     name="gameClueImage"
@@ -263,7 +285,7 @@ export default function ClueForm() {
                             variation="primary">
                         Create Clue
                     </Button>}
-                    {(action == "addClue") &&
+                    {(action == "addBackupClue") &&
                     <Button id="createClue" className="show" onClick={addClueFromFile}
                             variation="primary">
                         Create Clue from File

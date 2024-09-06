@@ -151,6 +151,7 @@ export const getGame = /* GraphQL */ `query GetGame($id: ID!) {
           }
           nextToken
         }
+    order
     createdAt
     disabled
     user {
@@ -198,6 +199,7 @@ export const listGames = /* GraphQL */ `query ListGames(
             gameZoneName
             gameZoneImage
             gameZoneIcon
+            gameZoneDescription
             latitude
             longitude
             order
@@ -287,6 +289,7 @@ export const getGamePuzzle = /* GraphQL */ `query GetGamePuzzle($id: ID!) {
     id
     gameID
     gamePlayZoneID
+    gamePlayZoneName
     puzzleName
     puzzlePosition
     puzzleImage
@@ -324,6 +327,7 @@ export const listGamePuzzles = /* GraphQL */ `query ListGamePuzzles(
       id
       gameID
       gamePlayZoneID
+      gamePlayZoneName
       puzzleName
       puzzlePosition
       puzzleImage
@@ -354,6 +358,7 @@ export const getTextField = /* GraphQL */ `query GetTextField($id: ID!) {
   getTextField(id: $id) {
     id
     puzzleID
+    puzzleName
     name
     label
     answer
@@ -377,6 +382,7 @@ export const listTextFields = /* GraphQL */ `query ListTextFields(
     items {
       id
       puzzleID
+      puzzleName
       name
       label
       answer
@@ -513,6 +519,7 @@ export const getGameHint = /* GraphQL */ `query GetGameHint($id: ID!) {
     id
     gameID
     gamePlayZoneID
+    gamePlayZoneName
     gameHintName
     gameHintDescription
     order
@@ -536,6 +543,7 @@ export const listGameHints = /* GraphQL */ `query ListGameHints(
       id
       gameID
       gamePlayZoneID
+      gamePlayZoneName
       gameHintName
       gameHintDescription
       order
@@ -557,6 +565,7 @@ export const getGameClue = /* GraphQL */ `query GetGameClue($id: ID!) {
     id
     gameID
     gamePlayZoneID
+    gamePlayZoneName
     gameClueName
     gameClueIcon
     gameClueImage
@@ -584,6 +593,7 @@ export const listGameClues = /* GraphQL */ `query ListGameClues(
       id
       gameID
       gamePlayZoneID
+      gamePlayZoneName
       gameClueName
       gameClueIcon
       gameClueImage
@@ -1053,6 +1063,7 @@ export const gamePuzzleByGameID = /* GraphQL */ `query GamePuzzleByGameID(
       id
       gameID
       gamePlayZoneID
+      gamePlayZoneName
       puzzleName
       puzzlePosition
       puzzleImage
@@ -1098,6 +1109,7 @@ export const textFieldByPuzzleID = /* GraphQL */ `query TextFieldByPuzzleID(
     items {
       id
       puzzleID
+      puzzleName
       name
       label
       answer
@@ -1379,6 +1391,7 @@ export const gameHintByGameID = /* GraphQL */ `query GameHintByGameID(
       id
       gameID
       gamePlayZoneID
+      gamePlayZoneName
       gameHintName
       gameHintDescription
       order
@@ -1415,6 +1428,7 @@ export const gameClueByGameID = /* GraphQL */ `query GameClueByGameID(
       id
       gameID
       gamePlayZoneID
+      gamePlayZoneName
       gameClueName
       gameClueIcon
       gameClueImage

@@ -262,6 +262,7 @@ export const createGamePuzzle = /* GraphQL */ `mutation CreateGamePuzzle(
     id
     gameID
     gamePlayZoneID
+    gamePlayZoneName
     puzzleName
     puzzlePosition
     puzzleImage
@@ -297,6 +298,7 @@ export const updateGamePuzzle = /* GraphQL */ `mutation UpdateGamePuzzle(
     id
     gameID
     gamePlayZoneID
+    gamePlayZoneName
     puzzleName
     puzzlePosition
     puzzleImage
@@ -332,6 +334,7 @@ export const deleteGamePuzzle = /* GraphQL */ `mutation DeleteGamePuzzle(
     id
     gameID
     gamePlayZoneID
+    gamePlayZoneName
     puzzleName
     puzzlePosition
     puzzleImage
@@ -366,6 +369,7 @@ export const createTextField = /* GraphQL */ `mutation CreateTextField(
   createTextField(input: $input, condition: $condition) {
     id
     puzzleID
+    puzzleName
     name
     label
     answer
@@ -387,6 +391,7 @@ export const updateTextField = /* GraphQL */ `mutation UpdateTextField(
   updateTextField(input: $input, condition: $condition) {
     id
     puzzleID
+    puzzleName
     name
     label
     answer
@@ -408,6 +413,7 @@ export const deleteTextField = /* GraphQL */ `mutation DeleteTextField(
   deleteTextField(input: $input, condition: $condition) {
     id
     puzzleID
+    puzzleName
     name
     label
     answer
@@ -586,6 +592,7 @@ export const createGameHint = /* GraphQL */ `mutation CreateGameHint(
     id
     gameID
     gamePlayZoneID
+    gamePlayZoneName
     gameHintName
     gameHintDescription
     order
@@ -607,6 +614,7 @@ export const updateGameHint = /* GraphQL */ `mutation UpdateGameHint(
     id
     gameID
     gamePlayZoneID
+    gamePlayZoneName
     gameHintName
     gameHintDescription
     order
@@ -628,6 +636,7 @@ export const deleteGameHint = /* GraphQL */ `mutation DeleteGameHint(
     id
     gameID
     gamePlayZoneID
+    gamePlayZoneName
     gameHintName
     gameHintDescription
     order
@@ -649,6 +658,7 @@ export const createGameClue = /* GraphQL */ `mutation CreateGameClue(
     id
     gameID
     gamePlayZoneID
+    gamePlayZoneName
     gameClueName
     gameClueIcon
     gameClueImage
@@ -674,6 +684,7 @@ export const updateGameClue = /* GraphQL */ `mutation UpdateGameClue(
     id
     gameID
     gamePlayZoneID
+    gamePlayZoneName
     gameClueName
     gameClueIcon
     gameClueImage
@@ -699,6 +710,7 @@ export const deleteGameClue = /* GraphQL */ `mutation DeleteGameClue(
     id
     gameID
     gamePlayZoneID
+    gamePlayZoneName
     gameClueName
     gameClueIcon
     gameClueImage

@@ -36,6 +36,7 @@ import ClueForm from "../components/admin/ClueForm";
 import HintForm from "../components/admin/HintForm";
 import GameStats from "../components/admin/GameStats";
 import UserStats from "../components/admin/UserStats";
+import CityForm from "../components/admin/CityForm";
 
 export function Admin() {
     const initialStateDisplaySection = {
@@ -223,6 +224,7 @@ export function Admin() {
                                 {(modalContent.content == "Clue Form") && <ClueForm />}
                                 {(modalContent.content == "Hint Form") && <HintForm />}
                                 {(modalContent.content == "User Stats") && <UserStats />}
+                                {(modalContent.content == "City Form") && <CityForm />}
                             </ReactModalFromRight>
                         </View>
                     </View>

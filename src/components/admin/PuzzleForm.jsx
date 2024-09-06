@@ -36,7 +36,7 @@ export default function PuzzleForm(props) {
     useEffect(() => {
         if (action === "edit") {
             populatePuzzleForm();
-        } else if (action === "addPuzzle") {
+        } else if (action === "addBackupPuzzle") {
             setFormCreatePuzzleState(puzzle);
             console.log("zone: " + JSON.stringify(puzzle));
             let key = "gameID";
@@ -230,9 +230,18 @@ export default function PuzzleForm(props) {
                     required
                 />
                 <TextField
+                    onChange={(event) => setInputCreatePuzzle('gamePlayZoneName', event.target.value)}
+                    name="gamePlayZoneName"
+                    placeholder="game Play Zone Name"
+                    label="Play Zone Name (used for copy/backup)"
+                    variation="quiet"
+                    value={formCreatePuzzleState.gamePlayZoneName}
+                    required
+                />
+                <TextField
                     onChange={(event) => setInputCreatePuzzle('puzzleClueText', event.target.value)}
                     name="puzzleClueText"
-                    placeholder="Clue Text Revealed"
+                    placeholder="Puzzle Clue Text (revealed)"
                     label="Clue Text Revealed"
                     variation="quiet"
                     value={formCreatePuzzleState.puzzleClueText}
@@ -240,7 +249,7 @@ export default function PuzzleForm(props) {
                 <TextField
                     onChange={(event) => setInputCreatePuzzle('puzzleClueRevealed', event.target.value)}
                     name="puzzleClueRevealed"
-                    placeholder="Puzzle Image Revealed"
+                    placeholder="Puzzle Clue Revealed (image)"
                     label="Puzzle Image Revealed"
                     variation="quiet"
                     value={formCreatePuzzleState.puzzleClueRevealed}
@@ -261,7 +270,7 @@ export default function PuzzleForm(props) {
                             variation="primary">
                         Create Puzzle
                     </Button>}
-                    {(action == "addPuzzle") &&
+                    {(action == "addBackupPuzzle") &&
                     <Button id="createPuzzle" className="show" onClick={addPuzzleFromFile}
                             variation="primary">
                         Create Puzzle From File
