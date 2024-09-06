@@ -1,4 +1,4 @@
-import {Button, Image, SelectField, TextAreaField, TextField, View, Flex, Heading} from "@aws-amplify/ui-react";
+import {Button, Image, SelectField, TextAreaField, TextField, View, Flex, Heading, Icon} from "@aws-amplify/ui-react";
 import React, {useState} from "react";
 import {
     toggleNotes,
@@ -9,6 +9,12 @@ import {useNavigate} from "react-router-dom";
 import DOMPurify from "dompurify";
 import Close from "../assets/times-solid-svgrepo-com.svg";
 import zoneIcon from "../assets/noun-zone-3097481-FFFFFF.svg";
+import diary from "../assets/noun-diary-6966311.svg";
+import tornPaper from "../assets/noun-torn-paper-3017230.svg";
+import messageInABottle from "../assets/noun-message-in-a-bottle-5712014.svg";
+import clueIcon from "../assets/noun-clue-4353248.svg";
+import clueNoteIcon from "../assets/noun-note-question-1648398.svg";
+import envelope from "../assets/noun-message-6963433.svg";
 
 export const NotAvailable = (props) => {
     const navigate = useNavigate();
@@ -27,6 +33,25 @@ export const NotAvailable = (props) => {
     )
 }
 
+export const GreenIcon = (props) => {
+    return (
+        <Icon
+            height={"20px"}
+            width={"20px"}
+            ariaLabel="CheckMark"
+            viewBox={{ minX: 0,
+                minY: 0,
+                width: 500,
+                height: 500 }}
+            paths={[
+                {
+                    d: "m7.7,404.6c0,0 115.2,129.7 138.2,182.68l99,0c41.5-126.7 202.7-429.1 340.92-535.1c28.6-36.8-43.3-52-101.35-27.62-87.5,36.7-252.5,317.2-283.3,384.64-43.7,11.5-89.8-73.7-89.84-73.7z",
+                    fill:"#6c4",
+                },
+            ]}
+        />
+    )
+}
 
 export const TimeBlock = (props) => {
     console.log("props.realTimeStart: " + props.realTimeStart);
@@ -63,7 +88,42 @@ function DangerouslySetInnerHTMLSanitized(htmlContent) {
     const sanitizedHtmlContent = DOMPurify.sanitize(htmlContent);
     return (sanitizedHtmlContent)
 }
+export const IconClueDisplay = (props) => {
+    console.log("props.gameClueIcon: " + props.gameClueIcon);
+    if (props.gameClueIcon != "") {
+        switch (true) {
+            case (props.gameClueIcon == "diary"):
+                return (
+                    <Image height="70px" width="70px" src={diary} alt="diary"/>
+                );
+            case (props.gameClueIcon == "tornPaper"):
+                return (
+                    <Image height="70px" width="70px" src={tornPaper} alt="torn paper"/>
+                );
+            case (props.gameClueIcon == "messageInABottle"):
+                return (
+                    <Image height="70px" width="70px" src={messageInABottle} alt="message in a bottle"/>
+                );
+            case (props.gameClueIcon == "clueIcon"):
+                return (
+                    <Image height="70px" width="70px" src={clueIcon} alt="clue icon"/>
+                );
+            case (props.gameClueIcon == "clueNoteIcon"):
+                return (
+                    <Image height="70px" width="70px" src={clueNoteIcon} alt="clue Note icon"/>
+                );
+            case (props.gameClueIcon == "envelope"):
+                return (
+                    <Image height="70px" width="70px" src={envelope} alt="envelope"/>
+                );
+            default:
+                return (
+                    <Image height="70px" width="70px" src={tornPaper} alt="torn paper"/>
+                );
+        }
 
+    }
+}
 export const NotesOpen = (props) => {
     let cluesArray=props.cluesArray;
     let setCluesArrayRemoveFunction=props.setCluesArrayRemoveFunction;

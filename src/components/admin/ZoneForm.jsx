@@ -45,7 +45,7 @@ export default function ZoneForm() {
     useEffect(() => {
         if (action === "edit") {
             populateZoneForm();
-        } else if (action === "addZone") {
+        } else if (action === "addBackupZone") {
             setFormCreateZoneState(zone);
             console.log("zone: " + JSON.stringify(zone));
             let key = "gameID";
@@ -70,7 +70,7 @@ export default function ZoneForm() {
         try {
             if (!formCreateZoneState.gameZoneName ) return;
             const zone = { ...formCreateZoneState };
-            console.log("addZone: " + zone);
+            console.log("addBackupZone: " + zone);
             /* setGames([...games, game]);*/
             setFormCreateZoneState(initialStateCreateZone);
             delete zone.updatedAt;
@@ -281,7 +281,7 @@ export default function ZoneForm() {
                         variation="primary">
                     Create Zone
                 </Button>}
-                {(action == "addZone") &&
+                {(action == "addBackupZone") &&
                 <Button id="createZone" onClick={addZoneFromFile}
                         variation="primary">
                     Create Zone from File

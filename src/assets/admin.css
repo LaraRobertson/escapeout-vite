@@ -79,6 +79,7 @@
     top: 0px;
     left: 0px;
     height: 100%;
+    min-height:100vh;
     z-index: 999;
     flex: 0 0 35px;
     max-width: 35px;
@@ -168,9 +169,9 @@
     display:inline-flex;
     margin: 0;
     padding:0;
-
-    line-height: .75rem;
-    font-size: .75rem;
+    max-width: 250px;
+    line-height: 1rem;
+    font-size: 1rem;
 }
 .image-upload-button
 {

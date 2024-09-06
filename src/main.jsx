@@ -36,12 +36,29 @@ if (isLocalhost) {
 } else if (window.location.hostname === 'play.escapeout.games') {
     amplifyconfig.oauth.redirectSignIn = "https://play.escapeout.games/"
     amplifyconfig.oauth.redirectSignOut = "https://play.escapeout.games/"
+    /* don't show console messages on play */
+    console.log = (function() {
+        var console_log = console.log;
+        var timeStart = new Date().getTime();
+
+        return function() {
+            var delta = new Date().getTime() - timeStart;
+            var args = [];
+            args.push((delta / 1000).toFixed(2) + ':');
+            for(var i = 0; i < arguments.length; i++) {
+                args.push(arguments[i]);
+            }
+           //console_log.apply(console, args);
+        };
+    })();
 } else {
     console.log('This is not possible')
 }
 
 Amplify.configure(amplifyconfig);
 /* end configure amplify */
+
+/* can run this to check timing - places timestamp on each console.log comment */
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(

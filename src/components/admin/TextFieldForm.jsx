@@ -29,7 +29,7 @@ export default function TextFieldForm() {
     useEffect(() => {
         if (action === "edit") {
             populateTextFieldForm();
-        } else if (action === "addTextField") {
+        } else if (action === "addBackupTextField") {
             setFormCreateTextFieldState(textField);
             console.log("zone: " + JSON.stringify(textField));
             let key = "puzzleID";
@@ -193,7 +193,7 @@ export default function TextFieldForm() {
                             variation="primary">
                         Create TextField
                     </Button>}
-                    {(action == "addTextField") &&
+                    {(action == "addBackupTextField") &&
                     <Button id="createPuzzle" className="show" onClick={addTextFieldFromFile}
                             variation="primary">
                         Create TextField From File

@@ -1,6 +1,6 @@
 import {Button, Flex, Heading, View, Card, Link} from "@aws-amplify/ui-react";
 import React, {useEffect, useState, useContext} from "react";
-import {gameByGameOrder, gamesByCity} from "../../graphql/queries";
+import {gameByGameOrder, gamesByCity, listCities} from "../../graphql/queries";
 import GameCard from "./GameCard";
 import {generateClient} from "aws-amplify/api";
 import {MyAuthContext} from "../../MyContext";
@@ -12,6 +12,7 @@ export default function GameList(props) {
     const [hidePlayedGames, setHidePlayedGames] = useState(false);
     const [loading, setLoading] = useState(false);
     const [gameListByCity, setGameListByCity] = useState([]);
+    const [cities, setCities] = useState([]);
     const [gameListByCityPlace, setGameListByCityPlace] = useState([]);
     const [gameLocationPlaceArray, setGameLocationPlaceArray] = useState([]);
     const [gamesFilter, setGamesFilter] = useState({disabled: {eq:false}});
@@ -22,6 +23,7 @@ export default function GameList(props) {
     useEffect(() => {
         console.log("***useEffect***:  fetchGames():");
         fetchGames();
+        fetchCities();
     }, []);
 
     useEffect(() => {
@@ -136,7 +138,23 @@ export default function GameList(props) {
             setLoading(false);
         }
     }
-
+    async function fetchCities() {
+        let filter = {
+            disabled: {
+                eq: false
+            }
+        };
+        try {
+            const apiData = await client.graphql({
+                query: listCities,
+                variables: {filter: filter}
+            });
+            const citiesFromAPI = apiData.data.listCities.items;
+            setCities(citiesFromAPI);
+        } catch (err) {
+            console.log('error fetching cities', err);
+        }
+    }
     return (
     <View id="game-list">
         <View className={"blue-alert"} margin="0 auto 5px auto" textAlign={"center"} fontSize={".8em"}
@@ -146,7 +164,7 @@ export default function GameList(props) {
         </View>
         {/*Selected: {gameLocationCity} -> {gameLocationPlace}*/}
         <Heading level={"6"} className="heading" marginBottom={"10px"}>
-            Game List (select city/location):
+            Game List (select city):
             {(authStatus === "authenticated")  &&
                 <Button className="close dark small" marginLeft="5px" padding="2px 4px"
                         onClick={() => (hidePlayedGames ? setHidePlayedGames(false) : setHidePlayedGames(true))}>
@@ -163,20 +181,22 @@ export default function GameList(props) {
             gap="1rem"
         >
             <Card className={"game-card city"} variation="elevated">
-                <Button marginRight="5px" className={"button-small small"}
-                        backgroundColor={(localStorage.getItem("gameLocationCity") === "Tybee Island") ? ("#0d5189") : ("transparent")}
-                        color="white" onClick={() => setGameLocationCityFunction("Tybee Island")}>Tybee
-                    Island, GA
-                    {(localStorage.getItem("gameLocationCity") === "Tybee Island") ? (
-                        <View>&nbsp;- selected</View>) : null}
-                </Button> <Link className="close light small"
-                href="https://www.google.com/maps/d/u/0/edit?mid=1UVlpxJl5_xcVIv_7NnRDEX_aa3p_Czc&usp=sharing"
-                                https://www.google.com/maps/d/u/0/edit?mid=1UVlpxJl5_xcVIv_7NnRDEX_aa3p_Czc&usp=sharing
-                color="#ffffff"
-                isExternal={true}
-            >
-                Map of Games
-            </Link><br />
+                {cities.map((city, index) => (
+                    <View key={city.id}>
+                    <Button marginRight="5px" className={"button-small small"}
+                            backgroundColor={(localStorage.getItem("gameLocationCity") == city.cityName) ? ("#0d5189") : ("transparent")}
+                            color="white" onClick={() => setGameLocationCityFunction(city.cityName)}>{city.cityName}
+                        {(localStorage.getItem("gameLocationCity") == city.cityName) ? (
+                            <View>&nbsp;- selected</View>) : null}
+                    </Button> <Link className="small light close"
+                                    href={city.cityMap}
+                                    color="#ffffff"
+                                    isExternal={true}>See Games on Google Maps
+                    </Link><br />
+                    </View>
+                ))}
+                <Heading level={"8"} className="heading" marginTop={"10px"}>
+                    Game List (select location):</Heading>
                 {/*<br />
                <Button className={"place-view"} onClick={()=>setPlaceView("list")}>Location List Below</Button>|
                 <Button className={"place-view"} onClick={()=>handleMapPlaceView()}>See Map View </Button><br />*/}
