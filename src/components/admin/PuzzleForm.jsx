@@ -230,15 +230,6 @@ export default function PuzzleForm(props) {
                     required
                 />
                 <TextField
-                    onChange={(event) => setInputCreatePuzzle('gamePlayZoneName', event.target.value)}
-                    name="gamePlayZoneName"
-                    placeholder="game Play Zone Name"
-                    label="Play Zone Name (used for copy/backup)"
-                    variation="quiet"
-                    value={formCreatePuzzleState.gamePlayZoneName}
-                    required
-                />
-                <TextField
                     onChange={(event) => setInputCreatePuzzle('puzzleClueText', event.target.value)}
                     name="puzzleClueText"
                     placeholder="Puzzle Clue Text (revealed)"

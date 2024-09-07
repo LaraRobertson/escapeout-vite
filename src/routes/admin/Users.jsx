@@ -11,37 +11,37 @@ import {
     listUsers, getGame, listGames,
     getGamePlayZone, getGameHint, getGameClue, getGamePuzzle,
     getTextField, userGamePlaysByUserId, listGameStats
-} from "../graphql/queries";
+} from "../../graphql/queries";
 import { format } from 'date-fns'
-import * as mutations from '../graphql/mutations';
+import * as mutations from '../../graphql/mutations';
 
-import {Navigate, useLocation, useNavigate, Outlet} from 'react-router-dom';
+import {Navigate, useLocation, useNavigate} from 'react-router-dom';
 import {generateClient} from "aws-amplify/api";
 import { fetchUserAttributes } from 'aws-amplify/auth';
-import {deleteGameHint} from "../graphql/mutations";
+import {deleteGameHint} from "../../graphql/mutations";
 import { saveAs } from 'file-saver';
-import {HeadingComponent, AdminNav} from "../components/admin/pageElements";
-import "../assets/admin.css";
-import {NotAvailable} from "../components/sharedComponents";
-import HomeSection from "../components/admin/HomeSection";
-import UserSection from "../components/admin/UserSection";
-import GameSection from "../components/admin/GameSection";
-import { MyAuthContext } from '../MyContext';
-import {ReactModalFromRight} from "../components/Modals";
-import GameForm from "../components/admin/GameForm";
-import ZoneForm from "../components/admin/ZoneForm";
-import PuzzleForm from "../components/admin/PuzzleForm";
-import TextFieldForm from "../components/admin/TextFieldForm";
-import ClueForm from "../components/admin/ClueForm";
-import HintForm from "../components/admin/HintForm";
-import GameStats from "../components/admin/GameStats";
-import UserStats from "../components/admin/UserStats";
-import CityForm from "../components/admin/CityForm";
+import {HeadingComponent, AdminNav} from "../../components/admin/pageElements";
+import "../../assets/admin.css";
+import {NotAvailable} from "../../components/sharedComponents";
+import HomeSection from "../../components/admin/HomeSection";
+import UserSection from "../../components/admin/UserSection";
+import GameSection from "../../components/admin/GameSection";
+import { MyAuthContext } from '../../MyContext';
+import {ReactModalFromRight} from "../../components/Modals";
+import GameForm from "../../components/admin/GameForm";
+import ZoneForm from "../../components/admin/ZoneForm";
+import PuzzleForm from "../../components/admin/PuzzleForm";
+import TextFieldForm from "../../components/admin/TextFieldForm";
+import ClueForm from "../../components/admin/ClueForm";
+import HintForm from "../../components/admin/HintForm";
+import GameStats from "../../components/admin/GameStats";
+import UserStats from "../../components/admin/UserStats";
+import CityForm from "../../components/admin/CityForm";
 
-export function Admin() {
+export function Users() {
     const initialStateDisplaySection = {
         gameSection: false,
-        userSection: false,
+        userSection: true,
         adminSection: false,
         homeSection: false,
     };
@@ -207,13 +207,8 @@ export function Admin() {
                 {(authStatus != 'authenticated') | (authStatus === "configuring") ? (
                     <NotAvailable authStatus={authStatus} />
                 ) : (
-                <View className="main-container-admin">
-                    <AdminNav displaySection={displaySection} setDisplaySection={setDisplaySection}/>
-                    <View className="admin">
-                        <HeadingComponent userName={email} displaySection={displaySection} setDisplaySection={setDisplaySection}/>
-                        <View className={"admin-content"}>
+                          <View className={"admin-content"}>
                             {(displaySection.homeSection) && <HomeSection />}
-                            <Outlet />
                             {(displaySection.userSection) && <UserSection />}
                             {(displaySection.gameSection) && <GameSection  setFormCreateGameStateBackup={setFormCreateGameStateBackup} formCreateGameStateBackup={formCreateGameStateBackup}/>}
                             <ReactModalFromRight>
@@ -228,8 +223,7 @@ export function Admin() {
                                 {(modalContent.content == "City Form") && <CityForm />}
                             </ReactModalFromRight>
                         </View>
-                    </View>
-                </View>
+
                     )}
         </MyAuthContext.Provider>
     )

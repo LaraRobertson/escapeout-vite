@@ -71,7 +71,7 @@ export const getGame = /* GraphQL */ `query GetGame($id: ID!) {
     gameGoals
     gameIntro
     gameMap
-      gamePlayZone {
+    gamePlayZone {
           items {
             id
             disabled
@@ -86,9 +86,9 @@ export const getGame = /* GraphQL */ `query GetGame($id: ID!) {
             createdAt
             updatedAt
           }
-          nextToken
-        }
-       gameHint {
+      nextToken
+    }
+    gameHint {
           items {
             id
             disabled
@@ -100,10 +100,10 @@ export const getGame = /* GraphQL */ `query GetGame($id: ID!) {
             createdAt
             updatedAt
           }
-          nextToken
-        }
-      type
-       gameClue {
+      nextToken
+    }
+    type
+    gameClue {
           items {
             id
             gameClueName
@@ -117,9 +117,9 @@ export const getGame = /* GraphQL */ `query GetGame($id: ID!) {
             createdAt
             updatedAt
           }
-          nextToken
-        }
-      gamePuzzle {
+      nextToken
+    }
+    gamePuzzle {
         items {
             id
             gamePlayZoneID
@@ -136,8 +136,8 @@ export const getGame = /* GraphQL */ `query GetGame($id: ID!) {
                 answer
                 order
                 }
-              nextToken
-            }
+      nextToken
+    }
             puzzleClueRevealed
             puzzleClueText
             puzzleToolRevealed
@@ -145,9 +145,9 @@ export const getGame = /* GraphQL */ `query GetGame($id: ID!) {
             winGame
             winGameImage
             winGameMessage
-            order
-            createdAt
-            updatedAt
+    order
+    createdAt
+    updatedAt
           }
           nextToken
         }
@@ -199,6 +199,7 @@ export const listGames = /* GraphQL */ `query ListGames(
             gameZoneName
             gameZoneImage
             gameZoneIcon
+            gameZoneDescription
             latitude
             longitude
             order
@@ -288,9 +289,8 @@ export const getGamePuzzle = /* GraphQL */ `query GetGamePuzzle($id: ID!) {
     id
     gameID
     gamePlayZoneID
-    gamePlayZoneName
-    puzzleName
     puzzlePosition
+    puzzleName
     puzzleImage
     puzzleImageOpen
     puzzleImageSolved
@@ -326,9 +326,8 @@ export const listGamePuzzles = /* GraphQL */ `query ListGamePuzzles(
       id
       gameID
       gamePlayZoneID
-      gamePlayZoneName
-      puzzleName
       puzzlePosition
+      puzzleName
       puzzleImage
       puzzleImageOpen
       puzzleImageSolved
@@ -357,7 +356,6 @@ export const getTextField = /* GraphQL */ `query GetTextField($id: ID!) {
   getTextField(id: $id) {
     id
     puzzleID
-    puzzleName
     name
     label
     answer
@@ -381,7 +379,6 @@ export const listTextFields = /* GraphQL */ `query ListTextFields(
     items {
       id
       puzzleID
-      puzzleName
       name
       label
       answer
@@ -518,7 +515,6 @@ export const getGameHint = /* GraphQL */ `query GetGameHint($id: ID!) {
     id
     gameID
     gamePlayZoneID
-    gamePlayZoneName
     gameHintName
     gameHintDescription
     order
@@ -542,7 +538,6 @@ export const listGameHints = /* GraphQL */ `query ListGameHints(
       id
       gameID
       gamePlayZoneID
-      gamePlayZoneName
       gameHintName
       gameHintDescription
       order
@@ -564,7 +559,6 @@ export const getGameClue = /* GraphQL */ `query GetGameClue($id: ID!) {
     id
     gameID
     gamePlayZoneID
-    gamePlayZoneName
     gameClueName
     gameClueIcon
     gameClueImage
@@ -592,7 +586,6 @@ export const listGameClues = /* GraphQL */ `query ListGameClues(
       id
       gameID
       gamePlayZoneID
-      gamePlayZoneName
       gameClueName
       gameClueIcon
       gameClueImage
@@ -1039,9 +1032,9 @@ export const gamesByCity = /* GraphQL */ `query GamesByCity(
   }
 }
 ` as GeneratedQuery<
-    APITypes.GamesByCityQueryVariables,
-    APITypes.GamesByCityQuery
-    >;
+  APITypes.GamesByCityQueryVariables,
+  APITypes.GamesByCityQuery
+>;
 export const gamePuzzleByGameID = /* GraphQL */ `query GamePuzzleByGameID(
   $gameID: ID!
   $order: ModelIntKeyConditionInput
@@ -1062,9 +1055,8 @@ export const gamePuzzleByGameID = /* GraphQL */ `query GamePuzzleByGameID(
       id
       gameID
       gamePlayZoneID
-      gamePlayZoneName
-      puzzleName
       puzzlePosition
+      puzzleName
       puzzleImage
       puzzleImageOpen
       puzzleImageSolved
@@ -1086,9 +1078,9 @@ export const gamePuzzleByGameID = /* GraphQL */ `query GamePuzzleByGameID(
   }
 }
 ` as GeneratedQuery<
-    APITypes.GamePuzzleByGameIDQueryVariables,
-    APITypes.GamePuzzleByGameIDQuery
-    >;
+  APITypes.GamePuzzleByGameIDQueryVariables,
+  APITypes.GamePuzzleByGameIDQuery
+>;
 export const textFieldByPuzzleID = /* GraphQL */ `query TextFieldByPuzzleID(
   $puzzleID: ID!
   $order: ModelIntKeyConditionInput
@@ -1108,7 +1100,6 @@ export const textFieldByPuzzleID = /* GraphQL */ `query TextFieldByPuzzleID(
     items {
       id
       puzzleID
-      puzzleName
       name
       label
       answer
@@ -1123,9 +1114,9 @@ export const textFieldByPuzzleID = /* GraphQL */ `query TextFieldByPuzzleID(
   }
 }
 ` as GeneratedQuery<
-    APITypes.TextFieldByPuzzleIDQueryVariables,
-    APITypes.TextFieldByPuzzleIDQuery
-    >;
+  APITypes.TextFieldByPuzzleIDQueryVariables,
+  APITypes.TextFieldByPuzzleIDQuery
+>;
 export const gameStatsByGameID = /* GraphQL */ `query GameStatsByGameID(
   $gameID: String!
   $sortDirection: ModelSortDirection
@@ -1158,9 +1149,9 @@ export const gameStatsByGameID = /* GraphQL */ `query GameStatsByGameID(
   }
 }
 ` as GeneratedQuery<
-    APITypes.GameStatsByGameIDQueryVariables,
-    APITypes.GameStatsByGameIDQuery
-    >;
+  APITypes.GameStatsByGameIDQueryVariables,
+  APITypes.GameStatsByGameIDQuery
+>;
 export const gameStatsByUserEmail = /* GraphQL */ `query GameStatsByUserEmail(
   $userEmail: String!
   $sortDirection: ModelSortDirection
@@ -1193,9 +1184,9 @@ export const gameStatsByUserEmail = /* GraphQL */ `query GameStatsByUserEmail(
   }
 }
 ` as GeneratedQuery<
-    APITypes.GameStatsByUserEmailQueryVariables,
-    APITypes.GameStatsByUserEmailQuery
-    >;
+  APITypes.GameStatsByUserEmailQueryVariables,
+  APITypes.GameStatsByUserEmailQuery
+>;
 export const gameStatsByGameName = /* GraphQL */ `query GameStatsByGameName(
   $gameName: String!
   $createdAt: ModelStringKeyConditionInput
@@ -1230,9 +1221,9 @@ export const gameStatsByGameName = /* GraphQL */ `query GameStatsByGameName(
   }
 }
 ` as GeneratedQuery<
-    APITypes.GameStatsByGameNameQueryVariables,
-    APITypes.GameStatsByGameNameQuery
-    >;
+  APITypes.GameStatsByGameNameQueryVariables,
+  APITypes.GameStatsByGameNameQuery
+>;
 export const gameStatsSortedByGameName = /* GraphQL */ `query GameStatsSortedByGameName(
   $type: String!
   $gameName: ModelStringKeyConditionInput
@@ -1269,8 +1260,8 @@ export const gameStatsSortedByGameName = /* GraphQL */ `query GameStatsSortedByG
             completed
             firstTime
             gameHintTime
-            createdAt
-            updatedAt
+      createdAt
+      updatedAt
           }
           nextToken
         }
@@ -1285,9 +1276,9 @@ export const gameStatsSortedByGameName = /* GraphQL */ `query GameStatsSortedByG
   }
 }
 ` as GeneratedQuery<
-    APITypes.GameStatsSortedByGameNameQueryVariables,
-    APITypes.GameStatsSortedByGameNameQuery
-    >;
+  APITypes.GameStatsSortedByGameNameQueryVariables,
+  APITypes.GameStatsSortedByGameNameQuery
+>;
 export const gameScoreByGameStatsID = /* GraphQL */ `query GameScoreByGameStatsID(
   $gameStatsID: ID!
   $createdAt: ModelStringKeyConditionInput
@@ -1326,9 +1317,9 @@ export const gameScoreByGameStatsID = /* GraphQL */ `query GameScoreByGameStatsI
   }
 }
 ` as GeneratedQuery<
-    APITypes.GameScoreByGameStatsIDQueryVariables,
-    APITypes.GameScoreByGameStatsIDQuery
-    >;
+  APITypes.GameScoreByGameStatsIDQueryVariables,
+  APITypes.GameScoreByGameStatsIDQuery
+>;
 export const gameScoreByGameID = /* GraphQL */ `query GameScoreByGameID(
   $gameID: ID!
   $gameTotalTime: ModelFloatKeyConditionInput
@@ -1367,9 +1358,9 @@ export const gameScoreByGameID = /* GraphQL */ `query GameScoreByGameID(
   }
 }
 ` as GeneratedQuery<
-    APITypes.GameScoreByGameIDQueryVariables,
-    APITypes.GameScoreByGameIDQuery
-    >;
+  APITypes.GameScoreByGameIDQueryVariables,
+  APITypes.GameScoreByGameIDQuery
+>;
 export const gameHintByGameID = /* GraphQL */ `query GameHintByGameID(
   $gameID: ID!
   $order: ModelIntKeyConditionInput
@@ -1390,7 +1381,6 @@ export const gameHintByGameID = /* GraphQL */ `query GameHintByGameID(
       id
       gameID
       gamePlayZoneID
-      gamePlayZoneName
       gameHintName
       gameHintDescription
       order
@@ -1404,9 +1394,9 @@ export const gameHintByGameID = /* GraphQL */ `query GameHintByGameID(
   }
 }
 ` as GeneratedQuery<
-    APITypes.GameHintByGameIDQueryVariables,
-    APITypes.GameHintByGameIDQuery
-    >;
+  APITypes.GameHintByGameIDQueryVariables,
+  APITypes.GameHintByGameIDQuery
+>;
 export const gameClueByGameID = /* GraphQL */ `query GameClueByGameID(
   $gameID: ID!
   $order: ModelIntKeyConditionInput
@@ -1427,7 +1417,6 @@ export const gameClueByGameID = /* GraphQL */ `query GameClueByGameID(
       id
       gameID
       gamePlayZoneID
-      gamePlayZoneName
       gameClueName
       gameClueIcon
       gameClueImage
@@ -1445,9 +1434,9 @@ export const gameClueByGameID = /* GraphQL */ `query GameClueByGameID(
   }
 }
 ` as GeneratedQuery<
-    APITypes.GameClueByGameIDQueryVariables,
-    APITypes.GameClueByGameIDQuery
-    >;
+  APITypes.GameClueByGameIDQueryVariables,
+  APITypes.GameClueByGameIDQuery
+>;
 export const gamePlayZoneByGameID = /* GraphQL */ `query GamePlayZoneByGameID(
   $gameID: ID!
   $order: ModelIntKeyConditionInput
@@ -1484,9 +1473,9 @@ export const gamePlayZoneByGameID = /* GraphQL */ `query GamePlayZoneByGameID(
   }
 }
 ` as GeneratedQuery<
-    APITypes.GamePlayZoneByGameIDQueryVariables,
-    APITypes.GamePlayZoneByGameIDQuery
-    >;
+  APITypes.GamePlayZoneByGameIDQueryVariables,
+  APITypes.GamePlayZoneByGameIDQuery
+>;
 export const userGamePlaysByUserId = /* GraphQL */ `query UserGamePlaysByUserId(
   $userId: ID!
   $sortDirection: ModelSortDirection
@@ -1514,9 +1503,9 @@ export const userGamePlaysByUserId = /* GraphQL */ `query UserGamePlaysByUserId(
   }
 }
 ` as GeneratedQuery<
-    APITypes.UserGamePlaysByUserIdQueryVariables,
-    APITypes.UserGamePlaysByUserIdQuery
-    >;
+  APITypes.UserGamePlaysByUserIdQueryVariables,
+  APITypes.UserGamePlaysByUserIdQuery
+>;
 export const userGamePlaysByGameId = /* GraphQL */ `query UserGamePlaysByGameId(
   $gameId: ID!
   $sortDirection: ModelSortDirection
@@ -1544,6 +1533,6 @@ export const userGamePlaysByGameId = /* GraphQL */ `query UserGamePlaysByGameId(
   }
 }
 ` as GeneratedQuery<
-    APITypes.UserGamePlaysByGameIdQueryVariables,
-    APITypes.UserGamePlaysByGameIdQuery
-    >;
+  APITypes.UserGamePlaysByGameIdQueryVariables,
+  APITypes.UserGamePlaysByGameIdQuery
+>;

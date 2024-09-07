@@ -102,7 +102,7 @@ export function CommentSection() {
                 No
             </ToggleButton>
             <ToggleButton value="a little">
-                a little
+                A little
             </ToggleButton>
         </ToggleButtonGroup>
 
@@ -115,13 +115,13 @@ export function CommentSection() {
             id={"1"}
         >
             <ToggleButton value="it was fun">
-                it was fun
+                It was fun
             </ToggleButton>
             <ToggleButton value="not fun">
-                not fun
+                Not fun
             </ToggleButton>
             <ToggleButton value="a little">
-                a little
+                A little
             </ToggleButton>
         </ToggleButtonGroup>
 
@@ -153,31 +153,31 @@ export function CommentSection() {
             isExclusive
             id={"2"}
         >
-            <ToggleButton value="YES!">
-                YES!
+            <ToggleButton value="yes">
+                Yes
             </ToggleButton>
             <ToggleButton value="never">
-                never
+                Never
             </ToggleButton>
             <ToggleButton value="maybe">
-                maybe
+                Maybe
             </ToggleButton>
         </ToggleButtonGroup>
 
         <Heading level={"6"} className={"heading"} paddingTop="5px" paddingBottom={"5px"}>Would you want to Create a Game Like this?</Heading>
         <ToggleButtonGroup
             value={exclusiveValue3}
-            onChange={(value) => {setGameCommentsFunction("Hard",value);setExclusiveValue3(value)}}
+            onChange={(value) => {setGameCommentsFunction("create-a-game",value);setExclusiveValue3(value)}}
             isExclusive
             id={"2"}
         >
-            <ToggleButton value="Yes">
-                yes
+            <ToggleButton value="yes">
+                Yes
             </ToggleButton>
-            <ToggleButton value="No">
+            <ToggleButton value="no">
                 No
             </ToggleButton>
-            <ToggleButton value="Maybe">
+            <ToggleButton value="maybe">
                 Maybe
             </ToggleButton>
         </ToggleButtonGroup>
@@ -190,11 +190,11 @@ export function CommentSection() {
             isExclusive
             id={"2"}
         >
-            <ToggleButton value="Yes!">
-                YES!
+            <ToggleButton value="yes">
+                Yes
             </ToggleButton>
-            <ToggleButton value="never">
-                never
+            <ToggleButton value="no">
+                No
             </ToggleButton>
 
         </ToggleButtonGroup>

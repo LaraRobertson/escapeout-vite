@@ -1,5 +1,5 @@
 /* src/App.jsx */
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
 
 /* routes */
 import { Login } from './routes/Login';
@@ -7,7 +7,9 @@ import { Home } from './routes/Home';
 import { Admin } from './routes/Admin';
 import { Game } from './routes/Game';
 import { GameV3 } from './routes/GameV3';
-
+import { Games } from './routes/admin/Games';
+import { Users  } from './routes/admin/Users';
+import { Dashboard  } from './routes/admin/Dashboard';
 /* error message */
 import { Layout } from './components/Layout';
 
@@ -41,8 +43,20 @@ const App = () => {
                         />
                         <Route
                             path="/admin"
-                            element={<Admin />}
-                        />
+                            element={<Admin />}>
+                            <Route
+                                path="dashboard"
+                                element={<Dashboard />}
+                            />
+                            <Route
+                                path="games"
+                                element={<Games />}
+                            />
+                            <Route
+                                path="users"
+                                element={<Users />}
+                            />
+                        </Route>
                         <Route
                             path="/login"
                             element={<Login />}

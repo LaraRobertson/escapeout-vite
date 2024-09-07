@@ -243,9 +243,8 @@ export const onCreateGamePuzzle = /* GraphQL */ `subscription OnCreateGamePuzzle
     id
     gameID
     gamePlayZoneID
-    gamePlayZoneName
-    puzzleName
     puzzlePosition
+    puzzleName
     puzzleImage
     puzzleImageOpen
     puzzleImageSolved
@@ -278,9 +277,8 @@ export const onUpdateGamePuzzle = /* GraphQL */ `subscription OnUpdateGamePuzzle
     id
     gameID
     gamePlayZoneID
-    gamePlayZoneName
-    puzzleName
     puzzlePosition
+    puzzleName
     puzzleImage
     puzzleImageOpen
     puzzleImageSolved
@@ -313,9 +311,8 @@ export const onDeleteGamePuzzle = /* GraphQL */ `subscription OnDeleteGamePuzzle
     id
     gameID
     gamePlayZoneID
-    gamePlayZoneName
-    puzzleName
     puzzlePosition
+    puzzleName
     puzzleImage
     puzzleImageOpen
     puzzleImageSolved
@@ -345,7 +342,6 @@ export const onCreateTextField = /* GraphQL */ `subscription OnCreateTextField($
   onCreateTextField(filter: $filter) {
     id
     puzzleID
-    puzzleName
     name
     label
     answer
@@ -364,7 +360,6 @@ export const onUpdateTextField = /* GraphQL */ `subscription OnUpdateTextField($
   onUpdateTextField(filter: $filter) {
     id
     puzzleID
-    puzzleName
     name
     label
     answer
@@ -383,7 +378,6 @@ export const onDeleteTextField = /* GraphQL */ `subscription OnDeleteTextField($
   onDeleteTextField(filter: $filter) {
     id
     puzzleID
-    puzzleName
     name
     label
     answer
@@ -541,7 +535,6 @@ export const onCreateGameHint = /* GraphQL */ `subscription OnCreateGameHint($fi
     id
     gameID
     gamePlayZoneID
-    gamePlayZoneName
     gameHintName
     gameHintDescription
     order
@@ -560,7 +553,6 @@ export const onUpdateGameHint = /* GraphQL */ `subscription OnUpdateGameHint($fi
     id
     gameID
     gamePlayZoneID
-    gamePlayZoneName
     gameHintName
     gameHintDescription
     order
@@ -579,7 +571,6 @@ export const onDeleteGameHint = /* GraphQL */ `subscription OnDeleteGameHint($fi
     id
     gameID
     gamePlayZoneID
-    gamePlayZoneName
     gameHintName
     gameHintDescription
     order
@@ -598,7 +589,6 @@ export const onCreateGameClue = /* GraphQL */ `subscription OnCreateGameClue($fi
     id
     gameID
     gamePlayZoneID
-    gamePlayZoneName
     gameClueName
     gameClueIcon
     gameClueImage
@@ -621,7 +611,6 @@ export const onUpdateGameClue = /* GraphQL */ `subscription OnUpdateGameClue($fi
     id
     gameID
     gamePlayZoneID
-    gamePlayZoneName
     gameClueName
     gameClueIcon
     gameClueImage
@@ -644,7 +633,6 @@ export const onDeleteGameClue = /* GraphQL */ `subscription OnDeleteGameClue($fi
     id
     gameID
     gamePlayZoneID
-    gamePlayZoneName
     gameClueName
     gameClueIcon
     gameClueImage
