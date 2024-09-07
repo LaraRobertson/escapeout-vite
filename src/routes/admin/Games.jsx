@@ -5,47 +5,17 @@ import {
     View,
     useAuthenticator, Image
 } from '@aws-amplify/ui-react';
-import {
-    gamesByCity,
-    usersByEmail,
-    listUsers, getGame, listGames,
-    getGamePlayZone, getGameHint, getGameClue, getGamePuzzle,
-    getTextField, userGamePlaysByUserId, listGameStats
-} from "../graphql/queries";
 import { format } from 'date-fns'
-import * as mutations from '../graphql/mutations';
 
-import {Navigate, useLocation, useNavigate, Outlet} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import {generateClient} from "aws-amplify/api";
 import { fetchUserAttributes } from 'aws-amplify/auth';
-import {deleteGameHint} from "../graphql/mutations";
-import { saveAs } from 'file-saver';
-import {HeadingComponent, AdminNav} from "../components/admin/pageElements";
-import "../assets/admin.css";
-import {NotAvailable} from "../components/sharedComponents";
-import HomeSection from "../components/admin/HomeSection";
-import UserSection from "../components/admin/UserSection";
-import GameSection from "../components/admin/GameSection";
-import { MyAuthContext } from '../MyContext';
-import {ReactModalFromRight} from "../components/Modals";
-import GameForm from "../components/admin/GameForm";
-import ZoneForm from "../components/admin/ZoneForm";
-import PuzzleForm from "../components/admin/PuzzleForm";
-import TextFieldForm from "../components/admin/TextFieldForm";
-import ClueForm from "../components/admin/ClueForm";
-import HintForm from "../components/admin/HintForm";
-import GameStats from "../components/admin/GameStats";
-import UserStats from "../components/admin/UserStats";
-import CityForm from "../components/admin/CityForm";
+import "../../assets/admin.css";
+import {NotAvailable} from "../../components/sharedComponents";
+import GameSection from "../../components/admin/GameSection";
+import { MyAuthContext } from '../../MyContext';
 
-export function Admin() {
-    const initialStateDisplaySection = {
-        gameSection: false,
-        userSection: false,
-        adminSection: false,
-        homeSection: false,
-    };
-    const [displaySection, setDisplaySection] = useState(initialStateDisplaySection);
+export function Games() {
     const [email, setEmail] = useState();
     const [modalContent, setModalContent] = useState({open:false, content:"",id:"",action:"", gameID:"",zoneID:"",updatedDB:false});
     const [formCreateGameStateBackup, setFormCreateGameStateBackup] = useState({"gameName":"New"});
@@ -203,33 +173,14 @@ export function Admin() {
 
 
     return (
-        <MyAuthContext.Provider value={{ authStatus, email, setModalContent, modalContent, setBackupIDArray, backupIDArray }}>
+        <MyAuthContext.Provider value={{ authStatus, email, setModalContent, modalContent}}>
                 {(authStatus != 'authenticated') | (authStatus === "configuring") ? (
                     <NotAvailable authStatus={authStatus} />
                 ) : (
-                <View className="main-container-admin">
-                    <AdminNav displaySection={displaySection} setDisplaySection={setDisplaySection}/>
-                    <View className="admin">
-                        <HeadingComponent userName={email} displaySection={displaySection} setDisplaySection={setDisplaySection}/>
-                        <View className={"admin-content"}>
-                            {(displaySection.homeSection) && <HomeSection />}
-                            <Outlet />
-                            {(displaySection.userSection) && <UserSection />}
-                            {(displaySection.gameSection) && <GameSection  setFormCreateGameStateBackup={setFormCreateGameStateBackup} formCreateGameStateBackup={formCreateGameStateBackup}/>}
-                            <ReactModalFromRight>
-                                {(modalContent.content == "Game Form") && <GameForm  setFormCreateGameStateBackup={setFormCreateGameStateBackup} />}
-                                {(modalContent.content == "Stats") && <GameStats modalContent={modalContent} />}
-                                {(modalContent.content == "Zone Form") && <ZoneForm formCreateGameStateBakcup={formCreateGameStateBackup}/>}
-                                {(modalContent.content == "Puzzle Form") && <PuzzleForm formCreateGameStateBackup={formCreateGameStateBackup}/>}
-                                {(modalContent.content == "TextField Form") && <TextFieldForm />}
-                                {(modalContent.content == "Clue Form") && <ClueForm />}
-                                {(modalContent.content == "Hint Form") && <HintForm />}
-                                {(modalContent.content == "User Stats") && <UserStats />}
-                                {(modalContent.content == "City Form") && <CityForm />}
-                            </ReactModalFromRight>
-                        </View>
+                    <View className={"admin-content"}>
+                        <GameSection />
                     </View>
-                </View>
+
                     )}
         </MyAuthContext.Provider>
     )

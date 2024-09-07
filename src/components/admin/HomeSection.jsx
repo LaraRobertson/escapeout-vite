@@ -122,7 +122,7 @@ export default function HomeSection(props) {
    }
    return (
        <>
-           <Heading level={4} marginBottom={"20px"}>Home Section</Heading>
+           <Heading level={4} marginBottom={"20px"}>Dashboard</Heading>
 
            <View>
            <Button className={showAllTimeButton ? "button small" : "hide"} onClick={() => {

@@ -10,12 +10,21 @@ import {generateClient} from "aws-amplify/api";
 import {MyAuthContext} from "../../MyContext";
 import copyGame from "./copyGame";
 import {GreenIcon, IconClueDisplay} from "../sharedComponents";
+import {ReactModalFromRight} from "../Modals";
+import GameForm from "./GameForm";
+import GameStats from "./GameStats";
+import ZoneForm from "./ZoneForm";
+import PuzzleForm from "./PuzzleForm";
+import TextFieldForm from "./TextFieldForm";
+import ClueForm from "./ClueForm";
+import HintForm from "./HintForm";
+import UserStats from "./UserStats";
+import CityForm from "./CityForm";
 
-export default function GameSection(props) {
+export default function GameSection() {
     const client = generateClient();
-    let formCreateGameStateBackup = props.formCreateGameStateBackup;
-    let setFormCreateGameStateBackup = props.setFormCreateGameStateBackup;
-    const { setModalContent, modalContent, setBackupIDArray, backupIDArray  } = useContext(MyAuthContext);
+    const [formCreateGameStateBackup, setFormCreateGameStateBackup] = useState({"gameName":"New"});
+    const { setModalContent, modalContent  } = useContext(MyAuthContext);
     const [cityValue, setCityValue] = React.useState("");
     const [games, setGames] = useState([]);
     const [cities, setCities] = useState([]);
@@ -23,7 +32,6 @@ export default function GameSection(props) {
     const [gameVisible, setGameVisible] = useState("");
     const [gameDesigner, setGameDesigner] = useState("");
     const [gameIndex, setGameIndex] = useState("");
-    const [backupsVisible, setBackupsVisible] = useState(false);
     const [gamePlayZoneObject, setGamePlayZoneObject] = useState({});
     const [gamePlayZoneObjectBackup, setGamePlayZoneObjectBackup] = useState({});
     const [zoneBackup, setZoneBackup] = useState(false);
@@ -33,38 +41,6 @@ export default function GameSection(props) {
     const [gameNameBackupArray, setGameNameBackupArray] = useState([]);
 
     const [disabledGame, setDisabledGame] = useState();
-    const initialStateShowHideLabel = {
-        gameForm: 'Hide',
-        gameSection: 'Hide',
-        userSection: 'Hide',
-        clueSection: 'Show',
-        puzzleSection: 'Hide',
-        toolSection: 'Hide',
-        imageSection: 'Hide'
-    };
-    const [showHideLabel, setShowHideLabel] = useState(initialStateShowHideLabel)
-    function divShowHide(divID) {
-        console.log("divShowHide - divID: "+ divID)
-        let element =  document.getElementById(divID);
-        /* check if "hide */
-        if (element.classList.contains("hide")) {
-            console.log("hide is there");
-            element.classList.remove('hide');
-            element.classList.add('show');
-            setShowHideLabel(showHideLabel => ({
-                ...showHideLabel,
-                [divID]:"Hide"
-            }));
-        } else if (element.classList.contains("show")) {
-            console.log("show is there");
-            element.classList.remove('show');
-            element.classList.add('hide');
-            setShowHideLabel(showHideLabel => ({
-                ...showHideLabel,
-                [divID]:"Show"
-            }));
-        }
-    }
     const [gamesFilter, setGamesFilter] = useState({type: {eq:"game"}});
     function setFilterCreateGame(key, value) {
         console.log("setFilterCreateGame: " + key);
@@ -74,7 +50,7 @@ export default function GameSection(props) {
             setGamesFilter({
                 type: {eq:"game"}
             });
-            setDisabledGame();
+            setDisabledGame("");
             setGameType("all");
         }
     }
@@ -232,7 +208,7 @@ export default function GameSection(props) {
         /* check for backup */
         if (localStorage.getItem("backup")!=null) {
             setFormCreateGameStateBackup(JSON.parse(localStorage.getItem("backup")));
-            let backupGame = {};
+            let backupGame;
             backupGame = JSON.parse(localStorage.getItem("backup"));
             let newObject = {};
             for (let i=0; i<backupGame.gamePlayZone.items.length; i++) {
@@ -269,10 +245,9 @@ export default function GameSection(props) {
         setGameVisible(gameID);
         setGameDesigner(gameDesigner);
         setGameIndex(index);
-        //console.log("games[index].gamePlayzone.items: " + JSON.stringify(games[index].gamePlayZone.items));
         let newObject = {};
         for (let i=0; i<games[index].gamePlayZone.items.length; i++) {
-            let key = "id-" + games[index].gamePlayZone.items[i].id;
+            let key = games[index].gamePlayZone.items[i].id;
             let value = games[index].gamePlayZone.items[i].gameZoneName;
             newObject = {...newObject,[key]:value};
         }
@@ -287,7 +262,7 @@ export default function GameSection(props) {
         console.log("nameBackupArray: " + JSON.stringify(nameBackupArray));
         setGameNameBackupArray(nameBackupArray);
     }
-    function handleCityForm(props) {
+    function handleCityForm() {
         setModalContent({
             open: true,
             content: "City Form",
@@ -332,52 +307,54 @@ export default function GameSection(props) {
             gameDesigner: gameDesigner,
             updatedDB:false
         })
-        if (props.action == "addBackupZone") {
+        if (props.action === "addBackupZone") {
             addGameNameBackup(props.zone.gameZoneName);
         }
     }
-    function handlePuzzleForm(props) {
-        console.log("zoneID (handle puzzle form): " + props.zoneID);
-        if (props.action === "addBackupPuzzle" && (props.zoneID == "select zone" || props.zoneID == "" || props.zoneID == undefined)) {
+    const handlePuzzleForm = ({action, gameID, puzzle, puzzleID, zoneID}) => {
+        console.log("zoneID (handle puzzle form): " + zoneID);
+        if (action === "addBackupPuzzle" && (zoneID === "select zone" || zoneID === "" || zoneID === undefined)) {
             alert("Please select zone")
         } else {
             setModalContent({
                 open: true,
                 content: "Puzzle Form",
-                puzzle: props.puzzle,
-                id: props.puzzleID,
-                gameID:props.gameID,
-                gamePlayZoneID:props.zoneID,
-                action: props.action,
+                puzzle: puzzle,
+                id: puzzleID,
+                gameID:gameID,
+                gamePlayZoneID:zoneID,
+                action: action,
                 gameDesigner: gameDesigner,
                 updatedDB:false
             })
         }
-        if (props.action == "addBackupPuzzle") {
-            addGameNameBackup(props.puzzle.puzzleName);
+        if (action === "addBackupPuzzle") {
+            addGameNameBackup(puzzle.puzzleName);
         }
-    }
-    function handleTextFieldForm(props) {
-        if (props.action === "addBackupTextField" && (props.puzzleID == "select puzzle" || props.puzzleID == "" || props.puzzleID == undefined)) {
+    };
+
+    function handleTextFieldForm({action, puzzleID, textField, textFieldID}) {
+        if (action === "addBackupTextField" && (puzzleID === "select puzzle" || puzzleID === "" || puzzleID === undefined)) {
             alert("Please select puzzle")
         } else {
             setModalContent({
                 open: true,
                 content: "TextField Form",
-                textField: props.textField,
-                id: props.textFieldID,
-                puzzleID: props.puzzleID,
-                action: props.action,
+                textField: textField,
+                id: textFieldID,
+                puzzleID: puzzleID,
+                action: action,
                 updatedDB: false
             })
         }
-        if (props.action == "addBackupTextField") {
-            addGameNameBackup(props.textField.name);
+        if (action === "addBackupTextField") {
+            addGameNameBackup(textField.name);
         }
     }
+
     function handleClueForm(props) {
         console.log("zoneID (handle clue form): " + props.zoneID);
-        if (props.action === "addBackupClue" && (props.zoneID == "select zone" || props.zoneID == "" || props.zoneID == undefined)) {
+        if (props.action === "addBackupClue" && (props.zoneID === "select zone" || props.zoneID === "" || props.zoneID === undefined)) {
             alert("Please select zone")
         } else {
             console.log("zoneID (handle clue form): " + props.zoneID);
@@ -393,13 +370,13 @@ export default function GameSection(props) {
                 updatedDB: false
             })
         }
-        if (props.action == "addBackupClue") {
+        if (props.action === "addBackupClue") {
             addGameNameBackup(props.clue.gameClueName);
         }
     }
     function handleHintForm(props) {
         console.log("zoneID (handle hint form): " + props.zoneID);
-        if (props.action === "addBackupHint" && (props.zoneID == "select zone" || props.zoneID == "" || props.zoneID == undefined)) {
+        if (props.action === "addBackupHint" && (props.zoneID === "select zone" || props.zoneID === "" || props.zoneID === undefined)) {
             alert("Please select zone")
         } else {
             setModalContent({
@@ -413,7 +390,7 @@ export default function GameSection(props) {
                 updatedDB: false
             })
         }
-        if (props.action == "addBackupHint") {
+        if (props.action === "addBackupHint") {
             addGameNameBackup(props.hint.gameHintName);
         }
     }
@@ -428,7 +405,7 @@ export default function GameSection(props) {
                 className={"city-dropdown"}
                 paddingTop={"3px"}
                 value={backupPuzzleValue}
-                onChange={(e) => setBackupPuzzleValue(e.target.value)}>
+                onChange={(e) => setBackupPuzzleValue(e.target.value)} label={""}>
                 <option value="select zone">select puzzle</option>
                 {props.visibleGame.gamePuzzle.items.map((puzzle) => (
                     <option key={puzzle.id} value={puzzle.id}>{puzzle.puzzleName}</option>
@@ -438,6 +415,7 @@ export default function GameSection(props) {
     const BackupZoneDropDown = (props) => {
         return (
             <SelectField
+                label={""}
                 className={"city-dropdown"}
                 paddingTop={"3px"}
                 value={backupZoneValue}
@@ -451,6 +429,7 @@ export default function GameSection(props) {
     const PuzzleZoneDropDown = (props) => {
         return (
             <SelectField
+                label={""}
             className={"city-dropdown"}
             paddingTop={"3px"}
             value={puzzleZoneValue}
@@ -464,6 +443,7 @@ export default function GameSection(props) {
     const ClueZoneDropDown = (props) => {
         return (
             <SelectField
+                label={""}
                 className={"city-dropdown"}
                 paddingTop={"3px"}
                 value={clueZoneValue}
@@ -477,6 +457,7 @@ export default function GameSection(props) {
     const HintZoneDropDown = (props) => {
         return (
             <SelectField
+                label={""}
                 className={"city-dropdown"}
                 paddingTop={"3px"}
                 value={hintZoneValue}
@@ -490,12 +471,13 @@ export default function GameSection(props) {
     const CityDropDown = () => {
         return (
             <SelectField
+                label={""}
                 className={"city-dropdown"}
                 placeholder="choose a city"
                 value={cityValue}
                 onChange={(e) => {
-                    setCityValue(e.target.value),setFilterCreateGame("gameLocationCity", {eq: e.target.value})}}>
-                {cities.map((city, index) => (
+                    setCityValue(e.target.value);setFilterCreateGame("gameLocationCity", {eq: e.target.value})}}>
+                {cities.map((city) => (
                     <option key={city.id} value={city.cityName}>{city.cityName}</option>
                 ))}
             </SelectField>)
@@ -525,7 +507,7 @@ export default function GameSection(props) {
                             onClick={() => handleGameForm({"gameID": "", "action": "addFromFile"})}>
                         <span style={{fontSize: "20px"}}>+</span> add backup/copy of game</Button>
                     {
-                        (formCreateGameStateBackup.gameName != "New" && formCreateGameStateBackup.gameName != "") &&
+                        (formCreateGameStateBackup.gameName !== "New" && formCreateGameStateBackup.gameName !== "") &&
                         <View paddingTop={"10px"} className={"small"}><strong>{formCreateGameStateBackup.gameName}</strong> backup is available.
                             <Button gap="0.1rem" size="small" color="red" onClick={() => deleteBackup()}>
                                 x
@@ -554,7 +536,7 @@ export default function GameSection(props) {
                 >
                     {(gameVisible === "") && <TableHead>
                     <TableRow>
-                        <TableCell as="th"></TableCell>
+                        <TableCell as="th"/>
                         <TableCell as="th">Game Name</TableCell>
                         <TableCell as="th">Type</TableCell>
                         <TableCell as="th">Place</TableCell>
@@ -599,7 +581,7 @@ export default function GameSection(props) {
 
                         </>}
 
-                    {(gameVisible == game.id) &&
+                    {(gameVisible === game.id) &&
                         <TableCell colSpan={9} className={"border1"}>
                             <Flex  direction="row"
                                    justifyContent="flex-start"
@@ -672,9 +654,9 @@ export default function GameSection(props) {
 
                                     </Flex>
                                     {
-                                        (formCreateGameStateBackup.gameName != "New" && formCreateGameStateBackup.gamePlayZone.items.length > 0) &&
+                                        (formCreateGameStateBackup.gameName !== "New" && formCreateGameStateBackup.gamePlayZone.items.length > 0) &&
                                         <Button  onClick={() => setZoneBackup(!zoneBackup)}>
-                                            {(zoneBackup)? "these are backup zones, show zones already backed up" : "these are live zones, show zones available for backup"}</Button>
+                                            {(zoneBackup)? "backup zones, show live zone" : "live zones, show backup zones"}</Button>
                                     }
                                     {zoneBackup?
                                         (<Table
@@ -702,7 +684,7 @@ export default function GameSection(props) {
                                                 <TableCell> {zone.order}</TableCell>
                                                 <TableCell> {zone.latitude}</TableCell>
                                                 <TableCell> {zone.longitude}</TableCell>
-                                                <TableCell><Image width={"50px"} src={zone.gameZoneImage}/></TableCell>
+                                                <TableCell><Image width={"50px"} src={zone.gameZoneImage} alt={"gameZoneImage"}/></TableCell>
                                                 <TableCell> {zone.gameZoneDescription}</TableCell>
                                                 <TableCell>  {zone.disabled ? "No" : "Yes"} </TableCell>
                                                 <TableCell>
@@ -742,7 +724,7 @@ export default function GameSection(props) {
                                                         <TableCell> {zone.order}</TableCell>
                                                         <TableCell> {zone.latitude}</TableCell>
                                                         <TableCell> {zone.longitude}</TableCell>
-                                                        <TableCell><Image width={"50px"} src={zone.gameZoneImage}/></TableCell>
+                                                        <TableCell><Image width={"50px"} src={zone.gameZoneImage} alt={"gameZoneImage"}/></TableCell>
                                                         <TableCell> {zone.gameZoneDescription}</TableCell>
                                                         <TableCell>  {zone.disabled ? "No" : "Yes"} </TableCell>
                                                         <TableCell>
@@ -757,7 +739,7 @@ export default function GameSection(props) {
                                                             <Button  gap="0.1rem" size="small"
                                                                      onClick={() => handleClueForm({"clueID": "", "gameID": game.id, "zoneID": zone.id, "action": "add"})}>
                                                                 <span style={{fontSize: "12px"}}>+</span> clue</Button>
-                                                            {(gamePlayZoneObject[("id-" + zone.id)] == null) &&  <Button  gap="0.1rem" size="small" color={"yellow"}
+                                                            {(gamePlayZoneObject[(zone.id)] == null) &&  <Button  gap="0.1rem" size="small" color={"yellow"}
                                                                                                                           onClick={() => setGameVisibleFunction(gameVisible, gameIndex, gameDesigner)}>set zone</Button>}
                                                             <Button  gap="0.1rem" size="small" color={"red"}
                                                                      onClick={() => deleteZone({"zoneID": zone.id, "gameZoneName": zone.gameZoneName})}>x</Button>
@@ -779,9 +761,9 @@ export default function GameSection(props) {
                                         {!puzzleBackup && <PuzzleZoneDropDown visibleGame={game}/>}
                                     </Flex>
                                     {
-                                        (formCreateGameStateBackup.gameName != "New" && formCreateGameStateBackup.gamePuzzle.items.length > 0) &&
+                                        (formCreateGameStateBackup.gameName !== "New" && formCreateGameStateBackup.gamePuzzle.items.length > 0) &&
                                         <Button  onClick={() => setPuzzleBackup(!puzzleBackup)}>
-                                            {(puzzleBackup)? "these are backup puzzles, show puzzles already backed up" : "these are live puzzles, show puzzles available for backup"}</Button>
+                                            {(puzzleBackup)? "backup puzzles, show live puzzles" : "live puzzles, show backup puzzles"}</Button>
                                     }
                                     {puzzleBackup ?
                                         (<>
@@ -792,7 +774,7 @@ export default function GameSection(props) {
                                                         size={"default"}
                                                         variation={"bordered"}
                                                         key={puzzle.id}
-                                                        className={(puzzleZoneValue != puzzle.gamePlayZoneID) && puzzleZoneValue != "select zone" ? "hide" : "puzzle"}
+                                                        className={(puzzleZoneValue !== puzzle.gamePlayZoneID) && puzzleZoneValue !== "select zone" ? "hide" : "puzzle"}
                                                     >
                                                         <TableHead>
                                                             <TableRow>
@@ -814,7 +796,7 @@ export default function GameSection(props) {
                                                                 <TableCell>{puzzle.puzzleClueText}</TableCell>
                                                                 <TableCell>
                                                                     <Image width={"50px"}
-                                                                           src={puzzle.puzzleClueRevealed}/></TableCell>
+                                                                           src={puzzle.puzzleClueRevealed} alt={"clueRevealed"}/></TableCell>
                                                                 <TableCell>{puzzle.winGame ? "true" : "false"}</TableCell>
                                                                 <TableCell>{puzzle.disabled ? "No" : "Yes"}</TableCell>
                                                                 <TableCell>
@@ -891,7 +873,7 @@ export default function GameSection(props) {
                                                     size={"default"}
                                                     variation={"bordered"}
                                                     key={puzzle.id}
-                                                    className={(puzzleZoneValue != puzzle.gamePlayZoneID) && puzzleZoneValue != "select zone" ? "hide" : "puzzle"}
+                                                    className={(puzzleZoneValue !== puzzle.gamePlayZoneID) && puzzleZoneValue !== "select zone" ? "hide" : "puzzle"}
                                                 >
                                                     <TableHead>
                                                         <TableRow>
@@ -909,11 +891,11 @@ export default function GameSection(props) {
                                                         <TableRow key={puzzle.id}>
                                                             <TableCell>{puzzle.puzzleName}</TableCell>
                                                             <TableCell>{puzzle.order}</TableCell>
-                                                            <TableCell>{gamePlayZoneObject[("id-" + puzzle.gamePlayZoneID)]}</TableCell>
+                                                            <TableCell>{gamePlayZoneObject[(puzzle.gamePlayZoneID)]}</TableCell>
                                                             <TableCell>{puzzle.puzzleClueText}</TableCell>
                                                             <TableCell>
                                                                 <Image width={"50px"}
-                                                                       src={puzzle.puzzleClueRevealed}/></TableCell>
+                                                                       src={puzzle.puzzleClueRevealed} alt={"clueRevealed"}/></TableCell>
                                                             <TableCell>{puzzle.winGame ? "true" : "false"}</TableCell>
                                                             <TableCell>{puzzle.disabled ? "No" : "Yes"}</TableCell>
                                                             <TableCell>
@@ -1003,9 +985,9 @@ export default function GameSection(props) {
                                 <Heading level={4} color="black" >Clues</Heading><ClueZoneDropDown visibleGame={game}/>
                                 </Flex>
                                 {
-                                    (formCreateGameStateBackup.gameName != "New" && formCreateGameStateBackup.gameClue.items.length > 0) &&
+                                    (formCreateGameStateBackup.gameName !== "New" && formCreateGameStateBackup.gameClue.items.length > 0) &&
                                     <Button  onClick={() => setClueBackup(!clueBackup)}>
-                                        {(clueBackup)? "these are backup clues, show clues already backed up" : "these are live clues, show clues available for backup"}</Button>
+                                        {(clueBackup)? "backup clues, show live clues" : "live clues, show backup clues"}</Button>
                                 }
                                 <Table
                                     highlightOnHover={true}
@@ -1029,12 +1011,12 @@ export default function GameSection(props) {
                                             <TableBody>
 
                                 {formCreateGameStateBackup.gameClue.items.map((clue) => (
-                                    <TableRow key={clue.id} className={(clueZoneValue != clue.gamePlayZoneID) && clueZoneValue != "select zone"? "hide":"clue"}>
+                                    <TableRow key={clue.id} className={(clueZoneValue !== clue.gamePlayZoneID) && clueZoneValue !== "select zone"? "hide":"clue"}>
                                         <TableCell>{clue.gameClueName} {(gameNameBackupArray.includes(clue.gameClueName)) && <GreenIcon />}</TableCell>
                                         <TableCell>{gamePlayZoneObjectBackup[("id-" + clue.gamePlayZoneID)]} | {clue.gamePlayZoneID}</TableCell>
                                         <TableCell>{clue.gameClueText} </TableCell>
                                         <TableCell><IconClueDisplay hide="true" gameClueIcon={clue.gameClueIcon}/> </TableCell>
-                                        <TableCell><Image width={"50px"} src={clue.gameClueImage}/></TableCell>
+                                        <TableCell><Image width={"50px"} src={clue.gameClueImage} alt={"gameClueImage"}/></TableCell>
                                         <TableCell>{clue.disabled ? "true" : "false"}</TableCell>
                                         <TableCell>
                                             <Button gap="0.1rem" size="small"
@@ -1054,12 +1036,12 @@ export default function GameSection(props) {
                                         ( <TableBody>
 
                                     {game.gameClue.items.map((clue) => (
-                                        <TableRow key={clue.id} className={(clueZoneValue != clue.gamePlayZoneID) && clueZoneValue != "select zone"? "hide":"clue"}>
+                                        <TableRow key={clue.id} className={(clueZoneValue !== clue.gamePlayZoneID) && clueZoneValue !== "select zone"? "hide":"clue"}>
                                         <TableCell>{clue.gameClueName}</TableCell>
-                                        <TableCell>{gamePlayZoneObject[("id-" + clue.gamePlayZoneID)]}</TableCell>
+                                        <TableCell>{gamePlayZoneObject[(clue.gamePlayZoneID)]}</TableCell>
                                         <TableCell>{clue.gameClueText} </TableCell>
                                         <TableCell><IconClueDisplay hide="true" gameClueIcon={clue.gameClueIcon}/></TableCell>
-                                        <TableCell><Image width={"50px"} src={clue.gameClueImage}/></TableCell>
+                                        <TableCell><Image width={"50px"} src={clue.gameClueImage} alt={"gameClueImage"}/></TableCell>
                                         <TableCell>{clue.disabled ? "true" : "false"}</TableCell>
                                         <TableCell>
                                         <Button gap="0.1rem" size="small"
@@ -1083,9 +1065,9 @@ export default function GameSection(props) {
                                             <Heading level={4} color="black" >Hints</Heading><HintZoneDropDown visibleGame={game}/>
                                         </Flex>
                                         {
-                                            (formCreateGameStateBackup.gameName != "New" && formCreateGameStateBackup.gameHint.items.length > 0) &&
+                                            (formCreateGameStateBackup.gameName !== "New" && formCreateGameStateBackup.gameHint.items.length > 0) &&
                                             <Button  onClick={() => setHintBackup(!hintBackup)}>
-                                                {(hintBackup)? "these are backup hints, show hints already backed up" : "these are live hints, show hints available for backup"}</Button>
+                                                {(hintBackup)? "backup hints, show live hints" : "live hints, show backup hints"}</Button>
                                         }
                                         <Table
                                             highlightOnHover={true}
@@ -1107,7 +1089,7 @@ export default function GameSection(props) {
                                                 (
                                             <TableBody>
                                 {formCreateGameStateBackup.gameHint.items.map((hint) => (
-                                        <TableRow key={hint.id} className={(hintZoneValue != hint.gamePlayZoneID) && hintZoneValue != "select zone"? "hide":"clue"}>
+                                        <TableRow key={hint.id} className={(hintZoneValue !== hint.gamePlayZoneID) && hintZoneValue !== "select zone"? "hide":"clue"}>
                                             <TableCell>{hint.gameHintName}  {(gameNameBackupArray.includes(hint.gameHintName)) && <GreenIcon />}</TableCell>
                                             <TableCell>{hint.order}</TableCell>
                                             <TableCell>{gamePlayZoneObjectBackup[("id-" + hint.gamePlayZoneID)]}| {hint.gamePlayZoneID}</TableCell>
@@ -1129,10 +1111,10 @@ export default function GameSection(props) {
                                             </TableBody>):(
                                                     <TableBody>
                                                         {game.gameHint.items.map((hint) => (
-                                                            <TableRow key={hint.id} className={(hintZoneValue != hint.gamePlayZoneID) && hintZoneValue != "select zone"? "hide":"clue"}>
+                                                            <TableRow key={hint.id} className={(hintZoneValue !== hint.gamePlayZoneID) && hintZoneValue !== "select zone"? "hide":"clue"}>
                                                                 <TableCell>{hint.gameHintName}</TableCell>
                                                                 <TableCell>{hint.order}</TableCell>
-                                                                <TableCell>{gamePlayZoneObject[("id-" + hint.gamePlayZoneID)]}</TableCell>
+                                                                <TableCell>{gamePlayZoneObject[(hint.gamePlayZoneID)]}</TableCell>
                                                                 <TableCell>{hint.gameHintDescription}</TableCell>
                                                                 <TableCell>{hint.disabled ? "true" : "false"}</TableCell>
                                                                 <TableCell>
@@ -1157,10 +1139,7 @@ export default function GameSection(props) {
                                    className={"game-detail-row"}>
                                 <Heading level={5} color="black" marginRight={"1rem"}>End Game Detail: {game.gameName}:  </Heading>
                                 <Button gap="0.1rem" size="small"
-                                        onClick={() => showGameStats({
-                                            "gameID": game.id,
-                                            "gameName": game.gameName
-                                        })}>stats</Button>
+                                        onClick={() => handleStats({"gameID": game.id, "gameName": game.gameName})}>stats</Button>
                                 <Button gap="0.1rem" size="small"
                                         onClick={() => handleGameForm({"gameID": game.id, "action": "edit"})}>edit</Button>
                                 <Button gap="0.1rem" size="small" onClick={() => copyGame({
@@ -1182,20 +1161,17 @@ export default function GameSection(props) {
                    </TableBody>
                 </Table>
             </View>
-            <View className={backupsVisible ? "overlay" : "hide"}>
-                <View className="popup">
-                    backups:
-
-                    <Flex direction="row" justifyContent="center" marginTop="20px">
-                        <Button className="show" onClick={() => setBackupsVisible(false)}
-                                variation="primary">
-                            Close
-                        </Button>
-
-                    </Flex>
-                </View>
-            </View>
-            <hr />
+            <ReactModalFromRight>
+                {(modalContent.content === "Game Form") && <GameForm  setFormCreateGameStateBackup={setFormCreateGameStateBackup} />}
+                {(modalContent.content === "Stats") && <GameStats modalContent={modalContent} />}
+                {(modalContent.content === "Zone Form") && <ZoneForm formCreateGameStateBakcup={formCreateGameStateBackup}/>}
+                {(modalContent.content === "Puzzle Form") && <PuzzleForm formCreateGameStateBackup={formCreateGameStateBackup}/>}
+                {(modalContent.content === "TextField Form") && <TextFieldForm />}
+                {(modalContent.content === "Clue Form") && <ClueForm />}
+                {(modalContent.content === "Hint Form") && <HintForm />}
+                {(modalContent.content === "User Stats") && <UserStats />}
+                {(modalContent.content === "City Form") && <CityForm />}
+            </ReactModalFromRight>
 
 
         </View>)

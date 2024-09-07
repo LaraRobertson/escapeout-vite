@@ -47,7 +47,7 @@ export default function TopNav({setModalContent, signOut}) {
                     </Button>
                     {/*<Button onClick={() => Toggle()}>ModalLink</Button>*/}
                     {(authStatus === "authenticated") && (email === "lararobertson70@gmail.com") ? (
-                        <Button className="topLink" onClick={() => navigate("/admin")}>Admin</Button>
+                        <Button className="topLink" onClick={() => navigate("/admin/dashboard")}>Admin</Button>
                     ) : null}
 
             </Flex>

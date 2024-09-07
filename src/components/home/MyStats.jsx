@@ -103,14 +103,14 @@ export default function MyStats(props) {
 
             <View>
                 {myStats.map((userStat, index) => (
-                    <>
+                    <View key={userStat.id}>
                     {(userStat.gameScore.items.length>0) &&
                         (<View key={index}>
                             <div>Game: {userStat.gameName} | {userStat.gameLocationCity}</div>
                             <GameScoreView gameScoreArray = {userStat.gameScore.items} gameName={userStat.gameName} />
                         </View>)
                     }
-                    </>
+                    </View>
                 ))}
             </View>
         </>
