@@ -119,7 +119,8 @@ button:focus-visible,
   border-left: 2px solid var(--background-dark);*/
 }
 .top-bar-change {
-  height: 75px;
+  height: 100px;
+  padding-top: 30px;
 }
 
 .play-area {
