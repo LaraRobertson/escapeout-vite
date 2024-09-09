@@ -119,8 +119,8 @@ button:focus-visible,
   border-left: 2px solid var(--background-dark);*/
 }
 .top-bar-change {
-  height: 100px;
-  padding-top: 30px;
+  height: 110px;
+  padding-top: 40px;
 }
 
 .play-area {
@@ -140,7 +140,7 @@ button:focus-visible,
 .notes-area{
   position:relative;
   position: relative;
-  height: calc(100vh - 385px);
+  height: calc(100vh - 405px);
   overflow: auto;
 }
 .game-container-bottom {
