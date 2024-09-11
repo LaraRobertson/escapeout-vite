@@ -1,6 +1,6 @@
 // components/ExampleGame.jsx
 import React, {useContext} from "react"
-import {Button, View, Alert, Flex, Message, Image} from '@aws-amplify/ui-react';
+import {Button, View, Alert, Flex, Message, Image, Heading} from '@aws-amplify/ui-react';
 import {MyAuthContext} from "../../MyContext";
 
 export default function ExampleGame3(props) {
@@ -20,11 +20,12 @@ export default function ExampleGame3(props) {
                 <View>
                     <View>
                         <View paddingBottom="10px">
-                            <strong>5: Clues/Notes Area</strong><br />Use this area to add your clues (see button on clue popup) if you need
-                            to see things in a different way.<br />
-                            Take notes too.<br />
-                            <span className={"small italics"}>This is a screenshot of a game at jaycee park.</span><br />
-                            <Image src={"https://escapeoutbucket2183723-dev.s3.amazonaws.com/public/ExampleGameLayout-Notes.jpg"} alt={"clues and puzzles"}/>
+                            <Heading level={"6"} className="heading" marginTop={"10px"} marginBottom={"5px"}>4: Your Time is Your Score</Heading>
+                            (see information at bottom of screenshot)<br />
+                            <br />Your total time is calculated from the time you start game and how many hints you use.<br />
+                            <span className={"small italics"}>This is a screenshot of a game at jaycee park (excluding yellow type).</span>
+                            <Image src={"https://escapeoutbucket2183723-dev.s3.amazonaws.com/public/ExampleGameLayout-CluesPuzzles.jpg"} alt={"clues and puzzles"}/>
+                            <br />Each hint adds 5 minutes to your score.
                         </View>
 
                     </View>

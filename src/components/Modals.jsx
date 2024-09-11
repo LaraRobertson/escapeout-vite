@@ -62,7 +62,7 @@ export function ModalExampleGame({modalContentEG,setModalContentEG,setModalConte
                 >
                     <div className="modal dark from-right" onClick={(e) => e.stopPropagation()}>
                         <header className="modal_header">
-                            <h3 className="modal_header-clueDetails">Zones</h3>
+                            <h3 className="modal_header-clueDetails">How to Play (1 of 5)</h3>
                             <button className="close" onClick={() => close()}>
                                 <img src={Close} alt="close" />
                             </button>
@@ -84,7 +84,7 @@ export function ModalExampleGame({modalContentEG,setModalContentEG,setModalConte
                             <Button margin="0 10px 0 0" className="button"
                                     onClick={() => {
                                         close();
-                                    }}>Skip</Button>
+                                    }}>Close</Button>
 
                         </footer>
                     </div>
@@ -109,7 +109,7 @@ export function ModalExampleGame2({modalContentEG2,setModalContentEG2,setModalCo
                 >
                     <div className="modal dark from-right" onClick={(e) => e.stopPropagation()}>
                         <header className="modal_header">
-                            <h3 className="modal_header-clueDetails">Clues, Puzzles, and Time</h3>
+                            <h3 className="modal_header-clueDetails">How to Play (2 of 5)</h3>
                             <button className="close" onClick={() => close()}>
                                 <img src={Close} alt="close" />
                             </button>
@@ -131,7 +131,7 @@ export function ModalExampleGame2({modalContentEG2,setModalContentEG2,setModalCo
                             <Button margin="0 10px 0 0" className="button"
                                     onClick={() => {
                                         close();
-                                    }}>Skip</Button>
+                                    }}>Close</Button>
                             <Button margin="0 10px 0 0" className="button"
                                     onClick={() => {
                                         close();
@@ -163,7 +163,7 @@ export function ModalExampleGame3({modalContentEG3,setModalContentEG3,setModalCo
                 >
                     <div className="modal dark from-right" onClick={(e) => e.stopPropagation()}>
                         <header className="modal_header">
-                            <h3 className="modal_header-clueDetails">Notes</h3>
+                            <h3 className="modal_header-clueDetails">How to Play (3 of 5)</h3>
                             <button className="close" onClick={() => close()}>
                                 <img src={Close} alt="close" />
                             </button>
@@ -185,7 +185,7 @@ export function ModalExampleGame3({modalContentEG3,setModalContentEG3,setModalCo
                             <Button margin="0 10px 0 0" className="button"
                                     onClick={() => {
                                         close();
-                                    }}>Skip</Button>
+                                    }}>Close</Button>
                             <Button margin="0 10px 0 0" className="button"
                                     onClick={() => {
                                         close();
@@ -203,7 +203,7 @@ export function ModalExampleGame3({modalContentEG3,setModalContentEG3,setModalCo
         </>
     )
 }
-export function ModalExampleGame4({modalContentEG4,setModalContentEG4,setModalContentEG3, children}) {
+export function ModalExampleGame4({modalContentEG4,setModalContentEG4,setModalContentEG3,setModalContentEG5, children}) {
     const { isChecked } = useContext(MyGameContext);
     function close() {
         setModalContentEG4({show:false,content:""});
@@ -217,7 +217,61 @@ export function ModalExampleGame4({modalContentEG4,setModalContentEG4,setModalCo
                 >
                     <div className="modal dark from-right" onClick={(e) => e.stopPropagation()}>
                         <header className="modal_header">
-                            <h3 className="modal_header-clueDetails">Help, Hints, and Zone Map</h3>
+                            <h3 className="modal_header-clueDetails">How to Play (4 of 5)</h3>
+                            <button className="close" onClick={() => close()}>
+                                <img src={Close} alt="close" />
+                            </button>
+                        </header>
+                        <main className="modal_content">
+                            <View className={"dark"}>
+                                {children}
+                            </View>
+                        </main>
+                        <footer className="modal_footer">
+                            <Button margin="0 0 0 0" className="button"
+                                    onClick={() => {
+                                        close();
+                                        setModalContentEG5({
+                                            show: true,
+                                            content: "Example Game5"
+                                        })
+                                    }}>Next</Button>
+                            <Button margin="0 10px 0 0" className="button"
+                                    onClick={() => {
+                                        close();
+                                    }}>Close</Button>
+                            <Button margin="0 10px 0 0" className="button"
+                                    onClick={() => {
+                                        close();
+                                        setModalContentEG3({
+                                            show: true,
+                                            content: "Example Game3"
+                                        })
+                                    }}>Back</Button>
+
+                        </footer>
+                    </div>
+                </div>,
+                document.getElementById("modal")
+            )}
+        </>
+    )
+}
+export function ModalExampleGame5({modalContentEG5,setModalContentEG5,setModalContentEG4, children}) {
+    const { isChecked } = useContext(MyGameContext);
+    function close() {
+        setModalContentEG5({show:false,content:""});
+    }
+    return (
+        <>
+            {createPortal(
+                <div
+                    className={`modalContainer ${modalContentEG5.show ? "showModal" : ""} `}
+                    onClick={() => close()}
+                >
+                    <div className="modal dark from-right" onClick={(e) => e.stopPropagation()}>
+                        <header className="modal_header">
+                            <h3 className="modal_header-clueDetails">How to Play (5 of 5)</h3>
                             <button className="close" onClick={() => close()}>
                                 <img src={Close} alt="close" />
                             </button>
@@ -231,13 +285,13 @@ export function ModalExampleGame4({modalContentEG4,setModalContentEG4,setModalCo
                             <Button margin="0 10px 0 0" className="button"
                                     onClick={() => {
                                         close();
-                                    }}>Next</Button>
+                                    }}>Next/Close</Button>
                             <Button margin="0 10px 0 0" className="button"
                                     onClick={() => {
                                         close();
-                                        setModalContentEG3({
+                                        setModalContentEG4({
                                             show: true,
-                                            content: "Example Game3"
+                                            content: "Example Game4"
                                         })
                                     }}>Back</Button>
 

@@ -204,12 +204,14 @@ export function ModalPuzzleContent(props) {
                             className={isChecked? "puzzleTextField light-label" : 'puzzleTextField dark-label '}
                             label={field.label}
                             value={gamePuzzleGuess[field.id]}
+                            placeholder={"input answer for above"}
                             onChange={(event) => setGamePuzzleGuessFunction(
                                 field.id, event.target.value, field.answer, puzzleDetails.puzzleID, setClueDetails, setModalClueContent, puzzleDetails.puzzleName, puzzleDetails.puzzleClueText, puzzleDetails.winGame)}
                         />) : (
                             <TextField
                                 className={isChecked? "puzzleTextField light-label" : 'puzzleTextField dark-label '}
                                 label={field.label}
+                                placeholder={"input answer for above"}
                                 value=""
                                 onChange={(event) => setGamePuzzleGuessFunction(
                                     field.id, event.target.value, field.answer, puzzleDetails.puzzleID, setClueDetails, setModalClueContent, puzzleDetails.puzzleName, puzzleDetails.puzzleClueText, puzzleDetails.winGame)}

@@ -162,7 +162,7 @@ export default function GameList(props) {
             <strong>GAMES ARE IN TESTING MODE</strong>
 
         </View>
-        <Heading level={"6"} className="heading" marginBottom={"10px"}>
+        <Heading level={"6"} className="heading" marginBottom={"5px"}>
             Select Game City:&nbsp;&nbsp;  {((gameListByCity.length === 0) && !loading)?
             "Click on a City!":gameLocationCity}
         </Heading>
@@ -180,7 +180,7 @@ export default function GameList(props) {
                     <Flex
                         direction="row"
                         justifyContent="flex-start"
-                        alignItems="stretch"
+                        alignItems="center"
                         alignContent="flex-start"
                         wrap="wrap"
                         gap=".1rem"
@@ -189,7 +189,7 @@ export default function GameList(props) {
                             backgroundColor={(localStorage.getItem("gameLocationCity") == city.cityName) ? ("#0d5189") : ("#b8cef9")}
                             color={(localStorage.getItem("gameLocationCity") == city.cityName) ? ("#ffffff") : ("#000000")} onClick={() => setGameLocationCityFunction(city.cityName)}>{city.cityName}
                         </Button>
-                        <Link className="city-map-link" color="#ffffff" href={city.cityMap} isExternal={true}>See {city.cityName} Games on Map</Link>
+                        <Link className="city-map-link" color="#ffffff" href={city.cityMap} isExternal={true}>see game locations on map</Link>
                     </Flex>
                 </Card>
             ))}
@@ -198,7 +198,7 @@ export default function GameList(props) {
 
         {(gameLocationCity !== "" && gameLocationPlaceArray.length > 0) &&
         <>
-            <Heading level={"6"} className="heading" marginTop={"10px"}>Select Location:</Heading>
+            <Heading level={"6"} className="heading" marginTop={"10px"} marginBottom={"5px"}>Select Location:</Heading>
             <Flex
                 direction="row"
                 justifyContent="flex-start"
@@ -226,14 +226,19 @@ export default function GameList(props) {
                 gap="0rem"
                 className={"level-list"}
             >
-                <View><strong>level 0:</strong> simple, for testing</View>
+                <Heading level={"6"} className="heading" marginBottom={"5px"}>Game Levels:</Heading>
+                <View><strong>level 0:</strong> simple, for learning how game works</View>
                 <View><strong>level 1:</strong> similar to a scavenger hunt</View>
-                <View><strong>level 2:</strong> escape-room style - some scavenger hunt, some deduction</View>
+                <View><strong>level 2:</strong> escape-room style puzzles - some scavenger hunt, some deduction</View>
                 <View><strong>level 3:</strong> more complicated with most puzzles requiring deduction</View>
             </Flex>
+            <Heading level={"6"} className="heading" marginTop={"10px"}>Game List:</Heading>
             {(authStatus === "authenticated")  &&
-            <Button className="light" padding="5px" marginTop={"10px"}
-                    onClick={() => (hidePlayedGames ? setHidePlayedGames(false) : setHidePlayedGames(true))}>
+            <Button className="button-small amplify-card--elevated" padding="5px" marginTop={"10px"}
+                    onClick={() => (hidePlayedGames ? setHidePlayedGames(false) : setHidePlayedGames(true))}
+                    backgroundColor={(hidePlayedGames) ? ("#0d5189") : ("#b8cef9")}
+                    color={(hidePlayedGames) ? ("#ffffff") : ("#000000")}
+            >
                 {hidePlayedGames ? "show" : "hide"} played games
             </Button>
             }

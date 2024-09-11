@@ -380,7 +380,9 @@ export function GameV3() {
                 ) : (
                 <>
                 <View className={isChecked ? "game-container dark" : "game-container light"}>
+                    <View className={"logo-top"}>EscapeOut.Games</View>
                     <View className="top-bar top-bar-change">
+
                         <Flex className="zone-holder zone-holder-change"
                               direction="row"
                               justifyContent="center"

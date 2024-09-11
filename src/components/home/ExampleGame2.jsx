@@ -19,12 +19,11 @@ export default function ExampleGame2(props) {
             <>
                 <View>
                     <View paddingBottom="10px">
-                        <strong>2: Clues are icons on the left</strong><br />(tap to open)
-                        <br /><strong>3: Puzzles are icons on the right</strong><br />(tap to open)<br />
-                        <span className={"small italics"}>This is a screenshot of a game at jaycee park.</span>
+                        <strong>2: Clues - icons on the left</strong><br />(tap to open to see clue)
+                        <br /><strong>3: Puzzles - icons on the right</strong><br />(tap to open to see puzzle form)<br />
+                        <span className={"small italics"}>This is a screenshot of a game at jaycee park (excluding yellow type).</span>
                         <Image src={"https://escapeoutbucket2183723-dev.s3.amazonaws.com/public/ExampleGameLayout-CluesPuzzles.jpg"} alt={"clues and puzzles"}/>
-                        <br />PUZZLES are forms - INPUT the answer into the appropriate field(s) to solve the puzzle.<br />
-                            <br /><strong>4: Time</strong> is the amount of time it takes to solve (includes hint time) and is your score.
+                        <br />Puzzle are forms - Type in the answer into the appropriate field(s) to solve the puzzle.<br />
                     </View>
 
                 </View>

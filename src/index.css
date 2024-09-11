@@ -6,7 +6,7 @@
   --amplify-components-tabs-item-active-border-color: var(--amplify-components-alert-info-background-color);
   --amplify-components-button-primary-background-color: #0D5189; /*old blue color */
   --blue-color-alert: #e6eefe; /* info variation from amplify */
-  --blue-color-light: #6177ba; /* old light blue */
+  --blue-color-light: #B8CEF9; /* old light blue */
   --blue-color: #0d4b89; /*old blue color */
   --blue-duke: #012169;
   --background-dark: #262626;
@@ -68,14 +68,14 @@ button:focus-visible,
 /* light/dark */
 .main-content {
   padding: 2em;
-  color: var(--color-dark);
-  background-color: var(--background-light);
-  /*color: var(--color-light);
-  background-color: var(--background-dark);*/
+  /*color: var(--color-dark);
+  background-color: var(--background-light);*/
+  color: var(--color-light);
+  background-color: var(--background-dark);
 }
 .heading {
   color: var(--color-light);
-  color: var(--color-dark);
+  /*color: var(--color-dark);*/
 }
 .topNav {
   background: var(--black);
@@ -87,7 +87,7 @@ button:focus-visible,
   text-align: center;
   padding-bottom: 10px;
 }
-.select-game {
+.select-game .amplify-card {
   color: var(--color-dark);
   background-color: var(--background-light);
 }
@@ -160,7 +160,7 @@ button:focus-visible,
 .notes-area{
   position:relative;
   position: relative;
-  height: calc(100vh - 405px);
+  height: calc(100vh - 411px);
   overflow: auto;
 }
 .game-container-bottom {
@@ -191,16 +191,24 @@ button:focus-visible,
   left: 0;
   background: black;
 }
-.logo{
+.logo, .logo-top{
   font-size: 8px;
   position: absolute;
   line-height: 1em;
-  bottom: 0;
   width: 100%;
   color: black;
   height: 10px;
   z-index: 10;
   text-align: center;
+}
+.logo {
+  bottom: 0;
+}
+.logo-top {
+  color: white;
+  top: 0;
+  height:20px;
+  padding:5px;
 }
 .right-buttons {
   /*position: absolute;

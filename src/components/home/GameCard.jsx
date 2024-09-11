@@ -97,7 +97,7 @@ export default function GameCard({game, gameDetails, hidePlayedGames}) {
               variation="elevated">
             <View className="inner-game-card">
                 <View className="game-card-full level" backgroundColor={"white"}>
-                    <Text color="black"><span className="italics">Level</span>: {gameLevel}
+                    <Text color="black"><span className="italics">level</span>: {gameLevel}
                     </Text>
                 </View>
                 <View className="game-card-full">
