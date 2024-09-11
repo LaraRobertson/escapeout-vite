@@ -157,20 +157,14 @@ export default function GameList(props) {
     }
     return (
     <View id="game-list">
-        <View className={"blue-alert"} margin="0 auto 5px auto" textAlign={"center"} fontSize={".8em"}
-              padding="5px" lineHeight="1.2em">
+        <View  className={"blue-light"} margin="0 auto 5px auto" textAlign={"center"} fontSize={".7em"}
+              padding="5px" lineHeight="1.1em">
             <strong>GAMES ARE IN TESTING MODE</strong>
 
         </View>
-        {/*Selected: {gameLocationCity} -> {gameLocationPlace}*/}
         <Heading level={"6"} className="heading" marginBottom={"10px"}>
-            Game List (select city):
-            {(authStatus === "authenticated")  &&
-                <Button className="close dark small" marginLeft="5px" padding="2px 4px"
-                        onClick={() => (hidePlayedGames ? setHidePlayedGames(false) : setHidePlayedGames(true))}>
-                    {hidePlayedGames ? "show" : "hide"} played games
-                </Button>
-            }
+            Select Game City:&nbsp;&nbsp;  {((gameListByCity.length === 0) && !loading)?
+            "Click on a City!":gameLocationCity}
         </Heading>
         <Flex
             direction="row"
@@ -179,46 +173,80 @@ export default function GameList(props) {
             alignContent="flex-start"
             wrap="wrap"
             gap="1rem"
+            className={"select-game"}
         >
-            <Card className={"game-card city"} variation="elevated">
-                {cities.map((city, index) => (
-                    <View key={city.id}>
-                    <Button marginRight="5px" className={"button-small small"}
-                            backgroundColor={(localStorage.getItem("gameLocationCity") == city.cityName) ? ("#0d5189") : ("transparent")}
-                            color="white" onClick={() => setGameLocationCityFunction(city.cityName)}>{city.cityName}
-                        {(localStorage.getItem("gameLocationCity") == city.cityName) ? (
-                            <View>&nbsp;- selected</View>) : null}
-                    </Button> <Link className="small light close"
-                                    href={city.cityMap}
-                                    color="#ffffff"
-                                    isExternal={true}>See Games on Google Maps
-                    </Link><br />
+            {cities.map((city, index) => (
+                <Card key={city.id} className={"game-card city"} variation="elevated">
+                    <Flex
+                        direction="row"
+                        justifyContent="flex-start"
+                        alignItems="stretch"
+                        alignContent="flex-start"
+                        wrap="wrap"
+                        gap=".1rem"
+                    >
+                        <Button marginRight="5px"  className={"button-small"}
+                            backgroundColor={(localStorage.getItem("gameLocationCity") == city.cityName) ? ("#0d5189") : ("#b8cef9")}
+                            color={(localStorage.getItem("gameLocationCity") == city.cityName) ? ("#ffffff") : ("#000000")} onClick={() => setGameLocationCityFunction(city.cityName)}>{city.cityName}
+                        </Button>
+                        <Link className="city-map-link" color="#ffffff" href={city.cityMap} isExternal={true}>See {city.cityName} Games on Map</Link>
+                    </Flex>
+                </Card>
+            ))}
+        </Flex>
+
+
+        {(gameLocationCity !== "" && gameLocationPlaceArray.length > 0) &&
+        <>
+            <Heading level={"6"} className="heading" marginTop={"10px"}>Select Location:</Heading>
+            <Flex
+                direction="row"
+                justifyContent="flex-start"
+                alignItems="stretch"
+                alignContent="flex-start"
+                wrap="wrap"
+                gap="1rem"
+            >
+                {gameLocationPlaceArray.map((location) => (
+                    <View className={"amplify-card--elevated"} marginRight="5px">
+                    <Button key={location}  className={"button-small amplify-card--elevated"}
+                            backgroundColor={(localStorage.getItem("gameLocationPlace") === location) ? ("#0d5189") : ("#b8cef9")}
+                            color={(localStorage.getItem("gameLocationPlace") == location) ? ("#ffffff") : ("#000000")}
+                            onClick={() => setGameLocationPlaceFunction(location)}>{location}
+                    </Button>
                     </View>
                 ))}
-                <Heading level={"8"} className="heading" marginTop={"10px"}>
-                    Game List (select location):</Heading>
-                {/*<br />
-               <Button className={"place-view"} onClick={()=>setPlaceView("list")}>Location List Below</Button>|
-                <Button className={"place-view"} onClick={()=>handleMapPlaceView()}>See Map View </Button><br />*/}
-                {gameLocationPlaceArray.map((location) => (
-                    <Button key={location} marginRight="5px" className={"button-small small"}
-                    backgroundColor={(localStorage.getItem("gameLocation") === location) ? ("#0d5189") : ("transparent")}
-                    color="white" onClick={() => setGameLocationPlaceFunction(location)}>{location}
-                {(localStorage.getItem("gameLocationPlace") === location ) ? (
-                    <View>&nbsp;- selected</View>) : null}
-                    </Button>
-                    ))}
-            {/*
-              <Button marginRight="5px" className={"button-small small"} backgroundColor={(localStorage.getItem("gameLocationCity") === "Savannah")? ("#7e0b0b" ): ("transparent")} color="white"  onClick={() => setGameLocationCityFunction("Savannah")}>Savannah, GA
-                {(localStorage.getItem("gameLocationCity") === "Savannah")? (<View>&nbsp;- selected</View> ): (null)}
-              </Button>*/}
-            </Card>
-        </Flex>
+            </Flex>
+            <Flex
+                direction="column"
+                justifyContent="flex-start"
+                alignItems="stretch"
+                alignContent="flex-start"
+                wrap="wrap"
+                gap="0rem"
+                className={"level-list"}
+            >
+                <View><strong>level 0:</strong> simple, for testing</View>
+                <View><strong>level 1:</strong> similar to a scavenger hunt</View>
+                <View><strong>level 2:</strong> escape-room style - some scavenger hunt, some deduction</View>
+                <View><strong>level 3:</strong> more complicated with most puzzles requiring deduction</View>
+            </Flex>
+            {(authStatus === "authenticated")  &&
+            <Button className="light" padding="5px" marginTop={"10px"}
+                    onClick={() => (hidePlayedGames ? setHidePlayedGames(false) : setHidePlayedGames(true))}>
+                {hidePlayedGames ? "show" : "hide"} played games
+            </Button>
+            }
+        </>
+        }
+
+
+
 
 
         <Flex className="flex-games">
             {loading && (<View>loading</View>)}
-            {((gameListByCity.length === 0) && !loading) && <View>Choose a City!</View>}
+
             {(gameLocationPlace != "") &&
                 <>
             {gameListByCityPlace.map((game) => (

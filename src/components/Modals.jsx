@@ -48,7 +48,7 @@ export function ModalGameIntro({modalContentGI,setModalContentGI, handlePlayGame
     )
 }
 
-export function ModalExampleGame({modalContentEG,setModalContentEG, children}) {
+export function ModalExampleGame({modalContentEG,setModalContentEG,setModalContentEG2, children}) {
     const { isChecked } = useContext(MyGameContext);
     function close() {
         setModalContentEG({show:false,content:""});
@@ -62,7 +62,7 @@ export function ModalExampleGame({modalContentEG,setModalContentEG, children}) {
                 >
                     <div className="modal dark from-right" onClick={(e) => e.stopPropagation()}>
                         <header className="modal_header">
-                            <h3 className="modal_header-clueDetails">Example Game Layout</h3>
+                            <h3 className="modal_header-clueDetails">Zones</h3>
                             <button className="close" onClick={() => close()}>
                                 <img src={Close} alt="close" />
                             </button>
@@ -76,7 +76,171 @@ export function ModalExampleGame({modalContentEG,setModalContentEG, children}) {
                             <Button margin="0 0 0 0" className="button"
                                     onClick={() => {
                                         close();
+                                        setModalContentEG2({
+                                            show: true,
+                                            content: "Example Game2"
+                                        })
                                     }}>Next</Button>
+                            <Button margin="0 10px 0 0" className="button"
+                                    onClick={() => {
+                                        close();
+                                    }}>Skip</Button>
+
+                        </footer>
+                    </div>
+                </div>,
+                document.getElementById("modal")
+            )}
+        </>
+    )
+}
+
+export function ModalExampleGame2({modalContentEG2,setModalContentEG2,setModalContentEG3,setModalContentEG, children}) {
+    const { isChecked } = useContext(MyGameContext);
+    function close() {
+        setModalContentEG2({show:false,content:""});
+    }
+    return (
+        <>
+            {createPortal(
+                <div
+                    className={`modalContainer ${modalContentEG2.show ? "showModal" : ""} `}
+                    onClick={() => close()}
+                >
+                    <div className="modal dark from-right" onClick={(e) => e.stopPropagation()}>
+                        <header className="modal_header">
+                            <h3 className="modal_header-clueDetails">Clues, Puzzles, and Time</h3>
+                            <button className="close" onClick={() => close()}>
+                                <img src={Close} alt="close" />
+                            </button>
+                        </header>
+                        <main className="modal_content">
+                            <View className={"dark"}>
+                                {children}
+                            </View>
+                        </main>
+                        <footer className="modal_footer">
+                            <Button margin="0 0 0 0" className="button"
+                                    onClick={() => {
+                                        close();
+                                        setModalContentEG3({
+                                            show: true,
+                                            content: "Example Game3"
+                                        })
+                                    }}>Next</Button>
+                            <Button margin="0 10px 0 0" className="button"
+                                    onClick={() => {
+                                        close();
+                                    }}>Skip</Button>
+                            <Button margin="0 10px 0 0" className="button"
+                                    onClick={() => {
+                                        close();
+                                        setModalContentEG({
+                                            show: true,
+                                            content: "Example Game"
+                                        })
+                                    }}>Back</Button>
+
+                        </footer>
+                    </div>
+                </div>,
+                document.getElementById("modal")
+            )}
+        </>
+    )
+}
+export function ModalExampleGame3({modalContentEG3,setModalContentEG3,setModalContentEG4,setModalContentEG2, children}) {
+    const { isChecked } = useContext(MyGameContext);
+    function close() {
+        setModalContentEG3({show:false,content:""});
+    }
+    return (
+        <>
+            {createPortal(
+                <div
+                    className={`modalContainer ${modalContentEG3.show ? "showModal" : ""} `}
+                    onClick={() => close()}
+                >
+                    <div className="modal dark from-right" onClick={(e) => e.stopPropagation()}>
+                        <header className="modal_header">
+                            <h3 className="modal_header-clueDetails">Notes</h3>
+                            <button className="close" onClick={() => close()}>
+                                <img src={Close} alt="close" />
+                            </button>
+                        </header>
+                        <main className="modal_content">
+                            <View className={"dark"}>
+                                {children}
+                            </View>
+                        </main>
+                        <footer className="modal_footer">
+                            <Button margin="0 0 0 0" className="button"
+                                    onClick={() => {
+                                        close();
+                                        setModalContentEG4({
+                                            show: true,
+                                            content: "Example Game4"
+                                        })
+                                    }}>Next</Button>
+                            <Button margin="0 10px 0 0" className="button"
+                                    onClick={() => {
+                                        close();
+                                    }}>Skip</Button>
+                            <Button margin="0 10px 0 0" className="button"
+                                    onClick={() => {
+                                        close();
+                                        setModalContentEG2({
+                                            show: true,
+                                            content: "Example Game2"
+                                        })
+                                    }}>Back</Button>
+
+                        </footer>
+                    </div>
+                </div>,
+                document.getElementById("modal")
+            )}
+        </>
+    )
+}
+export function ModalExampleGame4({modalContentEG4,setModalContentEG4,setModalContentEG3, children}) {
+    const { isChecked } = useContext(MyGameContext);
+    function close() {
+        setModalContentEG4({show:false,content:""});
+    }
+    return (
+        <>
+            {createPortal(
+                <div
+                    className={`modalContainer ${modalContentEG4.show ? "showModal" : ""} `}
+                    onClick={() => close()}
+                >
+                    <div className="modal dark from-right" onClick={(e) => e.stopPropagation()}>
+                        <header className="modal_header">
+                            <h3 className="modal_header-clueDetails">Help, Hints, and Zone Map</h3>
+                            <button className="close" onClick={() => close()}>
+                                <img src={Close} alt="close" />
+                            </button>
+                        </header>
+                        <main className="modal_content">
+                            <View className={"dark"}>
+                                {children}
+                            </View>
+                        </main>
+                        <footer className="modal_footer">
+                            <Button margin="0 10px 0 0" className="button"
+                                    onClick={() => {
+                                        close();
+                                    }}>Next</Button>
+                            <Button margin="0 10px 0 0" className="button"
+                                    onClick={() => {
+                                        close();
+                                        setModalContentEG3({
+                                            show: true,
+                                            content: "Example Game3"
+                                        })
+                                    }}>Back</Button>
+
                         </footer>
                     </div>
                 </div>,

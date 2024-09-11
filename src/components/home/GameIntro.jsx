@@ -13,8 +13,11 @@ import {generateClient} from "aws-amplify/api";
 import GameDetail from "./GameDetail";
 import Waiver from "./Waiver";
 import ExampleGame from "./ExampleGame";
+import ExampleGame2 from "./ExampleGame2";
+import ExampleGame3 from "./ExampleGame3";
+import ExampleGame4 from "./ExampleGame4";
 import DOMPurify from "dompurify";
-import {ModalGameIntro, ModalWaiver, ReactModalFromBottomMap, ModalExampleGame} from "../Modals";
+import {ModalGameIntro, ModalWaiver, ReactModalFromBottomMap, ModalExampleGame, ModalExampleGame2, ModalExampleGame3, ModalExampleGame4} from "../Modals";
 import {Map} from "../game/Map";
 
 export default function GameIntro(props) {
@@ -26,6 +29,9 @@ export default function GameIntro(props) {
     const [modalContentGI, setModalContentGI] = useState({show:false, content:""});
     const [modalContentWaiver, setModalContentWaiver] = useState({show:false, content:""});
     const [modalContentEG, setModalContentEG] = useState({show:false, content:""});
+    const [modalContentEG2, setModalContentEG2] = useState({show:false, content:""});
+    const [modalContentEG3, setModalContentEG3] = useState({show:false, content:""});
+    const [modalContentEG4, setModalContentEG4] = useState({show:false, content:""});
     const [modalContentMap, setModalContentMap] = useState({open:false, content:""});
     const [ isGameDetailOpen, setIsGameDetailOpen ] = useState(false);
     const [ isWaiverOpen, setIsWaiverOpen ] = useState(false);
@@ -286,11 +292,37 @@ export default function GameIntro(props) {
                     setModalContentGI={setModalContentWaiver}>
                     {(modalContentWaiver.content == "Waiver") && <Waiver gameIntro={true}/>}
                 </ModalWaiver>
+
+                <ModalExampleGame4
+                    modalContentEG4={modalContentEG4}
+                    setModalContentEG4={setModalContentEG4}
+                    setModalContentEG3={setModalContentEG3}>
+                    {(modalContentEG4.content == "Example Game4") && <ExampleGame4 gameIntro={true}/>}
+                </ModalExampleGame4>
+
+                <ModalExampleGame3
+                    modalContentEG3={modalContentEG3}
+                    setModalContentEG3={setModalContentEG3}
+                    setModalContentEG2={setModalContentEG2}
+                    setModalContentEG4={setModalContentEG4}>
+                    {(modalContentEG3.content == "Example Game3") &&<ExampleGame3 gameIntro={true}/>}
+                </ModalExampleGame3>
+
+                <ModalExampleGame2
+                    modalContentEG2={modalContentEG2}
+                    setModalContentEG2={setModalContentEG2}
+                    setModalContentEG3={setModalContentEG3}
+                    setModalContentEG={setModalContentEG}>
+                    {(modalContentEG2.content == "Example Game2") && <ExampleGame2 gameIntro={true}/>}
+                </ModalExampleGame2>
+
                 <ModalExampleGame
                     modalContentEG={modalContentEG}
-                    setModalContentEG={setModalContentEG}>
+                    setModalContentEG={setModalContentEG}
+                    setModalContentEG2={setModalContentEG2}>
                     {(modalContentEG.content == "Example Game") && <ExampleGame gameIntro={true}/>}
                 </ModalExampleGame>
+
                 <ModalGameIntro
                     modalContentGI={modalContentGI}
                     setModalContentGI={setModalContentGI}

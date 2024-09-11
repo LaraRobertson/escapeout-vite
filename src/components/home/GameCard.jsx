@@ -96,6 +96,10 @@ export default function GameCard({game, gameDetails, hidePlayedGames}) {
               className={(gamesIDUserPlayed.includes(id) && hidePlayedGames) ? "hide" : "game-card"}
               variation="elevated">
             <View className="inner-game-card">
+                <View className="game-card-full level" backgroundColor={"white"}>
+                    <Text color="black"><span className="italics">Level</span>: {gameLevel}
+                    </Text>
+                </View>
                 <View className="game-card-full">
                     {gamesIDUserPlayed.includes(id) ? (
                         <Text className="game-card-header played">{gameName} <span
@@ -112,10 +116,6 @@ export default function GameCard({game, gameDetails, hidePlayedGames}) {
                 <View className="game-card-full">
                     <Text color="white"><span
                         className="italics">City</span>: {gameLocationCity}</Text>
-                </View>
-                <View className="game-card-full">
-                    <Text color="white"><span className="italics">Level</span>: {gameLevel}
-                    </Text>
                 </View>
                 <View className="game-card-full">
                     <Text color="white">{walkingDistance} walking distance</Text>

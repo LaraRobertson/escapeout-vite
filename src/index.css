@@ -6,8 +6,8 @@
   --amplify-components-tabs-item-active-border-color: var(--amplify-components-alert-info-background-color);
   --amplify-components-button-primary-background-color: #0D5189; /*old blue color */
   --blue-color-alert: #e6eefe; /* info variation from amplify */
-  --blue-color-light: #B8CEF9; /* old light blue */
-  --blue-color: #0D5189; /*old blue color */
+  --blue-color-light: #6177ba; /* old light blue */
+  --blue-color: #0d4b89; /*old blue color */
   --blue-duke: #012169;
   --background-dark: #262626;
   --color-light: #ffffff;
@@ -59,19 +59,39 @@ button:focus-visible,
 .active {
   outline: 4px auto -webkit-focus-ring-color;
 }
-.heading {
-  color: var(--color-light);
-}
+
 .hero-paragraph {
   font-size: 1em;
   font-weight:500;
   padding: 2px 0;
 }
+/* light/dark */
 .main-content {
   padding: 2em;
-  color: var(--color-light);
-  background-color: var(--background-dark);
+  color: var(--color-dark);
+  background-color: var(--background-light);
+  /*color: var(--color-light);
+  background-color: var(--background-dark);*/
 }
+.heading {
+  color: var(--color-light);
+  color: var(--color-dark);
+}
+.topNav {
+  background: var(--black);
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  width: 100%;
+  max-width: 900px;
+  text-align: center;
+  padding-bottom: 10px;
+}
+.select-game {
+  color: var(--color-dark);
+  background-color: var(--background-light);
+}
+/* end light/dark */
 .authenticator {
   place-self: center;
   padding-bottom: 10px;
@@ -463,6 +483,7 @@ button:focus-visible,
 }
 .puzzleTextField {
   width: 95%;
+  background:white;
 }
 .right-answer {
   width: 5%;
@@ -473,8 +494,14 @@ input[type='number'],
 textarea {
   font-size: 16px;
 }
-.light, .light-label label, .light-label input, .light-label textarea {
+.light, .light-label label {
   color: var(--color-light);
+  background: var(--background-dark);
+
+}
+.light-label input, .light-label textarea {
+  color: var(--color-dark);
+
 }
 .light:visited {
   color: var(--color-light)!important;}
@@ -625,16 +652,7 @@ fieldset.comments legend {
   min-height:100vh;
 }
 
-.topNav {
-  background: var(--black);
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  width: 100%;
-  max-width: 900px;
-  text-align: center;
-  padding-bottom: 10px;
-}
+
 @media all and (min-width: 950px) {
   .main-container {
     max-width: 1200px;
@@ -661,7 +679,7 @@ fieldset.comments legend {
   border: none;
   padding: 0;
   font-weight: normal;
-  background-color: var(--amplify-colors-black);
+  background-color: transparent;
   padding-right: 6px;
   padding-left: 6px;
 }
@@ -868,6 +886,11 @@ isChecked is for light/dark
   background-color: transparent;
   font-size: 1rem;
 }
+.city-map-link {
+  text-decoration: underline;
+  background-color: transparent;
+  font-size: .8em;
+}
 .help {
  /* padding: 0px 5px;
   border-radius: 30px;
@@ -901,6 +924,13 @@ isChecked is for light/dark
 .game-card-full {
   text-align: center;
   padding: 0 10px;
+}
+.level-list {
+  font-size: .7em;
+  margin-top: 10px
+}
+.level {
+  font-weight:bold;
 }
 .game-card-header {
   color:#fff;
