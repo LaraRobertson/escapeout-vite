@@ -1,4 +1,4 @@
-import {Button, Flex, Input, SwitchField, TextAreaField, TextField, View} from "@aws-amplify/ui-react";
+import {Button, Flex, Input, SelectField, SwitchField, TextAreaField, TextField, View} from "@aws-amplify/ui-react";
 import React, {useContext, useEffect, useState} from "react";
 import {getGame, getGamePlayZone, getGamePuzzle} from "../../graphql/queries";
 import * as mutations from "../../graphql/mutations";
@@ -18,6 +18,7 @@ export default function PuzzleForm(props) {
     let zoneID = modalContent.gamePlayZoneID;
     let gameID = modalContent.gameID;
     let gameDesigner = modalContent.gameDesigner;
+    let gamePlayZoneObject = props.gamePlayZoneObject;
     const [puzzleBackup, setPuzzleBackup] = useState(false);
     const initialStateCreatePuzzle = {
         gameID: gameID,
@@ -194,8 +195,18 @@ export default function PuzzleForm(props) {
         <View id="gamePuzzleForm" className="show" as="form" margin=".5rem 0">
             <View><strong>Game Puzzle Form</strong></View>
             <View className={"small"}>Game ID: {formCreatePuzzleState.gameID}</View>
-            <View className={"small"}>Zone ID: {formCreatePuzzleState.gamePlayZoneID}</View>
+            <View className={"small"}>Zone ID: {gamePlayZoneObject[formCreatePuzzleState.gamePlayZoneID]}|{formCreatePuzzleState.gamePlayZoneID}</View>
             <Flex direction="column" justifyContent="center" gap="1rem" className={"game-form"}>
+                <SelectField
+                    className={"city-dropdown"}
+                    paddingTop={"3px"}
+                    value={modalContent.zoneID}
+                    onChange={(e) =>  setInputCreatePuzzle('gamePlayZoneID', e.target.value)} label={""}>
+                    <option value="change zone">select zone</option>
+                    {Object.entries(gamePlayZoneObject).map(([key, value], i) => (
+                        <option key={key} value={key}>{value}</option>
+                    ))}
+                </SelectField>
                 <SwitchField
                     label="disabled"
                     isChecked={formCreatePuzzleState.disabled}
@@ -212,6 +223,7 @@ export default function PuzzleForm(props) {
                         setInputCreatePuzzle('winGame', e.target.checked);
                     }}
                 />
+
                 <Input
                     name="order"
                     type="number"

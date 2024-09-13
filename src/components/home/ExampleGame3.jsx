@@ -1,9 +1,9 @@
 // components/ExampleGame.jsx
 import React, {useContext} from "react"
-import {Button, View, Alert, Flex, Message, Image, Heading} from '@aws-amplify/ui-react';
+import {Button, View, Alert, Flex, Message, Image} from '@aws-amplify/ui-react';
 import {MyAuthContext} from "../../MyContext";
 
-export default function ExampleGame3(props) {
+export default function ExampleGame2(props) {
     let gameDetails = props.gameDetails;
     let gameIntro = props.gameIntro;
     const { setModalContent, setGameDetails  } = useContext(MyAuthContext);
@@ -18,18 +18,16 @@ export default function ExampleGame3(props) {
     return (
             <>
                 <View>
-                    <View>
-                        <View paddingBottom="10px">
-                            <Heading level={"6"} className="heading" marginTop={"10px"} marginBottom={"5px"}>4: Your Time is Your Score</Heading>
-                            (see information at bottom of screenshot)<br />
-                            <br />Your total time is calculated from the time you start game and how many hints you use.<br />
-                            <span className={"small italics"}>This is a screenshot of a game at jaycee park (excluding yellow type).</span>
-                            <Image src={"https://escapeoutbucket2183723-dev.s3.amazonaws.com/public/ExampleGameLayout-CluesPuzzles.jpg"} alt={"clues and puzzles"}/>
-                            <br />Each hint adds 5 minutes to your score.
+                        <View>
+                            <Image width="180px" src={"https://escapeoutbucket2183723-dev.s3.amazonaws.com/public/ExampleLayout-PuzzlePopup.jpg"} alt={"puzzle popup"}/>
+                            <View className={"example"}>Puzzle are forms - type in the answer into the appropriate field(s) to solve the puzzle.</View>
+                            <View className={"example"}>In this case the Clue called "Magnifying Glass" asked a question, this is where you answer it.</View>
+                                <View className={"example"}>Not all
+                            answers follow this pattern but the goal is to input the right answers.</View>
+                            <View className={"example"}>If you answer one field correctly there will be a green check. If you answer all the fields correctly
+                                the puzzle is solved. You can close puzzle popup without completing it, your correct answers will still be there.</View>
+                            <View className={"example"}>After puzzle closes there may be a Clue available, so be alert.</View>
                         </View>
-
-                    </View>
-
                 </View>
             </>
         )

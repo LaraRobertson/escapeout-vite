@@ -1,5 +1,11 @@
 import {Accordion, Button, Flex, Image, View} from "@aws-amplify/ui-react";
 import React, {useState} from "react";
+import ExampleGame from "../home/ExampleGame";
+import ExampleGame2 from "../home/ExampleGame2";
+import ExampleGame3 from "../home/ExampleGame3";
+import ExampleGame4 from "../home/ExampleGame4";
+import ExampleGame5 from "../home/ExampleGame5";
+import ExampleGame6 from "../home/ExampleGame6";
 export default function Hints(props) {
     console.log("Hints");
     let gameHint=props.gameHint;
@@ -36,7 +42,7 @@ export default function Hints(props) {
         <Accordion.Container allowMultiple defaultValue={['hints']}>
             <Accordion.Item value="how-to-play">
                 <Accordion.Trigger>
-                    <strong>How to Play?</strong>
+                    <strong>How to Play (General)</strong>
                     <Accordion.Icon/>
                 </Accordion.Trigger>
                 <Accordion.Content>
@@ -49,6 +55,7 @@ export default function Hints(props) {
                     </View>
                 </Accordion.Content>
             </Accordion.Item>
+
             <Accordion.Item value="hints">
                 <Accordion.Trigger>
                     <strong>Available Hints</strong>
@@ -82,7 +89,22 @@ export default function Hints(props) {
                     </View>
                 </Accordion.Content>
             </Accordion.Item>
-
+            <Accordion.Item value="layout">
+                <Accordion.Trigger>
+                    <strong>How to Play Game (Detailed)</strong>
+                    <Accordion.Icon/>
+                </Accordion.Trigger>
+                <Accordion.Content>
+                    <View>
+                        <ExampleGame />
+                        <ExampleGame2 />
+                        <ExampleGame3 />
+                        <ExampleGame4 />
+                        <ExampleGame5 />
+                        <ExampleGame6 />
+                    </View>
+                </Accordion.Content>
+            </Accordion.Item>
         </Accordion.Container>
 
 

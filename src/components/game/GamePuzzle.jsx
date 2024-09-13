@@ -211,7 +211,6 @@ export function ModalPuzzleContent(props) {
                             <TextField
                                 className={isChecked? "puzzleTextField light-label" : 'puzzleTextField dark-label '}
                                 label={field.label}
-                                placeholder={"input answer for above"}
                                 value=""
                                 onChange={(event) => setGamePuzzleGuessFunction(
                                     field.id, event.target.value, field.answer, puzzleDetails.puzzleID, setClueDetails, setModalClueContent, puzzleDetails.puzzleName, puzzleDetails.puzzleClueText, puzzleDetails.winGame)}

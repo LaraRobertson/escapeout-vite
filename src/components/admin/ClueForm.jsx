@@ -24,7 +24,7 @@ import messageInABottle from "../../assets/noun-message-in-a-bottle-5712014.svg"
 import clueNoteIcon from "../../assets/noun-note-question-1648398.svg";
 import envelope from "../../assets/noun-message-6963433.svg";
 
-export default function ClueForm() {
+export default function ClueForm(props) {
     const client = generateClient();
     const { setModalContent, modalContent, setBackupIDArray, backupIDArray  } = useContext(MyAuthContext);
     console.log("zoneID (clue form): " + modalContent.gamePlayZoneID);
@@ -34,6 +34,7 @@ export default function ClueForm() {
     let zoneID = modalContent.gamePlayZoneID;
     let gameID = modalContent.gameID;
     let gameDesigner = modalContent.gameDesigner;
+    let gamePlayZoneObject = props.gamePlayZoneObject;
 
     const initialStateCreateClue = {
         gameID: gameID,
@@ -210,8 +211,18 @@ export default function ClueForm() {
         <View id="gameClueForm" className="show" as="form" margin=".5rem 0">
             <View><strong>Game Clue Form</strong></View>
             <View className={"small"}>Game ID: {formCreateClueState.gameID}</View>
-            <View className={"small"}>Zone ID: {formCreateClueState.gamePlayZoneID}</View>
+            <View className={"small"}>Zone ID: {gamePlayZoneObject[formCreateClueState.gamePlayZoneID]}|{formCreateClueState.gamePlayZoneID}</View>
             <Flex direction="column" justifyContent="center" gap="1rem" className={"game-form"}>
+                <SelectField
+                    className={"city-dropdown"}
+                    paddingTop={"3px"}
+                    value={modalContent.zoneID}
+                    onChange={(e) =>  setInputCreateClue('gamePlayZoneID', e.target.value)} label={""}>
+                    <option value="change zone">select zone</option>
+                    {Object.entries(gamePlayZoneObject).map(([key, value], i) => (
+                        <option key={key} value={key}>{value}</option>
+                    ))}
+                </SelectField>
                 <SwitchField
                     label="disabled"
                     isChecked={formCreateClueState.disabled}

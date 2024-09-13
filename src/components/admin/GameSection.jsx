@@ -1165,10 +1165,10 @@ export default function GameSection() {
                 {(modalContent.content === "Game Form") && <GameForm  setFormCreateGameStateBackup={setFormCreateGameStateBackup} />}
                 {(modalContent.content === "Stats") && <GameStats modalContent={modalContent} />}
                 {(modalContent.content === "Zone Form") && <ZoneForm formCreateGameStateBakcup={formCreateGameStateBackup}/>}
-                {(modalContent.content === "Puzzle Form") && <PuzzleForm formCreateGameStateBackup={formCreateGameStateBackup}/>}
+                {(modalContent.content === "Puzzle Form") && <PuzzleForm gamePlayZoneObject={gamePlayZoneObject} formCreateGameStateBackup={formCreateGameStateBackup}/>}
                 {(modalContent.content === "TextField Form") && <TextFieldForm />}
-                {(modalContent.content === "Clue Form") && <ClueForm />}
-                {(modalContent.content === "Hint Form") && <HintForm />}
+                {(modalContent.content === "Clue Form") && <ClueForm gamePlayZoneObject={gamePlayZoneObject} />}
+                {(modalContent.content === "Hint Form") && <HintForm gamePlayZoneObject={gamePlayZoneObject} />}
                 {(modalContent.content === "User Stats") && <UserStats />}
                 {(modalContent.content === "City Form") && <CityForm />}
             </ReactModalFromRight>
