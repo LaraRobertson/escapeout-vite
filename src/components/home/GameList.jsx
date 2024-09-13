@@ -162,7 +162,7 @@ export default function GameList(props) {
     <View id="game-list">
         <View  className={"blue-light"} margin="0 auto 5px auto" textAlign={"center"} fontSize={".7em"}
               padding="5px" lineHeight="1.1em">
-            <strong>GAMES ARE IN TESTING MODE</strong>
+            <strong>GAMES ARE IN TESTING MODE<br />Please contact info@escapeout.games to report issues.</strong>
 
         </View>
         <Heading level={"6"} className="heading" marginBottom={"5px"}>

@@ -7,6 +7,11 @@ export default function Footer() {
         <View ariaLabel={"footer"} className={"main-content"} marginTop="1em">
             <View textAlign="center"> © 2022 - {format(Date(), "yyyy")} EscapeOut.Games<br/>
                 <Link
+                    href="https://escapeout.games/contact-us/"
+                    isExternal={true}
+                    textDecoration={"underline"}
+                    >Contact Us</Link> |&nbsp;
+                <Link
                     href="https://escapeout.games/privacy-policy/"
                     isExternal={true}
                     textDecoration="underline"
