@@ -108,7 +108,10 @@ button:focus-visible,
   padding: .2em .5em;
   font-size: .8em;
 }
-
+.example {
+  font-size: .9em;
+  margin-bottom: .3em;
+}
 @media (min-width: 30rem) {
   .authenticator {
     width: var(--amplify-components-authenticator-container-width-max);
@@ -121,8 +124,8 @@ button:focus-visible,
 /* flexbox for game */
 .game-container {
   /*max-width: 600px;
-  margin: 0 auto;
-  position: relative;*/
+  margin: 0 auto;*/
+  position: relative;
   display:flex;
   flex-direction: column;
   min-height:100vh;
@@ -492,6 +495,7 @@ button:focus-visible,
 .puzzleTextField {
   width: 95%;
   background:white;
+  margin-top:.5em;
 }
 .right-answer {
   width: 5%;

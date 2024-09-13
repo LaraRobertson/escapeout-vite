@@ -15,10 +15,11 @@ import Waiver from "./Waiver";
 import ExampleGame from "./ExampleGame";
 import ExampleGame2 from "./ExampleGame2";
 import ExampleGame3 from "./ExampleGame3";
-import ExampleGame4 from "./ExampleGame4";
 import ExampleGame5 from "./ExampleGame5";
+import ExampleGame4 from "./ExampleGame4";
+import ExampleGame6 from "./ExampleGame6";
 import DOMPurify from "dompurify";
-import {ModalGameIntro, ModalWaiver, ReactModalFromBottomMap, ModalExampleGame, ModalExampleGame2, ModalExampleGame3, ModalExampleGame4, ModalExampleGame5} from "../Modals";
+import {ModalGameIntro, ModalWaiver, ReactModalFromBottomMap, ModalExampleGame, ModalExampleGame2, ModalExampleGame3, ModalExampleGame4, ModalExampleGame5, ModalExampleGame6} from "../Modals";
 import {Map} from "../game/Map";
 
 export default function GameIntro(props) {
@@ -34,6 +35,7 @@ export default function GameIntro(props) {
     const [modalContentEG3, setModalContentEG3] = useState({show:false, content:""});
     const [modalContentEG4, setModalContentEG4] = useState({show:false, content:""});
     const [modalContentEG5, setModalContentEG5] = useState({show:false, content:""});
+    const [modalContentEG6, setModalContentEG6] = useState({show:false, content:""});
     const [modalContentMap, setModalContentMap] = useState({open:false, content:""});
     const [ isGameDetailOpen, setIsGameDetailOpen ] = useState(false);
     const [ isWaiverOpen, setIsWaiverOpen ] = useState(false);
@@ -226,8 +228,8 @@ export default function GameIntro(props) {
                     <View className={"small end-paragraph"}><strong>You Have Signed Waiver</strong>:
                         <Button onClick={() => handleViewWaiver()} variation={"link"}>View Waiver</Button>
                     </View>
-                    <View className={"small end-paragraph"}><strong>Example Game</strong>:
-                        <Button onClick={() => handleExampleGame()} variation={"link"}>View How to Play</Button>
+                    <View className={"small end-paragraph"}>
+                        <Button onClick={() => handleExampleGame()} variation={"link"}>View How to Play (again)</Button>
                     </View>
                     <Heading level={6} textAlign={"center"} marginTop={"10px"} marginBottom={"5px"}>Start Playing when you are here:</Heading>
                     <View className={"end-paragraph"} textAlign={"center"}>
@@ -237,7 +239,7 @@ export default function GameIntro(props) {
                                     open: true,
                                     content: "Map"
                                 })}>
-                            Map of First Zone</Button>
+                            Tap for Location of First Zone on Map</Button>
                     </View>
 
                 </>
@@ -295,10 +297,18 @@ export default function GameIntro(props) {
                     {(modalContentWaiver.content == "Waiver") && <Waiver gameIntro={true}/>}
                 </ModalWaiver>
 
+                <ModalExampleGame6
+                    modalContentEG6={modalContentEG6}
+                    setModalContentEG6={setModalContentEG6}
+                    setModalContentEG5={setModalContentEG5}>
+                    {(modalContentEG6.content == "Example Game6") && <ExampleGame6 gameIntro={true}/>}
+                </ModalExampleGame6>
+
                 <ModalExampleGame5
                     modalContentEG5={modalContentEG5}
                     setModalContentEG5={setModalContentEG5}
-                    setModalContentEG4={setModalContentEG4}>
+                    setModalContentEG4={setModalContentEG4}
+                    setModalContentEG6={setModalContentEG6}>
                     {(modalContentEG5.content == "Example Game5") && <ExampleGame5 gameIntro={true}/>}
                 </ModalExampleGame5>
 

@@ -19,17 +19,14 @@ export default function ExampleGame(props) {
             <>
                 <View>
                     <View paddingBottom="10px">
-                        The Game has 8 Basic Elements<br />
-                        <br /><strong>1: Zones - icons at the top of screen</strong> <br />(tap zone # icon to change Zones)<br /><br />
-                        A game can have 1 Zone or many Zones.<br /><br />
-                        A Zone indicates the area in which you can find the answers for Clues and Puzzles in that Zone. The area is roughly 250 feet diameter with Zone location at center. <br />
-                        <span className={"small italics"}>This is a screenshot of a game at jaycee park (excluding yellow type).</span>
-                        <Image src={"https://escapeoutbucket2183723-dev.s3.amazonaws.com/public/ExampleGameLayout-Zones.jpg"} alt={"clues and puzzles"}/>
+                        <View className={"example"}><strong>Zones - icons at the top of screen</strong> <br />(tap zone # icon to change Zones)</View>
+                        <View className={"example"}>A game can have 1 Zone or many Zones.</View>
+                        <View className={"example"}>A Zone indicates the area that Clues reference so that you can answer Puzzles in that Zone. The area is roughly 250 feet diameter with Zone location at center.</View>
+                        <View className={"example"}>You only know where the first Zone is when you start the game, during the game you must find the other Zones.</View>
+                        <Image src={"https://escapeoutbucket2183723-dev.s3.amazonaws.com/public/ExampleGameLayout-Zones.jpg"} alt={"clues and puzzles"}/><br />
+                        <span className={"small italics"}>This is a screenshot of a Zone in a game at Jaycee Park (excluding yellow).</span>
                     </View>
                 </View>
-                {!gameIntro && <Flex justifyContent="center" wrap='wrap'>
-                    <Button textAlign="center" className="button" onClick={() => nextFunction()}>Next</Button>
-                </Flex>}
             </>
         )
 }

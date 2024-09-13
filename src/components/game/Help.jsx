@@ -1,13 +1,19 @@
 import {Accordion, Image, View} from "@aws-amplify/ui-react";
 import React from "react";
+import ExampleGame from "../home/ExampleGame";
+import ExampleGame2 from "../home/ExampleGame2";
+import ExampleGame3 from "../home/ExampleGame3";
+import ExampleGame4 from "../home/ExampleGame4";
+import ExampleGame5 from "../home/ExampleGame5";
+import ExampleGame6 from "../home/ExampleGame6";
 export default function Help() {
     console.log("How to Play");
     return (
         <View className={"modal-middle"}>
-            <Accordion.Container allowMultiple defaultValue={['levels']}>
+            <Accordion.Container allowMultiple defaultValue={['how-to-play']}>
                 <Accordion.Item value="how-to-play">
                     <Accordion.Trigger>
-                        <strong>How to Play?</strong>
+                        <strong>Generally How to Play</strong>
                         <Accordion.Icon/>
                     </Accordion.Trigger>
                     <Accordion.Content>
@@ -17,6 +23,22 @@ export default function Help() {
                             <View paddingBottom="10px">Tap on puzzles to open and then solve.</View>
                             <View paddingBottom="10px">Clues shown in each Zone are near the Zone image on the screen and near the
                                 marker on the Map for that Zone (within 100 feet or so).</View>
+                        </View>
+                    </Accordion.Content>
+                </Accordion.Item>
+                <Accordion.Item value="layout">
+                    <Accordion.Trigger>
+                        <strong>How to Play Game (Detailed)</strong>
+                        <Accordion.Icon/>
+                    </Accordion.Trigger>
+                    <Accordion.Content>
+                        <View>
+                            <ExampleGame />
+                            <ExampleGame2 />
+                            <ExampleGame3 />
+                            <ExampleGame4 />
+                            <ExampleGame5 />
+                            <ExampleGame6 />
                         </View>
                     </Accordion.Content>
                 </Accordion.Item>

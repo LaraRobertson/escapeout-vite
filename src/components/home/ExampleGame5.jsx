@@ -19,12 +19,11 @@ export default function ExampleGame5(props) {
             <>
                 <View>
                     <View paddingBottom="10px">
-                        <strong>6: Help Button</strong><br />Tap on Help button for some simple game advice and Hints.<br />
-                        <span className={"small italics"}>This is a screenshot of a game (excluding yellow type).</span><br />
-                        <Image src={"https://escapeoutbucket2183723-dev.s3.amazonaws.com/public/ExampleGameLayout-help.jpg"} alt={"help and hints"}/>
-                        <br /><strong>7:  Hints </strong>Tap On A Hint if you are stuck but it adds 5 minutes to your time<br />
-                        <Image width="232" src={"https://escapeoutbucket2183723-dev.s3.amazonaws.com/public/hint-modal.png"} alt={"hints"} />
-                        <br /><strong>8:  Zone Map </strong>shows where the zones are located (you can also identify zones by central image).<br />
+                        <View className={"example"}><strong>Clues/Notes Area</strong></View>
+                        <View className={"example"}>You can add your clues to this area (see button on clue popup) if you need
+                        to see things in a different way.</View>
+                        <View className={"example"}>You can take notes too.</View>
+                        <Image src={"https://escapeoutbucket2183723-dev.s3.amazonaws.com/public/ExampleGameLayout-Notes.jpg"} alt={"clues and puzzles"}/>
                     </View>
                 </View>
 

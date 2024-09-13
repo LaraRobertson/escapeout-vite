@@ -18,18 +18,16 @@ export default function ExampleGame2(props) {
     return (
             <>
                 <View>
-                    <View paddingBottom="10px">
-                        <strong>2: Clues - icons on the left</strong><br />(tap to open to see clue)
-                        <br /><strong>3: Puzzles - icons on the right</strong><br />(tap to open to see puzzle form)<br />
-                        <span className={"small italics"}>This is a screenshot of a game at jaycee park (excluding yellow type).</span>
-                        <Image src={"https://escapeoutbucket2183723-dev.s3.amazonaws.com/public/ExampleGameLayout-CluesPuzzles.jpg"} alt={"clues and puzzles"}/>
-                        <br />Puzzle are forms - Type in the answer into the appropriate field(s) to solve the puzzle.<br />
+                    <View>
+                        <View className={"example"}><strong>Clue Icons on Left, Puzzle Icons on Right.</strong></View>
+                        <Image width="200px" src={"https://escapeoutbucket2183723-dev.s3.amazonaws.com/public/ExampleGameLayout-CluesPuzzles.jpg"} alt={"clues and puzzles"}/>
+                        <Image width="180px" src={"https://escapeoutbucket2183723-dev.s3.amazonaws.com/public/ExampleGameLayout-CluesPopup.jpg"} alt={"clue popup"}/>
+                        <View className={"example"}>The Clue title is <strong>"Envelope"</strong>. The Clue Popup will ask a question, or show an image, or provide some words.
+                            You have to figure out what it means.</View>
+                        <View className={"example"}>You can add the Clue information to the Clues/Notes Area to use later too.</View>
                     </View>
 
                 </View>
-                {!gameIntro && <Flex justifyContent="center" wrap='wrap'>
-                    <Button textAlign="center" className="button" onClick={() => nextFunction()}>Next</Button>
-                </Flex>}
             </>
         )
 }

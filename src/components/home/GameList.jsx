@@ -1,15 +1,18 @@
-import {Button, Flex, Heading, View, Card, Link} from "@aws-amplify/ui-react";
+import {Button, Flex, Heading, View, Card, Link, Image} from "@aws-amplify/ui-react";
 import React, {useEffect, useState, useContext} from "react";
 import {gameByGameOrder, gamesByCity, listCities} from "../../graphql/queries";
 import GameCard from "./GameCard";
 import {generateClient} from "aws-amplify/api";
 import {MyAuthContext} from "../../MyContext";
+import upIcon from "../../assets/noun-arrow-3044516-up-arrow-FFFFFF.svg";
+import downIcon from "../../assets/noun-arrow-3044495-FFFFFF.svg";
 
 export default function GameList(props) {
     let gameDetails = props.gameDetails;
     const client = generateClient();
     const { authStatus, setModalContent, setGameLocationPlace, gameLocationPlace } = useContext(MyAuthContext);
     const [hidePlayedGames, setHidePlayedGames] = useState(false);
+    const [hideGamesLevels, setHideGamesLevels] = useState(false);
     const [loading, setLoading] = useState(false);
     const [gameListByCity, setGameListByCity] = useState([]);
     const [cities, setCities] = useState([]);
@@ -226,11 +229,21 @@ export default function GameList(props) {
                 gap="0rem"
                 className={"level-list"}
             >
-                <Heading level={"6"} className="heading" marginBottom={"5px"}>Game Levels:</Heading>
-                <View><strong>level 0:</strong> simple, for learning how game works</View>
-                <View><strong>level 1:</strong> similar to a scavenger hunt</View>
-                <View><strong>level 2:</strong> escape-room style puzzles - some scavenger hunt, some deduction</View>
-                <View><strong>level 3:</strong> more complicated with most puzzles requiring deduction</View>
+                <Flex
+                    direction="row"
+                    justifyContent="flex-start"
+                    alignItems="center"
+                    alignContent="flex-start"
+                    wrap="wrap"
+                    gap=".1rem"
+                >
+                    <Heading level={"6"} className="heading" >Game Levels </Heading><Image  onClick={() => setHideGamesLevels(!hideGamesLevels)} height="30px" width="30px" src={hideGamesLevels ? downIcon : upIcon} alt="up icon"/></Flex>
+                <View className={hideGamesLevels ? "hide" : "show"}>
+                    <View><strong>level 0:</strong> simple, for learning how game works</View>
+                    <View><strong>level 1:</strong> similar to a scavenger hunt</View>
+                    <View><strong>level 2:</strong> escape-room style puzzles - some scavenger hunt, some deduction</View>
+                    <View><strong>level 3:</strong> more complicated with most puzzles requiring deduction</View>
+                </View>
             </Flex>
             <Heading level={"6"} className="heading" marginTop={"10px"}>Game List:</Heading>
             {(authStatus === "authenticated")  &&
