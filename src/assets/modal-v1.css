@@ -48,6 +48,9 @@
     border-bottom: 1px solid #ddd;
     padding: 1rem 0;
   }
+.modalContainer.puzzleModal .modal_content {
+  padding: 0 0 1rem 0;
+}
 @media all and (max-width: 400px) {
   .modalContainer .modal_content {
     font-size: .9rem;

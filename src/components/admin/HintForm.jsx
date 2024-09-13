@@ -1,4 +1,4 @@
-import {Button, Flex, Input, SwitchField, TextAreaField, TextField, View} from "@aws-amplify/ui-react";
+import {Button, Flex, Input, SelectField, SwitchField, TextAreaField, TextField, View} from "@aws-amplify/ui-react";
 import React, {useContext, useEffect, useState} from "react";
 import {getGame, getGameClue, getGameHint, getGamePlayZone, getGamePuzzle} from "../../graphql/queries";
 import * as mutations from "../../graphql/mutations";
@@ -6,7 +6,7 @@ import {MyAuthContext} from "../../MyContext";
 import {generateClient} from "aws-amplify/api";
 import {createGamePuzzle} from "../../graphql/mutations";
 
-export default function HintForm() {
+export default function HintForm(props) {
     const client = generateClient();
     const { setModalContent, modalContent, setBackupIDArray, backupIDArray  } = useContext(MyAuthContext);
     console.log("zoneID (puzzle form): " + modalContent.zoneID);
@@ -15,6 +15,7 @@ export default function HintForm() {
     let hintID = modalContent.id;
     let zoneID = modalContent.gamePlayZoneID;
     let gameID = modalContent.gameID;
+    let gamePlayZoneObject = props.gamePlayZoneObject;
 
     const initialStateCreateHint = {
         gameID: gameID,
@@ -138,8 +139,18 @@ export default function HintForm() {
         <View id="gameHintForm" className="show" as="form" margin=".5rem">
             <View><strong>Game Hint Form</strong></View>
             <View className={"small"}>Game ID: {formCreateHintState.gameID}</View>
-            <View className={"small"}>Zone ID: {formCreateHintState.gamePlayZoneID}</View>
+            <View className={"small"}>Zone ID: {gamePlayZoneObject[formCreateHintState.gamePlayZoneID]}|{formCreateHintState.gamePlayZoneID}</View>
             <Flex direction="column" justifyContent="center" gap="1rem" className={"game-form"}>
+                <SelectField
+                    className={"city-dropdown"}
+                    paddingTop={"3px"}
+                    value={modalContent.zoneID}
+                    onChange={(e) =>  setInputCreateHint('gamePlayZoneID', e.target.value)} label={""}>
+                    <option value="change zone">select zone</option>
+                    {Object.entries(gamePlayZoneObject).map(([key, value], i) => (
+                        <option key={key} value={key}>{value}</option>
+                    ))}
+                </SelectField>
                 <SwitchField
                     label="disabled"
                     isChecked={formCreateHintState.disabled}

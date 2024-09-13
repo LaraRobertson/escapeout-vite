@@ -5,7 +5,12 @@ import Waiver from "./Waiver";
 import Help from "../game/Help";
 import Hints from "../game/Hints";
 import {Map} from "../game/Map";
-
+import ExampleGame from "./ExampleGame";
+import ExampleGame2 from "./ExampleGame2";
+import ExampleGame3 from "./ExampleGame3";
+import ExampleGame5 from "./ExampleGame5";
+import ExampleGame4 from "./ExampleGame4";
+import ExampleGame6 from "./ExampleGame6";
 export default function GameDetail(props) {
     let gameDetails=props.gameDetails;
     let gameIntro = props.gameIntro;
@@ -24,7 +29,8 @@ export default function GameDetail(props) {
                             open: true,
                             content: "Map"
                         })}>
-                    Map of First Zone</Button>
+                    Location of First Zone on Map</Button>
+                <br />You must find the other Zone Locations while playing the game.<br /><br />
             </View>
             <ReactModalFromBottomMap modalContentMap={modalContentMap} setModalContentMap={setModalContentMap}>
                 {(modalContentMap.content == "Map") && <Map gameDetails={gameDetails}/>}
@@ -32,14 +38,17 @@ export default function GameDetail(props) {
             <Accordion.Container allowMultiple defaultValue={['logistics']}>
                 <Accordion.Item value="layout">
                     <Accordion.Trigger>
-                        <strong>Example Layout</strong>
+                        <strong>How to Play Game</strong>
                         <Accordion.Icon/>
                     </Accordion.Trigger>
                     <Accordion.Content>
                         <View>
-                            <View paddingBottom="10px">
-                              <Image src={"https://escapeoutbucket2183723-dev.s3.amazonaws.com/public/ExampleGameLayout.jpg"} alt={"Example Layout"}/>
-                            </View>
+                          <ExampleGame />
+                            <ExampleGame2 />
+                            <ExampleGame3 />
+                            <ExampleGame4 />
+                            <ExampleGame5 />
+                            <ExampleGame6 />
                         </View>
                     </Accordion.Content>
                 </Accordion.Item>
