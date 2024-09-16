@@ -21,10 +21,10 @@ export default function ExampleGame2(props) {
                     <View>
                         <View className={"example"}><strong>Clue Icons on Left, Puzzle Icons on Right.</strong></View>
                         <Image width="200px" src={"https://escapeoutbucket2183723-dev.s3.amazonaws.com/public/ExampleGameLayout-CluesPuzzles.jpg"} alt={"clues and puzzles"}/>
+                        <View>Tap Icon on the Left.</View>
                         <Image width="180px" src={"https://escapeoutbucket2183723-dev.s3.amazonaws.com/public/ExampleGameLayout-CluesPopup.jpg"} alt={"clue popup"}/>
-                        <View className={"example"}>The Clue title is <strong>"Envelope"</strong>. The Clue Popup will ask a question, or show an image, or provide some words.
+                        <View className={"example"}>The Clue Popup will ask a question, or show an image, or provide some words.
                             You have to figure out what it means.</View>
-                        <View className={"example"}>You can add the Clue information to the Clues/Notes Area to use later too.</View>
                     </View>
 
                 </View>

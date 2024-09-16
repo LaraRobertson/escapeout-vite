@@ -428,7 +428,6 @@ export function GameV3() {
                             clueDetails={clueDetails}
                             setCluesFunction={setCluesFunction}>
                             <>
-                            <View>{clueDetails.gameClueName}</View>
                             <View
                                 dangerouslySetInnerHTML={{__html: DangerouslySetInnerHTMLSanitized(clueDetails.gameClueText)}}
                                 paddingTop="10px"></View>

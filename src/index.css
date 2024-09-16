@@ -89,7 +89,7 @@ button:focus-visible,
 }
 .select-game .amplify-card {
   color: var(--color-dark);
-  background-color: var(--background-light);
+  background-color: transparent;
 }
 /* end light/dark */
 .authenticator {
@@ -109,8 +109,8 @@ button:focus-visible,
   font-size: .8em;
 }
 .example {
-  font-size: .9em;
-  margin-bottom: .3em;
+  font-size: 1em;
+  margin-bottom: .5em;
 }
 @media (min-width: 30rem) {
   .authenticator {
@@ -320,6 +320,9 @@ button:focus-visible,
 
 .button-center {
   margin: 10px auto;
+}
+.button-center-gc {
+  margin: 10px auto 0 auto;
 }
 .button-small {
   font-size: .7em;

@@ -136,7 +136,7 @@ export default function GameCard({game, gameDetails, hidePlayedGames}) {
                             {(gamesIDUser.includes(id) || gameType === "free" || gameType === "free-test") &&
                             <View textAlign="center">
                                     <Button
-                                        className="button button-center button-light-dark show"
+                                        className="button button-center-gc button-light-dark show"
                                         onClick={() => handlePlayGameList({
                                             email: email,
                                             gameName: gameName,
@@ -154,6 +154,7 @@ export default function GameCard({game, gameDetails, hidePlayedGames}) {
                                         })}>
                                         Play Game
                                     </Button>
+                                <span className={"small"}>time doesn't start yet</span>
                                 </View>
                             }
                         </View>)}
@@ -191,7 +192,7 @@ export default function GameCard({game, gameDetails, hidePlayedGames}) {
                                 Game Details
                             </Button>
                         </Flex>
-                        <span className="italics">Tap on Leaderboard to see average time.</span>
+                        <span className="italics small">tap on Leaderboard to see average time.</span>
                     </View>
                 </View>
             </View>

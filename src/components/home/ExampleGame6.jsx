@@ -19,7 +19,7 @@ export default function ExampleGame6(props) {
             <>
                 <View>
                     <View paddingBottom="10px">
-                        <View className={"example"}><strong>Zone Map </strong>shows where the zones are located (you can also identify zones by central image).</View>
+                        <View className={"example"}><strong>Zone Map </strong>shows where the zones are located (you can also identify Zones by central image).</View>
                         <Image src={"https://escapeoutbucket2183723-dev.s3.amazonaws.com/public/ExampleGameLayout-help.jpg"} alt={"help and hints"}/>
 
                         <View className={"example"}><strong>Help </strong> - Tap on Help button for some simple game advice and Hints.</View>
