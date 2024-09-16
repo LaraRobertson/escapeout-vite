@@ -64,6 +64,8 @@ export default function GameList(props) {
         console.log("setGameLocationPlaceFunction: " + location);
         localStorage.setItem("gameLocationPlace",location);
         setGameLocationPlace(location);
+        if (hideGamesLevels === false) {setHideGamesLevels(true)}
+
         let gameListByCityPlaceArray = gameListByCity.filter(game => game.gameLocationPlace === location)
             .sort((a, b) => {
                 return a.gameLevel - b.gameLevel;
@@ -181,18 +183,18 @@ export default function GameList(props) {
             {cities.map((city, index) => (
                 <Card key={city.id} className={"game-card city"} variation="elevated">
                     <Flex
-                        direction="row"
+                        direction="column"
                         justifyContent="flex-start"
                         alignItems="center"
-                        alignContent="flex-start"
+                        alignContent="center"
                         wrap="wrap"
                         gap=".1rem"
                     >
-                        <Button marginRight="5px"  className={"button-small"}
+                        <Button marginRight="5px"  className={"button"}
                             backgroundColor={(localStorage.getItem("gameLocationCity") == city.cityName) ? ("#0d5189") : ("#b8cef9")}
                             color={(localStorage.getItem("gameLocationCity") == city.cityName) ? ("#ffffff") : ("#000000")} onClick={() => setGameLocationCityFunction(city.cityName)}>{city.cityName}
                         </Button>
-                        <Link className="city-map-link" color="#ffffff" href={city.cityMap} isExternal={true}>see game locations on map</Link>
+                        <Link className="city-map-link" color="#ffffff" href={city.cityMap} isExternal={true}>{city.cityName} Game locations</Link>
                     </Flex>
                 </Card>
             ))}
@@ -210,8 +212,8 @@ export default function GameList(props) {
                 wrap="wrap"
                 gap="1rem"
             >
-                {gameLocationPlaceArray.map((location) => (
-                    <View className={"amplify-card--elevated"} marginRight="5px">
+                {gameLocationPlaceArray.map((location,index) => (
+                    <View key={location + index} className={"amplify-card--elevated"} marginRight="5px">
                     <Button key={location}  className={"button-small amplify-card--elevated"}
                             backgroundColor={(localStorage.getItem("gameLocationPlace") === location) ? ("#0d5189") : ("#b8cef9")}
                             color={(localStorage.getItem("gameLocationPlace") == location) ? ("#ffffff") : ("#000000")}

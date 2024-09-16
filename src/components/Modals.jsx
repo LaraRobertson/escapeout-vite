@@ -446,7 +446,7 @@ export function ModalClue({modalClueContent,setModalClueContent,clueDetails,setC
             >
                 <div className="modal dark from-left" onClick={(e) => e.stopPropagation()}>
                     <header className="modal_header">
-                        <h2 className="modal_header-clueDetails">Clue</h2>
+                        <h2 className="modal_header-clueDetails">{clueDetails.gameClueName}</h2>
                         <button className="close" onClick={() => close()}>
                             <img src={Close} alt="close" />
                         </button>
