@@ -110,14 +110,9 @@ export default function GameCard({game, gameDetails, hidePlayedGames}) {
                     )}
                 </View>
                 <View className="game-card-full">
-                    <Text color="white"><span
-                        className="italics">Location</span>: {gameLocationPlace}</Text>
+                    <Text color="white">{gameLocationPlace}</Text>
                 </View>
-                <View className="game-card-full">
-                    <Text color="white"><span
-                        className="italics">City</span>: {gameLocationCity}</Text>
-                </View>
-                <View className="game-card-full">
+                <View className="game-card-full small">
                     <Text color="white">{walkingDistance} walking distance</Text>
                 </View>
             </View>
@@ -134,7 +129,7 @@ export default function GameCard({game, gameDetails, hidePlayedGames}) {
                         <View textAlign="center">
                             {/* can include free and free-test in gamesIDUser */}
                             {(gamesIDUser.includes(id) || gameType === "free" || gameType === "free-test") &&
-                            <View textAlign="center">
+                            <View textAlign="center"  marginBottom={"0"}>
                                     <Button
                                         className="button button-center-gc button-light-dark show"
                                         onClick={() => handlePlayGameList({
@@ -154,46 +149,41 @@ export default function GameCard({game, gameDetails, hidePlayedGames}) {
                                         })}>
                                         Play Game
                                     </Button>
-                                <span className={"small"}>time doesn't start yet</span>
-                                </View>
+                                <View className="italics small">time doesn't start yet</View>
+                            </View>
                             }
                         </View>)}
 
                 </Flex>
                 <View className="game-card-full light-dark">
-                    <View id={id}>
-                        <Heading level={"7"} className="light-dark"
-                                 marginTop="0em"><strong>Goal: </strong> {gameGoals}</Heading>
-                        <Heading level={"7"} className="light-dark"
-                                 marginBottom=".4em"><strong>Description</strong> {gameDescription}</Heading>
-                        <Flex justifyContent="center">
-                            <Button className="button button-small show"
-                                    onClick={() => handleLeaderboard({
-                                        gameName: gameName,
-                                        gameID: id
-                                    })}>
-                                Leaderboard
-                            </Button>
-
-                            <Button
-                                className="button button-small show"
-                                onClick={() => handleGameDetail({
-                                    gameName: gameName,
-                                    gameID: id,
-                                    gameLocationCity: gameLocationCity,
-                                    gameDescription: gameDescription,
-                                    gameSummary: gameSummary,
-                                    gameLogisticInfo: gameLogisticInfo,
-                                    gameGoals: gameGoals,
-                                    gamePlayZoneImage1: gamePlayZone.items[0].gameZoneImage,
-                                    latitude1: gamePlayZone.items[0].latitude,
-                                    longitude1: gamePlayZone.items[0].longitude,
-                                })}>
-                                Game Details
-                            </Button>
-                        </Flex>
-                        <span className="italics small">tap on Leaderboard to see average time.</span>
+                    <View className={"example"} marginTop={"10px"}>
+                        <Button
+                            className="button button-small show"
+                            onClick={() => handleGameDetail({
+                                gameName: gameName,
+                                gameID: id,
+                                gameLocationCity: gameLocationCity,
+                                gameDescription: gameDescription,
+                                gameSummary: gameSummary,
+                                gameLogisticInfo: gameLogisticInfo,
+                                gameGoals: gameGoals,
+                                gamePlayZoneImage1: gamePlayZone.items[0].gameZoneImage,
+                                latitude1: gamePlayZone.items[0].latitude,
+                                longitude1: gamePlayZone.items[0].longitude,
+                            })}>
+                            Game Details
+                        </Button>
                     </View>
+                    <View className={"example"} marginBottom={"0"}>
+                        <Button className="button button-small show"
+                                onClick={() => handleLeaderboard({
+                                    gameName: gameName,
+                                    gameID: id
+                                })}>
+                            Leaderboard
+                        </Button>
+                    </View>
+                    <View className="italics small">tap on Leaderboard to see some times</View>
                 </View>
             </View>
         </Card>

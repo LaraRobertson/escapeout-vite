@@ -224,8 +224,11 @@ export default function GameIntro(props) {
                     <View className={"end-paragraph"} textAlign={"center"}><Heading level={5} textAlign={"center"} marginBottom="10px" paddingTop="10px">{gameDetails.gameName}</Heading>
                     </View>
 
-                    <Heading level={6} textAlign={"center"} marginBottom="0">You must complete ALL the puzzles in ALL the zones to win.</Heading>
-                    <View className={"small end-paragraph"}><strong>You Have Signed Waiver</strong>:
+                    <Heading level={6} textAlign={"center"} marginBottom="0">ALL the Puzzles in ALL the Zones must be solved to complete the game.</Heading>
+                    <View className={"end-paragraph"} textAlign={"center"}>
+                    <Image width="300px" src={"https://escapeoutbucket2183723-dev.s3.amazonaws.com/public/puzzlesolved.png"} alt={"puzzle solved"} />
+                    </View>
+                        <View className={"small end-paragraph"}><strong>You Have Signed Waiver</strong>:
                         <Button onClick={() => handleViewWaiver()} variation={"link"}>View Waiver</Button>
                     </View>
                     <View className={"small end-paragraph"}>

@@ -22,8 +22,12 @@ export default function ExampleGame2(props) {
                             <Image width="180px" src={"https://escapeoutbucket2183723-dev.s3.amazonaws.com/public/ExampleLayout-PuzzlePopup.jpg"} alt={"puzzle popup"}/>
                             <View className={"example"}>Puzzle are forms - type in the answer into the appropriate field(s) to solve the puzzle.</View>
                                 <View className={"example"}>You have to figure out answers based on clues.</View>
-                            <View className={"example"}>If you answer one field correctly there will be a green check. If you answer all the fields correctly
-                                there will be a puzzle is solved message and the puzzle will close.</View>
+                            <View className={"example"}>If you answer one field correctly there will be a green check.</View>
+                            <View className={"example"}>
+                                <Image width="300px" src={"https://escapeoutbucket2183723-dev.s3.amazonaws.com/public/puzzlesolved.png"} alt={"puzzle solved"} />
+                                <br />If you answer all the fields correctly
+                                there will be a puzzle is solved message (and the puzzle will close).</View>
+
                             <View className={"example"}>   You can close puzzle popup without completing it, your correct answers will still be there.</View>
                             <View className={"example"}>After puzzle closes there may be a Clue available, so be alert.</View>
                         </View>

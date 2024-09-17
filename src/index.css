@@ -112,6 +112,9 @@ button:focus-visible,
   font-size: 1em;
   margin-bottom: .5em;
 }
+.example button{
+  margin: 0 auto;
+}
 @media (min-width: 30rem) {
   .authenticator {
     width: var(--amplify-components-authenticator-container-width-max);
@@ -303,7 +306,7 @@ button:focus-visible,
   border-radius: 8px;
   border: 1px solid transparent;
   font-weight: 500;
-  font-size:1rem;
+  font-size:1em;
 }
 .place-view {
   border:none;
@@ -903,6 +906,7 @@ isChecked is for light/dark
 }
 .city-map-link {
   text-decoration: underline;
+  text-align:center;
   background-color: transparent;
   font-size: .8em;
 }
@@ -925,7 +929,7 @@ isChecked is for light/dark
 }
 .game-card {
   border: 1px solid #BFD6E8;
-  width:330px;
+  width:145px;
   padding:0!important;
   background-repeat: no-repeat;
 }
@@ -939,6 +943,7 @@ isChecked is for light/dark
 .game-card-full {
   text-align: center;
   padding: 0 10px;
+  line-height: 1em;
 }
 .level-list {
   font-size: .7em;
@@ -946,11 +951,13 @@ isChecked is for light/dark
 }
 .level {
   font-weight:bold;
+  font-size: .9em;
+  margin-bottom:.5em;
 }
 .game-card-header {
   color:#fff;
   font-weight: bold;
-  font-size: 1.2em;
+  font-size: 1em;
   margin-bottom:0px;
   line-height: .9em;
   margin-top: 3px;

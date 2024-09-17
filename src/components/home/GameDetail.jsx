@@ -19,6 +19,8 @@ export default function GameDetail(props) {
         <View className={"game-details-content"}>
             <Heading level={5}>Goal:</Heading>
             <View className={"end-paragraph"}>{gameDetails.gameGoals}</View>
+            <Heading level={5}>Description:</Heading>
+            <View className={"end-paragraph"}>{gameDetails.gameDescription}</View>
             <Heading level={5}>Summary</Heading>
             <View className={"end-paragraph"}>{gameDetails.gameSummary}</View>
             <Heading level={5}>This Game Starts Here at Zone 1:</Heading>
