@@ -274,6 +274,7 @@ button:focus-visible,
   padding:0;
   /*border-bottom: 1px solid rgb(220, 222, 224);*/
   text-align:center;
+  font-size: .9em;
 }
 .game-details-content .end-paragraph {
   text-align:left;
@@ -927,40 +928,74 @@ isChecked is for light/dark
 .italics {
   font-style: italic;
 }
+
+
+.column-50 {
+  width:50%;
+}
+
+.level-list {
+  font-size: .7em;
+  margin-top: 10px
+}
+
 .game-card {
   border: 1px solid #BFD6E8;
-  width:145px;
-  padding:0!important;
+  width: 250px;
+  padding: 0 !important;
   background-repeat: no-repeat;
 }
 .city {
   background-color: transparent;
   border:none;
 }
-.column-50 {
-  width:50%;
+.inner-game-card {
+  background-color: rgb(0, 0, 0, 0.7);
+  padding: 5px 12px;
+  color: white;
+  height: 145px;
+}
+.level {
+  font-weight: bold;
+  font-size: 1em;
+
+}
+.game-card-header {
+  color: #fff;
+  font-weight: bold;
+  font-size: 1.2em;
+  margin-bottom: .25em;
+  line-height: .9em;
+  margin-top: 3px;
 }
 .game-card-full {
   text-align: center;
-  padding: 0 10px;
+  padding: .25em;
   line-height: 1em;
 }
-.level-list {
-  font-size: .7em;
-  margin-top: 10px
-}
-.level {
-  font-weight:bold;
-  font-size: .9em;
-  margin-bottom:.5em;
-}
-.game-card-header {
-  color:#fff;
-  font-weight: bold;
-  font-size: 1em;
-  margin-bottom:0px;
-  line-height: .9em;
-  margin-top: 3px;
+@media (max-width:420px) {
+  .game-card {
+    width: 145px;
+    padding: 0 !important;
+  }
+
+  .inner-game-card {
+    padding: 5px 12px;
+    height: 145px;
+  }
+  .level {
+    font-size: 1em;
+    margin-bottom: 0;
+  }
+  .game-card-header {
+    font-size: .9em;
+    margin-bottom: 0px;
+    line-height: .9em;
+    margin-top: 3px;
+  }
+  .game-card-full {
+    line-height: 1em;
+  }
 }
 
 .game-card-bg-image {
@@ -969,12 +1004,7 @@ isChecked is for light/dark
   top:30px;
   left:0;
 }
-.inner-game-card {
-  background-color: rgb(0, 0, 0, 0.7);
-  padding:5px 12px ;
-  color:white;
-  height:145px;
-}
+
 .inner-game-card1 {
   /*background-color: rgb(0, 0, 0, 0.7);*/
   border-top: 1px solid black;
