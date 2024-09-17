@@ -4,9 +4,10 @@ import puzzleIconClosed from "../../assets/noun-locker-6097531.svg";
 import puzzleIconOpen from "../../assets/noun-locker-6097523.svg";
 import {MyGameContext} from "../../MyContext";
 import {shallowEqual} from "../ShallowEqual";
-import safeBoxClosed from "../../assets/noun-safebox-closed-319680.svg";
+import safeBoxClosed from "../../assets/noun-safebox-7186604.svg";
 import safeBoxOpen from "../../assets/noun-safebox-open-319684.svg";
-import boxClosed from "../../assets/noun-box-locked-4427162.svg";
+/* clear import boxClosed from "../../assets/noun-box-locked-4427162.svg";*/
+import boxClosed from "../../assets/noun-box-locked-4427371.svg";
 import boxOpen from "../../assets/noun-open-package-6999076.svg";
 import safeDepositBoxOpen from "../../assets/noun-safe-deposit-box-open-5414386.svg";
 import safeDepositBoxClosed from "../../assets/noun-safe-deposit-box-closed-6008306.svg";
@@ -257,11 +258,11 @@ export function GamePuzzle(props) {
         switch (true) {
             case (props.index == 0):
                 return (
-                    <Image height="100px" width="100px" src={puzzleIconClosed} alt="puzzle icon closed" />
+                    <Image height="80px" width="80px" src={puzzleIconClosed} alt="puzzle icon closed" />
                 );
             case (props.index == 1):
                 return (
-                    <Image height="70px" width="70px" src={safeBoxClosed} alt="safe box closed" />
+                    <Image height="50px" width="50px" src={safeBoxClosed} alt="safe box closed" />
                 );
             case (props.index % 5 == 0):
                 return (
@@ -269,7 +270,7 @@ export function GamePuzzle(props) {
                 );
             case (props.index % 3 == 0):
                 return (
-                    <Image height="70px" width="70px" src={boxClosed} alt="box closed" />
+                    <Image height="60px" width="60px" src={boxClosed} alt="box closed" />
                 );
             case (props.index % 2 == 0):
                 return (
@@ -277,7 +278,7 @@ export function GamePuzzle(props) {
                 );
             default:
                 return (
-                    <Image height="100px" width="100px" src={puzzleIconClosed} alt="puzzle icon closed" />
+                    <Image height="50px" width="50px" src={puzzleIconClosed} alt="puzzle icon closed" />
                 );
         }
     }
