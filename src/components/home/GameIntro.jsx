@@ -223,8 +223,10 @@ export default function GameIntro(props) {
                 <>
                     <View className={"end-paragraph"} textAlign={"center"}><Heading level={5} textAlign={"center"} marginBottom="10px" paddingTop="10px">{gameDetails.gameName}</Heading>
                     </View>
+                    <View className={"end-paragraph"} textAlign={"center"}>note: Clues/Answers for Each Zone are within a 100 feet of Zone location.</View>
 
-                    <Heading level={6} textAlign={"center"} marginBottom="0">ALL the Puzzles in ALL the Zones must be solved to complete the game.</Heading>
+                        <View className={"end-paragraph"} textAlign={"center"}>note: All the Puzzles in all the Zones must be solved to complete the game.
+                   </View>
                     <View className={"end-paragraph"} textAlign={"center"}>
                     <Image width="300px" src={"https://escapeoutbucket2183723-dev.s3.amazonaws.com/public/puzzlesolved.png"} alt={"puzzle solved"} />
                     </View>
