@@ -14,7 +14,7 @@ import { Authenticator } from "@aws-amplify/ui-react";
 to your backend configuration using the Amplify CLI, the configuration in
 amplifyconfiguration.json will update automatically. */
 import { Amplify } from 'aws-amplify';
-import amplifyconfig from './amplifyconfiguration.json';
+import amplifyconfig from './aws-exports.js';
 
 
 const isLocalhost = Boolean(
