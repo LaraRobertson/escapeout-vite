@@ -1,0 +1,204 @@
+{
+  "id": "8144f0ac-f27f-4b8b-9c37-7603f1a844c2",
+  "gameName": "Super Easy Example Game",
+  "gameDescription": "A Simple Test Game",
+  "gameLogisticInfo": "Parking is not free at Jaycee Park at Tybee Island. Pay for parking every day from 8am to 8pm",
+  "gameSummary": "Just an Example Game. You must solve all the puzzles in all the zones to win!",
+  "gameLocationPlace": "Jaycee Park",
+  "latitude": "32.017384",
+  "longitude": "-80.845396",
+  "gameLocationPlaceDetails": null,
+  "gameLocationCity": "Tybee Island",
+  "gameDesigner": "EscapeOut.Games",
+  "gameLevel": "level 0",
+  "walkingDistance": "100 feet",
+  "playZones": null,
+  "gameImage": null,
+  "gameType": "free",
+  "gameWinMessage": "You Won the Super Easy Example Game!",
+  "gameWinImage": null,
+  "gameGoals": "Find the Answers",
+  "gameIntro": "Just an example game. There are 2 Zones. You must complete all the puzzles in all the zones to win.",
+  "gameMap": null,
+  "gamePlayZone": {
+    "items": [
+      {
+        "id": "9793dea8-4a86-4ee9-8c26-461d35a277d8",
+        "disabled": false,
+        "gameID": "8144f0ac-f27f-4b8b-9c37-7603f1a844c2",
+        "gameZoneName": "Main Sign at Jaycee Park",
+        "gameZoneIcon": null,
+        "gameZoneImage": "https://escapeoutbucket2183723-dev.s3.amazonaws.com/public/escapeoutgames/zones/jaycee-park-sign-zone-image-10.jpg",
+        "gameZoneDescription": "Main Sign is near main parking lot",
+        "latitude": "32.017384",
+        "longitude": "-80.845396",
+        "order": 1,
+        "createdAt": "2024-08-09T16:58:03.810Z",
+        "updatedAt": "2024-09-06T15:48:17.610Z"
+      },
+      {
+        "id": "c7a728ba-aa84-4c45-8641-e47a37c5c6ef",
+        "disabled": false,
+        "gameID": "8144f0ac-f27f-4b8b-9c37-7603f1a844c2",
+        "gameZoneName": "Disc Golf Sign",
+        "gameZoneIcon": null,
+        "gameZoneImage": "https://escapeoutbucket2183723-dev.s3.amazonaws.com/public/escapeoutgames/zones/jaycee-disc-golf-sign-10.jpg",
+        "gameZoneDescription": "Disc golf sign is also near parking lot",
+        "latitude": "32.0175238",
+        "longitude": "-80.8456783",
+        "order": 1,
+        "createdAt": "2024-08-28T16:11:20.000Z",
+        "updatedAt": "2024-09-06T15:48:37.060Z"
+      }
+    ],
+    "nextToken": null
+  },
+  "gameHint": {
+    "items": [
+      {
+        "id": "59913b58-37b5-4b99-b6ed-f6857b794a65",
+        "disabled": false,
+        "gameID": "8144f0ac-f27f-4b8b-9c37-7603f1a844c2",
+        "gamePlayZoneID": "4c7f6a9f-2672-4ca8-ab6a-6460305515f0",
+        "gameHintName": "Hint for Main Sign at Jaycee Park",
+        "gameHintDescription": "The name of the park is on the main sign.",
+        "order": 1,
+        "createdAt": "2024-08-09T20:53:17.049Z",
+        "updatedAt": "2024-09-07T17:26:06.439Z"
+      },
+      {
+        "id": "b46528dd-2260-46a4-b1fc-2045cfe9aba5",
+        "disabled": false,
+        "gameID": "8144f0ac-f27f-4b8b-9c37-7603f1a844c2",
+        "gamePlayZoneID": "c7a728ba-aa84-4c45-8641-e47a37c5c6ef",
+        "gameHintName": "Hint for Disc Golf Zone",
+        "gameHintDescription": "The name of the Game is on the Sign. And use both clues to figure out the answer to the puzzle.",
+        "order": 2,
+        "createdAt": "2024-08-28T16:14:11.839Z",
+        "updatedAt": "2024-09-07T17:26:15.495Z"
+      }
+    ],
+    "nextToken": null
+  },
+  "type": "game",
+  "gameClue": {
+    "items": [
+      {
+        "id": "c5df8daa-c992-4162-83af-94365a374d29",
+        "gameClueName": "Disc Golf Sign",
+        "gamePlayZoneID": "c7a728ba-aa84-4c45-8641-e47a37c5c6ef",
+        "gameClueIcon": "tornPaper",
+        "gameClueImage": "",
+        "gameClueToolNeeded": null,
+        "gameClueText": "Name of Game Played with Discs",
+        "gameCluePosition": null,
+        "order": 1,
+        "createdAt": "2024-08-28T16:12:19.783Z",
+        "updatedAt": "2024-08-28T16:26:27.472Z"
+      },
+      {
+        "id": "97e05922-73c7-4591-8b4b-3799c41cba9c",
+        "gameClueName": "Message In A Bottle",
+        "gamePlayZoneID": "c7a728ba-aa84-4c45-8641-e47a37c5c6ef",
+        "gameClueIcon": "messageInABottle",
+        "gameClueImage": "",
+        "gameClueToolNeeded": null,
+        "gameClueText": "Reverse the Answer.",
+        "gameCluePosition": null,
+        "order": 1,
+        "createdAt": "2024-09-07T17:24:15.331Z",
+        "updatedAt": "2024-09-07T17:24:15.331Z"
+      },
+      {
+        "id": "b4fdadf6-11d8-4510-abf9-d62e17ba61f3",
+        "gameClueName": "Magnifying Glass",
+        "gamePlayZoneID": "9793dea8-4a86-4ee9-8c26-461d35a277d8",
+        "gameClueIcon": "clueIcon",
+        "gameClueImage": "",
+        "gameClueToolNeeded": null,
+        "gameClueText": "What is the name of this park?",
+        "gameCluePosition": null,
+        "order": 2,
+        "createdAt": "2024-08-09T20:35:21.133Z",
+        "updatedAt": "2024-09-12T22:30:34.365Z"
+      }
+    ],
+    "nextToken": null
+  },
+  "gamePuzzle": {
+    "items": [
+      {
+        "id": "7dcdf5af-cdce-4541-b75a-74b5cc26e16d",
+        "gamePlayZoneID": "9793dea8-4a86-4ee9-8c26-461d35a277d8",
+        "puzzleName": "Main Sign at Jaycee Park Puzzle 1",
+        "puzzlePosition": null,
+        "puzzleImage": null,
+        "puzzleImageOpen": null,
+        "puzzleImageSolved": null,
+        "textField": {
+          "items": [
+            {
+              "id": "db9be40a-2c9d-4bcc-96fa-a0df8d40c86c",
+              "name": "textfield 1",
+              "label": "Answer - 2 Words",
+              "answer": "Jaycee Park",
+              "order": 1
+            }
+          ],
+          "nextToken": null
+        },
+        "puzzleClueRevealed": "",
+        "puzzleClueText": "Sometimes there is a clue that you need here.",
+        "puzzleToolRevealed": null,
+        "puzzleToolNeeded": null,
+        "winGame": false,
+        "winGameImage": null,
+        "winGameMessage": null,
+        "order": 1,
+        "createdAt": "2024-08-15T19:09:35.181Z",
+        "updatedAt": "2024-09-07T17:23:01.998Z"
+      },
+      {
+        "id": "6a189f05-0d90-4012-9c9a-87f52314ede0",
+        "gamePlayZoneID": "c7a728ba-aa84-4c45-8641-e47a37c5c6ef",
+        "puzzleName": "Disc Golf Sign Puzzle 2",
+        "puzzlePosition": null,
+        "puzzleImage": null,
+        "puzzleImageOpen": null,
+        "puzzleImageSolved": null,
+        "textField": {
+          "items": [
+            {
+              "id": "4184e440-06ef-44bd-aaaf-434b172f57fd",
+              "name": "field 1",
+              "label": "Answer for Clue \"Disc Golf Sign\"",
+              "answer": "Golf Disc",
+              "order": 1
+            }
+          ],
+          "nextToken": null
+        },
+        "puzzleClueRevealed": "",
+        "puzzleClueText": "Winner!",
+        "puzzleToolRevealed": null,
+        "puzzleToolNeeded": null,
+        "winGame": true,
+        "winGameImage": null,
+        "winGameMessage": null,
+        "order": 2,
+        "createdAt": "2024-08-28T16:14:40.804Z",
+        "updatedAt": "2024-09-07T17:23:18.419Z"
+      }
+    ],
+    "nextToken": null
+  },
+  "order": 1,
+  "createdAt": "2024-08-02T00:13:09.913Z",
+  "disabled": false,
+  "user": {
+    "nextToken": null,
+    "__typename": "ModelUserGamePlayConnection"
+  },
+  "updatedAt": "2024-09-07T17:20:15.433Z",
+  "__typename": "Game"
+}

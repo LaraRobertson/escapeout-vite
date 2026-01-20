@@ -534,7 +534,6 @@ export function Game() {
 
         }
     }
-
     async function updateGameScoreFunction() {
         console.log("updateGameScore:  " + gameTimeHint);
         let startDate = new Date(realTimeStart);

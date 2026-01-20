@@ -160,6 +160,8 @@ export function GameV3() {
             });
             const gamesFromAPI = apiData.data.getGame;
             setGame(gamesFromAPI);
+            /* JSON */
+            console.log("gamesFromAPI (JSON.stringify): " +  JSON.stringify(gamesFromAPI));
             console.log("getGameDetails initial: " + gamesFromAPI.gameName);
             /* first time */
             /* set up Play Zones: */
@@ -285,16 +287,16 @@ export function GameV3() {
         let clueTemp = "<strong>" + gameClueName + " </strong> ==> " +
             gameClueText + " <br />";
 
-        let cluesArrayObject = {
-            gameClueName: gameClueName,
-            gameClueText: gameClueText,
-            gameClueID: gameClueID,
-            gameClueImage: gameClueImage,
-        };
-        let cluesArrayTemp = cluesArray;
-        cluesArrayTemp.push(cluesArrayObject);
-        console.log("json cluesArrayTemp Z2: " + JSON.stringify(cluesArrayTemp))
-        setCluesArray(cluesArrayTemp);
+            let cluesArrayObject = {
+                gameClueName: gameClueName,
+                gameClueText: gameClueText,
+                gameClueID: gameClueID,
+                gameClueImage: gameClueImage,
+            };
+            let cluesArrayTemp = cluesArray;
+            cluesArrayTemp.push(cluesArrayObject);
+            console.log("json cluesArrayTemp Z2: " + JSON.stringify(cluesArrayTemp))
+            setCluesArray(cluesArrayTemp);
         setClues(clues + clueTemp);
         localStorage.setItem("clues",clues + clueTemp);
         localStorage.setItem("cluesArray",JSON.stringify(cluesArrayTemp));
@@ -494,7 +496,7 @@ export function GameV3() {
                 </ReactModalFromBottom>
                 <ReactModalWinner gameTimeTotal={gameTimeTotal}>
                     {(gameComplete) &&
-                    <Winner game={game} gameTimeTotal={gameTimeTotal} gameTimeHint={gameTimeHint}/>}
+                    <Winner game={game} gameTimeTotal={gamesTimeTotal} gameTimeHint={gameTimeHint}/>}
                 </ReactModalWinner>
 
                 <View className={isAlertVisible ? "alert-container show" : "hide"}>

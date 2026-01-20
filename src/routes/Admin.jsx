@@ -131,8 +131,6 @@ export function Admin() {
 
 
 
-
-
     useEffect(() => {
         if (user) {
             console.log("***useEffect***: handleFetchUserAttribues: " + user.userName);
